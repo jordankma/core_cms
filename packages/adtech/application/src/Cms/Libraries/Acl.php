@@ -46,7 +46,7 @@ class Acl
             $this->_user->role_id = $role->role_id;
         }
 
-        $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : null;
+        $host = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : null;
         if ($host) {
             $domain = Domain::where('name', $host)->first();
             $this->_domain = $domain;

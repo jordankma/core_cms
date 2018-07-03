@@ -27,7 +27,7 @@ class Controller extends BaseController
         $id = Auth::id();
         $this->user = Auth::user();
         $email = $this->user ? $this->user->email : null;
-        $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : null;
+        $host = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : null;
         $domain_id = 0;
         if ($host) {
             $domain = Domain::where('name', $host)->first();
@@ -125,18 +125,18 @@ class Controller extends BaseController
     }
 
     function getMenu($domain_id = 0) {
-        if (Cache::has('menuGroups')) {
-            $menuGroups = Cache::get('menuGroups');
+        if (Cache::has('menuGroups' . $domain_id)) {
+            $menuGroups = Cache::get('menuGroups' . $domain_id);
         } else {
             $menuGroups = Menu::select('group')->where('group', '!=', '')->distinct()->get();
-            Cache::forever('menuGroups', $menuGroups);
+            Cache::put('menuGroups' . $domain_id, $menuGroups);
         }
 
-        if (Cache::has('menus')) {
-            $menus = Cache::get('menus');
+        if (Cache::has('menus' . $domain_id)) {
+            $menus = Cache::get('menus' . $domain_id);
         } else {
             $menus = Menu::where('domain_id', $domain_id)->orderBy('parent')->orderBy('sort')->get();
-            Cache::forever('menus', $menus);
+            Cache::put('menus' . $domain_id, $menus);
         }
 
         $this->_menuTop = $menuGroups;

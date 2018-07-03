@@ -1,0 +1,707 @@
+<?php
+
+namespace App\Http\Controllers\Web;
+
+use Jenssegers\Agent\Agent;
+use App\Models\Note;
+use Illuminate\Http\Request;
+use App\Models\Comment;
+use App\Models\Course\Course;
+use App\Models\Course\LogTest;
+use App\Models\Course\Lesson;
+use App\Models\Course\LessonPart;
+use App\Models\Course\CloneExam;
+use App\Models\Member;
+use App\Elastic\CourseElactic;
+use App\Elastic\SpeSubElactic;
+use App\Models\Course\LessonHasSpeSub;
+use App\Models\Course\SpeSubject;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Config;
+use Session;
+use DB;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redirect;
+
+class StudyController extends Controller {
+
+    /**
+     * @return view trang học
+     * @author: tuanlv
+     * @params: $course_id , $lesson_id
+     * Chức năng : trả về giao diện trang học theo khóa và bài
+     */
+    public function getHome($course_id, $spe_sub_id = null, $lesson_id, $part_id = null, Request $request) {
+        $check_id_user= Config::get('params.checkViewLesson');
+        $agent = new Agent();
+        if ($agent->isMobile()) {
+            echo'<script> alert("Bạn vui lòng đăng nhập trên máy tính để học"); window.location="http://hctk.vnedutech.vn";</script>';
+        }
+        if (Session::has('user_web')) {
+
+            //die($request->course_id);
+            if (!empty($request->course_id)) {
+                $data = Course::find($request->course_id);
+                if (((strtotime(date("Y-m-d H:i:s")) > strtotime($data['time_promo'])) && ($data['price'] == 0)) || ((strtotime(date("Y-m-d H:i:s")) < strtotime($data['time_promo'])) && $data['price_promo'] == 0)) {
+
+                    $list_course = Session::get('user_web')['course'];
+                    $list_course = json_decode($list_course, true);
+                    if (!empty($list_course['list_course'])) {
+                        if (!array_key_exists($request->course_id, $list_course['list_course'])) {
+                            // $data = Course::find($request->course_id);
+                            $list_course['list_course'][$request->course_id] = [
+                                'course_id' => $request->course_id,
+                                'price' => $data['price'],
+                                'price_promo' => $data['price_promo'],
+                                'time_promo' => $data['time_promo'],
+                                'name' => $data['name'],
+                                'image' => $data['image'],
+                                'created_at' => date("Y-m-d H:i:s")
+                            ];
+                            $list_course = json_encode($list_course);
+                            $user = Member::find(Session::get('user_web')['id']);
+                            $user->course = $list_course;
+                            $user->save();
+                        }
+                    } else {
+                        $list_course['list_course'][$request->course_id] = [
+                            'course_id' => $request->course_id,
+                            'price' => $data['price'],
+                            'price_promo' => $data['price_promo'],
+                            'time_promo' => $data['time_promo'],
+                            'name' => $data['name'],
+                            'image' => $data['image'],
+                            'created_at' => date("Y-m-d H:i:s")
+                        ];
+                        $list_course = json_encode($list_course);
+                        $user = Member::find(Session::get('user_web')['id']);
+                        $user->course = $list_course;
+                        $user->save();
+                    }
+                }
+            }
+            $user_id = Session::get('user_web')['id'];
+            //lay danh sach khoa hoc,chuyen de, bai giang da mua
+            $flag = false;
+            $user = Member::find($user_id);
+            //get key bài học đã thi trắc nghiệm
+            $list_lesson_check = array();
+            $data = json_decode($user->choice_lesson, true);
+            if (!empty($data)) {
+                foreach ($data as $key => $value) {
+                    $list_lesson_check[] = $key;
+                }
+            }
+            //get key chuyên đề đã thi trắc nghiệm
+            $list_spesub_check = array();
+            $dataSpeSub = json_decode($user->choice_spe_sub, true);
+            if (!empty($dataSpeSub)) {
+                foreach ($dataSpeSub as $key => $value) {
+                    $list_spesub_check[] = $key;
+                }
+            }
+
+
+            $list_course_user = array();
+            $list_spe_sub_user = array();
+            $list_lesson_user = array();
+            $temp_list_course = json_decode($user->course, true);
+            if (!empty($temp_list_course['list_course'])) {
+                foreach ($temp_list_course['list_course'] as $key => $value) {
+                    $list_course_user[] = $key;
+                }
+            }
+            $temp_list_spe_sub = json_decode($user->spesub, true);
+            if (!empty($temp_list_spe_sub['list_spesub'])) {
+                foreach ($temp_list_spe_sub['list_spesub'] as $key => $value) {
+                    $list_spe_sub_user[] = $key;
+                }
+            }
+            $temp_list_lesson = json_decode($user->lesson, true);
+            if (!empty($temp_list_lesson['list_lesson'])) {
+                foreach ($temp_list_lesson['list_lesson'] as $key => $value) {
+                    $list_lesson_user[] = $key;
+                }
+            }
+
+            //dd($list_lesson_user);
+            // $list_course_user = explode("|", $user->course);
+            // $list_spe_sub_user = explode("|", $user->spesub);
+            // $list_lesson_user = explode("|", $user->lesson);
+            if (in_array($course_id, $list_course_user))
+                $flag = true;
+            if ($flag == false)
+                if (in_array($spe_sub_id, $list_spe_sub_user))
+                    $flag = true;
+            if ($flag == false)
+                if (in_array($lesson_id, $list_lesson_user))
+                    $flag = true;
+            // $flag = true;
+            
+             if(in_array(Session::get('user_web')['id'],$check_id_user)){
+                $flag=true;
+            }
+                
+            if ($flag == false) {
+                return redirect('/')->with('thongbao', 'Bạn cần đăng ký để vào học');
+            }
+            
+            if ($part_id == null) {
+                $parts = LessonPart::where('lesson_id', $lesson_id)->first();
+                if (!empty($parts))
+                    $part_id = $parts->part_id;
+            }
+
+            $array_id_like_active = array();
+            if (!$request->session()->has('session_comment_like')) {
+                $data_comment_like = json_encode($array_id_like_active);
+                $request->session()->put('session_comment_like', $data_comment_like);
+            } else {
+                $value_ = $request->session()->get('session_comment_like');
+                $data_comment_like = json_decode($value_, true);
+                //dd($data_comment_like);
+                if (array_key_exists($user_id, $data_comment_like)) {
+                    //duyet mang sesion 
+                    foreach ($data_comment_like as $key => $value) {
+                        //neu key bang user_id duyet mang con 
+                        if ($key == $user_id) {
+                            $array_id_like_active = $value;
+                        }
+                    }
+                }
+            }
+            $lesson = Lesson::find($lesson_id);
+            $course_l = Course::find($course_id);
+            $spe_sub = SpeSubject::find($spe_sub_id);
+            $comment = Comment::where('status', 'accepted')->where('lesson_id', $lesson_id)->orderBy("comment_id", "desc")->get();
+            //get data tab_content
+            $course_obj = new CourseElactic();
+            $data['course'] = $course_obj->customSearch(['course_id' => $course_id])->first()->toArray();
+            //$data['listCourseRelated'] = Course::getCourseRelated();
+            if (!empty($data['course']['spesub'])) {
+                foreach ($data['course']['spesub'] as $key => $value) {
+                    $data['course']['spesub'][$key]['lessons'] = SpeSubject::getListLessonByID($value['spe_sub_id']);
+                }
+            }
+
+            //kiem tra da mua khoa hoc chua
+ 	$uId = $user_id;
+
+            $time = time();
+            //echo $part_id;die;
+            // dd($data['course']['source']); die;
+            $expire = time() + 43200;
+            if (isset($data['course']['source'])) {
+                if ($data['course']['source'] == "cpvm") {
+                    $token_id = md5($lesson_id . $uId . $time . 'streamcpvm@)^^%(!$');
+                    $urlVideo = "http://stream.phonghoc.cpvm.vn/auth?token={$token_id}&expire={$expire}&part_id={$part_id}&uId={$uId}&lessId={$lesson_id}&ses_id={$time}&type=hctk";
+                } else {
+
+                    $token_id = md5($lesson_id . $uId . $time . 'hoccungthukhoa@)^^%(!$');
+                    $urlVideo = "http://streamdev2.hoccungthukhoa.vn/auth?token={$token_id}&expire={$expire}&part_id={$part_id}&uId={$uId}&lessId={$lesson_id}&ses_id={$time}";
+                }
+            } else {
+                $token_id = md5($lesson_id . $uId . $time . 'hoccungthukhoa@)^^%(!$');
+                $urlVideo = "http://streamdev2.hoccungthukhoa.vn/auth?token={$token_id}&expire={$expire}&part_id={$part_id}&uId={$uId}&lessId={$lesson_id}&ses_id={$time}";
+            }
+
+
+            Cache::forever('playing_video_' . $uId . $part_id, $token_id);
+            //$urlVideo = "http://auth.stream.hctk.vnedutech.vn/auth?token={$token_id}&expire={$expire}&part_id={$part_id}&uId={$uId}&lessId={$lesson_id}&ses_id={$time}";
+            //$urlVideo = "http://auth.stream.hctk.vnedutech.vn/auth";
+            //$urlVideo = '';
+
+            $data['id'] = ['c_id' => $course_id, 'l_id' => $lesson_id, 'spe_id' => $spe_sub_id];
+
+            $note = Note::where(['lesson_id' => $lesson_id, 'user_id' => Session::get('user_web')['id']])->get();
+            $data_check_url = [
+                'course_id' => $course_id,
+                'spe_sub_id' => $spe_sub_id,
+                'lesson_id' => $lesson_id,
+                'part_id' => $part_id
+            ];
+
+            return view('web.pages.study.study', compact('comment','course_l','spe_sub', 'lesson', 'array_id_like_active', 'data', 'urlVideo', 'user', 'list_lesson_check', 'list_spesub_check', 'course_id', 'note', 'data_check_url'));
+        }
+        return Redirect::back()->with('error_code', 5);
+    }
+
+    public function postNote(Request $request) {
+        //dd($request->all());
+        $data['status'] = false;
+        if (Session::has('user_web')) {
+            $user_id = Session::get('user_web')['id'];
+        }
+        $note = new Note;
+        $note->course_id = $request->course_id;
+        $note->lesson_id = $request->lesson_id;
+        $note->spe_sub_id = $request->spe_sub_id;
+        $note->user_id = $user_id;
+        $note->note = $request->note;
+        $note->video_time = $request->video_time;
+        $note->save();
+        $data = [
+            'status' => true,
+            'note_id' => $note->id,
+            'content' => $note->note,
+            'time' => convertTime($note->video_time)
+        ];
+        echo json_encode($data);
+    }
+
+    public function postDeleteNote(Request $request) {
+        $data['status'] = false;
+        if (Session::has('user_web')) {
+            $user_id = Session::get('user_web')['id'];
+        }
+        $note = Note::where(['id' => $request->note_id, 'user_id' => $user_id])->first();
+        if (!empty($note)) {
+            $note->delete();
+            $data['status'] = true;
+        }
+
+        echo json_encode($data);
+    }
+
+    /**
+     * @author Dao chien
+     * @param $type,$id
+     * @return view[modal_multiple_choice]
+     * function lay danh sach cau hoi trac nghiem
+     */
+    public function ListChoice(Request $request) {
+        if ($request->ajax()) {
+            if ($request->type == "spesub") {
+                $spe = new SpeSubject();
+                $choices = $spe->getDataSpeSub($request);
+                $data = $choices['pagination']->toArray();
+            }
+            if ($request->type == "lesson") {
+                $lesson = new Lesson();
+                $request->lesson_id = $request->id;
+                $choices = $lesson->getDataLesson($request);
+                $data = $choices['pagination']->toArray();
+            }
+            if ($request->type == "course") {
+                $course = new Course();
+                $choices = $course->getListCourse($request);
+                $data = $choices['pagination']->toArray();
+            }
+            if (!empty($data)) {
+                $exam = json_decode($data['data'][0]['list_exam'], true);
+                $dataQuestion = CloneExam::with(['questions', 'getEssay'])->find($exam[0]['clone_key']);
+
+                if (!empty($dataQuestion)) {
+                    $questions = $dataQuestion->toArray();
+                    $html = view('web.pages.study._item_question', compact('questions'));
+                    $response = [
+                        'html' => $html->render(),
+                        'error' => true
+                    ];
+                } else {
+                    $response = [
+                        'error' => false
+                    ];
+                }
+            } else {
+                $response = [
+                    'error' => false
+                ];
+            }
+
+            return response()->json($response);
+        }
+    }
+
+    /**
+     * @author Dao chien
+     * $params $type,$id
+     * function update kết quả thi trắc nghiệm
+     */
+    public function updateUserChoice(Request $request) {
+        if ($request->ajax()) {
+
+            $user = Member::find(Session::get('user_web')['id']);
+
+            $data_choice = [
+                'name' => $request->name,
+                'point' => $request->point,
+                'numberTrue' => $request->numberTrue,
+                'status' => true,
+                'exam_id' => $request->examId,
+                'name_exam' => $request->examName,
+                'totalQues' => $request->totalQues,
+                'created_at' => Carbon::now()->toDateTimeString()
+            ];
+            $data[$request->id] = $data_choice;
+
+            if ($request->type == "lesson") {
+                $lesson = json_decode($user->choice_lesson, true);
+                if (!empty($lesson)) {
+                    if (array_key_exists($request->id, $lesson)) {
+                        $lesson[$request->id] = $data_choice;
+                    } else {
+                        $lesson = $lesson + $data;
+                    }
+                    $user->choice_lesson = json_encode($lesson);
+                } else {
+                    $user->choice_lesson = json_encode($data);
+                }
+            }
+            if ($request->type == "spesub") {
+                $spesub = json_decode($user->choice_spe_sub, true);
+                if (!empty($spesub)) {
+                    if (array_key_exists($request->id, $spesub)) {
+                        $spesub[$request->id] = $data_choice;
+                    } else {
+                        $spesub = $spesub + $data;
+                    }
+                    $user->choice_spe_sub = json_encode($spesub);
+                } else {
+                    $user->choice_spe_sub = json_encode($data);
+                }
+            }
+
+            if ($request->type == "course") {
+                $course = json_decode($user->choice_course, true);
+                if (!empty($course)) {
+                    if (array_key_exists($request->id, $course)) {
+                        $course[$request->id] = $data_choice;
+                    } else {
+                        $course = $course + $data;
+                    }
+                    $user->choice_course = json_encode($course);
+                } else {
+                    $user->choice_course = json_encode($data);
+                }
+            }
+            $saved = $user->save();
+            if ($saved) {
+                $response = [
+                    'error' => true
+                ];
+                return response()->json($response);
+            }
+        }
+    }
+
+    /**
+     * @author Dao chien
+     * @param $request dataQues, dataAnswer
+     * function xem lại kết quả thi
+     * return view()
+     */
+    public function ViewAnswer(Request $request) {
+
+        if ($request->ajax()) {
+            $dataQues = \Cache::get('dataQuestion');
+            $dataAnswer = json_decode($request->dataAnswer, true);
+            if (!empty($dataQues)) {
+                $check = "";
+                $type = "";
+                if ($request->type == "lesson") {
+                    if (!empty($request->lessonId)) {
+                        $data = LogTest::where(['user_id' => Session::get('user_web')['id'], 'lesson_id' => $request->lessonId])->get()->toArray();
+                        
+                        if (!empty($data)) {
+                            
+                            $check = "update";
+                            $idLogTest = $data[0]['log_test_id'];
+                        } else {
+                            $check = "insert";
+                        }
+                        $type = "lesson";
+                    }
+                }                
+                if ($request->type == "spesub") {
+                    if (!empty($request->spesubId)) {
+                        $data = LogTest::where(['user_id' => Session::get('user_web')['id'], 'spe_sub_id' => $request->spesubId])->get()->toArray();
+                        if (!empty($data)) {
+                            $check = "update";
+                            $idLogTest = $data[0]['log_test_id'];
+                        } else {
+                            $check = "insert";
+                        }
+                        $type = "spesub";
+                    }
+                }
+                if ($request->type == "course") {
+                    if (!empty($request->courseId)) {
+                        $data = LogTest::where(['user_id' => Session::get('user_web')['id'], 'course_id' => $request->courseId])->get()->toArray();
+                        if (!empty($data)) {
+                            $check = "update";
+                            $idLogTest = $data[0]['log_test_id'];
+                        } else {
+                            $check = "insert";
+                        }
+                        $type = "course";
+                    }
+                }
+              
+                if ($check == "insert") {
+                    $logTest = new LogTest();
+                    if ($type == "course")
+                        $logTest->course_id = $request->courseId;
+                    if ($type == "spesub")
+                        $logTest->spe_sub_id = $request->spesubId;
+                    if ($type == "lesson_id")
+                        $logTest->lesson_id = $request->lessonId;
+                }
+                else{
+                    $logTest= LogTest::find($idLogTest);
+                }                
+                $logTest->user_id = Session::get('user_web')['id'];
+                $logTest->answer = !empty($request->dataAnswer)?json_encode($request->dataAnswer):'';
+                $logTest->question = !empty($dataQues)?json_encode($dataQues):'';
+                 $logTest->point = !empty($request->point)?$request->point:0;
+                $logTest->save();
+                $html = view('web.pages.study._item_view_answer', compact('dataQues', 'dataAnswer'));
+                $response = [
+                    'error' => true,
+                    'html' => $html->render()
+                ];
+            } else {
+                $response = [
+                    'error' => false,
+                ];
+            }
+            return response()->json($response);
+        }
+    }
+
+    public function postLogStudy(Request $request) {
+        $data = [];
+        $status = false;
+        if ($request->ajax()) {
+            if (Session::get('user_web')) {
+                if (!empty($request->course_id) && !empty($request->spe_sub_id) && !empty($request->lession_id) && !empty($request->part_id)) {
+                    if (!Cache::has('log_study_' . Session::get('user_web')['id'])) {
+                        $data[$request->course_id] = [
+                            'spe_sub_id' => $request->spe_sub_id,
+                            'lession_id' => $request->lession_id,
+                            'part_id' => $request->part_id
+                        ];
+                    } else {
+                        $data = Cache::get('log_study_' . Session::get('user_web')['id']);
+                        $data[$request->course_id] = [
+                            'spe_sub_id' => $request->spe_sub_id,
+                            'lession_id' => $request->lession_id,
+                            'part_id' => $request->part_id
+                        ];
+                    }
+                    Cache::forever('log_study_' . Session::get('user_web')['id'], $data);
+                    $status = true;
+                }
+            }
+        }
+        echo json_encode(['status' => $status]);
+    }
+
+    public function saveHistoryLearn(Request $request) {
+        if ($request->ajax()) {
+            $course_id = !empty($request->course_id) ? $request->course_id : null;
+            $spe_sub_id = !empty($request->spe_sub_id) ? $request->spe_sub_id : null;
+            $lesson_id = !empty($request->lesson_id) ? $request->lesson_id : null;
+            $part_id = !empty($request->part_id) ? $request->part_id : null;
+
+            if (!empty($course_id) && !empty($spe_sub_id) && !empty($lesson_id) && !empty($part_id)) {
+
+
+                $check = DB::table('history_learn')->where(['user_id' => Session::get('user_web')['id'], 'part_id' => $part_id])->get()->toArray();
+                if (!empty($check)) {
+                    $response = [
+                        'error' => false,
+                        'mess' => "learned"
+                    ];
+                } else {
+                    $course_obj = new CourseElactic();
+                    $data['course'] = $course_obj->customSearch(['course_id' => $course_id])->first()->toArray();
+                    if (!empty($data['course']['spesub'])) {
+                        foreach ($data['course']['spesub'] as $key => $value) {
+                            $data['course']['spesub'][$key]['lessons'] = SpeSubject::getListLessonByID($value['spe_sub_id']);
+                        }
+                    }
+
+                    //save history_learn
+                    $infoData = [];
+                    foreach ($data['course']['spesub'] as $spesub) {
+
+                        if (!empty($spesub) && $spesub['spe_sub_id'] == $spe_sub_id) {
+                            foreach ($spesub['lessons'] as $les) {
+                                if (!empty($les) && $les['lesson_id'] == $lesson_id) {
+                                    foreach ($les['parts'] as $part) {
+                                        if (!empty($part) && $part['part_id'] == $part_id) {
+                                            $infoData = [
+                                                'course_id' => $data['course']['course_id'],
+                                                'course_name' => $data['course']['name'],
+                                                'spe_sub_id' => $spesub['spe_sub_id'],
+                                                'spe_sub_name' => $spesub['name'],
+                                                'lesson_id' => $les['lesson_id'],
+                                                'lesson_name' => $les['name'],
+                                                'part_id' => $part['part_id'],
+                                                'part_name' => $part['part_name'],
+                                            ];
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    $history_learn = [
+                        'user_id' => Session::get('user_web')['id'],
+                        'user_name' => Session::get('user_web')['user_name'],
+                        'full_name' => Session::get('user_web')['name'],
+                        'part_id' => $part_id,
+                        'data' => json_encode($infoData),
+                        'created_at' => Carbon::now()->toDateTimeString()
+                    ];
+
+
+
+                    $insert = DB::table('history_learn')->insert($history_learn);
+                    if ($insert) {
+                        Cache::forget('history_part_' . Session::get('user_web')['id']);
+                        $response = [
+                            'error' => true,
+                            'mess' => "success"
+                        ];
+                    } else {
+                        $response = [
+                            'error' => false,
+                            'mess' => "error"
+                        ];
+                    }
+                }
+                return response()->json($response);
+            }
+        }
+    }
+
+    public function UpdatePercent(Request $request) {
+        if ($request->ajax()) {
+            $course_id = $request->course_id;
+            $total = $request->total;
+            $user = Member::find(Session::get('user_web')['id']);
+            if (!empty($user)) {
+                $datas = json_decode($user->course, true);
+                if (!empty($datas['list_course'])) {
+                    if (array_key_exists($course_id, $datas['list_course'])) {
+                        $datas['list_course'][$course_id]['percent'] = $total;
+                        $user->course = json_encode($datas);
+                        $user->save();
+                        $response = [
+                            'error' => true
+                        ];
+                    } else {
+                        $response = [
+                            'error' => false
+                        ];
+                    }
+                }
+            } else {
+                $response = [
+                    'error' => false
+                ];
+            }
+            return response()->json($response);
+        }
+    }
+
+    public function getSpeSub($spe_sub_id, $lesson_id, $part_id = null, Request $request) {
+        if (Session::has('user_web')) {
+            $user_id = Session::get('user_web')['id'];
+            //lay danh sach khoa hoc,chuyen de, bai giang da mua
+            $flag = false;
+            $user = Member::find($user_id);
+            //get key bài học đã thi trắc nghiệm
+            $list_lesson_check = array();
+            $data = json_decode($user->choice_lesson, true);
+            if (!empty($data)) {
+                foreach ($data as $key => $value) {
+                    $list_lesson_check[] = $key;
+                }
+            }
+            //get key chuyên đề đã thi trắc nghiệm
+            $list_spesub_check = array();
+            $dataSpeSub = json_decode($user->choice_spe_sub, true);
+            if (!empty($dataSpeSub)) {
+                foreach ($dataSpeSub as $key => $value) {
+                    $list_spesub_check[] = $key;
+                }
+            }
+            $list_spe_sub_user = array();
+            $list_lesson_user = array();
+            $temp_list_lesson = json_decode($user->lesson, true);
+            if (!empty($temp_list_lesson['list_lesson'])) {
+                foreach ($temp_list_lesson as $key => $value) {
+                    $list_lesson_user[] = $key;
+                }
+            }
+            $temp_list_spe_sub = json_decode($user->spesub, true);
+            if (!empty($temp_list_spe_sub['list_spesub'])) {
+                foreach ($temp_list_spe_sub['list_spesub'] as $key => $value) {
+                    $list_spe_sub_user[] = $key;
+                }
+            }
+            if ($flag == false)
+                if (in_array($spe_sub_id, $list_spe_sub_user))
+                    $flag = true;
+            if ($flag == false)
+                if (in_array($lesson_id, $list_lesson_user))
+                    $flag = true;
+            if ($flag == false) {
+                return redirect('/')->with('thongbao', 'Bạn cần đăng ký chuyên đề để vào học');
+            }
+            if ($part_id == null) {
+                $parts = LessonPart::where('lesson_id', $lesson_id)->first();
+                if (!empty($parts))
+                    $part_id = $parts->part_id;
+            }
+            $array_id_like_active = array();
+            if (!$request->session()->has('session_comment_like')) {
+                $data_comment_like = json_encode($array_id_like_active);
+                $request->session()->put('session_comment_like', $data_comment_like);
+            } else {
+                $value_ = $request->session()->get('session_comment_like');
+                $data_comment_like = json_decode($value_, true);
+                //dd($data_comment_like);
+                if (array_key_exists($user_id, $data_comment_like)) {
+                    //duyet mang sesion 
+                    foreach ($data_comment_like as $key => $value) {
+                        //neu key bang user_id duyet mang con 
+                        if ($key == $user_id) {
+                            $array_id_like_active = $value;
+                        }
+                    }
+                }
+            }
+            $lesson = Lesson::find($lesson_id);
+            $comment = Comment::where('status', 'accepted')->where('lesson_id', $lesson_id)->orderBy("comment_id", "desc")->get();
+            //get data tab_content
+            $spesub_obj = new SpeSubElactic();
+            $spesub = $spesub_obj->customSearch(['spe_sub_id' => $spe_sub_id])->first()->toArray();
+            //kiem tra da mua khoa hoc chua
+
+            $time = time();
+            //echo $part_id;die;
+            $uId = $user_id;
+            $expire = time() + 43200;
+
+            $token_id = md5($lesson_id . $uId . $time . 'hoccungthukhoa@)^^%(!$');
+            $urlVideo = "http://streamdev2.hoccungthukhoa.vn/auth?token={$token_id}&expire={$expire}&part_id={$part_id}&uId={$uId}&lessId={$lesson_id}&ses_id={$time}";
+            $data['id'] = ['c_id' => null, 'l_id' => $lesson_id, 'spe_id' => $spe_sub_id];
+            $note = Note::where(['lesson_id' => null, 'user_id' => Session::get('user_web')['id']])->get();
+            $data_check_url = [
+                'course_id' => null,
+                'spe_sub_id' => $spe_sub_id,
+                'lesson_id' => $lesson_id,
+                'part_id' => $part_id
+            ];
+            return view('web.pages.study.studySpeSub', compact('comment', 'lesson', 'array_id_like_active', 'data', 'urlVideo', 'user', 'list_lesson_check', 'list_spesub_check', 'note', 'data_check_url', 'spesub'));
+        }
+        return Redirect::back()->with('error_code', 5);
+    }
+
+}

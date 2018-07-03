@@ -1,0 +1,73 @@
+{
+  "package": "administration",
+  "module": "dhcd",
+  "description": "Permission route by group",
+  "details": [
+    {
+      "name": "Quản lý provine-city",
+      "groups": [
+        {
+          "name": "View list",
+          "routes": [
+            "dhcd.administration.provine-city.manage",
+            "dhcd.administration.provine-city.data"
+          ]
+        },
+        {
+          "name": "Create",
+          "routes": [
+            "dhcd.administration.provine-city.create",
+            "dhcd.administration.provine-city.add"
+          ]
+        },
+        {
+          "name": "Update",
+          "routes": [
+            "dhcd.administration.provine-city.show",
+            "dhcd.administration.provine-city.update"
+          ]
+        },
+        {
+          "name": "Delete",
+          "routes": [
+            "dhcd.administration.provine-city.delete",
+            "dhcd.administration.provine-city.confirm-delete"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Quản lý country-district",
+      "groups": [
+        {
+          "name": "View list",
+          "routes": [
+            "dhcd.administration.country-district.manager",
+            "dhcd.administration.country-district.data"
+          ]
+        },
+        {
+          "name": "Create",
+          "routes": [
+            "dhcd.administration.country-district.create",
+            "dhcd.administration.country-district.add"
+          ]
+        },
+        {
+          "name": "Update",
+          "routes": [
+            "dhcd.administration.country-district.show",
+            "dhcd.administration.country-district.update"
+          ]
+        },
+        {
+          "name": "Delete",
+          "routes": [
+            "dhcd.administration.country-district.delete",
+            "dhcd.administration.country-district.confirm-delete"
+          ]
+        }
+      ]
+    }
+  ]
+}

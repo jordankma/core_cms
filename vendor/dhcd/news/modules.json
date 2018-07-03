@@ -1,0 +1,73 @@
+{
+  "package": "news",
+  "module": "dhcd",
+  "description": "Permission route by group",
+  "details": [
+    {
+      "name": "Quản lý news",
+      "groups": [
+        {
+          "name": "View list",
+          "routes": [
+            "dhcd.news.news.manager",
+            "dhcd.news.news.data"
+          ]
+        },
+        {
+          "name": "Create",
+          "routes": [
+            "dhcd.news.news.create",
+            "dhcd.news.news.add"
+          ]
+        },
+        {
+          "name": "Update",
+          "routes": [
+            "dhcd.news.news.show",
+            "dhcd.news.news.update"
+          ]
+        },
+        {
+          "name": "Delete",
+          "routes": [
+            "dhcd.news.news.delete",
+            "dhcd.news.news.confirm-delete"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Quản lý news_cat",
+      "groups": [
+        {
+          "name": "View list",
+          "routes": [
+            "dhcd.news.news.cat.manager",
+            "dhcd.news.news.cat.data"
+          ]
+        },
+        {
+          "name": "Create",
+          "routes": [
+            "dhcd.news.news.cat.create",
+            "dhcd.news.news.cat.add"
+          ]
+        },
+        {
+          "name": "Update",
+          "routes": [
+            "dhcd.news.news.cat.show",
+            "dhcd.news.news.cat.update"
+          ]
+        },
+        {
+          "name": "Delete",
+          "routes": [
+            "dhcd.news.news.cat.delete",
+            "dhcd.news.news.cat.confirm-delete"
+          ]
+        }
+      ]
+    }
+  ]
+}

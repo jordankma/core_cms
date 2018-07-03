@@ -187,7 +187,9 @@ return [
          */
         Collective\Html\HtmlServiceProvider::class,
         Cartalyst\Sentinel\Laravel\SentinelServiceProvider::class,
-        Spatie\Analytics\AnalyticsServiceProvider::class
+        Spatie\Analytics\AnalyticsServiceProvider::class,
+        Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
     ],
 
     /*
@@ -247,7 +249,8 @@ return [
         'Sentinel'   => Cartalyst\Sentinel\Laravel\Facades\Sentinel::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Charts' => ConsoleTVs\Charts\Facades\Charts::class,
-        'Analytics' => Spatie\Analytics\AnalyticsFacade::class
+        'Analytics' => Spatie\Analytics\AnalyticsFacade::class,
+        'Image' => Intervention\Image\Facades\Image::class,
     ],
 
 ];

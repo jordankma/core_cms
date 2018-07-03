@@ -193,6 +193,10 @@ textarea{
     resize: vertical;
 }
 
+.red {
+    color: red;
+}
+
 @media(min-width:320px) and (max-width:425px){
     .col-full-width-right iframe{
         height:100%;

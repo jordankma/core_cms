@@ -5,34 +5,35 @@
     <meta charset="UTF-8">
     <title>
         @section('title')
-            | Josh Admin Template
+            | {{ (!empty($SETTING['title'])) ? $SETTING['title'] : 'VNEdutech CMS' }}
         @show
     </title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <link rel="icon" href="{{ (!empty($SETTING['title'])) ? asset($SETTING['favicon']) : '' }}" type="image/gif" sizes="16x16">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <script src="{{ asset('/js/html5shiv.js?t=').time() }}"></script>
+    <script src="{{ asset('/js/respond.min.js?t=').time() }}"></script>
     <![endif]-->
+
     {{--CSRF Token--}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <!-- global css -->
 
+    <!-- global css -->
     <link rel="stylesheet" href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/css/app.css?t=' . time()) }}"/>
     <link rel="stylesheet" href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/css/global.css?t=' . time()) }}"/>
-    <!-- font Awesome -->
-
     <!-- end of global css -->
-    <!--page level css-->
-    @yield('header_styles')
-            <!--end of page level css-->
+
+    <!--page css-->
+@yield('header_styles')
+<!--end of page css-->
 
 <body class="skin-josh">
 <header class="header">
-    <a href="{{ route('backend.homepage') }}" class="logo">
-        <img src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/img/logo.png') }}" alt="logo">
+    <a href="{{ (empty($SETTING['logo_link']) || $SETTING['logo_link'] == '') ? route('backend.homepage') : $SETTING['logo_link'] }}" class="logo">
+        <img src="{{ asset($SETTING['logo']) }}" alt="logo" style="height: 50px; max-width: 250px">
     </a>
     <nav class="navbar navbar-static-top" role="navigation">
         <!-- Sidebar toggle button-->
@@ -44,12 +45,12 @@
 
         <div class="navbar-right">
             <ul class="nav navbar-nav">
-                @include('includes._messages')
-                @include('includes._notifications')
+                {{--@include('includes._messages')--}}
+                {{--@include('includes._notifications')--}}
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="{!! asset('/vendor/' . $group_name . '/' . $skin . '/images/authors/no_avatar.jpg') !!}" alt="img" height="35px" width="35px"
-                                 class="img-circle img-responsive pull-left"/>
+                        <img src="{!! asset('/vendor/' . $group_name . '/' . $skin . '/images/authors/no_avatar.jpg') !!}" alt="img" height="35px" width="35px"
+                             class="img-circle img-responsive pull-left"/>
                         <div class="riot">
                             <div>
                                 <p class="user_name_max">{{ $USER_LOGGED->contact_name }}</p>
@@ -64,42 +65,29 @@
                         <li class="user-header bg-light-blue">
                             <img src="{!! asset('/vendor/' . $group_name . '/' . $skin . '/images/authors/no_avatar.jpg') !!}" alt="img" height="35px" width="35px"
                                  class="img-circle img-responsive pull-left"/>
-
-                            {{--@elseif($USER_LOGGED->gender === "male")--}}
-                                {{--<img src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/images/authors/avatar3.png') }}" alt="img" height="35px" width="35px"--}}
-                                     {{--class="img-circle img-responsive pull-left"/>--}}
-
-                            {{--@elseif($USER_LOGGED->gender === "female")--}}
-                                {{--<img src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/images/authors/avatar5.png') }}" alt="img" height="35px" width="35px"--}}
-                                     {{--class="img-circle img-responsive pull-left"/>--}}
-                            {{--@else--}}
-                                {{--<img src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/images/authors/no_avatar.jpg') }}" alt="img" height="35px" width="35px"--}}
-                                     {{--class="img-circle img-responsive pull-left"/>--}}
-                            {{--@endif--}}
-                            {{--<p class="topprofiletext">{{ $USER_LOGGED->contact_name }}</p>--}}
                         </li>
                         <!-- Menu Body -->
-                        <li>
-                            <a href="{{ URL::route('adtech.core.user.show',$USER_LOGGED_ID) }}">
-                                <i class="livicon" data-name="user" data-s="18"></i>
-                                My Profile
-                            </a>
-                        </li>
-                        <li role="presentation"></li>
-                        <li>
-                            <a href="{{ route('adtech.core.user.update', $USER_LOGGED_ID) }}">
-                                <i class="livicon" data-name="gears" data-s="18"></i>
-                                Account Settings
-                            </a>
-                        </li>
-                        <!-- Menu Footer-->
+                    {{--<li>--}}
+                    {{--<a href="#">--}}
+                    {{--<i class="livicon" data-name="user" data-s="18"></i>--}}
+                    {{--My Profile--}}
+                    {{--</a>--}}
+                    {{--</li>--}}
+                    {{--<li role="presentation"></li>--}}
+                    {{--<li>--}}
+                    {{--<a href="#">--}}
+                    {{--<i class="livicon" data-name="gears" data-s="18"></i>--}}
+                    {{--Account Settings--}}
+                    {{--</a>--}}
+                    {{--</li>--}}
+                    <!-- Menu Footer-->
                         <li class="user-footer">
-                            <div class="pull-left">
-                                <a href="{{ URL::route('adtech.core.auth.logout',$USER_LOGGED_ID) }}">
-                                    <i class="livicon" data-name="lock" data-size="16" data-c="#555555" data-hc="#555555" data-loop="true"></i>
-                                    Lock
-                                </a>
-                            </div>
+                            {{--<div class="pull-left">--}}
+                            {{--<a href="{{ URL::route('adtech.core.auth.logout',$USER_LOGGED_ID) }}">--}}
+                            {{--<i class="livicon" data-name="lock" data-size="16" data-c="#555555" data-hc="#555555" data-loop="true"></i>--}}
+                            {{--Lock--}}
+                            {{--</a>--}}
+                            {{--</div>--}}
                             <div class="pull-right">
                                 <a href="{{ URL::route('adtech.core.auth.logout') }}">
                                     <i class="livicon" data-name="sign-out" data-s="15"></i>
@@ -122,36 +110,44 @@
             <div class="page-sidebar  sidebar-nav">
                 <div class="nav_icons">
                     <ul class="sidebar_threeicons">
-                        <li>
-                            <a href="{{ URL::to('admin/advanced_tables') }}">
-                                <i class="livicon" data-name="table" title="Advanced tables" data-loop="true"
-                                   data-color="#418BCA" data-hc="#418BCA" data-s="25"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ URL::to('admin/tasks') }}">
-                                <i class="livicon" data-name="list-ul" title="Tasks" data-loop="true"
-                                   data-color="#e9573f" data-hc="#e9573f" data-s="25"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ URL::to('admin/gallery') }}">
-                                <i class="livicon" data-name="image" title="Gallery" data-loop="true"
-                                   data-color="#F89A14" data-hc="#F89A14" data-s="25"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ URL::to('admin/users') }}">
-                                <i class="livicon" data-name="user" title="Users" data-loop="true"
-                                   data-color="#6CC66C" data-hc="#6CC66C" data-s="25"></i>
-                            </a>
-                        </li>
+                        @if ($USER_LOGGED->canAccess('adtech.core.package.manage'))
+                            <li>
+                                <a href="{{ route('adtech.core.package.manage') }}">
+                                    <i class="livicon" data-name="table" title="Packages" data-loop="true"
+                                       data-color="#418BCA" data-hc="#418BCA" data-s="25"></i>
+                                </a>
+                            </li>
+                        @endif
+                        @if ($USER_LOGGED->canAccess('adtech.core.menu.manage'))
+                            <li>
+                                <a href="{{ route('adtech.core.menu.manage') }}">
+                                    <i class="livicon" data-name="list-ul" title="Menus" data-loop="true"
+                                       data-color="#e9573f" data-hc="#e9573f" data-s="25"></i>
+                                </a>
+                            </li>
+                        @endif
+                        @if ($USER_LOGGED->canAccess('adtech.core.file.manage'))
+                            <li>
+                                <a href="{{ route('adtech.core.file.manage') }}">
+                                    <i class="livicon" data-name="image" title="File manager" data-loop="true"
+                                       data-color="#F89A14" data-hc="#F89A14" data-s="25"></i>
+                                </a>
+                            </li>
+                        @endif
+                        @if ($USER_LOGGED->canAccess('adtech.core.setting.manage'))
+                            <li>
+                                <a href="{{ route('adtech.core.setting.manage') }}">
+                                    <i class="livicon" data-name="gear" title="Users" data-loop="true"
+                                       data-color="#6CC66C" data-hc="#6CC66C" data-s="25"></i>
+                                </a>
+                            </li>
+                        @endif
                     </ul>
                 </div>
                 <div class="clearfix"></div>
                 <!-- BEGIN SIDEBAR MENU -->
-                @include('includes._left_menu')
-                <!-- END SIDEBAR MENU -->
+            @include('includes._left_menu')
+            <!-- END SIDEBAR MENU -->
             </div>
         </section>
     </aside>
@@ -159,10 +155,10 @@
 
         <!-- Notifications -->
         <div id="notific">
-        @include('includes.notifications')
+            @include('includes.notifications')
         </div>
 
-                <!-- Content -->
+        <!-- Content -->
         @yield('content')
 
     </aside>

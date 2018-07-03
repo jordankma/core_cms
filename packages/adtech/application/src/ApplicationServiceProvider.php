@@ -76,7 +76,7 @@ class ApplicationServiceProvider extends ServiceProvider
     public function register()
     {
         $serverInfo = $this->app->request->server();
-        $host = isset($serverInfo['HTTP_HOST']) ? $serverInfo['HTTP_HOST'] : null;
+        $host = isset($serverInfo['SERVER_NAME']) ? $serverInfo['SERVER_NAME'] : null;
 
         if ($host) {
             $configPath = __DIR__ . '/configs/' . $host;

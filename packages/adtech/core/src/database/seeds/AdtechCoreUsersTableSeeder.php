@@ -15,9 +15,9 @@ class AdtechCoreUsersTableSeeder extends Seeder
     {
 
         DB::table('adtech_core_users')->insert([
-            'email' => 'electric@gmail.com',
+            'email' => 'tuan@gmail.com',
             'password' => Hash::make('123456'),
-            'contact_name' => 'Electric',
+            'contact_name' => 'Tuan',
             'salt' => 'sal',
             'created_at' => new DateTime(),
             'updated_at' => new DateTime(),
