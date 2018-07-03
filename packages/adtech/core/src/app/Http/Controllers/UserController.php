@@ -70,7 +70,7 @@ class UserController extends Controller
         if ($user->user_id) {
             $user_id = $user->user_id;
             $role_id = $request->input('group');
-            DB::insert('insert into adtech_core_users_role (user_id, role_id, created_at, updated_at) values (?, ?, ?, ?)',
+            DB::connection('mysql_core')->insert('insert into adtech_core_users_role (user_id, role_id, created_at, updated_at) values (?, ?, ?, ?)',
                 [$user_id, $role_id, date('Y-m-d H:i:s'), date('Y-m-d H:i:s')]);
 
             activity('user')
@@ -98,12 +98,12 @@ class UserController extends Controller
 
         if ($user->save()) {
             $role_id = $request->input('groups');
-            $user_role_item = DB::select('select * from adtech_core_users_role where user_id = :id', ['id' => $user_id]);
+            $user_role_item = DB::connection('mysql_core')->select('select * from adtech_core_users_role where user_id = :id', ['id' => $user_id]);
             if (null == $user_role_item) {
-                DB::insert('insert into adtech_core_users_role (user_id, role_id, created_at, updated_at) values (?, ?, ?, ?)',
+                DB::connection('mysql_core')->insert('insert into adtech_core_users_role (user_id, role_id, created_at, updated_at) values (?, ?, ?, ?)',
                     [$user_id, $role_id, date('Y-m-d H:i:s'), date('Y-m-d H:i:s')]);
             } else {
-                DB::update('update adtech_core_users_role set role_id = ?, updated_at = ? where user_id = ?', [$role_id, date('Y-m-d H:i:s'), $user_id]);
+                DB::connection('mysql_core')->update('update adtech_core_users_role set role_id = ?, updated_at = ? where user_id = ?', [$role_id, date('Y-m-d H:i:s'), $user_id]);
             }
 
             activity('user')
@@ -134,9 +134,9 @@ class UserController extends Controller
 
         if (null != $user) {
 
-            $user_role_item = DB::select('select * from adtech_core_users_role where user_id = :id', ['id' => $user_id]);
+            $user_role_item = DB::connection('mysql_core')->select('select * from adtech_core_users_role where user_id = :id', ['id' => $user_id]);
             if (null != $user_role_item) {
-                DB::table('adtech_core_users_role')->where('user_id', $user_id)->delete();
+                DB::connection('mysql_core')->table('adtech_core_users_role')->where('user_id', $user_id)->delete();
             }
 
             $this->user->deleteID($user_id);

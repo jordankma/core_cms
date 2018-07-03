@@ -88,6 +88,7 @@ return [
 
     // available since v1.3.0
     'valid_image_mimetypes' => [
+        'image/png',
         'image/jpeg',
         'image/pjpeg',
         'image/png',
@@ -112,8 +113,9 @@ return [
     'create_file_mode' => 0644,
 
     // available since v1.3.0
-    // only when '/laravel-filemanager?type=Files'
+    // only when '/admin/laravel-filemanager?type=Files'
     'valid_file_mimetypes' => [
+        'image/png',
         'image/jpeg',
         'image/pjpeg',
         'image/png',
