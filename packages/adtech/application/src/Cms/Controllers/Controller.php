@@ -7,7 +7,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Collection;
 use Adtech\Core\App\Models\Domain;
 use Adtech\Core\App\Models\Menu;
-use Adtech\Core\App\Models\Setting;
+// use Adtech\Core\App\Models\Setting;
 use Session;
 use Cache;
 use Auth;
@@ -63,8 +63,13 @@ class Controller extends BaseController
         }
 
         //get setting value
-        $settings = Setting::all();
+        // $settings = Setting::all();
+        $settings = [];
         $settingView = array();
+        $settingView['logo'] = '';
+        $settingView['title'] = '';
+        $settingView['favicon'] = '';
+        $settingView['logo_link'] = '';
         if (count($settings) > 0) {
             foreach ($settings as $setting) {
                 switch ($setting->name) {

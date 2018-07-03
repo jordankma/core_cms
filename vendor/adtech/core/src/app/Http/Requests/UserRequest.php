@@ -34,7 +34,7 @@ class UserRequest extends FormRequest
             case 'POST': {
                 return [
                     'contact_name' => 'required|min:3',
-                    'email' => 'required|email|unique:adtech_core_users,email',
+                    'email' => 'required|email|unique:mysql_core.adtech_core_users,email',
                     'password' => 'required|between:3,32',
                     'password_confirm' => 'required|same:password'
                 ];
