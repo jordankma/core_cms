@@ -4,7 +4,7 @@ namespace Dhcd\News\App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Adtech\Application\Cms\Controllers\Controller as Controller;
-
+use Illuminate\Support\Collection;
 use Dhcd\News\App\Http\Requests\NewsCatRequest;
 
 use Dhcd\News\App\Repositories\NewsRepository;
@@ -26,6 +26,7 @@ use Auth;
 use DateTime;
 class NewsCatController extends Controller
 {	
+    protected $_newsCatList;
     private $messages = array(
         'name.regex' => "Sai định dạng",
         'required' => "Bắt buộc",
@@ -47,10 +48,12 @@ class NewsCatController extends Controller
      * Chức năng : get view add news cat
      */
 	public function create(){
-		$list_news_cat = $this->news_cat->all();
-		if(!empty($list_news_cat)){
-			$list_news_cat = $list_news_cat->toArray();
-		}
+        $newsCatData = array(
+            'items' => array(),
+            'parents' => array()
+        );
+        self::getCate();
+        $list_news_cat = $this->_newsCatList;
 		return view('DHCD-NEWS::modules.news.news_cat.create',compact('list_news_cat'));
 	}
 	/**
@@ -61,20 +64,14 @@ class NewsCatController extends Controller
      */
 	public function add(NewsCatRequest $request){
         $name = $request->name;
-        $time = new DateTime();
         $news_cat = new NewsCat();
         $news_cat->name = $name;
         $news_cat->cat_alias = self::stripUnicode($name);
-        $news_cat->created_at = $time;
-        $news_cat->updated_at = $time;
+        $news_cat->created_at = new DateTime();
+        $news_cat->updated_at = new DateTime();
         $news_cat->status = 1;
         $news_cat->visible = 1;
-        if(!empty($request->cat_child)){
-            $news_cat->parent_news_cat_id = $request->news_cat_id;
-        }
-        else{
-            $news_cat->parent_news_cat_id = 0;  
-        }
+        $news_cat->parent = $request->parent_id;
 		$news_cat->save();
 		if ($news_cat->news_cat_id) {
             activity('news_cat')
@@ -82,9 +79,9 @@ class NewsCatController extends Controller
                 ->withProperties($request->all())
                 ->log('User: :causer.email - Add NewsCat - name: :properties.name, news_cat_id: ' . $news_cat->news_cat_id);
 
-            return redirect()->route('dhcd.news.news.cat.manager')->with('success', trans('dhcd-news::language.messages.success.create'));
+            return redirect()->route('dhcd.news.cat.manager')->with('success', trans('dhcd-news::language.messages.success.create'));
         } else {
-            return redirect()->route('dhcd.news.news.cat.manager')->with('error', trans('dhcd-news::language.messages.error.create'));
+            return redirect()->route('dhcd.news.cat.manager')->with('error', trans('dhcd-news::language.messages.error.create'));
         }
 	}
 	/**
@@ -109,9 +106,16 @@ class NewsCatController extends Controller
      * @params: 
      * Chức năng : get view sửa chuyên đề
      */
-	public function show($news_cat_id){
+	public function show(Request $request){
+        $news_cat_id = $request->news_cat_id;
 		$news_cat = $this->news_cat->find($news_cat_id);
-		return view('DHCD-NEWS::modules.news.news_cat.edit',compact('news_cat'));
+        $newsCatData = array(
+            'items' => array(),
+            'parents' => array()
+        );
+        self::getCate();
+        $list_news_cat = $this->_newsCatList;
+		return view('DHCD-NEWS::modules.news.news_cat.edit',compact('news_cat','list_news_cat'));
 	}	
 	public function update($news_cat_id,NewsCatRequest $request){
 		$news_cat = $this->news_cat->find($news_cat_id);
@@ -122,9 +126,9 @@ class NewsCatController extends Controller
                 ->withProperties($request->all())
                 ->log('User: :causer.email - Update News Cat - news_cat_id: :properties.news_cat_id, name: :properties.name');
 
-            return redirect()->route('dhcd.news.news.cat.manager')->with('success', trans('DHCD-NEWS::language.messages.success.update'));
+            return redirect()->route('dhcd.news.cat.manager')->with('success', trans('DHCD-NEWS::language.messages.success.update'));
         } else {
-            return redirect()->route('dhcd.news.news.cat.manager')->with('error', trans('DHCD-NEWS::language.messages.error.update'));
+            return redirect()->route('dhcd.news.cat.manager')->with('error', trans('DHCD-NEWS::language.messages.error.update'));
         }
 	}
     public function delete(Request $request)
@@ -142,9 +146,9 @@ class NewsCatController extends Controller
                 ->performedOn($news_cat)
                 ->withProperties($request->all())
                 ->log('User: :causer.email - Delete News Cat - news_cat_id: :properties.news_cat_id, name: ' . $news_cat->name);
-            return redirect()->route('dhcd.news.news.cat.manager')->with('success', trans('DHCD-NEWS::language.messages.success.delete'));
+            return redirect()->route('dhcd.news.cat.manager')->with('success', trans('DHCD-NEWS::language.messages.success.delete'));
         } else {
-            return redirect()->route('dhcd.news.news.cat.manager')->with('error', trans('DHCD-NEWS::language.messages.error.delete'));
+            return redirect()->route('dhcd.news.cat.manager')->with('error', trans('DHCD-NEWS::language.messages.error.delete'));
         }
     }
     public function getModalDelete(Request $request)
@@ -156,7 +160,7 @@ class NewsCatController extends Controller
         ], $this->messages);
         if (!$validator->fails()) {
             try {
-                $confirm_route = route('dhcd.news.news.cat.delete', ['news_cat_id' => $request->news_cat_id]);
+                $confirm_route = route('dhcd.news.cat.delete', ['news_cat_id' => $request->news_cat_id]);
                 return view('includes.modal_confirmation', compact('error', 'model', 'confirm_route'));
             } catch (GroupNotFoundException $e) {
                 return view('includes.modal_confirmation', compact('error', 'model', 'confirm_route'));
@@ -190,25 +194,70 @@ class NewsCatController extends Controller
 	//Table Data to index page
     public function data()
     {
-        $list_news_cat = NewsCat::where('visible',1)->get();
+        // $list_news_cat = NewsCat::where('visible',1)->get();
+        $newsCatData = array(
+            'items' => array(),
+            'parents' => array()
+        );
+        self::getCate();
+        $list_news_cat = Collection::make($this->_newsCatList);
         return Datatables::of($list_news_cat)
             ->editColumn('name', function ($list_news_cat) {
-                if($list_news_cat->parent_news_cat_id==0){
-                    $name = $list_news_cat->name;
-                }
-                else{
-                    $name = '---'.$list_news_cat->name;    
-                }
+                $name = str_repeat('---', $list_news_cat->level) . $list_news_cat->name;
                 return $name;
             })
             ->addColumn('actions', function ($list_news_cat) {
-                $actions = '<a href=' . route('dhcd.news.news.cat.log', ['type' => 'news', 'news_cat_id' => $list_news_cat->news_cat_id]) . ' data-toggle="modal" data-target="#log"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#F99928" data-hc="#F99928" title="log news cat"></i></a>
-                        <a href=' . route('dhcd.news.news.cat.show', ['news_cat_id' => $list_news_cat->news_cat_id]) . '><i class="livicon" data-name="edit" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="update news cat"></i></a>
-                        <a href=' . route('dhcd.news.news.cat.confirm-delete', ['news_cat_id' => $list_news_cat->news_cat_id]) . ' data-toggle="modal" data-target="#delete_confirm"><i class="livicon" data-name="trash" data-size="18" data-loop="true" data-c="#f56954" data-hc="#f56954" title="delete news cat"></i></a>';
-
+                if ($this->user->canAccess('dhcd.news.cat.log')) {
+                    $actions = '<a href=' . route('dhcd.news.cat.log', ['type' => 'news', 'news_cat_id' => $list_news_cat->news_cat_id]) . ' data-toggle="modal" data-target="#log"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#F99928" data-hc="#F99928" title="log news cat"></i></a>';
+                }
+                if ($this->user->canAccess('dhcd.news.cat.show')) {
+                    $actions .= '<a href=' . route('dhcd.news.cat.show', ['news_cat_id' => $list_news_cat->news_cat_id]) . '><i class="livicon" data-name="edit" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="update news cat"></i></a>';
+                }
+                if ($this->user->canAccess('dhcd.news.cat.confirm-delete')) {
+                    $actions .='<a href=' . route('dhcd.news.cat.confirm-delete', ['news_cat_id' => $list_news_cat->news_cat_id]) . ' data-toggle="modal" data-target="#delete_confirm"><i class="livicon" data-name="trash" data-size="18" data-loop="true" data-c="#f56954" data-hc="#f56954" title="delete news cat"></i></a>';
+                }
                 return $actions;
             })
             ->rawColumns(['actions'])
             ->make();
+    }
+
+    function getCate() {
+
+        $news_cats = NewsCat::orderBy('parent')->get();
+        if (count($news_cats) > 0) {
+            foreach ($news_cats as $news_cat) {
+
+                $parent_id = $news_cat->parent;
+                $news_cat_id = $news_cat->news_cat_id;
+
+                $newsCatData['items'][$news_cat_id] = $news_cat;
+                $newsCatData['parents'][$parent_id][] = $news_cat_id;
+            }
+            $this->_newsCatList = new Collection();
+            self::buildMenu(0, $newsCatData);
+        }
+    }
+
+    function buildMenu($parentId, $newsCatData)
+    {
+        if (isset($newsCatData['parents'][$parentId]))
+        {
+            foreach ($newsCatData['parents'][$parentId] as $itemId)
+            {
+                $item = $newsCatData['items'][$itemId];
+                $item->level = 1;
+                if ($parentId == 0)
+                    $item->level = 0;
+                else
+                    $item->level = $newsCatData['items'][$parentId]->level + 1;
+                $this->_newsCatList->push($item);
+
+                // find childitems recursively
+                $more = self::buildMenu($itemId, $newsCatData);
+                if (!empty($more))
+                    $this->_newsCatList->push($more);
+            }
+        }
     }
 }

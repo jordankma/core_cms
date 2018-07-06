@@ -62,7 +62,7 @@
                         <div class="form-group col-xs-12">
                             <div class="form-group">
                                 <button type="submit" class="btn btn-success">{{ trans('adtech-core::buttons.create') }}</button>
-                                <a href="{!! route('dhcd.banner.banner.create') !!}"
+                                <a href="{!! route('dhcd.banner.banner.manage') !!}"
                                    class="btn btn-danger">{{ trans('dhcd-banner::language.buttons.discard') }}</a>
                             </div>
                         </div>
@@ -72,6 +72,7 @@
                         <label>{{trans('dhcd-banner::language.placeholder.banner.close_at') }}</label>
                          <div class="form-group">
                             <input type="button" class="form-control" name="close_at" id="close_at" placeholder="{{trans('dhcd-banner::language.placeholder.banner.close_at') }}">
+                            <p style="color: red">Không chọn mặc định thời hạn là 30 ngày</p>
                         </div>
                         <label>{{trans('dhcd-banner::language.label.link') }}</label>
                         <div class="form-group">
@@ -90,7 +91,7 @@
                     </div>
                     <!-- /.col-sm-4 -->
                 </div>
-                {!! Form::close() !!}
+                </form>
             </div>
         </div>
         <!--main content ends-->

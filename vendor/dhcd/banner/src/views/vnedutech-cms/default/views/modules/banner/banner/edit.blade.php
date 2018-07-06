@@ -63,7 +63,7 @@
                         <div class="form-group col-xs-12">
                             <div class="form-group">
                                 <button type="submit" class="btn btn-success">{{ trans('dhcd-banner::language.buttons.update') }}</button>
-                                <a href="{!! route('dhcd.banner.banner.create') !!}"
+                                <a href="{!! route('dhcd.banner.banner.manage') !!}"
                                    class="btn btn-danger">{{ trans('dhcd-banner::language.buttons.discard') }}</a>
                             </div>
                         </div>
@@ -91,7 +91,7 @@
                     </div>
                     <!-- /.col-sm-4 -->
                 </div>
-                {!! Form::close() !!}
+                </form>
             </div>
         </div>
         <!--main content ends-->

@@ -14,17 +14,17 @@ Route::group(array('prefix' => $adminPrefix), function() {
         Route::get('dhcd/news/news/delete', 'NewsController@delete')->name('dhcd.news.news.delete');
         Route::get('dhcd/news/news/confirm-delete', 'NewsController@getModalDelete')->name('dhcd.news.news.confirm-delete');
         //route news cat
-        Route::get('dhcd/news/news/cat/log', 'NewsCatController@log')->name('dhcd.news.news.cat.log');
-        Route::get('dhcd/news/news/cat/data', 'NewsCatController@data')->name('dhcd.news.news.cat.data');
-        Route::get('dhcd/news/news/cat/manager', 'NewsCatController@manager')->name('dhcd.news.news.cat.manager');
-        Route::get('dhcd/news/news/cat/create', 'NewsCatController@create')->name('dhcd.news.news.cat.create');
-        Route::post('dhcd/news/news/cat/add', 'NewsCatController@add')->name('dhcd.news.news.cat.add');
-        Route::get('dhcd/news/news/cat/show/{news_cat_id}', 'NewsCatController@show')->where('news_cat_id', '[0-9]+')->name('dhcd.news.news.cat.show');
-        Route::post('dhcd/news/news/cat/update/{news_cat_id}', 'NewsCatController@update')->where('news_cat_id', '[0-9]+')->name('dhcd.news.news.cat.update');
-        Route::get('dhcd/news/news/cat/delete', 'NewsCatController@delete')->name('dhcd.news.news.cat.delete');
-        Route::get('dhcd/news/news/cat/confirm-delete', 'NewsCatController@getModalDelete')->name('dhcd.news.news.cat.confirm-delete');
+        Route::get('dhcd/news/cat/log', 'NewsCatController@log')->name('dhcd.news.cat.log');
+        Route::get('dhcd/news/cat/data', 'NewsCatController@data')->name('dhcd.news.cat.data');
+        Route::get('dhcd/news/cat/manager', 'NewsCatController@manager')->name('dhcd.news.cat.manager');
+        Route::get('dhcd/news/cat/create', 'NewsCatController@create')->name('dhcd.news.cat.create');
+        Route::post('dhcd/news/cat/add', 'NewsCatController@add')->name('dhcd.news.cat.add');
+        Route::get('dhcd/news/cat/show', 'NewsCatController@show')->where('news_cat_id', '[0-9]+')->name('dhcd.news.cat.show');
+        Route::post('dhcd/news/cat/update', 'NewsCatController@update')->where('news_cat_id', '[0-9]+')->name('dhcd.news.cat.update');
+        Route::get('dhcd/news/cat/delete', 'NewsCatController@delete')->name('dhcd.news.cat.delete');
+        Route::get('dhcd/news/cat/confirm-delete', 'NewsCatController@getModalDelete')->name('dhcd.news.cat.confirm-delete');
 
-        Route::post('dhcd/news/news/cat/check_name_cat_exist', 'NewsCatController@checkNameExist')->name('dhcd.news.news.cat.check_name_exist');
+        Route::post('dhcd/news/cat/check_name_cat_exist', 'NewsCatController@checkNameExist')->name('dhcd.news.cat.check_name_exist');
         //api
     });
 });

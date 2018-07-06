@@ -178,7 +178,7 @@ class PositionController extends Controller
     //Table Data to index page
     public function data()
     {
-        $positions = Position::query();
+        $positions = $this->position->findAll();
         return Datatables::of($positions)
             ->addIndexColumn()
             ->addColumn('actions', function ($positions) {

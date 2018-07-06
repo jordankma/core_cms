@@ -56,7 +56,7 @@
                         <div class="form-group">
                             <div class="form-group">
                                 <button type="submit" class="btn btn-success">{{ trans('dhcd-banner::language.buttons.create') }}</button>
-                                <a href="{!! route('dhcd.banner.position.create') !!}"
+                                <a href="{!! route('dhcd.banner.position.manage') !!}"
                                    class="btn btn-danger">{{ trans('dhcd-banner::language.buttons.discard') }}</a>
                             </div>
                         </div>

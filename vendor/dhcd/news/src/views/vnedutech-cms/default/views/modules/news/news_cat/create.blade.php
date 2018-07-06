@@ -27,33 +27,27 @@
     <section class="content paddingleft_right15">
             <div class="the-box no-border">
                 <div class="row">
-                        <form action="{{route('dhcd.news.news.cat.add')}}" method="post" id="form-add-cat">
+                        <form action="{{route('dhcd.news.cat.add')}}" method="post" id="form-add-cat">
                             <div class="col-md-5" style="">
+                                    <div class="form-group ui-draggable-handle" id="list-cat">
+                                        <label for="select-1">{{ trans('dhcd-news::language.table.list_news.category') }}</label>
+                                        <select class="form-control" id="select-1" name="parent_id">
+                                            <option value="0">Chuyên mục tổng</option>
+                                            @if(!empty($list_news_cat))
+                                                @foreach($list_news_cat as $news_cat)
+                                                    <option value="{{$news_cat->news_cat_id}}">{{str_repeat('---', $news_cat->level) .$news_cat->name}}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
                                 <div class="form-group ui-draggable-handle" style="position: static;">
                                     <label for="input-text-1">{{trans('dhcd-news::language.label_cat.name_category')}}</label>
                                     <input type="text" name="name" class="form-control" id="input-text-1" placeholder="{{trans('dhcd-news::language.form_cat.category_placeholder')}}">
                                 </div>
-                                @if(!empty($list_news_cat))
-                                    <div class="checkbox ui-draggable-handle" style="position: static;">
-                                        <label>
-                                            <input type="checkbox" name="cat_child" id="cat-child">
-                                            <span>{{trans('dhcd-news::language.label_cat.checkbox')}}</span>
-                                        </label>
-                                    </div>
-                                    <div class="form-group ui-draggable-handle" id="list-cat" style="position: static;display: none">
-                                        <label for="select-1">{{ trans('dhcd-news::language.table.list_news.category') }}</label>
-                                        <select class="form-control" id="select-1" name="news_cat_id">
-                                            <option >Select {{ trans('dhcd-news::language.table.list_news.category') }}</option>
-                                            @foreach($list_news_cat as $news_cat)
-                                                <option value="{{$news_cat['news_cat_id']}}">{{$news_cat['name']}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                @endif
                             </div>
                             <div class="form-group col-md-12">
                                 <button type="submit" class="btn btn-success">{{trans('dhcd-news::language.buttons.create')}}</button>
-                                <a href="" class="btn btn-danger">{{trans('dhcd-news::language.buttons.discard')}}</a>
+                                <a href="{{route('dhcd.news.cat.manager')}}" class="btn btn-danger">{{trans('dhcd-news::language.buttons.discard')}}</a>
                             </div>
                         </form>
                 </div>

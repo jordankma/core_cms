@@ -72,7 +72,7 @@
                 serverSide: true,
                 ajax: '{{ route('dhcd.banner.position.data') }}',
                 columns: [
-                    { data: 'banner_position_id', name: 'banner_position_id'},
+                    { data: 'rownum', name: 'rownum'},
                     { data: 'name', name: 'name' },
                     { data: 'actions', name: 'actions', orderable: false, searchable: false, className: 'fit-content'}
                 ]

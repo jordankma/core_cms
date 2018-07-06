@@ -36,8 +36,7 @@ class BannerRequest extends FormRequest
             }
             case 'POST': {
                 return [
-                    'name' => 'required',
-                    'close_at' => 'required',    
+                    'name' => 'required',   
                     'image' => 'required'   
                 ];
             }

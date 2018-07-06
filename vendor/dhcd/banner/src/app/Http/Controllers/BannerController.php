@@ -45,7 +45,6 @@ class BannerController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'close_at' => 'required',
             'image' => 'required',
             'position' => 'numeric',
             'priority' => 'numeric'
@@ -102,7 +101,6 @@ class BannerController extends Controller
         $data = [
             'banner' => $banner,
             'positions' => $positions,
-            'close_at' => $close_at
         ];
 
         return view('DHCD-BANNER::modules.banner.banner.edit', $data);
@@ -213,7 +211,7 @@ class BannerController extends Controller
     //Table Data to index page
     public function data()
     {
-        $banners = Banner::query();
+        $banners = $this->banner->findAll();
         return Datatables::of($banners)
             ->addIndexColumn()
             ->addColumn('actions', function ($banners) {

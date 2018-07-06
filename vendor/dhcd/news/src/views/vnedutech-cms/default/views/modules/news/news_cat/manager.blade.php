@@ -39,8 +39,8 @@
                     <div class="panel-heading clearfix">
                         <h4 class="panel-title pull-left">{{ $title }}</h4>
                         <div class="pull-right">
-                            @if ($USER_LOGGED->canAccess('dhcd.news.news.cat.create'))
-                                <a href="{{ route('dhcd.news.news.cat.create') }}" class="btn btn-sm btn-default"><span
+                            @if ($USER_LOGGED->canAccess('dhcd.news.cat.create'))
+                                <a href="{{ route('dhcd.news.cat.create') }}" class="btn btn-sm btn-default"><span
                                         class="glyphicon glyphicon-plus"></span> {{ trans('adtech-core::buttons.create') }}</a>
                             @endif
                         </div>
@@ -96,7 +96,7 @@
             var table = $('#table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('dhcd.news.news.cat.data') }}',
+                ajax: '{{ route('dhcd.news.cat.data') }}',
                 columns: [
                     { data: 'news_cat_id', name: 'news_cat_id' },
                     { data: 'name', name: 'name' },

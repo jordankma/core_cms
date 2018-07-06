@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 {{-- Page title --}}
-@section('title'){{ $title = trans('dhcd-news::language.titles.news_cat.add') }} @stop
+@section('title'){{ $title = trans('dhcd-news::language.titles.news_cat.edit') }} @stop
 {{-- page styles --}}
 @section('header_styles')
     <link href="{{ asset('/vendor/' . $group_name . '/' . $skin .'/vendors/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
@@ -27,15 +27,28 @@
     <section class="content paddingleft_right15">
             <div class="the-box no-border">
                 <div class="row">
-                        <form action="{{route('dhcd.news.news.cat.update',$news_cat->news_cat_id)}}" method="post" id="form-add-cat">
+                        <form action="{{route('dhcd.news.cat.update')}}" method="post" id="form-add-cat">
+                            <input type="hidden" name="news_cat_id" value="{{$news_cat->news_cat_id}}">
                             <div class="col-md-5" style="">
+                                    <div class="form-group ui-draggable-handle" id="list-cat">
+                                        <label for="select-1">{{ trans('dhcd-news::language.table.list_news.category') }}</label>
+                                        <select class="form-control" id="select-1" name="parent_id">
+                                            <option value="0">Chuyên mục tổng</option>
+                                            @if(!empty($list_news_cat))
+                                                @foreach($list_news_cat as $nc)
+                                                    <option value="{{$nc->news_cat_id}}" @if($nc->news_cat_id==$news_cat->news_cat_id) selected="" @endif>{{str_repeat('---', $nc->level) .$nc->name}}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
                                 <div class="form-group ui-draggable-handle" style="position: static;">
                                     <label for="input-text-1">{{trans('dhcd-news::language.label_cat.name_category')}}</label>
-                                    <input type="text" name="name" value="{{$news_cat->name}}"class="form-control" id="input-text-1" placeholder="{{$news_cat->name}}">
+                                    <input type="text" name="name" value="{{$news_cat->name}}" class="form-control" id="input-text-1" placeholder="{{trans('dhcd-news::language.form_cat.category_placeholder')}}">
                                 </div>
                             </div>
                             <div class="form-group col-md-12">
-                                <button type="submit" class="btn btn-success">{{trans('dhcd-news::language.buttons.update')}}</button>
+                                <button type="submit" class="btn btn-success">{{trans('dhcd-news::language.buttons.create')}}</button>
+                                <a href="" class="btn btn-danger">{{trans('dhcd-news::language.buttons.discard')}}</a>
                             </div>
                         </form>
                 </div>
@@ -48,7 +61,7 @@
     <!-- begining of page js -->
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrapvalidator/js/bootstrapValidator.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin .'/vendors/select2/js/select2.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/vendor/' . $group_name . '/' . $skin .'/dhcd/news/js/news_cat/edit.js') }}" type="text/javascript" ></script>
+    <script src="{{ asset('/vendor/' . $group_name . '/' . $skin .'/dhcd/news/js/news_cat/add.js') }}" type="text/javascript" ></script>
     <!--end of page js-->
     <script type="text/javascript">
         $('#form-add-cat').bootstrapValidator({
@@ -71,6 +84,16 @@
                         // }
                     }
                 }
+            }
+        });
+        $('#cat-child').change(function(){
+            if(this.checked){   
+                $(this).val("1");
+                $('#list-cat').fadeIn();
+            }
+            else{
+                $(this).val("0");
+                $('#list-cat').fadeOut();
             }
         });
     </script>

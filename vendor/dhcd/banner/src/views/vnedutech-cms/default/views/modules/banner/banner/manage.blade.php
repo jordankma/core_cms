@@ -75,7 +75,7 @@
                 serverSide: true,
                 ajax: '{{ route('dhcd.banner.banner.data') }}',
                 columns: [
-                    { data: 'banner_id', name: 'banner_id' },
+                    { data: 'rownum', name: 'rownum' },
                     { data: 'name', name: 'name' },
                     { data: 'image', name: 'image'},
                     { data: 'link', name: 'link'},
