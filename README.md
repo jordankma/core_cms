@@ -80,4 +80,19 @@ php artisan migrate --path="packages/adtech/core/src/database/migrations"
 php artisan db:seed
  ```
 
+## Lỗi thường gặp
+
+```
+Thư viện Unisharp:
+LfmHelpers.php line 335
+//        return lcfirst(str_singular(request('type'))) === 'image';
+        return lcfirst(str_singular(request('type') ? request('type') : '')) === 'image';
+        
+index.blade.php line 209
+{{--acceptedFiles: "{{ lcfirst(str_singular(request('type'))) == 'image' ? implode(',', config('lfm.valid_image_mimetypes')) : implode(',', config('lfm.valid_file_mimetypes')) }}",--}}
+{{--maxFilesize: ({{ lcfirst(str_singular(request('type'))) == 'image' ? config('lfm.max_image_size') : config('lfm.max_file_size') }} / 1000)--}}
+acceptedFiles: "{{ lcfirst(str_singular(request('type') ? request('type') : '')) == 'image' ? implode(',', config('lfm.valid_image_mimetypes')) : implode(',', config('lfm.valid_file_mimetypes')) }}",
+maxFilesize: ({{ lcfirst(str_singular(request('type') ? request('type') : '')) == 'image' ? config('lfm.max_image_size') : config('lfm.max_file_size') }} / 1000)
+```
+
 ## Chạy thử nghiệm

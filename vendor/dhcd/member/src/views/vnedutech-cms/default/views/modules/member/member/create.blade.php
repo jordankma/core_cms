@@ -275,6 +275,10 @@
                             notEmpty: {
                                 message: 'Trường này không được bỏ trống'
                             },
+                            regexp: {
+                                regexp: '^[a-zA-Z0-9_]+$',
+                                message: 'Username chỉ gồm số hoặc chữ'
+                            },
                             stringLength: {
                                 min: 3,
                                 max: 50,
@@ -320,8 +324,7 @@
                             notEmpty: {
                                 message: 'Trường này không được bỏ trống'
                             },
-                            regexp: {
-                                regexp: "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$",
+                            emailAddress: {
                                 message: 'Email không đúng định dạng'
                             },
                             remote: {

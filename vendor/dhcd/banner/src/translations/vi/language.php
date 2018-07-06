@@ -6,7 +6,12 @@ return [
             "manage" => "Manage banner",
             "create" => "Create banner",
             "update" => "Update banner",
-        ]
+        ],
+        "position" => [
+            "manage" => "Manage position",
+            "create" => "Create position",
+            "update" => "Update position",
+        ],
     ],
     "label" => [
         "name" => "Name",
@@ -15,7 +20,9 @@ return [
         "link" => "Link",
         "priority" => "Priority",
         "position" => "Position",
-        "close_at" => "Close at"
+        "close_at" => "Close at",
+        "width" => "Width",
+        "height" => "Height",
     ],
     "table" => [
         "id" => "#",
@@ -30,6 +37,11 @@ return [
             "priority" => "Priority",
             "position" => "Position",
             "close_at" => "Close at"
+        ],
+        "position" => [
+            "name" => "Name",   
+            "width" => "Width",   
+            "height" => "Height",   
         ]
     ],
     "buttons" => [
@@ -46,6 +58,11 @@ return [
             "priority" => "Priority here..",
             "position" => "Position here..",
             "close_at" => "Close at here.."
+        ],
+        "position" => [
+            "name" => "Name here...",  
+            "width" => "Width here...",  
+            "height" => "Height here...",  
         ]
     ],
     "messages" => [

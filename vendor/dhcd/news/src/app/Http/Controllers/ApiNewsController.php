@@ -3,14 +3,16 @@
 namespace Dhcd\News\App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Adtech\Application\Cms\Controllers\Controller as Controller;
+use Illuminate\Routing\Controller as BaseController;
 
 use Dhcd\News\App\Http\Requests\ApiNewsRequest;
 
 use Dhcd\News\App\Models\News;
 
 use Validator;
-class ApiNewsController extends Controller
+
+
+class ApiNewsController extends BaseController
 {	
 	private $messages = array(
         'required' => "Bắt buộc",
@@ -21,25 +23,28 @@ class ApiNewsController extends Controller
 		$limit = $request->limit;
 		$data_list_news = array();
 		$list_news = News::where('visible',1)->paginate($limit)->toArray();
-		$total_page = $list_news['total'];
-		$current_page = $list_news['current_page'];
 		if(!empty($list_news)){
+			$total_page = $list_news['total'];
+			$current_page = $list_news['current_page'];
 			foreach ($list_news['data'] as $key => $news) {
 				$data_list_news[] =[
 					"id" => $news['news_id'],
                     "title" => base64_encode($news['title']),
-                    "sub_title" => base64_encode($news['desc']),
-                    "photo" => base64_encode($news['image']),
+                    "sub_title" => base64_encode(json_decode($news['news_cat'],true)[0]['name'].' - '.$news['created_at']),
+                    "describe" => base64_encode($news['desc']),
+                    "photo" => $news['image'],
                     "content" => base64_encode($news['content']),
                     "date_created" => $news['created_at'],
                     "date_modified" => $news['updated_at'],
-                    "is_top_new" => $news['is_hot']==1 ? true	:false
+                    "is_top_new" => $news['is_hot'] == 1 ? true : false
 				];	
 			}
 			$data = [
-				'data'=>$data_list_news,
-				"total_page"=>$total_page,
-	            "current_page"=>$current_page,
+				'data'=>[
+					'list_news'=>$data_list_news,
+					"total_page"=>$total_page,
+	            	"current_page"=>$current_page,
+				],
 	            "success"=> true,
 	            "message"=> "Lấy danh sách tin tức home thành công"
 			];
@@ -47,7 +52,7 @@ class ApiNewsController extends Controller
 			return response(json_encode($data))->setStatusCode(200)->header('Content-Type', 'application/json; charset=utf-8');
 		}	
 		else{
-			return json_encode($data_message);
+			return response(json_encode($data_message))->setStatusCode(200)->header('Content-Type', 'application/json; charset=utf-8');
 		}
 	}   
 	public function getNewsHome(ApiNewsRequest $request){
@@ -55,15 +60,16 @@ class ApiNewsController extends Controller
 		$limit = $request->limit;
 		$data_list_news = array();
 		$list_news = News::where('visible',1)->orderBy('is_hot', 'asc')->paginate($limit)->toArray();
-		$total_page = $list_news['total'];
-		$current_page = $list_news['current_page'];
 		if(!empty($list_news)){
+			$total_page = $list_news['total'];
+			$current_page = $list_news['current_page'];
 			foreach ($list_news['data'] as $key => $news) {
 				$data_list_news[] =[
-					"id" => base64_encode($news['news_id']),
+					"id" => $news['news_id'],
                     "title" => base64_encode($news['title']),
-                    "sub_title" => base64_encode($news['desc']),
-                    "photo" => base64_encode($news['image']),
+                    "sub_title" => base64_encode(json_decode($news['news_cat'],true)[0]['name'].' - '.$news['created_at']),
+                    "describe" => base64_encode($news['desc']),
+                    "photo" => $news['image'],
                     "content" => base64_encode($news['content']),
                     "date_created" => $news['created_at'],
                     "date_modified" => $news['updated_at'],
@@ -71,16 +77,18 @@ class ApiNewsController extends Controller
 				];	
 			}
 			$data = [
-				'data'=>$data_list_news,
-				"total_page"=>$total_page,
-	            "current_page"=>$current_page,
+				'data'=>[
+					'list_news_home'=>$data_list_news,
+					"total_page"=>$total_page,
+	            	"current_page"=>$current_page,
+				],
 	            "success"=> true,
-	            "message"=> "Lấy danh sách tin tức thành công"
+	            "message"=> "Lấy danh sách tin tức home thành công"
 			];
 			return response(json_encode($data))->setStatusCode(200)->header('Content-Type', 'application/json; charset=utf-8');
 		}	
 		else{
-			return json_encode($data_message);
+			return response(json_encode($data_message))->setStatusCode(200)->header('Content-Type', 'application/json; charset=utf-8');
 		}
 	} 
 	public function getNewsDetail(ApiNewsRequest $request){
@@ -94,10 +102,10 @@ class ApiNewsController extends Controller
 			if(!empty($news)){
 				$news = $news->toArray();
 				$data_news = [
-					"id"=> base64_encode($news['news_id']),
+					"id"=> $news['news_id'],
 	                "title"=> base64_encode($news['title']),
 	                "display_name"=> base64_encode($news['title']),
-	                "photo"=> base64_encode($news['image']),
+	                "photo"=> $news['image'],
 	                "content" => base64_encode($news['content']), 
 	                "content_html"=> base64_encode($news['content']),        
 	                "date_created"=> $news['created_at'],
@@ -111,7 +119,7 @@ class ApiNewsController extends Controller
 				return response(json_encode($data))->setStatusCode(200)->header('Content-Type', 'application/json; charset=utf-8');
 			}
 			else{
-				return json_encode($data_message);
+				return response(json_encode($data_message))->setStatusCode(200)->header('Content-Type', 'application/json; charset=utf-8');
 			}
 		}
 		else{

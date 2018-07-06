@@ -27,7 +27,7 @@ class Controller extends BaseController
         $id = Auth::id();
         $this->user = Auth::user();
         $email = $this->user ? $this->user->email : null;
-        $host = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : null;
+        $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : null;
         $domain_id = 0;
         if ($host) {
             $domain = Domain::where('name', $host)->first();
@@ -64,11 +64,7 @@ class Controller extends BaseController
 
         //get setting value
         $settings = Setting::all();
-        $settingView = array();
-        $settingView['logo'] = '';
-        $settingView['title'] = '';
-        $settingView['favicon'] = '';
-        $settingView['logo_link'] = '';
+        $settingView = array('logo' => '', 'title' => '', 'favicon' => '', 'logo_link' => '');
         if (count($settings) > 0) {
             foreach ($settings as $setting) {
                 switch ($setting->name) {

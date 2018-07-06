@@ -25,9 +25,10 @@ class DhcdBannerTable extends Migration
             $table->integer("position", false, true)->comment('vi tri banner')->default('0');
             $table->integer("priority", false, true)->comment('thứ tự ưu tiên')->default('1');
             $table->datetime("close_at")->comment('han hien thị banner');
-            $table->tinyInteger('visible', false, true)->comemt('an hien tin 1:hien 0:an')->default(1);
             $table->tinyInteger('status', false, true)->comment('trang thai')->default(1);
+
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

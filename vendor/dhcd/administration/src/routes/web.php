@@ -5,15 +5,15 @@ Route::group(array('prefix' => $adminPrefix), function() {
     Route::group(['middleware' => ['adtech.auth', 'adtech.acl']], function () {
         
         //phuong xa
-        Route::get('dhcd/administration/commune-guild/log', 'CommuneGuildController@log')->name('dhcd.administration.commune-guild.log');
-        Route::get('dhcd/administration/commune-guild/data', 'CommuneGuildController@data')->name('dhcd.administration.commune-guild.data');
-        Route::get('dhcd/administration/commune-guild/manage', 'CommuneGuildController@manage')->name('dhcd.administration.commune-guild.manage');
-        Route::get('dhcd/administration/commune-guild/create', 'CommuneGuildController@create')->name('dhcd.administration.commune-guild.create');
-        Route::post('dhcd/administration/commune-guild/add', 'CommuneGuildController@add')->name('dhcd.administration.commune-guild.add');
-        Route::get('dhcd/administration/commune-guild/show', 'CommuneGuildController@show')->name('dhcd.administration.commune-guild.show');
-        Route::post('dhcd/administration/commune-guild/update', 'CommuneGuildController@update')->name('dhcd.administration.commune-guild.update');
-        Route::get('dhcd/administration/commune-guild/delete', 'CommuneGuildController@delete')->name('dhcd.administration.commune-guild.delete');
-        Route::get('dhcd/administration/commune-guild/confirm-delete', 'CommuneGuildController@getModalDelete')->name('dhcd.administration.commune-guild.confirm-delete');
+        // Route::get('dhcd/administration/commune-guild/log', 'CommuneGuildController@log')->name('dhcd.administration.commune-guild.log');
+        // Route::get('dhcd/administration/commune-guild/data', 'CommuneGuildController@data')->name('dhcd.administration.commune-guild.data');
+        // Route::get('dhcd/administration/commune-guild/manage', 'CommuneGuildController@manage')->name('dhcd.administration.commune-guild.manage');
+        // Route::get('dhcd/administration/commune-guild/create', 'CommuneGuildController@create')->name('dhcd.administration.commune-guild.create');
+        // Route::post('dhcd/administration/commune-guild/add', 'CommuneGuildController@add')->name('dhcd.administration.commune-guild.add');
+        // Route::get('dhcd/administration/commune-guild/show', 'CommuneGuildController@show')->name('dhcd.administration.commune-guild.show');
+        // Route::post('dhcd/administration/commune-guild/update', 'CommuneGuildController@update')->name('dhcd.administration.commune-guild.update');
+        // Route::get('dhcd/administration/commune-guild/delete', 'CommuneGuildController@delete')->name('dhcd.administration.commune-guild.delete');
+        // Route::get('dhcd/administration/commune-guild/confirm-delete', 'CommuneGuildController@getModalDelete')->name('dhcd.administration.commune-guild.confirm-delete');
         //quan huyen
         Route::get('dhcd/administration/country-district/log', 'CountryDistrictController@log')->name('dhcd.administration.country-district.log');
         Route::get('dhcd/administration/country-district/data', 'CountryDistrictController@data')->name('dhcd.administration.country-district.data');

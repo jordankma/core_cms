@@ -9,7 +9,7 @@
         @show
     </title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-    <link rel="icon" href="{{ (!empty($SETTING['title'])) ? asset($SETTING['favicon']) : '' }}" type="image/gif" sizes="16x16">
+    <link rel="icon" href="{{ (!empty($SETTING['favicon'])) ? asset($SETTING['favicon']) : '' }}" type="image/gif" sizes="16x16">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -33,7 +33,7 @@
 <body class="skin-josh">
 <header class="header">
     <a href="{{ (empty($SETTING['logo_link']) || $SETTING['logo_link'] == '') ? route('backend.homepage') : $SETTING['logo_link'] }}" class="logo">
-        <img src="{{ asset($SETTING['logo']) }}" alt="logo" style="height: 50px; max-width: 250px">
+        <img src="{{ (empty($SETTING['logo'])) ? '' : asset($SETTING['logo']) }}" alt="logo" style="height: 50px; max-width: 250px">
     </a>
     <nav class="navbar navbar-static-top" role="navigation">
         <!-- Sidebar toggle button-->

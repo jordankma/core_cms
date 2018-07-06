@@ -15,7 +15,7 @@ class DhcdProvineCityTable extends Migration
     {
         Schema::create('dhcd_provine_city', function (Blueprint $table) {
             $table->increments('provine_city_id');
-            $table->strings('user_id')->comment('user_id cua nguoi dang tin');
+            $table->string('user_id')->comment('user_id cua nguoi dang tin');
             $table->string('name')->comment('name');
             $table->string('alias')->comment('alias');
             $table->string('type')->comment('kieu thanh pho hay tinh');

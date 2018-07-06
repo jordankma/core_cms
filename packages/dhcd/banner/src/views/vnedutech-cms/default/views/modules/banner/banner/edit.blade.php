@@ -48,7 +48,13 @@
                         </div>
                         <label>{{trans('dhcd-banner::language.label.position') }}</label>
                         <div class="form-group">
-                            <input type="number" name="position" class="form-control" value="{{$banner->position}}" placeholder="{{trans('dhcd-banner::language.placeholder.banner.position') }}">
+                            <select class="form-control" id="position" name="position">
+                            @if(!empty($positions))
+                            @foreach($positions as $position)
+                                <option value="{{$position->banner_position_id }}" @if($position->banner_position_id ==$banner->position) selected="" @endif>{{$position->name}}</option>
+                            @endforeach
+                            @endif
+                            </select>
                         </div>
                         <label>{{trans('dhcd-banner::language.label.priority') }}</label>
                         <div class="form-group">
@@ -66,7 +72,7 @@
                     <div class="col-sm-6">
                         <label>{{trans('dhcd-banner::language.placeholder.banner.close_at') }}</label>
                          <div class="form-group">
-                            <input type="text" class="form-control" value="{{$banner->close_at}}" name="close_at" id="close_at" placeholder="{{trans('dhcd-banner::language.placeholder.banner.close_at') }}">
+                            <input type="text" class="form-control" value="{{$close_at}}" name="close_at" id="close_at" placeholder="{{trans('dhcd-banner::language.placeholder.banner.close_at') }}">
                         </div>
                         <label>{{trans('dhcd-banner::language.label.link') }}</label>
                         <div class="form-group">
@@ -107,7 +113,8 @@
             var domain = "/admin/laravel-filemanager/";
             $('#lfm').filemanager('image', {prefix: domain});
             $('#close_at').datetimepicker({
-                format: 'YYYY-M-D',
+                format: 'DD-MM-YYYY',
+                minDate: new Date()
             });
             $('#form-edit-banner').bootstrapValidator({
                 feedbackIcons: {

@@ -48,7 +48,7 @@
                     <hr>
                 <div id='reload-spe-sub'>
                     <div class="panel-body ">
-                        <div class="row">
+                        <div class="table-responsive">
                             <table class="table table-bordered" id="table">
                                 <thead>
                                     <tr>                                             

@@ -31,18 +31,20 @@
         <div class="row">
             <div class="the-box no-border">
                 <!-- errors -->
-                {!! Form::open(array('url' => route('dhcd.topic.topic.add'), 'method' => 'post', 'class' => 'bf', 'id' => 'demoForm', 'files'=> true)) !!}
+                <form action="{{route('dhcd.topic.topic.add')}}" method="post" id="form-add-topic">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
                 <div class="row">
                     <div class="col-sm-8">
-                        <label>Demo Name</label>
+                        <label>{{trans('dhcd-topic::language.form.text.name') }}</label>
                         <div class="form-group {{ $errors->first('name', 'has-error') }}">
-                            {!! Form::text('name', null, array('class' => 'form-control', 'autofocus'=>'autofocus','placeholder'=> trans('dhcd-topic::language.placeholder.demo.name_here'))) !!}
+                            <input type="text" class="form-control" name="name" placeholder="{{trans('dhcd-topic::language.placeholder.topic.name_here')}}">
                             <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                         </div>
-                    </div>
-                    <!-- /.col-sm-8 -->
-                    <div class="col-sm-4">
+                        <label>{{trans('dhcd-topic::language.form.text.topic_hot') }}</label>
+                        <div class="form-group">
+                            <input type="radio" name="is_hot" value="1" id="topic_hot"> <label for="topic_hot" > {{trans('dhcd-topic::language.form.text.hot') }} </label> 
+                            <input type="radio" name="is_hot" value="2" id="topic_normal" checked=""> <label for="topic_normal" style="margin-right: 40px"> {{trans('dhcd-topic::language.form.text.normal') }} </label>
+                        </div>
                         <div class="form-group col-xs-12">
                             <label for="blog_category" class="">Actions</label>
                             <div class="form-group">
@@ -51,6 +53,9 @@
                                    class="btn btn-danger">{{ trans('dhcd-topic::language.buttons.discard') }}</a>
                             </div>
                         </div>
+                    </div>
+                    <!-- /.col-sm-8 -->
+                    <div class="col-sm-4">
                     </div>
                     <!-- /.col-sm-4 -->
                 </div>
@@ -71,5 +76,21 @@
         $(function () {
             $("[name='permission_locked']").bootstrapSwitch();
         })
+    </script>
+    <script type="text/javascript">
+        $('#form-add-topic').bootstrapValidator({
+            feedbackIcons: {
+                // validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                name: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Bạn chưa nhập tiêu đề'
+                        }
+                    }
+                }
+            }
+        });    
     </script>
 @stop

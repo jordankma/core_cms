@@ -35,9 +35,11 @@ class DhcdMemberTable extends Migration
             $table->string('reg_ip')->nullable();
             $table->datetime('last_login')->nullable();
             $table->string('last_ip')->nullable();
-            $table->tinyInteger('visible', false, true)->comemt('an hien tin 1:hien 0:an')->default(1);
+            
             $table->tinyInteger('status', false, true)->comment('trang thai')->default(1);
+            
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

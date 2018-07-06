@@ -47,11 +47,17 @@
                         </div>
                         <label>{{trans('dhcd-banner::language.label.position') }}</label>
                         <div class="form-group">
-                            <input type="number" name="position" class="form-control" placeholder="{{trans('dhcd-banner::language.placeholder.banner.position') }}">
+                            <select class="form-control" id="position" name="position" required="">
+                            @if(!empty($positions))
+                            @foreach($positions as $position)
+                                <option value="{{$position->banner_position_id}}">{{$position->name}}</option>
+                            @endforeach
+                            @endif
+                            </select>
                         </div>
                         <label>{{trans('dhcd-banner::language.label.priority') }}</label>
                         <div class="form-group">
-                            <input type="number" name="priority" class="form-control" placeholder="{{trans('dhcd-banner::language.placeholder.banner.priority') }}">
+                            <input type="number" name="priority" min="0" class="form-control" placeholder="{{trans('dhcd-banner::language.placeholder.banner.priority') }}">
                         </div>
                         <div class="form-group col-xs-12">
                             <div class="form-group">
@@ -65,14 +71,14 @@
                     <div class="col-sm-6">
                         <label>{{trans('dhcd-banner::language.placeholder.banner.close_at') }}</label>
                          <div class="form-group">
-                            <input type="text" class="form-control" name="close_at" id="close_at" placeholder="{{trans('dhcd-banner::language.placeholder.banner.close_at') }}">
+                            <input type="button" class="form-control" name="close_at" id="close_at" placeholder="{{trans('dhcd-banner::language.placeholder.banner.close_at') }}">
                         </div>
                         <label>{{trans('dhcd-banner::language.label.link') }}</label>
                         <div class="form-group">
                             <input type="text" name="link" class="form-control" placeholder="{{trans('dhcd-banner::language.placeholder.banner.link') }}">
                         </div>
                         <label>{{trans('dhcd-banner::language.label.image') }}</label>
-                        <div class="form-group">
+                        <div class=" input-group">
                             <span class="input-group-btn">
                                 <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
                                     <i class="fa fa-picture-o"></i> Choose
@@ -99,6 +105,7 @@
     <script src="{{ asset('/vendor/laravel-filemanager/js/lfm.js') }}" type="text/javascript" ></script>
     <script type="text/javascript" src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/moment/js/moment.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/datetimepicker/js/bootstrap-datetimepicker.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/select2/js/select2.js') }}"></script>
     <!--end of page js-->
     <script>
         $(function () {
@@ -106,7 +113,8 @@
             var domain = "/admin/laravel-filemanager/";
             $('#lfm').filemanager('image', {prefix: domain});
             $('#close_at').datetimepicker({
-                format: 'YYYY-M-D',
+                format: 'DD-MM-YYYY',
+                minDate: new Date()
             });
             $('#form-add-banner').bootstrapValidator({
                 feedbackIcons: {
@@ -120,20 +128,13 @@
                             }
                         }
                     },
-                    close_at: {
-                        validators: {
-                            notEmpty: {
-                                message: 'Bạn chưa chọn ngày hết hạn'
-                            }
-                        }
-                    },
                     image: {
                         validators: {
                             notEmpty: {
                                 message: 'Bạn chưa chọn ảnh banner'
                             }
                         }
-                    }
+                    },
                 }
             }); 
         })

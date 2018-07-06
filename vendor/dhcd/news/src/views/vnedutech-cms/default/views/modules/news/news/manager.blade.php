@@ -92,10 +92,10 @@
                     <hr>
                 </div>
                 <div id='reload-spe-sub'>
-                    <div class="panel-body ">
-                        <div class="row">
+                    <div class="panel-body">
+                        <div class="table-responsive">
                             <table class="table table-bordered" id="table">
-                                <thead>
+                                <thead >
                                     <tr>                                             
                                         <th class="fit-content">{{ trans('dhcd-news::language.table.id') }}</th>
                                         <th>{{ trans('dhcd-news::language.table.list_news.title') }}</th>

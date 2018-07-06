@@ -27,7 +27,9 @@ Route::group(array('prefix' => $adminPrefix), function() {
         Route::post('dhcd/news/news/cat/check_name_cat_exist', 'NewsCatController@checkNameExist')->name('dhcd.news.news.cat.check_name_exist');
         //api
     });
-    Route::get('dhcd/news/news/api/news', 'ApiNewsController@getNews')->name('dhcd.news.news.api.news');
-    Route::get('dhcd/news/news/api/news-home', 'ApiNewsController@getNewsHome')->name('dhcd.news.news.api.news.home');
-    Route::get('dhcd/news/news/api/news/detail-new', 'ApiNewsController@getNewsDetail')->name('dhcd.news.news.api.news.detail');
 });
+    Route::group(array('prefix' => 'dev'), function() {
+        Route::get('get/news', 'ApiNewsController@getNews')->name('dhcd.news.news.api.news');
+        Route::get('get/news-home', 'ApiNewsController@getNewsHome')->name('dhcd.news.news.api.news.home');
+        Route::get('get/detail-new', 'ApiNewsController@getNewsDetail')->name('dhcd.news.news.api.news.detail');
+    });

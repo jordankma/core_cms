@@ -15,7 +15,7 @@ class DhcdCommuneGuildTable extends Migration
     {
         Schema::create('dhcd_commune_guild', function (Blueprint $table) {
             $table->increments('commune_guild_id');
-            $table->strings('user_id')->comment('user_id cua nguoi dang tin');
+            $table->string('user_id')->comment('user_id cua nguoi dang tin');
             $table->integer('parent_code',false,true)->comment('id quan huyen');
             $table->string('name')->comment('name');
             $table->string('alias')->comment('alias');

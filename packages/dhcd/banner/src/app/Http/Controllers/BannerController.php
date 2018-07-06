@@ -10,6 +10,7 @@ use Dhcd\Banner\App\Http\Requests\BannerRequest;
 use Dhcd\Banner\App\Repositories\BannerRepository;
 
 use Dhcd\Banner\App\Models\Banner;
+use Dhcd\Banner\App\Models\Position;
 
 use Spatie\Activitylog\Models\Activity;
 use Yajra\Datatables\Datatables;
@@ -36,7 +37,8 @@ class BannerController extends Controller
     
     public function create()
     {
-        return view('DHCD-BANNER::modules.banner.banner.create');
+        $positions = Position::all();
+        return view('DHCD-BANNER::modules.banner.banner.create',compact('positions'));
     }
 
     public function add(BannerRequest $request)
@@ -45,18 +47,27 @@ class BannerController extends Controller
             'name' => 'required',
             'close_at' => 'required',
             'image' => 'required',
+            'position' => 'numeric',
+            'priority' => 'numeric'
         ], $this->messages);
         if (!$validator->fails()) {
+            if(isset($request->close_at) && $request->close_at != ''){
+                $date = new DateTime($request->close_at);
+                $close_at = $date->format('Y-m-d H:i:s');
+            }
+            else{
+                $date = new DateTime();
+                $date->modify('+30 day');
+                $close_at = $date->format('Y-m-d H:i:s');
+            }
             $banners = new Banner();
             $banners->name = $request->name;
             $banners->desc = $request->desc;
-            if($request->position!=''){
-                $banners->position = $request->position;
-            }
+            $banners->position = $request->position;
             if($request->position!=''){
                 $banners->priority = $request->priority;
             }
-            $banners->close_at = $request->close_at;
+            $banners->close_at = $close_at;
             $banners->link = $request->link;
             $banners->image = $request->image;
             $banners->alias = self::stripUnicode($request->name);
@@ -85,8 +96,13 @@ class BannerController extends Controller
     {
         $banner_id = $request->input('banner_id');
         $banner = $this->banner->find($banner_id);
+        $positions = Position::all();
+        $date = new DateTime($banner->close_at);
+        $close_at = date_format($date, 'd-m-y');
         $data = [
-            'banner' => $banner
+            'banner' => $banner,
+            'positions' => $positions,
+            'close_at' => $close_at
         ];
 
         return view('DHCD-BANNER::modules.banner.banner.edit', $data);
@@ -100,17 +116,18 @@ class BannerController extends Controller
             'image' => 'required',
         ], $this->messages);
         if (!$validator->fails()) {
+            $date = new DateTime($request->close_at);
+            $close_at = $date->format('Y-m-d H:i:s');
+
             $banner_id = $request->banner_id;
             $banners = $this->banner->find($banner_id);
             $banners->name = $request->name;
             $banners->desc = $request->desc;
-            if($request->position!=''){
-                $banners->position = $request->position;
-            }
+            $banners->position = $request->position;
             if($request->position!=''){
                 $banners->priority = $request->priority;
             }
-            $banners->close_at = $request->close_at;
+            $banners->close_at = $close_at;
             $banners->link = $request->link;
             $banners->image = $request->image;
             $banners->alias = self::stripUnicode($request->name);
@@ -158,7 +175,7 @@ class BannerController extends Controller
         $banner_id = $request->input('banner_id');
         $banner = $this->banner->find($banner_id);
         if (null != $banner) {
-            $this->banner->deleteID($banner_id);
+            $this->banner->delete($banner_id);
             activity('banner')
                 ->performedOn($banner)
                 ->withProperties($request->all())
@@ -196,10 +213,11 @@ class BannerController extends Controller
     //Table Data to index page
     public function data()
     {
-        $banners = Banner::where('visible',1)->get();
+        $banners = Banner::query();
         return Datatables::of($banners)
+            ->addIndexColumn()
             ->addColumn('actions', function ($banners) {
-                if ($this->user->canAccess('dhcd.banner.banner.log')) {
+                if ($this->user->canAccess('dhcd.banner.banner.log', ['object_type' => 'banners', 'banner_id' => $banners->banner_id])) {
                     $actions = '<a href=' . route('dhcd.banner.banner.log', ['type' => 'banner', 'id' => $banners->banner_id]) . ' data-toggle="modal" data-target="#log"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#F99928" data-hc="#F99928" title="log banner"></i></a>';
                 }
                 if ($this->user->canAccess('dhcd.banner.banner.show')) {
@@ -214,7 +232,13 @@ class BannerController extends Controller
                 $image = '<img  style="width:100px;height:100px"src="'.$banners->image.'">'; 
                 return $image;   
             })
-            ->rawColumns(['actions','image'])
+            ->addColumn('close_at', function ($banners) {
+                $date = new DateTime($banners->close_at);
+                $close_at = date_format($date, 'd-m-y');
+
+                return $close_at;   
+            })
+            ->rawColumns(['actions','image','close_at'])
             ->make();
     }
 }

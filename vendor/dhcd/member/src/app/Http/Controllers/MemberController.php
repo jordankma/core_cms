@@ -182,8 +182,9 @@ class MemberController extends Controller
         $member_id = $request->input('member_id');
         $member = $this->member->find($member_id);
         if (null != $member) {
-            $member->visible = 0;
-            $member->save();
+            // $member->visible = 0;
+            // $member->save();
+            $member = $this->member->delete($member_id);
             activity('member')
                 ->performedOn($member)
                 ->withProperties($request->all())
@@ -279,7 +280,7 @@ class MemberController extends Controller
     //Table Data to index page
     public function data()
     {
-        $members = Member::where('visible',1)->get();
+        $members = Member::query();
         return Datatables::of($members)
             ->addColumn('actions', function ($members) {
                 if ($this->user->canAccess('dhcd.member.member.log')) {

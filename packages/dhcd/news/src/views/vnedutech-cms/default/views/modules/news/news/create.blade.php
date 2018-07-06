@@ -19,6 +19,12 @@
         .multiselect-container .active a{
             background-color: #fff !important;
         }
+        #cate .btn-group{
+            width: 100% !important;
+        }
+        .bootstrap-tagsinput{
+            width: 100% !important;
+        }
     </style>
 {{-- Page content --}}
 @section('content')

@@ -1,14 +1,14 @@
 @extends('layouts.default')
 
 {{-- Page title --}}
-@section('title'){{ $title = trans('dhcd-topic::language.titles.demo.update') }}@stop
+@section('title'){{ $title = trans('dhcd-topic::language.titles.topic.update') }}@stop
 
 {{-- page styles --}}
 @section('header_styles')
     <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-switch/css/bootstrap-switch.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/css/pages/blog.css') }}" rel="stylesheet" type="text/css">
-    <!--end of page css-->
 @stop
+<!--end of page css-->
 
 
 {{-- Page content --}}
@@ -17,8 +17,8 @@
         <h1>{{ $title }}</h1>
         <ol class="breadcrumb">
             <li>
-                <a href="{{ route('backend.homepage') }}"> <i class="livicon" data-name="home" data-size="16"
-                                                                         data-color="#000"></i>
+                <a href="{{ route('backend.homepage') }}">
+                    <i class="livicon" data-name="home" data-size="16" data-color="#000"></i>
                     {{ trans('adtech-core::labels.home') }}
                 </a>
             </li>
@@ -30,38 +30,39 @@
         <!--main content-->
         <div class="row">
             <div class="the-box no-border">
-                {!! Form::model($demo, ['url' => route('dhcd.topic.demo.update'), 'method' => 'put', 'class' => 'bf', 'files'=> true]) !!}
+                <!-- errors -->
+                <form action="{{route('dhcd.topic.topic.update')}}" method="post" id="form-add-topic">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
+                <input type="hidden" name="topic_id" value="{{ $topic->topic_id }}"/>
                 <div class="row">
                     <div class="col-sm-8">
-                        <label>Demo Name</label>
-                        <div class="form-group {{ $errors->first('title', 'has-error') }}">
-                            {!! Form::text('name', null, array('class' => 'form-control', 'autofocus'=>'autofocus', 'placeholder'=>trans('dhcd-topic::language.placeholder.demo.name_here'))) !!}
-                            <span class="help-block">{{ $errors->first('title', ':message') }}</span>
+                        <label>{{trans('dhcd-topic::language.form.text.name') }}</label>
+                        <div class="form-group {{ $errors->first('name', 'has-error') }}">
+                            <input type="text" value="{{$topic->name}}" class="form-control" name="name" placeholder="{{trans('dhcd-topic::language.placeholder.topic.name_here')}}">
+                            <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                         </div>
-                        <div class="form-group">
-                            {!! Form::hidden('demo_id') !!}
+                        <label>{{trans('dhcd-topic::language.form.text.topic_hot') }}</label>
+                        <div class="form-group {{ $errors->first('name', 'has-error') }}">
+                            <input type="radio" name="is_hot" value="1" id="topic_hot" @if($topic->is_hot==1) checked="" @endif> <label for="topic_hot" style="margin-right: 40px"> {{trans('dhcd-topic::language.form.text.hot') }} </label> 
+                            <input type="radio" name="is_hot" value="2" id="topic_normal" @if($topic->is_hot==2) checked="" @endif> <label for="topic_normal"> {{trans('dhcd-topic::language.form.text.normal') }} </label>
+                            <span class="help-block">{{ $errors->first('name', ':message') }}</span>
+                        </div>
+                        <div class="form-group col-xs-12">
+                            <label for="blog_category" class="">Actions</label>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-success">{{ trans('dhcd-topic::language.buttons.update') }}</button>
+                                <a href="{!! route('dhcd.topic.topic.create') !!}"
+                                   class="btn btn-danger">{{ trans('dhcd-topic::language.buttons.discard') }}</a>
+                            </div>
                         </div>
                     </div>
                     <!-- /.col-sm-8 -->
                     <div class="col-sm-4">
-                        <label for="blog_category" class="">Actions</label>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-success">{{ trans('adtech-core::buttons.save') }}</button>
-                            <a href="{!! route('dhcd.topic.demo.create') !!}"
-                               class="btn btn-danger">{{ trans('dhcd-topic::language.buttons.discard') }}</a>
-                        </div>
                     </div>
-                    <!-- /.col-sm-4 --> </div>
-                <!-- /.row -->
+                    <!-- /.col-sm-4 -->
+                </div>
                 {!! Form::close() !!}
             </div>
-            @if ( $errors->any() )
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            @endif
         </div>
         <!--main content ends-->
     </section>
@@ -72,9 +73,26 @@
     <!-- begining of page js -->
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-switch/js/bootstrap-switch.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrapvalidator/js/bootstrapValidator.min.js') }}" type="text/javascript"></script>
+    <!--end of page js-->
     <script>
         $(function () {
-            $("[name='permission_locked'], [name='status']").bootstrapSwitch();
+            $("[name='permission_locked']").bootstrapSwitch();
         })
+    </script>
+    <script type="text/javascript">
+        $('#form-add-topic').bootstrapValidator({
+            feedbackIcons: {
+                // validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                name: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Bạn chưa nhập tiêu đề'
+                        }
+                    }
+                }
+            }
+        });    
     </script>
 @stop

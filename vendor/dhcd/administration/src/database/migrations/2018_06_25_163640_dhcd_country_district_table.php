@@ -15,7 +15,7 @@ class DhcdCountryDistrictTable extends Migration
     {
         Schema::create('dhcd_country_district', function (Blueprint $table) {
             $table->increments('country_district_id');
-            $table->strings('user_id')->comment('user_id cua nguoi dang tin');
+            $table->string('user_id')->comment('user_id cua nguoi dang tin');
             $table->integer('parent_code',false,true)->comment('user_id cua nguoi dang tin');
             $table->string('name')->comment('name');
             $table->string('alias')->comment('alias');

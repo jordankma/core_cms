@@ -17,7 +17,7 @@ class DhcdTopicTable extends Migration
             $table->increments('topic_id');
             $table->string('name');
             $table->string('alias');
-            $table->tinyInteger('is_hot', false, true)->comemt('an hien tin 1:hien 0:an')->default(0);
+            $table->tinyInteger('is_hot', false, true)->comemt('1 hot 2 normal')->default(0);
             $table->tinyInteger('visible', false, true)->comemt('an hien tin 1:hien 0:an')->default(1);
             $table->tinyInteger('status', false, true)->comment('trang thai')->default(0);
             $table->timestamps();
