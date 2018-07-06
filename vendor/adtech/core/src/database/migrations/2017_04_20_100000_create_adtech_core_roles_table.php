@@ -19,8 +19,9 @@ class CreateAdtechCoreRolesTable extends Migration
             $table->tinyInteger('permission_locked', false, true)->default(0);
             $table->tinyInteger('sort', false, true)->default(99);
             $table->tinyInteger('status', false, true)->default(1);
-            $table->tinyInteger('visible', false, true)->default(1);
+
             $table->timestamps();
+            $table->softDeletes();
             $table->engine = 'InnoDB';
         });
     }

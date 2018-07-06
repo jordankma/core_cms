@@ -78,7 +78,7 @@ class DomainController extends Controller
 
         if (null != $domain) {
 
-            $this->domain->deleteID($domain_id);
+            $this->domain->delete($domain_id);
 
             //Delete folder domain config
             shell_exec('cd ../ && rm -rf packages/adtech/application/src/configs/' . $domain->name);
@@ -191,7 +191,7 @@ class DomainController extends Controller
             }
         }
 
-        $domains = Domain::where('visible', 1)->get();
+        $domains = Domain::query();
         return Datatables::of($domains)
             ->editColumn('name', function ($domains) {
                 if ($this->user->canAccess('adtech.core.package.manage')) {

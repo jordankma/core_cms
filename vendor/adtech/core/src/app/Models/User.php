@@ -9,10 +9,11 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use \Adtech\Application\Cms\Libraries\Acl as AdtechAcl;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
-    use Authenticatable, CanResetPassword, Notifiable;
+    use Authenticatable, CanResetPassword, Notifiable, SoftDeletes;
 
     /**
      * The database table used by the model.
@@ -39,8 +40,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     protected $hidden = ['password', 'remember_token', 'salt'];
 
+    protected $dates = ['deleted_at'];
+
     private $rules = array(
-        'email' => 'required|email|unique:adtech_core_users',
+        'email' => 'required|email|unique:mysql_core.adtech_core_users',
         'password' => 'required|min:6|confirmed',
         'password_confirmation' => 'required|min:6',
         'contact_name' => 'required',

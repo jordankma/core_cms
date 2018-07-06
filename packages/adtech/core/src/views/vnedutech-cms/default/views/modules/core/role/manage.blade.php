@@ -82,7 +82,7 @@
                     }
                 },
                 columns: [
-                    { data: 'role_id', name: 'role_id' },
+                    { data: 'DT_Row_Index', name: 'DT_Row_Index' },
                     { data: 'name', name: 'name' },
                     { data: 'sort', name: 'sort' },
                     { data: 'created_at', name: 'created_at'},

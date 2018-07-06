@@ -40,7 +40,7 @@ class Controller extends BaseController
         if(isset($_GET["domain_id"])) {
             $domain_id = $_GET["domain_id"];
         }
-        self::getMenu($domain_id);
+        self::getMenu($this->domainDefault);
         $arrColor = ['#4089C7', '#00BB8D', '#58BEDC', '#F99928', '#F06E6B', '#A7B4BA'];
 
         if (null != $this->_menuList) {
@@ -63,13 +63,16 @@ class Controller extends BaseController
         }
 
         //get setting value
-        $settings = Setting::all();
-        $settingView = array('logo' => '', 'title' => '', 'favicon' => '', 'logo_link' => '');
+        $settings = Setting::where('domain_id', $this->domainDefault)->get();
+        $settingView = array('logo' => '', 'logo_mini' => '', 'title' => '', 'favicon' => '', 'logo_link' => '');
         if (count($settings) > 0) {
             foreach ($settings as $setting) {
                 switch ($setting->name) {
                     case 'logo':
                         $settingView['logo'] = $setting->value;
+                        break;
+                    case 'logo_mini':
+                        $settingView['logo_mini'] = $setting->value;
                         break;
                     case 'title':
                         $settingView['title'] = $setting->value;

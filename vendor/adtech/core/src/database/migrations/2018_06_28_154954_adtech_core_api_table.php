@@ -21,9 +21,9 @@ class AdtechCoreApiTable extends Migration
             $table->text('description')->nullable();
             $table->text('datademo')->nullable();
             $table->tinyInteger('status', false, true)->default(0);
-            $table->tinyInteger('visible', false, true)->default(1);
 
             $table->timestamps();
+            $table->softDeletes();
             $table->engine = 'InnoDB';
         });
     }

@@ -31,6 +31,7 @@ class ForgotPasswordController extends Controller
     {
         if ($request->isMethod('post')) {
             $email = $request->input('inputEmail');
+
             if (($user = $this->_userRepository->findBy('email', $email)) == null) {
                 \Session::flash('flash_messenger', trans('adtech-core::messages.forgot_password_email_not_found'));
                 return redirect(route('adtech.core.auth.forgot'));

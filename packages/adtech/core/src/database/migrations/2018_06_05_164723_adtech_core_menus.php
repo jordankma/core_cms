@@ -23,8 +23,9 @@ class AdtechCoreMenus extends Migration
             $table->integer('domain_id', false, true)->index();
             $table->integer('parent', false, true)->default(0);
             $table->tinyInteger('sort', false, true)->default(99);
-            $table->tinyInteger('visible', false, true)->default(1);
+
             $table->timestamps();
+            $table->softDeletes();
             $table->engine = 'InnoDB';
         });
     }

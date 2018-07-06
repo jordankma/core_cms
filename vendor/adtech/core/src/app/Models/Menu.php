@@ -4,10 +4,11 @@ namespace Adtech\Core\App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use \Adtech\Application\Cms\Libraries\Acl as AdtechAcl;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Menu extends Model
 {
-
+    use SoftDeletes;
     /**
      * The database table used by the model.
      *
@@ -19,7 +20,9 @@ class Menu extends Model
 
     protected $primaryKey = 'menu_id';
 
-    protected $fillable = ['parent', 'name', 'route_name', 'domain_id', 'group'];
+    protected $fillable = ['parent', 'name', 'route_name', 'domain_id', 'group', 'sort', 'icon'];
+
+    protected $dates = ['deleted_at'];
 
     public function domains()
     {

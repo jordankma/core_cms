@@ -66,7 +66,7 @@ class RoleController extends Controller
 
         if (null != $role) {
 
-            $this->role->deleteID($role_id);
+            $this->role->delete($role_id);
             activity('role')
                 ->performedOn($role)
                 ->withProperties($request->all())
@@ -170,7 +170,7 @@ class RoleController extends Controller
     {
         $role_id = $this->_user->role_id;
         $role = $this->role->find($role_id);
-        $roles = Role::where('sort', '>=', $role->sort)->where('visible', 1)->get();
+        $roles = Role::where('sort', '>=', $role->sort)->get();
 
         return Datatables::of($roles)
             ->editColumn('status', function ($roles) {
@@ -195,7 +195,7 @@ class RoleController extends Controller
             ->addColumn('actions', function ($roles) {
                 $actions = '';
                 if ($roles->permission_locked != 1) {
-                    if ($this->_user->canAccess('adtech.core.role.log', ['object_type' => 'role', 'role_id' => $roles->role_id])) {
+                    if ($this->_user->canAccess('adtech.core.role.log', ['object_type' => 'role', 'id' => $roles->role_id])) {
                         $actions .= '<a href=' . route('adtech.core.role.log', ['type' => 'role', 'id' => $roles->role_id]) . ' data-toggle="modal" data-target="#log"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#F99928" data-hc="#F99928" title="Log Role"></i></a>';
                     }
                     if ($this->_user->canAccess('adtech.core.permission.manage', ['object_type' => 'role', 'role_id' => $roles->role_id])) {
@@ -210,6 +210,7 @@ class RoleController extends Controller
                 }
                 return $actions;
             })
+            ->addIndexColumn()
             ->rawColumns(['actions', 'name', 'status'])
             ->make();
     }

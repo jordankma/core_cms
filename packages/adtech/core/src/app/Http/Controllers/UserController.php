@@ -46,6 +46,24 @@ class UserController extends Controller
         return view('ADTECH-CORE::modules.core.user.manage');
     }
 
+    public function checkExits(Request $request)
+    {
+        // Check its existence (for example, execute a query from the database) ...
+        $isAvailable = true; // or false
+
+        if ($request->has('email')) {
+            $findUser = $this->user->findBy('email', $request->input('email'));
+            if (null != $findUser) {
+                $isAvailable = false;
+            }
+        }
+
+        // Finally, return a JSON
+        echo json_encode(array(
+            'valid' => $isAvailable,
+        ));
+    }
+
     public function show(UserRequest $request)
     {
         $user_id = $request->input('user_id');
@@ -56,7 +74,7 @@ class UserController extends Controller
         }
         $groups = Role::all();
 
-        return view('modules.core.user.edit', compact('user', 'groups'));
+        return view('ADTECH-CORE::modules.core.user.edit', compact('user', 'groups'));
     }
 
     public function add(UserRequest $request)
@@ -120,7 +138,7 @@ class UserController extends Controller
     public function create()
     {
         $groups = Role::where('status', 1)->get();
-        return view('modules.core.user.create', compact('groups'));
+        return view('ADTECH-CORE::modules.core.user.create', compact('groups'));
     }
 
     public function delete(UserRequest $request)
@@ -139,7 +157,7 @@ class UserController extends Controller
                 DB::connection('mysql_core')->table('adtech_core_users_role')->where('user_id', $user_id)->delete();
             }
 
-            $this->user->deleteID($user_id);
+            $this->user->delete($user_id);
 
             activity('user')
                 ->performedOn($user)
@@ -231,7 +249,7 @@ class UserController extends Controller
             ->addColumn('actions', function ($users) {
                 $actions = '';
                 if ($users->permission_locked != 1) {
-                    if ($this->_user->canAccess('adtech.core.user.log', ['object_type' => 'user', 'user_id' => $users->user_id])) {
+                    if ($this->_user->canAccess('adtech.core.user.log', ['object_type' => 'user', 'id' => $users->user_id])) {
                         $actions .= '<a href=' . route('adtech.core.user.log', ['type' => 'user', 'id' => $users->user_id]) . ' data-toggle="modal" data-target="#log"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#F99928" data-hc="#F99928" title="Log User"></i></a>';
                     }
                     if ($this->_user->canAccess('adtech.core.permission.manage', ['object_type' => 'user', 'user_id' => $users->user_id])) {

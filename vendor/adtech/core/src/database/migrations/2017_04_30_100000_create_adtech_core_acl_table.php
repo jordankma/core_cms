@@ -25,7 +25,9 @@ class CreateAdtechCoreAclTable extends Migration
             $table->string('vendor', 255)->nullable();
             $table->string('package', 255)->nullable();
             $table->text('params')->nullable();
+
             $table->timestamps();
+            $table->softDeletes();
             $table->engine = 'InnoDB';
         });
     }

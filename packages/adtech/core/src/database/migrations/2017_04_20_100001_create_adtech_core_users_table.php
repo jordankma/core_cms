@@ -22,9 +22,10 @@ class CreateAdtechCoreUsersTable extends Migration
             $table->tinyInteger('status', false, true)->default(1);
             $table->tinyInteger('activated', false, true)->default(0);
             $table->tinyInteger('permission_locked', false, true)->default(0);
-            $table->tinyInteger('visible', false, true)->default(1);
             $table->rememberToken();
+
             $table->timestamps();
+            $table->softDeletes();
             $table->engine = 'InnoDB';
         });
     }

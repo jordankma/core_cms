@@ -5,9 +5,11 @@ namespace Adtech\Core\App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Acl extends Model
 {
+    use SoftDeletes;
     /**
      * The database table used by the model.
      *
@@ -18,6 +20,8 @@ class Acl extends Model
     protected $table = 'adtech_core_acl';
 
     protected $primaryKey = 'acl_id';
+
+    protected $dates = ['deleted_at'];
 
     private static $_aclKey = 'ADTECH_CMS_ACL_RULES';
 

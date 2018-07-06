@@ -3,8 +3,10 @@
 namespace vendor_namespace\package_namespace\App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class model_name extends Model {
+    use SoftDeletes;
     /**
      * The database table used by the model.
      *
@@ -14,6 +16,7 @@ class model_name extends Model {
 
     protected $primaryKey = 'demo_id';
 
-    protected $guarded = ['demo_id'];
     protected $fillable = ['name'];
+
+    protected $dates = ['deleted_at'];
 }

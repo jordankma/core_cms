@@ -37,10 +37,6 @@
                             <i class="livicon" data-name="user-add" data-size="18" data-c="#fff" data-hc="#fff" data-loop="true"></i>
                             {{ $title }}
                         </h3>
-                        <span class="pull-right">
-                             <i class="glyphicon glyphicon-chevron-up clickable"></i>
-                             <i class="glyphicon glyphicon glyphicon-remove removepanel clickable"></i>
-                        </span>
                     </div>
                     <div class="panel-body">
                         <!--main content-->
@@ -124,14 +120,14 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-2">
-                                                <div class="form-group">
-                                                    <label>Permission Lock</label>
-                                                    <div class="form-group">
-                                                        {!! Form::checkbox('permission_locked', null, false, array('data-size'=> 'mini')) !!}
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            {{--<div class="col-sm-2">--}}
+                                                {{--<div class="form-group">--}}
+                                                    {{--<label>Permission Lock</label>--}}
+                                                    {{--<div class="form-group">--}}
+                                                        {{--{!! Form::checkbox('permission_locked', null, false, array('data-size'=> 'mini')) !!}--}}
+                                                    {{--</div>--}}
+                                                {{--</div>--}}
+                                            {{--</div>--}}
                                         </div>
 
                                     </div>
@@ -157,10 +153,11 @@
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrapwizard/jquery.bootstrap.wizard.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrapvalidator/js/bootstrapValidator.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-switch/js/bootstrap-switch.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/js/pages/add_user.js') }}"></script>
     <script>
+        var check_user_available = '{{ route('adtech.core.user.checkExits') }}';
         $(function () {
             $("[name='permission_locked'], [name='status']").bootstrapSwitch();
         })
     </script>
+    <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/js/pages/add_user.js') }}"></script>
 @stop

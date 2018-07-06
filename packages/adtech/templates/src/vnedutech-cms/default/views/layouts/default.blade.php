@@ -9,7 +9,7 @@
         @show
     </title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-    <link rel="icon" href="{{ (!empty($SETTING['favicon'])) ? asset($SETTING['favicon']) : '' }}" type="image/gif" sizes="16x16">
+    <link rel="icon" href="{{ (!empty($SETTING['favicon'])) ? asset($SETTING['favicon']) : '' }}" type="image/png" sizes="32x32">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -27,13 +27,13 @@
     <!-- end of global css -->
 
     <!--page css-->
-@yield('header_styles')
-<!--end of page css-->
+    @yield('header_styles')
+    <!--end of page css-->
 
 <body class="skin-josh">
 <header class="header">
     <a href="{{ (empty($SETTING['logo_link']) || $SETTING['logo_link'] == '') ? route('backend.homepage') : $SETTING['logo_link'] }}" class="logo">
-        <img src="{{ (empty($SETTING['logo'])) ? '' : asset($SETTING['logo']) }}" alt="logo" style="height: 50px; max-width: 250px">
+        <img src="{{ (empty($SETTING['logo_mini'])) ? '' : asset($SETTING['logo_mini']) }}" alt="logo" style="height: 35px; max-width: 200px">
     </a>
     <nav class="navbar navbar-static-top" role="navigation">
         <!-- Sidebar toggle button-->
@@ -49,8 +49,8 @@
                 {{--@include('includes._notifications')--}}
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="{!! asset('/vendor/' . $group_name . '/' . $skin . '/images/authors/no_avatar.jpg') !!}" alt="img" height="35px" width="35px"
-                             class="img-circle img-responsive pull-left"/>
+                            <img src="{!! asset('/vendor/' . $group_name . '/' . $skin . '/images/authors/no_avatar.jpg') !!}" alt="img" height="35px" width="35px"
+                                 class="img-circle img-responsive pull-left"/>
                         <div class="riot">
                             <div>
                                 <p class="user_name_max">{{ $USER_LOGGED->contact_name }}</p>
@@ -67,26 +67,26 @@
                                  class="img-circle img-responsive pull-left"/>
                         </li>
                         <!-- Menu Body -->
-                    {{--<li>--}}
-                    {{--<a href="#">--}}
-                    {{--<i class="livicon" data-name="user" data-s="18"></i>--}}
-                    {{--My Profile--}}
-                    {{--</a>--}}
-                    {{--</li>--}}
-                    {{--<li role="presentation"></li>--}}
-                    {{--<li>--}}
-                    {{--<a href="#">--}}
-                    {{--<i class="livicon" data-name="gears" data-s="18"></i>--}}
-                    {{--Account Settings--}}
-                    {{--</a>--}}
-                    {{--</li>--}}
-                    <!-- Menu Footer-->
+                        {{--<li>--}}
+                            {{--<a href="#">--}}
+                                {{--<i class="livicon" data-name="user" data-s="18"></i>--}}
+                                {{--My Profile--}}
+                            {{--</a>--}}
+                        {{--</li>--}}
+                        {{--<li role="presentation"></li>--}}
+                        {{--<li>--}}
+                            {{--<a href="#">--}}
+                                {{--<i class="livicon" data-name="gears" data-s="18"></i>--}}
+                                {{--Account Settings--}}
+                            {{--</a>--}}
+                        {{--</li>--}}
+                        <!-- Menu Footer-->
                         <li class="user-footer">
                             {{--<div class="pull-left">--}}
-                            {{--<a href="{{ URL::route('adtech.core.auth.logout',$USER_LOGGED_ID) }}">--}}
-                            {{--<i class="livicon" data-name="lock" data-size="16" data-c="#555555" data-hc="#555555" data-loop="true"></i>--}}
-                            {{--Lock--}}
-                            {{--</a>--}}
+                                {{--<a href="{{ URL::route('adtech.core.auth.logout',$USER_LOGGED_ID) }}">--}}
+                                    {{--<i class="livicon" data-name="lock" data-size="16" data-c="#555555" data-hc="#555555" data-loop="true"></i>--}}
+                                    {{--Lock--}}
+                                {{--</a>--}}
                             {{--</div>--}}
                             <div class="pull-right">
                                 <a href="{{ URL::route('adtech.core.auth.logout') }}">
@@ -146,8 +146,8 @@
                 </div>
                 <div class="clearfix"></div>
                 <!-- BEGIN SIDEBAR MENU -->
-            @include('includes._left_menu')
-            <!-- END SIDEBAR MENU -->
+                @include('includes._left_menu')
+                <!-- END SIDEBAR MENU -->
             </div>
         </section>
     </aside>
@@ -155,7 +155,7 @@
 
         <!-- Notifications -->
         <div id="notific">
-            @include('includes.notifications')
+        @include('includes.notifications')
         </div>
 
         <!-- Content -->

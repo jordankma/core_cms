@@ -31,7 +31,7 @@
                     <label class="sr-only"></label>
                     <input type="email" class="form-control email" name="email" placeholder="Email"
                            value="{!! old('email') !!}">
-                    <span class="help-block">{{ $errors->first('email', ':message') }}</span>
+                    {{--<span class="help-block">{{ $errors->first('email', ':message') }}</span>--}}
                 </div>
                 <div class="form-group">
                     <input class="form-control btn btn-primary btn-block" type="submit" value="Reset Your Password">

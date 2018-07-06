@@ -1,6 +1,13 @@
 <?php
 
 return [
+    "login" => [
+        "login" => "Đăng nhập",
+        "forgot_password" => "Quên mật khẩu",
+        "forgot_password_mess" => "Nhập email để tạo lại mật khẩu",
+        "comeback_login" => "Trở lại trang đăng nhập?",
+        "click_here" => "Bấm vào đây"
+    ],
     "page" => [
         "login" => "Login",
         "register" => "Create new account",
@@ -8,7 +15,7 @@ return [
         "reset_password" => "Reset password",
     ],
     "setting" => [
-        "manage" => "Manage Settings"
+        "manage" => "Cài đặt chung"
     ],
     "role" => [
         "manage" => "Manage Roles",

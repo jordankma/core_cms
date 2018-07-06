@@ -4,10 +4,11 @@ namespace Adtech\Core\App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use \Adtech\Application\Cms\Libraries\Acl as AdtechAcl;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Role extends Model
 {
-
+    use SoftDeletes;
     /**
      * The database table used by the model.
      *
@@ -20,7 +21,10 @@ class Role extends Model
     protected $primaryKey = 'role_id';
 
     protected $guarded = ['role_id'];
+
     protected $fillable = ['name', 'sort'];
+
+    protected $dates = ['deleted_at'];
 
     public function canAccess($routeName, $params = null)
     {

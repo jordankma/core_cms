@@ -3,9 +3,11 @@
 namespace Adtech\Core\App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PasswordReset extends Model
 {
+    use SoftDeletes;
     /**
      * The database table used by the model.
      *
@@ -16,4 +18,6 @@ class PasswordReset extends Model
     protected $table = 'adtech_password_resets';
 
     protected $fillable = ['email', 'token', 'created_at'];
+
+    protected $dates = ['deleted_at'];
 }

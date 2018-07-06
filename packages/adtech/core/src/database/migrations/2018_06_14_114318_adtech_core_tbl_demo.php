@@ -16,6 +16,8 @@ class AdtechCoreTblDemo extends Migration
         Schema::connection('mysql_core')->create('tbl_demo', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }

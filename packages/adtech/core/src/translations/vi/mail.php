@@ -9,9 +9,9 @@ return [
         "thank_you" => "Thank you for using our products!"
     ],
     "forgot_password" => [
-        "title" => "Reset your password or unlock your Admicro Account"
+        "title" => "Reset your password or unlock your VNEdutech Account"
     ],
     "reset_password" => [
-        "title" => "Your Admicro Account password has been reset"
+        "title" => "Your VNEdutech Account password has been reset"
     ]
 ];

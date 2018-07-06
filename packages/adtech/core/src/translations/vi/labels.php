@@ -9,13 +9,13 @@ return [
     "login_one_account" => "One account. All of VNEduTech.",
     "login_sign_in" => "Sign in with your VNEduTech Account.",
     "email_address" => "Email Address",
-    "new_password" => "New Password",
-    "confirm_new_password" => "Confirm Password",
+    "new_password" => "Mật khẩu mới",
+    "confirm_new_password" => "Xác nhận mật khẩu",
     "password" => "Password",
     "forgot_having_trouble" => "Having trouble signing in?",
     "forgot_provide_information" => "Please provide additional information to aid in the recovery process.",
     "remember_me" => "Remember me?",
-    "setting_new_password" => "Setting your password",
+    "setting_new_password" => "Đặt mật khẩu mới",
     "extra_params" => "Extra Params",
     "home" => "Home",
     "site" => "Site",
@@ -38,4 +38,8 @@ return [
     "page" => "Trang",
     "rowsPerPage" => "Số bản ghi",
     "of" => "của",
+
+    "setting" => [
+        "title_page" => "Tiêu đề trang"
+    ]
 ];

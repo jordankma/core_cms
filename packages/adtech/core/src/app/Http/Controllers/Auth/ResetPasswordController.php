@@ -18,8 +18,8 @@ class ResetPasswordController extends Controller
 
     public function __construct(PasswordResetRepository $passwordResetRepository, UserRepository $userRepository)
     {
+        parent::__construct();
         $this->_passwordResetRepository = $passwordResetRepository;
-
         $this->_userRepository = $userRepository;
     }
 
@@ -31,7 +31,7 @@ class ResetPasswordController extends Controller
     {
         $passwordReset = $this->_passwordResetRepository->findWhere(['token' => $resetToken])->sortBy('created_at', 0, true)->first();
         if (null == $passwordReset) {
-            view(404);
+            return redirect(route('adtech.core.auth.login'));
         }
 
         $createAtTimestamp = strtotime($passwordReset->created_at);
@@ -75,6 +75,6 @@ class ResetPasswordController extends Controller
             }
         }
 
-        return view('modules.core.auth.password.reset');
+        return view('modules.core.auth.forgot-password-confirm');
     }
 }

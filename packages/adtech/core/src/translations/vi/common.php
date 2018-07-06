@@ -1,68 +1,68 @@
 <?php
 
 return [
-    "back_to_top" => "Back to Top",
+    "back_to_top" => "Lên đầu trang",
     "actions" => [
-        "add" => "Add",
-        "edit" => "Edit",
-        "delete" => "Delete",
-        "permission" => "Permission",
+        "add" => "Thêm",
+        "edit" => "Sửa",
+        "delete" => "Xoá",
+        "permission" => "Phân quyền",
     ],
     "id" => "Id",
     "sequence" => "#",
-    "action" => "Action",
-    "detail" => "Detail",
-    "created_at" => "Created_at",
-    "update_at" => "Update_at",
+    "action" => "Thao tác",
+    "detail" => "Chi tiết",
+    "created_at" => "Tạo lúc",
+    "update_at" => "Cập nhật lúc",
     "permission" => [
-        "allow" => "Allow",
-        "deny" => "Deny"
+        "allow" => "Cho phép",
+        "deny" => "Từ chối"
     ],
     "role" => [
-        "name" => "Name",
-        "sort" => "Sort",
-        "status" => "Status",
-        "permission_locked" => "Permission locked",
-        "name_here" => "Role name here...",
-        "sort_here" => "Role sort here..."
+        "name" => "Tên quyền",
+        "sort" => "Sắp xếp",
+        "status" => "Trạng thái",
+        "permission_locked" => "Khoá chỉnh sửa",
+        "name_here" => "Nhập tên quyền tại đây...",
+        "sort_here" => "Nhập sắp xếp quyền tại đây..."
     ],
     "setting" => [
-        "title_here" => "Title here...",
-        "logo_link_here" => "Link in logo here...",
-        "company_name_here" => "Company name here...",
-        "address_here" => "Address here...",
-        "email_here" => "Email here...",
-        "phone_here" => "Phone number here...",
-        "hotline_here" => "Hotline here...",
-        "ga_code_here" => "GA code here...",
-        "chat_code_here" => "Chat code here..."
+        "title_here" => "Nhập tiêu đề trang tại đây...",
+        "logo_link_here" => "Liên kết logo tại đây...",
+        "company_name_here" => "Nhập tên công ty tại đây...",
+        "address_here" => "Nhập địa chỉ công ty tại đây...",
+        "email_here" => "Nhập email tại đây...",
+        "phone_here" => "Nhập số điện thoại tại đây...",
+        "hotline_here" => "Nhập số đường dây nóng tại đây...",
+        "ga_code_here" => "Nhập mã GA tại đây...",
+        "chat_code_here" => "Nhập mã chat tại đây..."
     ],
     "domain" => [
-        "name" => "Name",
-        "status" => "Status",
-        "name_here" => "Domain name here..."
+        "name" => "Tên miền",
+        "status" => "Trạng thái",
+        "name_here" => "Nhập tên miền tại đây..."
     ],
     "api" => [
-        "name" => "Name",
+        "name" => "Tên api",
         "link" => "Link",
-        "demo" => "Data demo",
-        "status" => "Status",
-        "name_here" => "Api name here...",
-        "description_here" => "Description here...",
-        "datademo_here" => "Data demo here..."
+        "demo" => "Dữ liệu giả lập",
+        "status" => "Trạng thái",
+        "name_here" => "Nhập tên api tại đây...",
+        "description_here" => "Nhập mô tả api tại đây...",
+        "datademo_here" => "Nhập dữ liệu giả lập tại đây..."
     ],
     "menu" => [
-        "icon" => "Icon",
-        "name" => "Name",
-        "sort" => "Sort",
-        "group" => "Group",
-        "status" => "Status",
-        "route_name" => "Route name",
-        "icon_here" => "Icon name here...",
-        "sort_here" => "Menu sort here...",
-        "name_here" => "Menu name here...",
-        "group_name_here" => "Group name here...",
-        "route_name_here" => "Route name here..."
+        "icon" => "Biểu tượng",
+        "name" => "Tên đại diện",
+        "sort" => "Sắp xếp",
+        "group" => "Nhóm",
+        "status" => "Trạng thái",
+        "route_name" => "Tên route",
+        "icon_here" => "Nhập mã biểu tượng tại đây...",
+        "sort_here" => "Nhập sắp xếp menu tại đây...",
+        "name_here" => "Nhập tên đại diện tại đây...",
+        "group_name_here" => "Nhập tên nhóm tại đây...",
+        "route_name_here" => "Nhập tên route tại đây..."
     ],
     "package" => [
         "package" => "Package",
@@ -75,7 +75,7 @@ return [
     ],
     "users" => "Users",
     "user" => [
-        "title" => "Manager User",
+        "title" => "Quản lý User",
         "avatar" => "Avatar",
         "email" => "Email",
         "password" => "Password",

@@ -130,14 +130,14 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-2">
-                                                        <div class="form-group">
-                                                            <label>Permission Lock</label>
-                                                            <div class="form-group">
-                                                                {!! Form::checkbox('permission_locked', null, ($user->permission_locked == 1) ? true : false, array('data-size'=> 'mini')) !!}
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    {{--<div class="col-sm-2">--}}
+                                                        {{--<div class="form-group">--}}
+                                                            {{--<label>Permission Lock</label>--}}
+                                                            {{--<div class="form-group">--}}
+                                                                {{--{!! Form::checkbox('permission_locked', null, ($user->permission_locked == 1) ? true : false, array('data-size'=> 'mini')) !!}--}}
+                                                            {{--</div>--}}
+                                                        {{--</div>--}}
+                                                    {{--</div>--}}
                                                 </div>
                                             </div>
                                             <ul class="pager wizard">

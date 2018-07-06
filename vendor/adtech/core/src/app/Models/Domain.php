@@ -4,10 +4,11 @@ namespace Adtech\Core\App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use \Adtech\Application\Cms\Libraries\Acl as AdtechAcl;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Domain extends Model
 {
-
+    use SoftDeletes;
     /**
      * The database table used by the model.
      *
@@ -19,8 +20,9 @@ class Domain extends Model
 
     protected $primaryKey = 'domain_id';
 
-    protected $guarded = ['domain_id'];
     protected $fillable = ['name'];
+
+    protected $dates = ['deleted_at'];
 
     public function hasPackage($package, $module)
     {

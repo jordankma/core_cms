@@ -221,8 +221,8 @@ class PackageController extends Controller
                         } elseif ($request->input('type') == 'db') {
                             //migrate + seed
                             $pathDatabase = 'packages/' . $package->package_alias . '/' . $package->module_alias . '/src/database/migrations';
-//                            shell_exec('cd ../ && /egserver/php/bin/php artisan migrate:refresh --path="' . $pathDatabase . '"');
-                            shell_exec('cd ../ && php artisan migrate:refresh --path="' . $pathDatabase . '"');
+                            shell_exec('cd ../ && /egserver/php/bin/php artisan migrate:refresh --path="' . $pathDatabase . '"');
+//                            shell_exec('cd ../ && php artisan migrate:refresh --path="' . $pathDatabase . '"');
                         }
                     }
                     return redirect()->route('adtech.core.package.manage', ['id' => $domain_id])->with('success', trans('adtech-core::messages.success.update'));
@@ -278,7 +278,6 @@ class PackageController extends Controller
 
                             file_put_contents($path, str_replace('\/', '/', json_encode($composerObject)));
                         }
-
                         activity('package')
                             ->performedOn($domainsPackage)
                             ->withProperties($request->all())
@@ -286,12 +285,12 @@ class PackageController extends Controller
 
                         //migrate + seed
                         $pathDatabase = 'packages/' . $package->package_alias . '/' . $package->module_alias . '/src/database/migrations';
-//                        shell_exec('cd ../ && /egserver/php/bin/php artisan migrate --path="' . $pathDatabase . '"');
-                        shell_exec('cd ../ && php artisan migrate --path="' . $pathDatabase . '"');
+                        shell_exec('cd ../ && /egserver/php/bin/php artisan migrate --path="' . $pathDatabase . '"');
+//                        shell_exec('cd ../ && php artisan migrate --path="' . $pathDatabase . '"');
 
                         // Dump autoload.
-//                        shell_exec('cd ../ && /egserver/php/bin/composer dump-autoload');
-                        shell_exec('cd ../ && composer dump-autoload');
+                        shell_exec('cd ../ && /egserver/php/bin/composer dump-autoload');
+//                        shell_exec('cd ../ && composer dump-autoload');
 
                         //bung file /views/publics module
                         \Artisan::call('vendor:publish', [
@@ -361,11 +360,12 @@ class PackageController extends Controller
 
                 //delete migrate
                 $pathDatabase = 'packages/' . $package->package_alias . '/' . $package->module_alias . '/src/database/migrations';
-//                shell_exec('cd ../ && /egserver/php/bin/php artisan migrate:reset --path="' . $pathDatabase . '"');
-                shell_exec('cd ../ && php artisan migrate:reset --path="' . $pathDatabase . '"');
+                shell_exec('cd ../ && /egserver/php/bin/php artisan migrate:reset --path="' . $pathDatabase . '"');
+//                shell_exec('cd ../ && php artisan migrate:reset --path="' . $pathDatabase . '"');
 
                 //Delete folder package
-                shell_exec('cd ../ && rm -rf packages/' . $package->package_alias . '/' . $package->module_alias);
+                if ($package->package_alias != 'adtech')
+                    shell_exec('cd ../ && rm -rf packages/' . $package->package_alias . '/' . $package->module_alias);
 
                 activity('package')
                     ->performedOn($domainsPackage)
@@ -694,6 +694,7 @@ class PackageController extends Controller
         $packages = Package::with('domains')
             ->whereHas('domains', function ($query) use ($domain_id) {
                 $query->where('adtech_core_domains_package.domain_id', $domain_id);
+                $query->where('adtech_core_domains_package.deleted_at', null);
             })
             ->get();
 

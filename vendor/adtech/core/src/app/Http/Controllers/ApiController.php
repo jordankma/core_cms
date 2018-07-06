@@ -62,7 +62,7 @@ class ApiController extends Controller
         $api = $this->api->find($api_id);
 
         if (null != $api) {
-            $this->api->deleteID($api_id);
+            $this->api->delete($api_id);
 
             activity('api')
                 ->performedOn($api)
@@ -84,10 +84,10 @@ class ApiController extends Controller
 
                 return view('ADTECH-CORE::modules.core.api.manage', compact("package_id"));
             } else {
-                return redirect()->route('adtech.core.package.manage', ['package_id' => $package_id])->with('error', trans('adtech-core::messages.error.create'));
+                return redirect()->route('adtech.core.package.manage')->with('error', trans('adtech-core::messages.error.create'));
             }
         } else {
-            return redirect()->route('adtech.core.package.manage', ['package_id' => $package_id])->with('error', trans('adtech-core::messages.error.create'));
+            return redirect()->route('adtech.core.package.manage')->with('error', trans('adtech-core::messages.error.create'));
         }
 
     }
@@ -191,7 +191,7 @@ class ApiController extends Controller
             $package_id = $request->input('package_id');
             $packageDetail = $this->package->find($package_id);
             $module_alias = $packageDetail->module_alias;
-            $apis = Api::where('visible', 1)->where('package_id', $package_id)->get();
+            $apis = Api::where('package_id', $package_id)->get();
             return Datatables::of($apis)
                 ->editColumn('datademo', function ($apis) {
                     return '<a href=' . route('adtech.core.api.datademo', ['api_id' => $apis->api_id]) . ' data-toggle="modal" data-target="#datademo"><div class="btn-group btn-group-xs">

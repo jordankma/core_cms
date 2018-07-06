@@ -72,7 +72,7 @@
                 serverSide: true,
                 ajax: '{{ route('vendor_name.package_name.controller_name.data') }}',
                 columns: [
-                    { data: 'controller_name_id', name: 'controller_name_id' },
+                    { data: 'rownum', name: 'rownum' },
                     { data: 'name', name: 'name' },
                     { data: 'created_at', name: 'created_at'},
                     { data: 'updated_at', name: 'updated_at'},

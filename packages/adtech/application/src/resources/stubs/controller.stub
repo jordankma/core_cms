@@ -53,7 +53,7 @@ class controller_namespaceController extends Controller
         $controller_name = $this->controller_name->find($controller_name_id);
 
         if (null != $controller_name) {
-            $this->controller_name->deleteID($controller_name_id);
+            $this->controller_name->delete($controller_name_id);
 
             activity('demo')
                 ->performedOn($controller_name)
@@ -147,8 +147,7 @@ class controller_namespaceController extends Controller
     //Table Data to index page
     public function data()
     {
-        $controller_names = controller_namespace::all();
-        return Datatables::of($controller_names)
+        return Datatables::of($this->controller_name->findAll())
             ->addColumn('actions', function ($controller_names) {
                 $actions = '<a href=' . route('vendor_name.package_name.controller_name.log', ['type' => 'controller_name', 'id' => $controller_names->controller_name_id]) . ' data-toggle="modal" data-target="#log"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#F99928" data-hc="#F99928" title="log controller_name"></i></a>
                         <a href=' . route('vendor_name.package_name.controller_name.show', ['controller_name_id' => $controller_names->controller_name_id]) . '><i class="livicon" data-name="edit" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="update controller_name"></i></a>

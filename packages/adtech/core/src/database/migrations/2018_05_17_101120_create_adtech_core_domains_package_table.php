@@ -18,7 +18,9 @@ class CreateAdtechCoreDomainsPackageTable extends Migration
             $table->integer('domain_id', false, true)->index();
             $table->integer('package_id', false, true)->index();
             $table->integer('status')->default(0);
+
             $table->timestamps();
+            $table->softDeletes();
             $table->engine = 'InnoDB';
 
             $table->foreign('domain_id')->references('domain_id')->on('adtech_core_domains')->onDelete('cascade');

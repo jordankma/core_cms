@@ -119,6 +119,7 @@ Route::group(array('prefix' => $adminPrefix), function () {
         Route::get('adtech/core/user/show', 'UserController@show')->name('adtech.core.user.show');
         Route::put('adtech/core/user/update', 'UserController@update')->name('adtech.core.user.update');
         Route::get('adtech/core/user/delete', 'UserController@delete')->name('adtech.core.user.delete');
+        Route::get('adtech/core/user/checkExits', 'UserController@checkExits')->name('adtech.core.user.checkExits');
         Route::get('adtech/core/user/confirm-delete', 'UserController@getModalDelete')->name('adtech.core.user.confirm-delete');
 
         Route::get('adtech/core/route/list', 'RouteController@manage')->name('adtech.core.route.list');

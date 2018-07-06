@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAdtechCoreDomainsTable extends Migration
+class CreatePasswordResetsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateAdtechCoreDomainsTable extends Migration
      */
     public function up()
     {
-        Schema::connection('mysql_core')->create('adtech_core_domains', function (Blueprint $table) {
-            $table->increments('domain_id')->index();
-            $table->string('name');
+        Schema::connection('mysql_core')->create('adtech_password_resets', function (Blueprint $table) {
+            $table->increments('id')->index();
+            $table->string('email')->index();
+            $table->string('token');
 
             $table->timestamps();
             $table->softDeletes();
@@ -30,6 +31,6 @@ class CreateAdtechCoreDomainsTable extends Migration
      */
     public function down()
     {
-        Schema::connection('mysql_core')->dropIfExists('adtech_core_domains');
+        Schema::connection('mysql_core')->dropIfExists('password_resets');
     }
 }

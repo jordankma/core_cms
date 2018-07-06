@@ -16,9 +16,9 @@ class CreateAdtechCoreDomainsTable extends Migration
         Schema::connection('mysql_core')->create('adtech_core_domains', function (Blueprint $table) {
             $table->increments('domain_id')->index();
             $table->string('name');
-            $table->tinyInteger('visible', false, true)->default(1);
 
             $table->timestamps();
+            $table->softDeletes();
             $table->engine = 'InnoDB';
         });
     }

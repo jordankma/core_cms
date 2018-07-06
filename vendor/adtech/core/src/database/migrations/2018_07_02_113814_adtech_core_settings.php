@@ -15,6 +15,7 @@ class AdtechCoreSettings extends Migration
     {
         Schema::connection('mysql_core')->create('adtech_core_settings', function (Blueprint $table) {
             $table->increments('setting_id');
+            $table->increments('domain_id', false, true)->default(0);
             $table->string('name');
             $table->string('value');
             $table->tinyInteger('status', false, true)->default('1');

@@ -23,9 +23,9 @@ class CreateAdtechCorePackagesTable extends Migration
             $table->string('module_alias');
             $table->integer('create_by', false, true)->default(0);
             $table->tinyInteger('status', false, true)->default(0);
-            $table->tinyInteger('visible', false, true)->default(1);
 
             $table->timestamps();
+            $table->softDeletes();
             $table->engine = 'InnoDB';
         });
     }
