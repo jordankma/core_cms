@@ -221,8 +221,8 @@ class PackageController extends Controller
                         } elseif ($request->input('type') == 'db') {
                             //migrate + seed
                             $pathDatabase = 'packages/' . $package->package_alias . '/' . $package->module_alias . '/src/database/migrations';
-                            shell_exec('cd ../ && /egserver/php/bin/php artisan migrate:refresh --path="' . $pathDatabase . '"');
-//                            shell_exec('cd ../ && php artisan migrate:refresh --path="' . $pathDatabase . '"');
+//                            shell_exec('cd ../ && /egserver/php/bin/php artisan migrate:refresh --path="' . $pathDatabase . '"');
+                            shell_exec('cd ../ && php artisan migrate:refresh --path="' . $pathDatabase . '"');
                         }
                     }
                     return redirect()->route('adtech.core.package.manage', ['id' => $domain_id])->with('success', trans('adtech-core::messages.success.update'));
@@ -234,19 +234,29 @@ class PackageController extends Controller
                         $package = $this->package->find($package_id);
 
                         //khai bao trong composer root
+//                        $path = base_path('composer.json');
+//                        $composerFile = file_get_contents($path);
+//                        $composerObject = json_decode($composerFile, true);
+//                        $repositories = $composerObject['repositories'];
+//                        $require = $composerObject['require'];
+//                        $autoload_dev_classmap = $composerObject['autoload-dev']['classmap'];
+//                        $autoload_psr4 = $composerObject['autoload']['psr-4'];
+                        $urlRepositorie = "packages"."/".$package->package_alias."/".$package->module_alias;
+
                         $path = base_path('composer.json');
                         $composerFile = file_get_contents($path);
-                        $composerObject = json_decode($composerFile, true);
-                        $repositories = $composerObject['repositories'];
-                        $require = $composerObject['require'];
-                        $autoload_dev_classmap = $composerObject['autoload-dev']['classmap'];
-                        $autoload_psr4 = $composerObject['autoload']['psr-4'];
-                        $urlRepositorie = "packages"."/".$package->package_alias."/".$package->module_alias;
+                        $composerFile = str_replace('-', '__', $composerFile);
+                        $composerObject = json_decode($composerFile);
+
+                        $repositories = $composerObject->repositories;
+                        $require = $composerObject->require;
+                        $autoload_dev_classmap = $composerObject->autoload__dev->classmap;
+                        $autoload_psr4 = $composerObject->autoload->psr__4;
 
                         $checkRepo = true;
                         if (count($repositories) > 0) {
                             foreach ($repositories as $repositorie) {
-                                if ($repositorie['url'] == $urlRepositorie) {
+                                if ($repositorie->url == $urlRepositorie) {
                                     $checkRepo = false;
                                     break;
                                 }
@@ -262,22 +272,25 @@ class PackageController extends Controller
                             $repositories[] = $repositoriesMore;
 
                             //them vao composer require
-                            $require[$package->package_alias . '/' . $package->module_alias] = 'dev-master';
+//                            $require[$package->package_alias . '/' . $package->module_alias] = 'dev-master';
+                            $arrRequire[$package->package_alias . '/' . $package->module_alias] = 'dev-master';
 
                             //them vao composer autoload dev
                             $autoload_dev_classmap[] = 'packages/' . $package->package_alias . '/' . $package->module_alias . '/src/';
 
                             //"Adtech\\Application\\":"packages/adtech/application/src/"
                             $str_psr4 = ucfirst($package->package_alias) . '\\' . ucfirst($package->module_alias) . '\\';
-                            $autoload_psr4[$str_psr4] = 'packages/' . $package->package_alias . '/' . $package->module_alias . '/src/';
+                            $arrAutoload_psr4[$str_psr4] = 'packages/' . $package->package_alias . '/' . $package->module_alias . '/src/';
 
-                            $composerObject['repositories'] = $repositories;
-                            $composerObject['require'] = $require;
-                            $composerObject['autoload-dev']['classmap'] = $autoload_dev_classmap;
-                            $composerObject['autoload']['psr-4'] = $autoload_psr4;
+                            $composerObject->repositories = $repositories;
+                            $composerObject->require = array_merge((array) $require, $arrRequire);
+                            $composerObject->autoload__dev->classmap = $autoload_dev_classmap;
+                            $composerObject->autoload->psr__4 = array_merge((array) $autoload_psr4, $arrAutoload_psr4);
 
-                            file_put_contents($path, str_replace('\/', '/', json_encode($composerObject)));
+
+                            file_put_contents($path, str_replace('__', '-', str_replace('\/', '/', json_encode($composerObject))));
                         }
+
                         activity('package')
                             ->performedOn($domainsPackage)
                             ->withProperties($request->all())
@@ -285,12 +298,13 @@ class PackageController extends Controller
 
                         //migrate + seed
                         $pathDatabase = 'packages/' . $package->package_alias . '/' . $package->module_alias . '/src/database/migrations';
-                        shell_exec('cd ../ && /egserver/php/bin/php artisan migrate --path="' . $pathDatabase . '"');
-//                        shell_exec('cd ../ && php artisan migrate --path="' . $pathDatabase . '"');
+//                        shell_exec('cd ../ && /egserver/php/bin/php artisan migrate --path="' . $pathDatabase . '"');
+                        shell_exec('cd ../ && php artisan migrate --path="' . $pathDatabase . '"');
 
                         // Dump autoload.
-                        shell_exec('cd ../ && /egserver/php/bin/composer dump-autoload');
-//                        shell_exec('cd ../ && composer dump-autoload');
+//                        $this->composer->dumpAutoloads();
+//                        shell_exec('cd ../ && /egserver/php/bin/composer dump-autoload');
+                        shell_exec('cd ../ && composer dump-autoload');
 
                         //bung file /views/publics module
                         \Artisan::call('vendor:publish', [
@@ -360,8 +374,8 @@ class PackageController extends Controller
 
                 //delete migrate
                 $pathDatabase = 'packages/' . $package->package_alias . '/' . $package->module_alias . '/src/database/migrations';
-                shell_exec('cd ../ && /egserver/php/bin/php artisan migrate:reset --path="' . $pathDatabase . '"');
-//                shell_exec('cd ../ && php artisan migrate:reset --path="' . $pathDatabase . '"');
+//                shell_exec('cd ../ && /egserver/php/bin/php artisan migrate:reset --path="' . $pathDatabase . '"');
+                shell_exec('cd ../ && php artisan migrate:reset --path="' . $pathDatabase . '"');
 
                 //Delete folder package
                 if ($package->package_alias != 'adtech')
