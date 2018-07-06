@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePasswordResetsTable extends Migration
+class CreateAdtechCorePasswordResetsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -31,6 +31,6 @@ class CreatePasswordResetsTable extends Migration
      */
     public function down()
     {
-        Schema::connection('mysql_core')->dropIfExists('password_resets');
+        Schema::connection('mysql_core')->dropIfExists('adtech_password_resets');
     }
 }

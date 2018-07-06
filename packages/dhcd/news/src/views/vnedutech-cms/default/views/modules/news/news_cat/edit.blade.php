@@ -36,7 +36,7 @@
                                             <option value="0">Chuyên mục tổng</option>
                                             @if(!empty($list_news_cat))
                                                 @foreach($list_news_cat as $nc)
-                                                    <option value="{{$nc->news_cat_id}}" @if($nc->news_cat_id==$news_cat->news_cat_id) selected="" @endif>{{str_repeat('---', $nc->level) .$nc->name}}</option>
+                                                    <option value="{{$nc->news_cat_id}}" @if($nc->news_cat_id==$news_cat->parent) selected="" @endif>{{str_repeat('---', $nc->level) .$nc->name}}</option>
                                                 @endforeach
                                             @endif
                                         </select>

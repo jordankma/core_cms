@@ -48,12 +48,9 @@ class NewsCatController extends Controller
      * Chức năng : get view add news cat
      */
 	public function create(){
-        $newsCatData = array(
-            'items' => array(),
-            'parents' => array()
-        );
         self::getCate();
         $list_news_cat = $this->_newsCatList;
+        dd($list_news_cat);
 		return view('DHCD-NEWS::modules.news.news_cat.create',compact('list_news_cat'));
 	}
 	/**
@@ -109,17 +106,14 @@ class NewsCatController extends Controller
 	public function show(Request $request){
         $news_cat_id = $request->news_cat_id;
 		$news_cat = $this->news_cat->find($news_cat_id);
-        $newsCatData = array(
-            'items' => array(),
-            'parents' => array()
-        );
         self::getCate();
         $list_news_cat = $this->_newsCatList;
 		return view('DHCD-NEWS::modules.news.news_cat.edit',compact('news_cat','list_news_cat'));
 	}	
-	public function update($news_cat_id,NewsCatRequest $request){
-		$news_cat = $this->news_cat->find($news_cat_id);
+	public function update(NewsCatRequest $request){
+		$news_cat = $this->news_cat->find($request->news_cat_id);
 		$news_cat->name = $request->name;
+        $news_cat->parent = $request->parent_id;
 		if ($news_cat->save()) {
             activity('news_cat')
                 ->performedOn($news_cat)
