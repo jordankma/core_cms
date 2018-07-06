@@ -334,20 +334,30 @@ class PackageController extends Controller
 
                 $package = $this->package->find($package_id);
                 //khai bao trong composer root
+//                $path = base_path('composer.json');
+//                $composerFile = file_get_contents($path);
+//                $composerObject = json_decode($composerFile, true);
+//                $repositories = $repositoriesEmpty = $composerObject['repositories'];
+//                $require = $composerObject['require'];
+//                $autoload_dev_classmap = $composerObject['autoload-dev']['classmap'];
+//                $autoload_psr4 = $composerObject['autoload']['psr-4'];
+                $urlRepositorie = "packages"."/".$package->package_alias."/".$package->module_alias;
+
                 $path = base_path('composer.json');
                 $composerFile = file_get_contents($path);
-                $composerObject = json_decode($composerFile, true);
-                $repositories = $repositoriesEmpty = $composerObject['repositories'];
-                $require = $composerObject['require'];
-                $autoload_dev_classmap = $composerObject['autoload-dev']['classmap'];
-                $autoload_psr4 = $composerObject['autoload']['psr-4'];
-                $urlRepositorie = "packages"."/".$package->package_alias."/".$package->module_alias;
+                $composerFile = str_replace('-', '__', $composerFile);
+                $composerObject = json_decode($composerFile);
+
+                $repositories = $composerObject->repositories;
+                $require = $composerObject->require;
+                $autoload_dev_classmap = $composerObject->autoload__dev->classmap;
+                $autoload_psr4 = $composerObject->autoload->psr__4;
 
                 $checkRepo = false;
                 if (count($repositories) > 0) {
                     $repositoriesEmpty = [];
                     foreach ($repositories as $repositorie) {
-                        if ($repositorie['url'] == $urlRepositorie) {
+                        if ($repositorie->url == $urlRepositorie) {
                             $checkRepo = true;
                             continue;
                         }
@@ -356,20 +366,28 @@ class PackageController extends Controller
                 }
 
                 if ($checkRepo) {
-                    unset($require[$package->package_alias . '/' . $package->module_alias]);
+                    $arrRequire = (array) $require;
+                    $arrAutoload_psr4 = (array) $autoload_psr4;
+                    $arrAutoload_dev_classmap = (array) $autoload_dev_classmap;
+
+                    unset($arrRequire[$package->package_alias . '/' . $package->module_alias]);
                     if (($key = array_search('packages/' . $package->package_alias . '/' . $package->module_alias . '/src/', $autoload_dev_classmap)) !== false) {
-                        unset($autoload_dev_classmap[$key]);
+                        unset($arrAutoload_dev_classmap[$key]);
                     }
 
                     $str_psr4 = ucfirst($package->package_alias) . '\\' . ucfirst($package->module_alias) . '\\';
-                    unset($autoload_psr4[$str_psr4]);
+                    unset($arrAutoload_psr4[$str_psr4]);
 
-                    $composerObject['require'] = $require;
-                    $composerObject['repositories'] = $repositoriesEmpty;
-                    $composerObject['autoload-dev']['classmap'] = $autoload_dev_classmap;
-                    $composerObject['autoload']['psr-4'] = $autoload_psr4;
+                    $require = (object) $arrRequire;
+                    $autoload_psr4 = (object) $arrAutoload_psr4;
+                    $autoload_dev_classmap = $arrAutoload_dev_classmap;
 
-                    file_put_contents($path, str_replace('\/', '/', json_encode($composerObject)));
+                    $composerObject->require = $require;
+                    $composerObject->repositories = $repositoriesEmpty;
+                    $composerObject->autoload__dev->classmap = $autoload_dev_classmap;
+                    $composerObject->autoload->psr__4 = $autoload_psr4;
+
+                    file_put_contents($path, str_replace('__', '-', str_replace('\/', '/', json_encode($composerObject))));
                 }
 
                 //delete migrate
