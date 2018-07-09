@@ -41,10 +41,13 @@
                 <!--lg-6 starts-->
                 <!--basic form starts-->
                 <div class="panel panel-primary" id="hidepanel1">
-                    <div class="panel-heading" id="btnToolbarMember">
+                    <div class="panel-heading">
                         <h3 class="panel-title">
                             Add User Topic    
                         </h3>
+                    </div>
+                    <div id="btnToolbarMember" style=" padding-left: 50%; padding-top: 10px; ">
+                        
                     </div>
                     <div class="panel-body"> 
                         <div class="row">
@@ -152,7 +155,7 @@
                 selectedArr.splice( index, 1 );
             }
             $(this).toggleClass('selected');
-            var moreHtml = '<a class="btn btn-sm btn-default" data-toggle="modal" data-target="#delete_member_topic_confirm" href="' + routeDelete + '?member=' + selectedArr + '&topic_id='+topic_id+'">\n' +
+            var moreHtml = '<a class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete_member_topic_confirm" href="' + routeDelete + '?member=' + selectedArr + '&topic_id='+topic_id+'">\n' +
             '                            <span class="glyphicon glyphicon-trash"></span>\n Delete member\n' +
             '                        </a>';
             document.getElementById('btnToolbarMember').innerHTML = moreHtml + htmlBtnToolbar;

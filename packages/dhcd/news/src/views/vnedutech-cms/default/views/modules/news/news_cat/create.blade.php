@@ -73,14 +73,10 @@
                         notEmpty: {
                             message: 'Bạn chưa nhập chuyên đề'
                         },
-                        // remote: {
-                        //     data: {
-                        //         '_token': $('meta[name=csrf-token]').prop('content')
-                        //     },
-                        //     type: 'post',
-                        //     message: 'Tên chuyên đề đã tồn tại',
-                        //     url: '/admin/dhcd/news/news/cat/check_name_cat_exist',
-                        // }
+                        stringLength: {
+                            max: 250,
+                            message: 'Tên không được quá dài'
+                        }
                     }
                 }
             }

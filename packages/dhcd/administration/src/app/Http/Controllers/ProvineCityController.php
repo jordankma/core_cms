@@ -28,11 +28,12 @@ class ProvineCityController extends Controller
     private $messages = array(
         'name.regex' => "Sai định dạng",
         'required' => "Bắt buộc",
-        'numeric'  => "Phải là số"
+        'numeric'  => "Phải là số",
+        'unique' => "Phải duy nhất"
     );
 
     public function manage()
-    {
+    {   
         return view('DHCD-ADMINISTRATION::modules.administration.provine-city.manage');
     }
 
@@ -44,33 +45,47 @@ class ProvineCityController extends Controller
         $this->provine_city = $provineCityRepository;
     }
 
-    public function add(ProvineCityRequest $request)
-    {
-        $provine_citys = new ProvineCity();
-        $provine_citys->user_id = $this->user->email; 
-        $provine_citys->name = $request->name; 
-        $provine_citys->alias = self::stripUnicode($request->name);
-        $provine_citys->type = $request->type; 
-        $provine_citys->name_with_type = $request->name_with_type; 
-        $provine_citys->code = $request->code; 
-        $provine_citys->created_at = new DateTime();
-        $provine_citys->updated_at = new DateTime();
-        $provine_citys->save();
-        if ($provine_citys->provine_city_id) {
-            activity('provine_city')
-                ->performedOn($provine_citys)
-                ->withProperties($request->all())
-                ->log('User: :causer.email - Add Provice City - name: :properties.name, provine_city_id: ' . $provine_citys->provine_city_id);
-
-            return redirect()->route('dhcd.administration.provine-city.manage')->with('success', trans('DHCD-ADMINISTRATION::language.messages.success.create'));
-        } else {
-            return redirect()->route('dhcd.administration.provine-city.manage')->with('error', trans('DHCD-ADMINISTRATION::language.messages.error.create'));
-        }
-    }
-
     public function create()
     {
         return view('DHCD-ADMINISTRATION::modules.administration.provine-city.create');
+    }
+
+    public function add(ProvineCityRequest $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:4|max:100',
+            'code' => 'required|unique:dhcd_provine_city,code',
+        ], $this->messages);
+        if (!$validator->fails()) {
+            $provine_citys = new ProvineCity();
+            $provine_citys->user_id = $this->user->email; 
+            $provine_citys->name = $request->name; 
+            $provine_citys->alias = self::stripUnicode($request->name);
+            $provine_citys->type = $request->type; 
+            if($type = 'tinh'){   
+                $provine_citys->name_with_type = 'Tỉnh '.$request->name; 
+            }
+            else{
+                $provine_citys->name_with_type = 'Thành phố '.$request->name;     
+            }
+            $provine_citys->code = $request->code; 
+            $provine_citys->created_at = new DateTime();
+            $provine_citys->updated_at = new DateTime();
+            $provine_citys->save();
+            if ($provine_citys->provine_city_id) {
+                activity('provine_city')
+                    ->performedOn($provine_citys)
+                    ->withProperties($request->all())
+                    ->log('User: :causer.email - Add Provice City - name: :properties.name, provine_city_id: ' . $provine_citys->provine_city_id);
+
+                return redirect()->route('dhcd.administration.provine-city.manage')->with('success', trans('DHCD-ADMINISTRATION::language.messages.success.create'));
+            } else {
+                return redirect()->route('dhcd.administration.provine-city.manage')->with('error', trans('DHCD-ADMINISTRATION::language.messages.error.create'));
+            }
+        }
+        else{
+            return $validator->messages(); 
+        }
     }
 
     public function show(Request $request)
@@ -80,7 +95,6 @@ class ProvineCityController extends Controller
         $data = [
             'provine_city' => $provine_city
         ];
-
         return view('DHCD-ADMINISTRATION::modules.administration.provine-city.edit', $data);
     }
 
@@ -92,8 +106,12 @@ class ProvineCityController extends Controller
         $provine_city->name = $request->name; 
         $provine_city->alias = self::stripUnicode($request->name);
         $provine_city->type = $request->type; 
-        $provine_city->name_with_type = $request->name_with_type; 
-        $provine_city->code = $request->code;
+        if($type = 'tinh'){   
+            $provine_city->name_with_type = 'Tỉnh '.$request->name; 
+        }
+        else{
+            $provine_city->name_with_type = 'Thành phố '.$request->name;     
+        }
         $provine_city->updated_at = new DateTime();
         $provine_city->save();
         if ($provine_city->save()) {
@@ -185,4 +203,14 @@ class ProvineCityController extends Controller
             ->make();
     }
     
+    public function checkCode(Request $request){
+        $data['valid'] = true;
+        if ($request->ajax()) {
+            $provine_city =  ProvineCity::where(['code' => $request->code])->first();
+            if ($provine_city) {
+                $data['valid'] = false; // true là có user
+            }
+        }
+        echo json_encode($data);
+    }
 }

@@ -5,24 +5,24 @@ return [
     "confirm" => "Confirm",
     "topic" => [
     	"delete"=>[
-        	"title" => "Delete Topic",
-        	"body" => "Are you sure to delete this topic? This operation is irreversible."
+        	"title" => "Xóa Topic",
+        	"body" => "Bạn có chắc muốn xóa topic này?"
     	],
     	"block"=>[
         	"title" => "Block Topic",
-        	"body" => "Are you sure to block this topic? This operation is irreversible."
+        	"body" => "Bạn có chắc muốn khóa topic này?"
     	],
         "status"=>[
             "title" => "Change Status Topic",
-            "body" => "Are you sure to change status this topic? This operation is irreversible."
+            "body" => "Bạn có chắc muốn tắt topic này?"
         ],
         "add_all_member"=>[
-            "title" => "Add All Member Topic",
-            "body" => "Are you sure to add all member this topic? This operation is irreversible."
+            "title" => "Thêm toàn bộ người dùng",
+            "body" => "Bạn có chắc muốn thêm toàn bộ người dùng vào topic này?"
         ],
         "delete_member"=>[
-            "title" => "Delete Member Topic",
-            "body" => "Are you sure to delete member this topic? This operation is irreversible."
+            "title" => "Xóa người dùng topic",
+            "body" => "Bạn có chắc muốn xóa người dùng khỏi topic này?"
         ],
 
     ],

@@ -128,6 +128,10 @@
                             }
                         }
                     },
+                    stringLength: {
+                        max: 250,
+                        message: 'Tên không được quá dài'
+                    },
                     close_at: {
                         validators: {
                             notEmpty: {

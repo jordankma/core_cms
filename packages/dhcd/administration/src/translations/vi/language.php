@@ -2,101 +2,73 @@
 
 return [
     "titles" => [
-        "demo" => [
-            "manage" => "Manage demo "
-        ],
         "provine_city" => [
-            "manage" => "Manage Provice City",
-            "create" => "Create Provice City",
-            "edit" => "Edit Provice City",
+            "manage" => "Quản lý tỉnh thành",
+            "create" => "Thêm tỉnh thành",
+            "edit" => "Cập nhật tỉnh thành",
         ],
         "country_district" => [
-            "manage" => "Manage Country District",
-            "create" => "Create Country District",
-            "edit" => "Edit Country District",
+            "manage" => "Quản lý quận huyện",
+            "create" => "Thêm quận huyện",
+            "edit" => "Cập nhật quận huyện",
         ],
         "commune_guild" => [
-            "manage" => "Manage Commune Guild",
-            "create" => "Create Commune Guild",
-            "edit" => "Edit Commune Guild",
+            "manage" => "Quản lý phường xã",
+            "create" => "Thêm phường xã",
+            "edit" => "Cập nhật phường xã",
         ],
     ],
     "table" => [
         "id" => "#",
-        "created_at" => "Created at",
-        "updated_at" => "Updated at",
-        "action" => "Actions",
-        "demo" => [
-            "name" => "Name"
-        ],
+        "created_at" => "Ngày tạo",
+        "updated_at" => "Ngày sửa",
+        "action" => "Thao tác",
         "provine_city"=>[
-            "name" => "Name",
-            "type" => "Type",
-            "name_with_type" => "Name With Type",
+            "name" => "Tên",
+            "type" => "Kiểu",
+            "name_with_type" => "Tên theo kiểu",
             "code" =>"Code"
         ],
         "country_district"=>[
-            "name" => "Name",
-            "provine_city" => "Provine City",
-            "type" => "Type",
-            "name_with_type" => "Name With Type",
-            "path"=>"Path",
-            "path_with_type"=>"Path with type",
+            "name" => "Tên",
+            "provine_city" => "Tỉnh thành",
+            "type" => "Kiểu",
+            "name_with_type" => "Tên theo kiểu",
+            "path"=> "Đường dẫn",
+            "path_with_type"=> "Tên theo đường dẫn",
             "code" =>"Code"
         ],
          "commune_guild"=>[
-            "name" => "Name",
-            "country_district" => "Country District",
-            "type" => "Type",
-            "name_with_type" => "Name With Type",
-            "path"=>"Path",
-            "path_with_type"=>"Path with type",
+            "name" => "Tên",
+            "country_district" => "Quận huyện",
+            "type" => "Kiểu",
+            "name_with_type" => "Tên theo kiểu",
+            "path"=> "Đường dẫn",
+            "path_with_type"=>"Tên theo đường dẫn",
             "code" =>"Code"
         ]
     ],
     "buttons" => [
-        "create" => "Create",
-        "discard" => "Discard",
-        "update" => "Update"
+        "create" => "Thêm",
+        "discard" => "Hủy",
+        "update" => "Cập nhật"
     ],
     "placeholder" => [
-        "demo" => [
-            "name_here" => "Name here..."
-        ],
-        "provine_city"=>[
-            "name" => "Name here...",
-            "type" => "Type here...",
-            "name_with_type" => "Name with type here...",
-            "code" =>"Code here..."
-        ],
-        "country_district"=>[
-            "name" => "Name here...",
-            "type" => "Type here...",
-            "name_with_type" => "Name with type here...",
-            "path"=> "Path here...",
-            "path_with_type"=> "Path with type here...",
-            "code" => "Code here..."
-        ],
-        "commune_guild"=>[
-            "name" => "Name here...",
-            "type" => "Type here...",
-            "name_with_type" => "Name with type here...",
-            "path"=> "Path here...",
-            "path_with_type"=> "Path with type here...",
-            "code" => "Code here..."
-        ]
+        "name" => "Nhập tên",
+        "type" => "Nhập kiểu",
+        "code" =>" Nhập code"
     ],
     "messages" => [
         "success" => [
-            "create" => "Create successfully",
-            "update" => "Update successfully",
-            "delete" => "Delete successfully"
+            "create" => "Thêm thành công",
+            "update" => "Cập nhật thành công",
+            "delete" => "Xóa thành công"
         ],
         "error" => [
             "permission" => "Permission lock",
-            "create" => "Create failed",
-            "update" => "Update failed",
-            "delete" => "Delete failed"
+            "create" => "Thêm thất bại",
+            "update" => "Cập nhật thất bại",
+            "delete" => "Xóa thất bại"
         ]
     ]
 ];

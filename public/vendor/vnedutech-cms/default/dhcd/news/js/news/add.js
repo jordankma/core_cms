@@ -4,4 +4,9 @@ $(document).ready(function() {
         nonSelectedText: 'Chọn danh mục',
         enableFiltering: true,
     });
+    $('#tag').multiselect({
+    	buttonWidth: '100%',
+        nonSelectedText: 'Chọn tag',
+        enableFiltering: true,
+    });
 });

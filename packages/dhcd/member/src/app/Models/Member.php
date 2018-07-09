@@ -2,12 +2,15 @@
 
 namespace Dhcd\Member\App\Models;
 
+use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-class Member extends Model {
-	use SoftDeletes;
-
+class Member extends Model implements AuthenticatableContract, CanResetPasswordContract{
+    use Authenticatable, CanResetPassword, Notifiable, SoftDeletes;
     /**
      * The attributes that should be mutated to dates.
      *

@@ -20,9 +20,9 @@ class DhcdNewsTable extends Migration
             $table->string('news_tag')->comment('json chua cac tag');
             $table->string('title')->comment('tieu de');
             $table->string('title_alias')->comment('alias cua tieu de');
-            $table->string('desc')->comment('doan mo ta ngan tin');
-            $table->longText('content')->comment('noi dung tin');
-            $table->string('image')->comment('url anh tin tuc');
+            $table->longText('desc')->comment('doan mo ta ngan tin')->nullable();
+            $table->longText('content')->comment('noi dung tin')->nullable();
+            $table->string('image')->comment('url anh tin tuc')->nullable();
             $table->tinyInteger('is_hot')->comment('1: tin hot 0: tin thuong');
             $table->integer('priority')->comment('thu tu uu tien cua tin de hien thi')->nullable();
             $table->string('key_word_seo')->comment('json cac tu khoa seo');
@@ -30,6 +30,7 @@ class DhcdNewsTable extends Migration
             $table->tinyInteger('visible', false, true)->comemt('an hien tin 1:hien 0:an')->default(1);
             $table->tinyInteger('status', false, true)->comment('trang thai')->default(1);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

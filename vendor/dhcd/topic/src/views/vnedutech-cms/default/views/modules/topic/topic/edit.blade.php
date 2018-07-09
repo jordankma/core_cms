@@ -89,6 +89,10 @@
                     validators: {
                         notEmpty: {
                             message: 'Bạn chưa nhập tiêu đề'
+                        },
+                        stringLength: {
+                            max: 250,
+                            message: 'Tên không được quá dài'
                         }
                     }
                 }

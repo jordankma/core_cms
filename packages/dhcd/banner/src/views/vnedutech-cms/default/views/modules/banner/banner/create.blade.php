@@ -50,7 +50,7 @@
                             <select class="form-control" id="position" name="position" required="">
                             @if(!empty($positions))
                             @foreach($positions as $position)
-                                <option value="{{$position->banner_position_id}}">{{$position->name}}</option>
+                                <option value="{{$position->banner_position_id}}">{{$position->name}} {{'  ( '.$position->width.'px  x '.$position->height.'px )' }} </option>
                             @endforeach
                             @endif
                             </select>
@@ -61,7 +61,7 @@
                         </div>
                         <div class="form-group col-xs-12">
                             <div class="form-group">
-                                <button type="submit" class="btn btn-success">{{ trans('adtech-core::buttons.create') }}</button>
+                                <button type="submit" class="btn btn-success">{{ trans('dhcd-banner::language.buttons.create') }}</button>
                                 <a href="{!! route('dhcd.banner.banner.manage') !!}"
                                    class="btn btn-danger">{{ trans('dhcd-banner::language.buttons.discard') }}</a>
                             </div>
@@ -126,6 +126,10 @@
                         validators: {
                             notEmpty: {
                                 message: 'Bạn chưa nhập tên banner'
+                            },
+                            stringLength: {
+                                max: 250,
+                                message: 'Tên không được quá dài'
                             }
                         }
                     },

@@ -15,7 +15,17 @@
 @stop
 <!--end of page css-->
 
-
+<style type="text/css">
+        .multiselect-container .active a{
+            background-color: lightblue !important;
+        }
+        #cate .btn-group{
+            width: 100% !important;
+        }
+        .bootstrap-tagsinput{
+            width: 100% !important;
+        }
+    </style>
 {{-- Page content --}}
 @section('content')
     <section class="content-header">
@@ -72,17 +82,31 @@
                                     @if(!empty($list_news_cat))
                                     @foreach($list_news_cat as $news_cat)
                                         @if(in_array($news_cat->news_cat_id, $list_id_cat))
-                                            <option value="{{$news_cat->news_cat_id}}"  selected >{{$news_cat->name}}</option>
+                                            <option value="{{$news_cat->news_cat_id}}"  selected >{{str_repeat('+', $news_cat->level) .$news_cat->name}}</option>
                                         @else
-                                            <option value="{{$news_cat->news_cat_id}}">{{$news_cat->name}}</option>    
+                                            <option value="{{$news_cat->news_cat_id}}">{{str_repeat('+', $news_cat->level) .$news_cat->name}}</option>    
                                         @endif
                                     @endforeach
                                     @endif
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label>{{trans('dhcd-news::language.form.text.tag')}}</label><br>
-                                <input type="text" name="news_tag[]" value="{{$list_tag_string}}" class="form-control" data-role="tagsinput" placeholder="{{trans('dhcd-news::language.form.tags_placeholder')}}">
+                            <div class="form-group area-tag">
+                                <label>{{trans('Thêm tag')}}</label><br>
+                                <div class="input-group">
+                                    <input type="text" name="news_tag_add" value="" class="form-control" placeholder="{{trans('dhcd-news::language.form.tags_placeholder')}}" id="text-tag">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" id="add-tag">Thêm</button> <br>
+                                    </span>
+                                 </div>
+                                <p style="color: red"> Các tag cách nhau bằng dấu phẩy</p>
+                                <label>{{trans('Chọn tag')}}</label>
+                                <select id="tag" class="form-control" name="news_tag[]" required multiple="multiple">
+                                    @if(!empty($list_news_tag))
+                                    @foreach($list_news_tag as $nt)
+                                        <option value="{{$nt->news_tag_id}}" @if(in_array($nt->news_tag_id, $list_id_tag)) selected="" @endif>{{$nt->name}}</option>
+                                    @endforeach
+                                    @endif
+                                </select>
                             </div>
                             <label>{{trans('dhcd-news::language.form.text.image')}}</label>
                             <div class="input-group">
@@ -97,7 +121,7 @@
                             <div class="form-group">
                                 <input type="radio" id="hot" @if($news->is_hot==1) checked @endif name="is_hot" value="1">
                                 <label for="normal">{{trans('dhcd-news::language.form.text.news_hot')}}    </label> <br>
-                                <input type="radio" @if($news->is_hot==0) checked @endif id="normal" name="is_hot" value="0">
+                                <input type="radio" @if($news->is_hot==2) checked @endif id="normal" name="is_hot" value="0">
                                 <label>    {{trans('dhcd-news::language.form.text.news_normal')}}</label>
                             </div>
                             <div class="form-group">
@@ -160,10 +184,51 @@
                     validators: {
                         notEmpty: {
                             message: 'Bạn chưa nhập tiêu đề'
+                        },
+                        stringLength: {
+                            max: 250,
+                            message: 'Tiêu đề không được quá dài'
+                        }
+                    }
+                },
+                desc_seo: {
+                    validators: {
+                        stringLength: {
+                            max: 500,
+                            message: 'Mô tả không được quá dài'
                         }
                     }
                 }
             }
-        });    
+        });  
+        $('body').on('click','#add-tag',function(e){
+            e.preventDefault();
+            var list_tag = $('#text-tag').val();
+            var i;
+            if(list_tag!=''){
+                $.ajax({
+                    url: "{{route('dhcd.news.tag.ajax.add')}}",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name=csrf-token]').prop('content')
+                    },
+                    type: 'POST',
+                    cache: false,
+                    data: {
+                        'list_tag': list_tag
+                    },
+                    success: function (response) {
+                        var text = '';
+                        var data = JSON.parse(response);
+                        for( i in data){
+                            // text += '<li><a tabindex="0"><label class="checkbox" title="'+data[i].name+'"><input type="checkbox" value="'+data[i].news_tag_id+'"> '+data[i].name+'</label></a></li>'
+                            text += '<option value="'+data[i].news_tag_id+'" selected="">'+data[i].name+'</option>';
+                        }
+                        $('#tag').prepend(text);
+                        $('#tag').multiselect('rebuild');
+                    }
+                }, 'json');
+            }
+            // $('.area-tag .multiselect-container').append('<li><a tabindex="0"><label class="checkbox" title="Hà nội"><input type="checkbox" value="3"> Hà nội</label></a></li>');
+        });  
     </script>
 @stop

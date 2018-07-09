@@ -49,9 +49,9 @@
                             <tr class="filters">
                                 <th>{{ trans('dhcd-administration::language.table.id') }}</th>
                                 <th>{{ trans('dhcd-administration::language.table.provine_city.name') }}</th>  
-                                <th>{{ trans('dhcd-administration::language.table.provine_city.name_with_type') }}</th>
+                                {{-- <th>{{ trans('dhcd-administration::language.table.provine_city.name_with_type') }}</th> --}}
                                 <th>{{ trans('dhcd-administration::language.table.provine_city.code') }}</th>
-                                <th>{{ trans('dhcd-administration::language.table.action') }}</th>
+                                <th class="fit-content" style="width: 120px">{{ trans('dhcd-administration::language.table.action') }}</th>
                             </tr>
                             </thead>
                         </table>
@@ -76,7 +76,7 @@
                 columns: [
                     { data: 'provine_city_id', name: 'provine_city_id' },
                     { data: 'name', name: 'name' },
-                    { data: 'name_with_type', name: 'name_with_type'},
+                    // { data: 'name_with_type', name: 'name_with_type'},
                     { data: 'code', name: 'code'},
                     { data: 'actions', name: 'actions', orderable: false, searchable: false}
                 ]

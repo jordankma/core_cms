@@ -50,7 +50,6 @@ class NewsCatController extends Controller
 	public function create(){
         self::getCate();
         $list_news_cat = $this->_newsCatList;
-        dd($list_news_cat);
 		return view('DHCD-NEWS::modules.news.news_cat.create',compact('list_news_cat'));
 	}
 	/**
@@ -148,6 +147,7 @@ class NewsCatController extends Controller
     public function getModalDelete(Request $request)
     {
         $model = 'news_cat';
+        $type = 'delete';
         $confirm_route = $error = null;
         $validator = Validator::make($request->all(), [
             'news_cat_id' => 'required|numeric',
@@ -155,9 +155,9 @@ class NewsCatController extends Controller
         if (!$validator->fails()) {
             try {
                 $confirm_route = route('dhcd.news.cat.delete', ['news_cat_id' => $request->news_cat_id]);
-                return view('includes.modal_confirmation', compact('error', 'model', 'confirm_route'));
+                return view('DHCD-NEWS::modules.news.modal.modal_confirmation', compact('type','error', 'model', 'confirm_route'));
             } catch (GroupNotFoundException $e) {
-                return view('includes.modal_confirmation', compact('error', 'model', 'confirm_route'));
+                return view('DHCD-NEWS::modules.news.modal.modal_confirmation', compact('type','error', 'model', 'confirm_route'));
             }
         } else {
             return $validator->messages();
@@ -177,9 +177,9 @@ class NewsCatController extends Controller
                     ['log_name', $model],
                     ['subject_id', $request->input('news_cat_id')]
                 ])->get();
-                return view('includes.modal_table', compact('error', 'model', 'confirm_route', 'logs'));
+                return view('DHCD-NEWS::modules.news.modal.modal_table', compact('error', 'model', 'confirm_route', 'logs'));
             } catch (GroupNotFoundException $e) {
-                return view('includes.modal_table', compact('error', 'model', 'confirm_route'));
+                return view('DHCD-NEWS::modules.news.modal.modal_table', compact('error', 'model', 'confirm_route'));
             }
         } else {
             return $validator->messages();
@@ -217,7 +217,6 @@ class NewsCatController extends Controller
     }
 
     function getCate() {
-
         $news_cats = NewsCat::orderBy('parent')->get();
         if (count($news_cats) > 0) {
             foreach ($news_cats as $news_cat) {

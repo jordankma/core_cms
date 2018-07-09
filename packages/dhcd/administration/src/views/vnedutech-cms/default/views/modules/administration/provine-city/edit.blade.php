@@ -46,15 +46,6 @@
                             <input type="radio" name="type"  value="tinh" @if($provine_city->type=='tinh') checked="checked" @endif> Tỉnh
                             <input type="radio" name="type"  value="thanh-pho" @if($provine_city->type=='thanh-pho') checked="checked" @endif>  Thành phố
                         </div>
-                        <label> Name with type</label>
-                        <div class="form-group">
-                            <input type="text" name="name_with_type" value ="{{$provine_city->name_with_type}}" class="form-control" value="" placeholder="{{ trans('dhcd-administration::language.placeholder.provine_city.name_with_type') }}">
-                            <p>vd: Tỉnh Hà Tĩnh, Thành phố Hà Nội </p>
-                        </div>
-                        <label> Code</label>
-                        <div class="form-group">
-                            <input type="number" name="code" value ="{{$provine_city->code}}" class="form-control" value="" placeholder="{{ trans('dhcd-administration::language.placeholder.provine_city.code') }}">
-                        </div>
                         <div class="form-group">
                             <label for="blog_category" class="">Actions</label>
                             <div class="form-group">
@@ -99,23 +90,13 @@
                     validators: {
                         notEmpty: {
                             message: 'Tên không được bỏ trống'
+                        },
+                        stringLength: {
+                            max: 250,
+                            message: 'Tên không được quá dài'
                         }
                     }
-                },
-                name_with_type: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Tên theo kiểu không được bỏ trống'
-                        }
-                    }
-                },
-                code: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Mã tỉnh không được bỏ trống'
-                        }
-                    }
-                },
+                }
             }
         });    
     </script>

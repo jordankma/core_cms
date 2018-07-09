@@ -2,92 +2,92 @@
 
 return [
     "titles" => [
-        "demo" => [
-            "manage" => "Manage demo"
-        ],
         "news"=>[
-            "add" => "Add news",
-            "list"=> "List news",
-            "edit"=> "Edit news"
+            "add" => "Thêm tin tức",
+            "list"=> "Danh sách tin tức",
+            "edit"=> "Cập nhật tin tức"
         ],
         "news_cat"=>[
-            "add" => "Add news category ",
-            "list"=> "List news category",
-            "edit"=> "Edit news category"
+            "add" => "Thêm danh mục",
+            "list"=> "Danh sách danh mục",
+            "edit"=> "Cập nhật danh mục"
+        ],
+        "news_tag"=>[
+            "add" => "Thêm tag",
+            "list"=> "Danh sách tag",
+            "edit"=> "Cập nhật tag"
         ]
     ],
     "table" => [
         "id" => "Stt",
-        "created_at" => "Created at",
-        "updated_at" => "Updated at",
-        "action" => "Actions",
+        "created_at" => "Ngày tạo",
+        "updated_at" => "Ngày sửa",
+        "action" => "Thao tác",
         "list_news" => [
-            "title"=>"Title",
-            "author"=>"Author",
-            "category"=>"Category",
-            "status"=>"Status",
-            'is_hot'=>"News hot",
-            'priority'=> "Sort",
-            'image'=> "Image",
+            "title"=>"Tiêu đề",
+            "author"=>"Người tạo",
+            "category"=>"Chuyên mục",
+            "status"=>"Trạng thái",
+            'is_hot'=>"Tin hot",
+            'priority'=> "Sắp xếp",
+            'image'=> "Ảnh",
         ],
         "list_news_cat"=>[
-            "title_cat_paren"=>"Category Parent"
+            "title_cat_paren"=>"Chuyên mục cha"
         ]
     ],
     "form"=>[
-        "tags_placeholder"=>"Enter tags here",
-        "desc_placeholder"=>"Enter descipton here",
-        "title_placeholder"=>"Enter title here",
-        "seo_key_word_placeholder"=>"Enter seo keywords here",
-        "desc_seo_placeholder"=>"Enter seo keywords here",
-        "priority_placeholder"=>"Enter priority here",
-        "content_placeholder"=>"Enter content here",
+        "tags_placeholder"=>"Nhập tag...",
+        "desc_placeholder"=>"Nhập mô tả...",
+        "title_placeholder"=>"Nhập title...",
+        "seo_key_word_placeholder"=>"Nhập từ khóa seo...",
+        "desc_seo_placeholder"=>"Nhập mô tả seo...",
+        "priority_placeholder"=>"Nhập thứ tự sắp xếp...",
+        "content_placeholder"=>"Nhập nội dung...",
         "text"=>[
-            "title" => "Title",
-            "desc" => "Decription",
-            "content" => "Content",
-            "cat" => "Category",
+            "title" => "Tiêu đề",
+            "desc" => "Mô tả",
+            "content" => "Nội dung",
+            "cat" => "Chuyên mục",
             "tag" => "Tag",
-            "image" => "Images Display",
-            "news_hot" => "News hot",
-            "news_normal" => "News normal",
-            "priority" => "priority",
-            "key_seo" => "List key seo",
-            "desc_seo" => "Decription seo"
+            "image" => "Ảnh hiển thị",
+            "news_hot" => "Tin hot",
+            "news_normal" => "Tin thường",
+            "priority" => "Sắp xếp",
+            "key_seo" => "Danh sách từ khóa seo",
+            "desc_seo" => "Mô tả seo",
         ],
     ],
     "label_cat"=>[
-        "name_category" => "Name category",
-        "checkbox" => "Child Category",   
+        "name_category" => "Tên chuyên mục",
+        "checkbox" => "Chuyên mục con",   
+    ],
+    "label"=>[
+        "name" => "Tên",  
     ],
     "form_cat"=>[
-        "category_placeholder" => "Enter name category here",   
+        "category_placeholder" => "Nhập chuyên mục",   
     ],
     "buttons" => [
-        "create" => "Create",
-        "update"=> "Update",
-        "discard" => "Discard",
-        "select_image"=> "Select Image",
-        "change_image"=>"Change Image",
-        "remove_image"=>"Remove Image",
-        "search"=>"Search"
-    ],
-    "placeholder" => [
-        "demo" => [
-            "name_here" => "Name here..."
-        ]
+        "create" => "Thêm",
+        "update"=> "Cập nhật",
+        "discard" => "Hủy",
+        "select_image"=> "Chọn ảnh",
+        "change_image"=> "Sửa ảnh",
+        "remove_image"=> "Xóa ảnh",
+        "search"=> "Tìm kiếm"
     ],
     "messages" => [
         "success" => [
-            "create" => "Create successfully",
-            "update" => "Update successfully",
-            "delete" => "Delete successfully"
+            "create" => "Thêm thành công",
+            "update" => "Cập nhật thành công",
+            "delete" => "Xóa thành công"
         ],
         "error" => [
             "permission" => "Permission lock",
-            "create" => "Create failed",
-            "update" => "Update failed",
-            "delete" => "Delete failed"
+            "create" => "Thêm thất bại",
+            "update" => "Cập nhật thất bại",
+            "delete" => "Xóa thất bại"
         ]
     ]
 ];

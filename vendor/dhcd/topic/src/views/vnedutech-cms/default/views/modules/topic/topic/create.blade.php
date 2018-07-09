@@ -48,8 +48,8 @@
                         <div class="form-group col-xs-12">
                             <label for="blog_category" class="">Actions</label>
                             <div class="form-group">
-                                <button type="submit" class="btn btn-success">{{ trans('adtech-core::buttons.create') }}</button>
-                                <a href="{!! route('dhcd.topic.topic.create') !!}"
+                                <button type="submit" class="btn btn-success">{{ trans('dhcd-topic::language.buttons.create') }}</button>
+                                <a href="{!! route('dhcd.topic.topic.manage') !!}"
                                    class="btn btn-danger">{{ trans('dhcd-topic::language.buttons.discard') }}</a>
                             </div>
                         </div>
@@ -87,6 +87,10 @@
                     validators: {
                         notEmpty: {
                             message: 'Bạn chưa nhập tiêu đề'
+                        },
+                        stringLength: {
+                            max: 250,
+                            message: 'Tên không được quá dài'
                         }
                     }
                 }

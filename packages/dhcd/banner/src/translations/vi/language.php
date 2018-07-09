@@ -3,79 +3,79 @@
 return [
     "titles" => [
         "banner" => [
-            "manage" => "Manage banner",
-            "create" => "Create banner",
-            "update" => "Update banner",
+            "manage" => "Quản lý banner",
+            "create" => "Thêm banner",
+            "update" => "Cập nhật banner",
         ],
         "position" => [
-            "manage" => "Manage position",
-            "create" => "Create position",
-            "update" => "Update position",
+            "manage" => "Quản lý vị trí",
+            "create" => "Thêm vị trí",
+            "update" => "Cập nhật vị trí",
         ],
     ],
     "label" => [
-        "name" => "Name",
-        "desc" => "Desc",
-        "image" => "Image",
+        "name" => "Tên",
+        "desc" => "Mô tả",
+        "image" => "Ảnh",
         "link" => "Link",
-        "priority" => "Priority",
-        "position" => "Position",
-        "close_at" => "Close at",
-        "width" => "Width",
-        "height" => "Height",
+        "priority" => "Sắp xếp",
+        "position" => "Vị trí",
+        "close_at" => "Thời gian hết hạn",
+        "width" => "Chiều rộng",
+        "height" => "Chiều cao",
     ],
     "table" => [
         "id" => "#",
-        "created_at" => "Created at",
-        "updated_at" => "Updated at",
-        "action" => "Actions",
+        "created_at" => "Ngày tạo",
+        "updated_at" => "Ngày sửa",
+        "action" => "Thao tác",
         "banner" => [
-            "name" => "Name",
-            "count_view" => "Count View",
-            "image" => "Image",
+            "name" => "Tên",
+            "count_view" => "Lượt click",
+            "image" => "Ảnh",
             "link" => "Link",
-            "priority" => "Priority",
-            "position" => "Position",
-            "close_at" => "Close at"
+            "priority" => "Sắp xếp",
+            "position" => "Vị trí",
+            "close_at" => "Ngày hết hạn"
         ],
         "position" => [
-            "name" => "Name",   
-            "width" => "Width",   
-            "height" => "Height",   
+            "name" => "Tên",   
+            "width" => "Dài",   
+            "height" => "Rộng",   
         ]
     ],
     "buttons" => [
-        "create" => "Create",
-        "discard" => "Discard",
-        "update" => "Update"
+        "create" => "Thêm",
+        "discard" => "Hủy",
+        "update" => "Cập nhật"
     ],
     "placeholder" => [
         "banner" => [
-            "name" => "Name here...",
-            "desc" => "Desc here...",
-            "image" => "Image here..",
-            "link" => "Link here..",
-            "priority" => "Priority here..",
-            "position" => "Position here..",
-            "close_at" => "Close at here.."
+            "name" => "Nhập tên...",
+            "desc" => "Nhập mô tả...",
+            "image" => "Chọn ảnh..",
+            "link" => "Nhập link..",
+            "priority" => "Nhập thứ tự sắp xếp..",
+            "position" => "Chọn vị trí..",
+            "close_at" => "Chọn ngày hết hạn.."
         ],
         "position" => [
-            "name" => "Name here...",  
-            "width" => "Width here...",  
-            "height" => "Height here...",  
+            "name" => "Nhập tên...",  
+            "width" => "Nhập chiều dài...",  
+            "height" => "Nhập chiều rộng...",  
         ]
     ],
     "messages" => [
         "success" => [
-            "create" => "Create successfully",
-            "update" => "Update successfully",
-            "delete" => "Delete successfully"
+            "create" => "Thêm thành công",
+            "update" => "Cập nhật thành công",
+            "delete" => "Xóa thành công"
         ],
         "error" => [
             "permission" => "Permission lock",
-            "create" => "Create failed",
-            "update" => "Update failed",
-            "delete" => "Delete failed"
+            "create" => "Thêm thất bại",
+            "update" => "Cập nhật thất bại",
+            "delete" => "Xóa thất bại"
         ]
     ]
 ];

@@ -16,9 +16,10 @@ class DhcdNewsTagTable extends Migration
         Schema::create('dhcd_news_tag', function (Blueprint $table) {
             $table->increments('news_tag_id');
             $table->string('name');
-            $table->string('tag_alias');
+            $table->string('alias');
             $table->tinyInteger('status')->default(1); 
             $table->timestamps();
+            $table->softDeletes();
             $table->engine = 'InnoDB';
         });
     }

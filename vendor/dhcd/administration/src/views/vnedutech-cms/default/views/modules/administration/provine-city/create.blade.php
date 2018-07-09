@@ -38,21 +38,16 @@
                     <div class="col-sm-8">
                         <label> Name</label>
                         <div class="form-group">
-                            <input type="text" name="name" class="form-control" placeholder="{{ trans('dhcd-administration::language.placeholder.provine_city.name') }}">
+                            <input type="text" name="name" class="form-control" placeholder="{{ trans('dhcd-administration::language.placeholder.name') }}">
                         </div>
                         <label> Type</label>
                         <div class="form-group">
                             <input type="radio" name="type"  value="tinh" checked="checked"> Tỉnh
                             <input type="radio" name="type"  value="thanh-pho">  Thành phố
                         </div>
-                        <label> Name with type</label>
-                        <div class="form-group">
-                            <input type="text" name="name_with_type" class="form-control" value="" placeholder="{{ trans('dhcd-administration::language.placeholder.provine_city.name_with_type') }}">
-                            <p>vd: Tỉnh Hà Tĩnh, Thành phố Hà Nội </p>
-                        </div>
                         <label> Code</label>
                         <div class="form-group">
-                            <input type="number" name="code" class="form-control" value="" placeholder="{{ trans('dhcd-administration::language.placeholder.provine_city.code') }}">
+                            <input type="number" name="code" min=1 class="form-control" value="" placeholder="{{ trans('dhcd-administration::language.placeholder.code') }}">
                         </div>
                         <div class="form-group">
                             <label for="blog_category" class="">Actions</label>
@@ -98,6 +93,10 @@
                     validators: {
                         notEmpty: {
                             message: 'Tên không được bỏ trống'
+                        },
+                        stringLength: {
+                            max: 250,
+                            message: 'Tên không được quá dài'
                         }
                     }
                 },
@@ -112,6 +111,14 @@
                     validators: {
                         notEmpty: {
                             message: 'Mã tỉnh không được bỏ trống'
+                        },
+                        remote: {
+                            data: {
+                                '_token': $('meta[name=csrf-token]').prop('content')
+                            },
+                            type: 'post',
+                            message: 'Code không được trùng',
+                            url: '{{route('dhcd.administration.provine-city.check-code')}}',
                         }
                     }
                 },

@@ -41,19 +41,27 @@
                     <!-- /.col-sm-8 -->
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label>{{trans('dhcd-member::language.form.title.name') }}</label>
+                            <label>{{trans('dhcd-member::language.form.title.name') }} (*)</label>
                             <input type="text" name="name" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.name')}}">
                         </div>
                         <div class="form-group">
-                            <label>{{trans('dhcd-member::language.form.title.u_name') }}</label>
+                            <label>{{trans('dhcd-member::language.form.title.u_name') }} (*)</label>
                             <input type="text" name="u_name" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.u_name')}}">
                         </div>
                         <div class="form-group">
-                            <label>{{trans('dhcd-member::language.form.title.email') }}</label>
+                            <label>{{trans('dhcd-member::language.form.title.password') }} (*)</label>
+                            <input type="password" name="password" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.password')}}">
+                        </div>
+                        <div class="form-group">
+                            <label>{{trans('dhcd-member::language.form.title.conf_password') }} (*)</label>
+                            <input type="password" name="conf_password" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.conf_password')}}">
+                        </div>
+                        <div class="form-group">
+                            <label>{{trans('dhcd-member::language.form.title.email') }} (*)</label>
                             <input type="text" name="email" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.email')}}">
                         </div>
                         <div class="form-group">
-                            <label>{{trans('dhcd-member::language.form.title.phone') }}</label>
+                            <label>{{trans('dhcd-member::language.form.title.phone') }} (*)</label>
                             <input type="text" name="phone" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.phone')}}">
                         </div>
                         <label>{{trans('dhcd-member::language.form.title.position') }}</label>
@@ -104,14 +112,6 @@
                                 </button>
                             </span>
                         </div>
-                        <div class="form-group">
-                            <label>{{trans('dhcd-member::language.form.title.password') }}</label>
-                            <input type="password" name="password" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.password')}}">
-                        </div>
-                        <div class="form-group">
-                            <label>{{trans('dhcd-member::language.form.title.conf_password') }}</label>
-                            <input type="password" name="conf_password" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.conf_password')}}">
-                        </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
@@ -161,7 +161,7 @@
                             <label for="blog_category" class="">Actions</label>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-success">{{ trans('dhcd-member::language.buttons.create') }}</button>
-                                <a href="{!! route('dhcd.member.member.create') !!}"
+                                <a href="{!! route('dhcd.member.member.manage') !!}"
                                    class="btn btn-danger">{{ trans('dhcd-member::language.buttons.discard') }}</a>
                             </div>
                         </div>
@@ -265,9 +265,9 @@
                             },
                             stringLength: {
                                 min: 3,
-                                max: 30,
-                                message: 'Tên phải từ 3 đến 30 kí tự'
-                            },
+                                max: 100,
+                                message: 'Tên phải từ 3 đến 100 kí tự'
+                            }
                         }
                     },
                     u_name: {
@@ -281,8 +281,8 @@
                             },
                             stringLength: {
                                 min: 3,
-                                max: 50,
-                                message: 'Tên đăng nhập phải từ 3 đến 30 kí tự'
+                                max: 100,
+                                message: 'Tên đăng nhập phải từ 3 đến 100 kí tự'
                             },
                             remote: {
                                 // headers: {

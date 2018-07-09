@@ -4,7 +4,7 @@ namespace Dhcd\News\App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Adtech\Application\Cms\Controllers\Controller as Controller;
-
+use Illuminate\Support\Collection;
 use Dhcd\News\App\Http\Requests\NewsCatRequest;
 use Dhcd\News\App\Http\Requests\NewsRequest;
 
@@ -32,6 +32,7 @@ use Illuminate\Support\Facades\URL;
 
 class NewsController extends Controller
 {	
+	protected $_newsCatList;
 	private $messages = array(
         'name.regex' => "Sai định dạng",
         'required' => "Bắt buộc",
@@ -65,23 +66,29 @@ class NewsController extends Controller
 		return view('DHCD-NEWS::modules.news.news.manager',compact('list_news_cat','params'));
 	}
 	public function create(){
-		$list_news_cat = $this->news_cat->all();
-		return view('DHCD-NEWS::modules.news.news.create',compact('list_news_cat'));
+		// $list_news_cat = $this->news_cat->all();
+		self::getCate();
+        $list_news_cat = $this->_newsCatList;
+		$list_news_tag = $this->news_tag->all();
+		$data = [
+			'list_news_cat' => $list_news_cat,
+			'list_news_tag' => $list_news_tag
+		];
+		return view('DHCD-NEWS::modules.news.news.create',$data);
 	}
 	public function add(NewsRequest $request){
 		$user_id = $this->user->email;
 		$title = $request->title;
 		$news_cat = $request->news_cat;
-		$news_tag = explode(",",$request->news_tag[0]);
+		$news_tag = $request->news_tag;
 		$title = $request->title;
 		$title_alias = $request->title_alias;
 		$desc = $request->desc;
 		$content = $request->content;
-		$image = $request->image;
 		$is_hot = !empty($request->is_hot) ? $request->is_hot : 0;
 		$priority = $request->priority;
 		$desc_seo = !empty($request->desc_seo) ? $request->desc_seo : '';
-		$filepath = $request->filepath;
+		$filepath = $request->filepath !='' ? $request->filepath : asset('test.png');
 		$key_word_seo = explode(",",$request->key_word_seo[0]);
 
 		$news = new News();
@@ -104,17 +111,11 @@ class NewsController extends Controller
 
 		if(!empty($news_tag)){
 			foreach ($news_tag as $key => $tag) {
-				$news_tag = new NewsTag();
-				$news_tag->name = $tag;
-				$news_tag->tag_alias = self::stripUnicode($tag);
-				$news_tag->created_at = new DateTime();
-				$news_tag->updated_at = new DateTime();
-				$news_tag->save();
 				$data_insert_news_has_tag[] =[
 					'news_id'=> $news->news_id,
-					'news_tag_id'=> $news_tag->news_tag_id
+					'news_tag_id'=> $tag
 				];
-				$list_tag_id[] = $news_tag->news_tag_id;
+				$list_tag_id[] = $tag;
 			}
 			if(!empty($data_insert_news_has_tag)){
 				DB::table('dhcd_news_has_tag')->insert($data_insert_news_has_tag);
@@ -149,7 +150,10 @@ class NewsController extends Controller
         }
 	}
 	public function show($news_id){
-		$list_news_cat = $this->news_cat->all();
+		// $list_news_cat = $this->news_cat->all();
+		self::getCate();
+        $list_news_cat = $this->_newsCatList;
+		$list_news_tag = $this->news_tag->all();
 		$news = $this->news->find($news_id);
 		$list_id_cat = [];
 		$list_tag = [];
@@ -162,29 +166,36 @@ class NewsController extends Controller
 		if(!empty($news->news_tag)){
 			$news_tag = json_decode($news->news_tag,true);
 			foreach ($news_tag as $key => $value) {
-				$list_tag[] = $value['name'];
+				$list_id_tag[] = $value['news_tag_id'];
 			}	
 		}
-		$list_tag_string = implode(',', $list_tag);
 		$list_key_word_seo_string = implode(',', json_decode($news->key_word_seo,true));
-		return view('DHCD-NEWS::modules.news.news.edit',compact('news','list_id_cat','list_tag_string','list_news_cat','list_key_word_seo_string'));
+		$data = [
+			'news' => $news,
+			'list_news_cat' => $list_news_cat,
+			'list_news_tag' => $list_news_tag,
+			'list_id_cat' => $list_id_cat,
+			'list_id_tag' => $list_id_tag,
+			'list_key_word_seo_string' => $list_key_word_seo_string,
+		];
+		return view('DHCD-NEWS::modules.news.news.edit',$data);
 	}	
 	public function update($news_id,NewsRequest $request){
-		$list_tag_id_old = NewsHasTag::where('news_id',$news_id)->select('news_tag_id') ->get()->toArray();
-		DB::table('dhcd_news_tag')->whereIn('news_tag_id',$list_tag_id_old)->delete();
+		// $list_tag_id_old = NewsHasTag::where('news_id',$news_id)->select('news_tag_id') ->get()->toArray();
+		// DB::table('dhcd_news_tag')->whereIn('news_tag_id',$list_tag_id_old)->delete();
 		DB::table('dhcd_news_has_tag')->where('news_id',$news_id)->delete();
 		DB::table('dhcd_news_has_cat')->where('news_id',$news_id)->delete();
 
 		$user_id = $this->user->user_id;
 		$title = $request->title;
 		$news_cat = $request->news_cat;
-		$news_tag = explode(",",$request->news_tag[0]);
+		$news_tag = $request->news_tag;
 		$title = $request->title;
 		$title_alias = $request->title_alias;
 		$desc = $request->desc;
 		$content = $request->content;
 		$image = $request->image;
-		$filepath = $request->filepath;
+		$filepath = $request->filepath !='' ? $request->filepath : asset('test.png');
 		$is_hot = $request->is_hot;
 		$priority = $request->priority;
 		$desc_seo = !empty($request->desc_seo) ? $request->desc_seo : '';
@@ -209,17 +220,11 @@ class NewsController extends Controller
 
 		if(!empty($news_tag)){
 			foreach ($news_tag as $key => $tag) {
-				$news_tag = new NewsTag();
-				$news_tag->name = $tag;
-				$news_tag->tag_alias = self::stripUnicode($tag);
-				$news_tag->created_at = new DateTime();
-				$news_tag->updated_at = new DateTime();
-				$news_tag->save();
 				$data_insert_news_has_tag[] =[
 					'news_id'=> $news->news_id,
-					'news_tag_id'=> $news_tag->news_tag_id
+					'news_tag_id'=> $tag
 				];
-				$list_tag_id[] = $news_tag->news_tag_id;
+				$list_tag_id[] = $tag;
 			}
 			if(!empty($data_insert_news_has_tag)){
 				DB::table('dhcd_news_has_tag')->insert($data_insert_news_has_tag);
@@ -296,9 +301,9 @@ class NewsController extends Controller
                     ['log_name', $model],
                     ['subject_id', $request->input('news_id')]
                 ])->get();
-                return view('includes.modal_table', compact('error', 'model', 'confirm_route', 'logs'));
+                return view('DHCD-NEWS::modules.news.modal.modal_table', compact('error', 'model', 'confirm_route', 'logs'));
             } catch (GroupNotFoundException $e) {
-                return view('includes.modal_table', compact('error', 'model', 'confirm_route'));
+                return view('DHCD-NEWS::modules.news.modal.modal_table', compact('error', 'model', 'confirm_route'));
             }
         } else {
             return $validator->messages();
@@ -323,6 +328,7 @@ class NewsController extends Controller
     public function getModalDelete(Request $request)
     {
         $model = 'news';
+        $type = 'delete';
         $confirm_route = $error = null;
         $validator = Validator::make($request->all(), [
             'news_id' => 'required|numeric',
@@ -330,9 +336,9 @@ class NewsController extends Controller
         if (!$validator->fails()) {
             try {
                 $confirm_route = route('dhcd.news.news.delete', ['news_id' => $request->news_id]);
-                return view('includes.modal_confirmation', compact('error', 'model', 'confirm_route'));
+                return view('DHCD-NEWS::modules.news.modal.modal_confirmation', compact('type','error', 'model', 'confirm_route'));
             } catch (GroupNotFoundException $e) {
-                return view('includes.modal_confirmation', compact('error', 'model', 'confirm_route'));
+                return view('DHCD-NEWS::modules.news.modal.modal_confirmation', compact('type','error', 'model', 'confirm_route'));
             }
         } else {
             return $validator->messages();
@@ -377,10 +383,12 @@ class NewsController extends Controller
             ->addColumn('news_cat', function ($list_news) {
             	$list_cat_json = json_decode($list_news->news_cat,true);
             	$list_cat_array = array();
-            	foreach ($list_cat_json as $key => $cat) {
-            		$list_cat_array[] = $cat['name'];	
-            	}
-            	$news_cat = implode(",",$list_cat_array);
+                if(!empty($list_cat_json)){
+                    foreach ($list_cat_json as $key => $cat) {
+                        $list_cat_array[] = $cat['name'];   
+                    }
+                	$news_cat = implode(",",$list_cat_array);
+                }
             	return $news_cat;
             })
             ->rawColumns(['actions','is_hot','image'])
@@ -390,4 +398,43 @@ class NewsController extends Controller
     	$list_news_cat = $this->news_cat->all();
 		return view('DHCD-NEWS::modules.news.news.manager_search',compact('list_news_cat'));
     }
+
+    function getCate() {
+        $news_cats = NewsCat::orderBy('parent')->get();
+        if (count($news_cats) > 0) {
+            foreach ($news_cats as $news_cat) {
+
+                $parent_id = $news_cat->parent;
+                $news_cat_id = $news_cat->news_cat_id;
+
+                $newsCatData['items'][$news_cat_id] = $news_cat;
+                $newsCatData['parents'][$parent_id][] = $news_cat_id;
+            }
+            $this->_newsCatList = new Collection();
+            self::buildMenu(0, $newsCatData);
+        }
+    }
+
+    function buildMenu($parentId, $newsCatData)
+    {
+        if (isset($newsCatData['parents'][$parentId]))
+        {
+            foreach ($newsCatData['parents'][$parentId] as $itemId)
+            {
+                $item = $newsCatData['items'][$itemId];
+                $item->level = 1;
+                if ($parentId == 0)
+                    $item->level = 0;
+                else
+                    $item->level = $newsCatData['items'][$parentId]->level + 1;
+                $this->_newsCatList->push($item);
+
+                // find childitems recursively
+                $more = self::buildMenu($itemId, $newsCatData);
+                if (!empty($more))
+                    $this->_newsCatList->push($more);
+            }
+        }
+    }
+
 }

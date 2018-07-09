@@ -34,6 +34,7 @@ Route::group(array('prefix' => $adminPrefix), function() {
         Route::post('dhcd/administration/provine-city/update', 'ProvineCityController@update')->name('dhcd.administration.provine-city.update');
         Route::get('dhcd/administration/provine-city/delete', 'ProvineCityController@delete')->name('dhcd.administration.provine-city.delete');
         Route::get('dhcd/administration/provine-city/confirm-delete', 'ProvineCityController@getModalDelete')->name('dhcd.administration.provine-city.confirm-delete');
+        Route::post('dhcd/administration/provine-city/check-code', 'ProvineCityController@checkCode')->name('dhcd.administration.provine-city.check-code');
 
         Route::get('dhcd/administration/country-district/member', 'CountryDistrictController@getCountryDistrict')->name('dhcd.administration.country-district.member');
     });

@@ -226,7 +226,7 @@ class TopicController extends Controller
         $topic = $this->topic->find($topic_id);
 
         if (null != $topic) {
-            $members = Member::where('visible',1)->select('member_id')->get();
+            $members = Member::select('member_id')->get();
             $data_insert = array();
             if(!empty($members)){
                 foreach ($members as $key => $member) {
@@ -313,8 +313,17 @@ class TopicController extends Controller
                         $status .= ' <a href=' . route('dhcd.topic.topic.confirm_add_all_member', ['topic_id' => $topics->topic_id]) . ' data-toggle="modal" data-target="#add_all_member_confirm"><span class="label label-sm label-danger">Add All</span></a>';
                     } 
                 }
-
                 return $status;   
+            })
+            ->addColumn('created_at', function ($banners) {
+                $date = new DateTime($banners->created_at);
+                $created_at = date_format($date, 'd-m-Y');
+                return $created_at;   
+            })
+            ->addColumn('updated_at', function ($banners) {
+                $date = new DateTime($banners->updated_at);
+                $updated_at = date_format($date, 'd-m-Y');
+                return $updated_at;   
             })
             ->rawColumns(['actions','status'])
             ->make();
@@ -354,10 +363,10 @@ class TopicController extends Controller
                 ->performedOn($topic)
                 ->withProperties($request->all())
                 ->log('User: :causer.email - Add single member topic - topic_id: :properties.topic_id, name: ' . $topic->name);
-            return redirect()->route('dhcd.topic.topic.manage')->with('success', trans('dhcd-topic::language.messages.success.status'));
+            return redirect()->route('dhcd.topic.topic.create.member',['topic_id' => $topic_id])->with('success', trans('dhcd-topic::language.messages.success.status'));
         }
         else{
-            return redirect()->route('dhcd.topic.topic.manage')->with('error', trans('dhcd-topic::language.messages.error.status'));
+            return redirect()->route('dhcd.topic.topic.create.member',['topic_id' => $topic_id])->with('error', trans('dhcd-topic::language.messages.error.status'));
         }
     }
 

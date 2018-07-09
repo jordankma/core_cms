@@ -3,43 +3,43 @@
 return [
     "titles" => [
         "topic" => [
-            "manage" => "Manage Topic",
-            "create" => "Create Topic",
-            "update" => "Update Topic",
-            "add_member" => "Add Member Topic",
+            "manage" => "Quản lý topic",
+            "create" => "Thêm topic",
+            "update" => "Cập nhật topic",
+            "add_member" => "Thêm người dùng vào topic",
         ]
     ],
     "table" => [
         "id" => "#",
-        "created_at" => "Created at",
-        "updated_at" => "Updated at",
-        "action" => "Actions",
-        "status" => "Status",
+        "created_at" => "Ngày tạo",
+        "updated_at" => "Ngày sửa",
+        "action" => "Thao tác",
+        "status" => "Trạng thái",
         "demo" => [
-            "name" => "Name"
+            "name" => "Tên"
         ],
         "add_member" => [
             "email" => "Email",
-            "name" => "Name"
+            "name" => "Tên"
         ]
     ],
     "form"=>[
-        "name_placeholder"=>"Enter tags here",
+        "name_placeholder"=>"Nhập tag...",
         "text"=>[
-            "name" => "Name",
+            "name" => "Tên",
             "topic_hot" => "Topic Hot",
             "hot" => "Hot",
-            "normal" => "Normal",
+            "normal" => "Thường",
         ],
     ],
     "buttons" => [
-        "create" => "Create",
-        "discard" => "Discard",
-        "update" => "Update",
+        "create" => "Thêm",
+        "discard" => "Hủy",
+        "update" => "cập nhật",
     ],
     "placeholder" => [
         "topic" => [
-            "name_here" => "Name here..."
+            "name_here" => "Nhập tên..."
         ]
     ],
     "labels" => [
@@ -47,17 +47,17 @@ return [
     ],
     "messages" => [
         "success" => [
-            "create" => "Create successfully",
-            "update" => "Update successfully",
-            "delete" => "Delete successfully",
-            "status" => "Status successfully"
+            "create" => "Thêm thành công",
+            "update" => "Cập nhật thành công",
+            "delete" => "Xóa thành công",
+            "status" => "Sửa trạng thái thành công"
         ],
         "error" => [
             "permission" => "Permission lock",
-            "create" => "Create failed",
-            "update" => "Update failed",
-            "delete" => "Delete failed",
-            "status" => "Status failed",
+            "create" => "Thêm thất bại",
+            "update" => "Câp nhật thất bại",
+            "delete" => "Xóa thất bại",
+            "status" => "Sửa trạng thái thất bại",
         ]
     ]
 ];

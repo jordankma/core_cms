@@ -19,6 +19,8 @@ class DhcdNewsHasTagTable extends Migration
             $table->integer('news_tag_id',false,true);
             $table->timestamps();
             $table->engine = 'InnoDB';
+            $table->softDeletes();
+            
             $table->foreign('news_id')->references('news_id')->on('dhcd_news')->onDelete('cascade');
             $table->foreign('news_tag_id')->references('news_tag_id')->on('dhcd_news_tag')->onDelete('cascade');
         });

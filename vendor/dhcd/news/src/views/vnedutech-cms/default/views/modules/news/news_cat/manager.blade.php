@@ -55,8 +55,8 @@
                                         <th class="fit-content">{{ trans('dhcd-news::language.table.id') }}</th>
                                         <th>{{ trans('dhcd-news::language.table.list_news.title') }}</th>
                                         {{-- <th style="width: 120px">{{ trans('dhcd-news::language.table.list_news_cat.title_cat_paren') }}</th> --}}
-                                        <th style="width: 120px">{{ trans('dhcd-news::language.table.created_at') }}</th>
-                                        <th style="width: 120px">{{ trans('dhcd-news::language.table.updated_at') }}</th>
+                                        {{-- <th style="width: 120px">{{ trans('dhcd-news::language.table.created_at') }}</th> --}}
+                                        {{-- <th style="width: 120px">{{ trans('dhcd-news::language.table.updated_at') }}</th> --}}
                                         {{-- <th>{{ trans('dhcd-news::language.table.list_news.status') }}</th> --}}
                                         <th class="fit-content" style="width: 100px">{{ trans('dhcd-news::language.table.action') }}</th>
                                     </tr>
@@ -100,8 +100,8 @@
                 columns: [
                     { data: 'news_cat_id', name: 'news_cat_id' },
                     { data: 'name', name: 'name' },
-                    { data: 'created_at', name: 'created_at'},
-                    { data: 'updated_at', name: 'updated_at'},
+                    // { data: 'created_at', name: 'created_at'},
+                    // { data: 'updated_at', name: 'updated_at'},
                     { data: 'actions', name: 'actions', orderable: false, searchable: false}
                 ]
             });

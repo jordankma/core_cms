@@ -21,6 +21,7 @@ class DhcdNewsCatTable extends Migration
             $table->tinyInteger('status')->comment('1 duyet 0 cho duyet')->default(1);    
             $table->tinyInteger('visible')->comment('1 hien 0 an')->default(1);  
             $table->timestamps();
+            $table->softDeletes();
             $table->engine = 'InnoDB';
         });
     }

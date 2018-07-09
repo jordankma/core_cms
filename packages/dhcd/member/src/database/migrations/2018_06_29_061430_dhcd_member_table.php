@@ -18,11 +18,11 @@ class DhcdMemberTable extends Migration
             $table->string('token');
             $table->string('name');
             $table->string('u_name');
+            $table->string('password');
             $table->string('position')->nullable();
             $table->string('gender');
             $table->string('phone')->unique();
             $table->string('email')->unique();
-            $table->string('password');
             $table->string('avatar')->nullable();
             $table->string('address')->nullable();
             $table->string('don_vi')->nullable();
@@ -38,6 +38,7 @@ class DhcdMemberTable extends Migration
             
             $table->tinyInteger('status', false, true)->comment('trang thai')->default(1);
             
+            $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -71,7 +71,7 @@
                         <table class="table table-bordered" id="table">
                             <thead>
                             <tr class="filters">
-                                <th class="fit-content">{{ trans('dhcd-member::language.table.id') }}</th>
+                                <th class="fit-content">#</th>
                                 <th>{{ trans('dhcd-member::language.table.member.name') }}</th>
                                 <th>{{ trans('dhcd-member::language.table.member.u_name') }}</th>
                                 <th>{{ trans('dhcd-member::language.table.member.position') }}</th>
@@ -100,7 +100,7 @@
                 serverSide: true,
                 ajax: '{{ route('dhcd.member.member.data') }}',
                 columns: [
-                    { data: 'member_id', name: 'member_id' },
+                    { data: 'rownum', name: 'rownum' },
                     { data: 'name', name: 'name' },
                     { data: 'u_name', name: 'u_name'},
                     { data: 'position', name: 'position' },

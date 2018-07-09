@@ -11,13 +11,13 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('/vendor/' . $group_name . '/' . $skin .'/vendors/jasny-bootstrap/css/jasny-bootstrap.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('/vendor/' . $group_name . '/' . $skin .'/vendors/bootstrap-multiselect/css/bootstrap-multiselect.css') }}">
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin .'/vendors/ckeditor/js/ckeditor.js') }}" type="text/javascript"></script>
-    <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/dhcd/news/css/news/add.css') }}" rel="stylesheet" type="text/css"/>
+    {{-- <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/dhcd/news/css/news/add.css') }}" rel="stylesheet" type="text/css"/> --}}
 @stop
 <!--end of page css-->
 
     <style type="text/css">
         .multiselect-container .active a{
-            background-color: #fff !important;
+            background-color: lightblue !important;
         }
         #cate .btn-group{
             width: 100% !important;
@@ -56,7 +56,8 @@
                             @endif
                             <div class="form-group">
                                 <label>{{trans('dhcd-news::language.form.text.title')}} {{'(*)'}}</label>
-                                <input type="text" required name="title" class="form-control" placeholder="{{trans('dhcd-news::language.form.title_placeholder')}}">
+                                <input type="text" required id="title" name="title" class="form-control" placeholder="{{trans('dhcd-news::language.form.title_placeholder')}}">
+                                <p id="alias" style="color: red"></p>
                             </div>
                             <div class="form-group">
                                 <label>{{trans('dhcd-news::language.form.text.desc')}}</label><br>
@@ -73,18 +74,32 @@
                         <!-- /.col-sm-4 -->
                         <div class="col-md-4 col-sm-4">
                             <div class="form-group">
-                                <label>{{trans('dhcd-news::language.form.text.cat')}}</label><br>
-                                <select id="cate" class="form-control" name="news_cat[]" required multiple="multiple">
+                                <label>{{trans('dhcd-news::language.form.text.cat')}}(*)</label><br>
+                                <select id="cate" class="form-control" name="news_cat[]" required="" multiple="multiple">
                                     @if(!empty($list_news_cat))
                                     @foreach($list_news_cat as $news_cat)
-                                        <option value="{{$news_cat->news_cat_id}}">{{$news_cat->name}}</option>
+                                        <option value="{{$news_cat->news_cat_id}}">{{str_repeat('+', $news_cat->level) .$news_cat->name}}</option>
                                     @endforeach
                                     @endif
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label>{{trans('dhcd-news::language.form.text.tag')}}</label><br>
-                                <input type="text" name="news_tag[]" value="" class="form-control" data-role="tagsinput" placeholder="{{trans('dhcd-news::language.form.tags_placeholder')}}">
+                            <div class="form-group area-tag">
+                                <label>{{trans('Thêm tag')}}</label><br>
+                                <div class="input-group">
+                                    <input type="text" name="news_tag_add" value="" class="form-control" placeholder="{{trans('dhcd-news::language.form.tags_placeholder')}}" id="text-tag">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" id="add-tag">Thêm</button> <br>
+                                    </span>
+                                 </div>
+                                <p style="color: red"> Các tag cách nhau bằng dấu phẩy</p>
+                                <label>{{trans('Chọn tag')}}</label>
+                                <select id="tag" class="form-control" name="news_tag[]" multiple="multiple">
+                                    @if(!empty($list_news_tag))
+                                    @foreach($list_news_tag as $nt)
+                                        <option value="{{$nt->news_tag_id}}">{{$nt->name}}</option>
+                                    @endforeach
+                                    @endif
+                                </select>
                             </div>
                             <label>{{trans('dhcd-news::language.form.text.image')}}</label>
                             <div class="input-group">
@@ -98,9 +113,9 @@
                              <img id="holder" style="margin-top:15px;max-height:100px;">
                             <div class="form-group">
                                 <input type="radio" id="hot" name="is_hot" value="1">
-                                <label for="normal">{{trans('dhcd-news::language.form.text.news_hot')}}    </label> <br>
+                                <label for="hot">{{trans('dhcd-news::language.form.text.news_hot')}}    </label> <br>
                                 <input type="radio" id="normal" name="is_hot" value="2" checked="checked">
-                                <label>    {{trans('dhcd-news::language.form.text.news_normal')}}</label>
+                                <label for="normal">{{trans('dhcd-news::language.form.text.news_normal')}}</label>
                             </div>
                             <div class="form-group">
                                 <label>{{trans('dhcd-news::language.form.text.priority')}}</label>
@@ -117,7 +132,7 @@
                         </div>
                         <div class="form-group text-center">
                             <button type="submit" class="btn btn-success">{{trans('dhcd-news::language.buttons.create')}}</button>
-                            <a href="" class="btn btn-danger">{{trans('dhcd-news::language.buttons.discard')}}</a>
+                            <a href="{{route("dhcd.news.news.manager")}}" class="btn btn-danger">{{trans('dhcd-news::language.buttons.discard')}}</a>
                         </div>
                         <!-- /.col-sm-4 -->
                     </div>
@@ -146,7 +161,7 @@
         filebrowserImageBrowseUrl: '/admin/laravel-filemanager?type=Images',
         filebrowserImageUploadUrl: '/admin/laravel-filemanager/upload?type=Images&_token=',
         filebrowserBrowseUrl: '/admin/laravel-filemanager?type=Files',
-        filebrowserUploadUrl: '/admin/laravel-filemanager/upload?type=Files&_token='
+        filebrowserUploadUrl: '/admin/laravel-filemanager/upload?type=Files&_token=',
       };
         CKEDITOR.replace('ckeditor',options);
         var domain = "/admin/laravel-filemanager/";
@@ -162,6 +177,10 @@
                     validators: {
                         notEmpty: {
                             message: 'Bạn chưa nhập tiêu đề'
+                        },
+                        stringLength: {
+                            max: 250,
+                            message: 'Tiêu đề không được quá dài'
                         }
                     }
                 },
@@ -175,5 +194,36 @@
                 }
             }
         });    
+        $('body').on('click','#add-tag',function(e){
+            e.preventDefault();
+            var list_tag = $('#text-tag').val();
+            var i;
+            if(list_tag!=''){
+                $.ajax({
+                    url: "{{route('dhcd.news.tag.ajax.add')}}",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name=csrf-token]').prop('content')
+                    },
+                    type: 'POST',
+                    cache: false,
+                    data: {
+                        'list_tag': list_tag
+                    },
+                    success: function (response) {
+                        var text = '';
+                        var data = JSON.parse(response);
+                        for( i in data){
+                            text += '<option value="'+data[i].news_tag_id+'" selected="">'+data[i].name+'</option>';
+                        }
+                        $('#tag').prepend(text);
+                        $('#tag').multiselect('rebuild');
+                    }
+                }, 'json');
+            }
+        });
+        $("#title").keyup(function(){
+            text = $(this).val();
+            $("#alias").text(text);
+        });
     </script>
 @stop

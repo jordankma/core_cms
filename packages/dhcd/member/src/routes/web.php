@@ -23,3 +23,8 @@ Route::group(array('prefix' => $adminPrefix), function() {
         Route::post('dhcd/member/member/excel/post/import', 'MemberController@postImport')->name('dhcd.member.member.excel.post.import');
     });
 });
+Route::group(array('prefix' => 'dev'), function() {
+    Route::post('post/login', 'ApiMemberController@postLogin');
+    Route::get('get/user/info', 'ApiMemberController@getUserInfo');
+    Route::put('put/user/change-password', 'ApiMemberController@putChangePass');
+});

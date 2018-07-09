@@ -101,6 +101,7 @@ class BannerController extends Controller
         $data = [
             'banner' => $banner,
             'positions' => $positions,
+            'close_at' => $close_at
         ];
 
         return view('DHCD-BANNER::modules.banner.banner.edit', $data);
@@ -187,7 +188,7 @@ class BannerController extends Controller
 
     public function log(Request $request)
     {
-        $model = 'banners';
+        $model = 'banner';
         $confirm_route = $error = null;
         $validator = Validator::make($request->all(), [
             'type' => 'required',
@@ -232,8 +233,7 @@ class BannerController extends Controller
             })
             ->addColumn('close_at', function ($banners) {
                 $date = new DateTime($banners->close_at);
-                $close_at = date_format($date, 'd-m-y');
-
+                $close_at = date_format($date, 'd-m-Y');
                 return $close_at;   
             })
             ->rawColumns(['actions','image','close_at'])

@@ -223,6 +223,7 @@ class PackageController extends Controller
                             $pathDatabase = 'packages/' . $package->package_alias . '/' . $package->module_alias . '/src/database/migrations';
 //                            shell_exec('cd ../ && /egserver/php/bin/php artisan migrate:refresh --path="' . $pathDatabase . '"');
                             shell_exec('cd ../ && php artisan migrate:refresh --path="' . $pathDatabase . '"');
+                            
                         }
                     }
                     return redirect()->route('adtech.core.package.manage', ['id' => $domain_id])->with('success', trans('adtech-core::messages.success.update'));

@@ -44,7 +44,6 @@ class MemberController extends Controller
 
     public function add(MemberRequest $request)
     {
-        $members = new Member();
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:4|max:50',
             'u_name' => 'required|unique:dhcd_member,u_name|min:3|max:50',
@@ -53,6 +52,7 @@ class MemberController extends Controller
             'email' => 'required|unique:dhcd_member,email',
         ], $this->messages);
         if (!$validator->fails()) {
+            $members = new Member();
             $name = $request->name; 
             $u_name = $request->u_name; 
             $email = $request->email; 
@@ -182,9 +182,7 @@ class MemberController extends Controller
         $member_id = $request->input('member_id');
         $member = $this->member->find($member_id);
         if (null != $member) {
-            // $member->visible = 0;
-            // $member->save();
-            $member = $this->member->delete($member_id);
+            $this->member->delete($member_id);
             activity('member')
                 ->performedOn($member)
                 ->withProperties($request->all())
@@ -280,8 +278,9 @@ class MemberController extends Controller
     //Table Data to index page
     public function data()
     {
-        $members = Member::query();
+        $members = $this->member->findAll();
         return Datatables::of($members)
+            ->addIndexColumn()
             ->addColumn('actions', function ($members) {
                 if ($this->user->canAccess('dhcd.member.member.log')) {
                     $actions = '<a href=' . route('dhcd.member.member.log', ['type' => 'member', 'id' => $members->member_id]) . ' data-toggle="modal" data-target="#log"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#F99928" data-hc="#F99928" title="log member"></i></a>';

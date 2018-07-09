@@ -18,6 +18,7 @@ class DhcdNewsHasCatTable extends Migration
             $table->integer('news_id', false, true)->index();
             $table->integer('news_cat_id', false, true)->index();
             $table->timestamps();
+            $table->softDeletes();
             $table->engine = 'InnoDB';
             $table->foreign('news_id')->references('news_id')->on('dhcd_news')->onDelete('cascade');
             $table->foreign('news_cat_id')->references('news_cat_id')->on('dhcd_news_cat')->onDelete('cascade');

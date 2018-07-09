@@ -61,17 +61,7 @@
                         <div class="form-group">
                             <input type="text" name="name_with_type" class="form-control" value="" placeholder="{{ trans('dhcd-administration::language.placeholder.country_district.name_with_type') }}">
                             <p>vd: Tỉnh Hà Tĩnh, Thành phố Hà Nội </p>
-                        </div>
-                        <label> Path</label>
-                        <div class="form-group">
-                            <input type="text" name="path" class="form-control" value="" placeholder="{{ trans('dhcd-administration::language.placeholder.country_district.path') }}">
-                            <p>vd: Thanh Xuân,Hà Nội </p>
-                        </div>
-                        <label> Path with type</label>
-                        <div class="form-group">
-                            <input type="text" name="path_with_type" class="form-control" value="" placeholder="{{ trans('dhcd-administration::language.placeholder.country_district.path_with_type') }}">
-                            <p>vd: Quận Thanh Xuân, Thành phố Hà Nội </p>
-                        </div>
+                        </div> 
                         <label> Code</label>
                         <div class="form-group">
                             <input type="number" name="code" class="form-control" value="" placeholder="{{ trans('dhcd-administration::language.placeholder.country_district.code') }}">
