@@ -21,7 +21,7 @@ use Symfony\Component\VarDumper\Dumper\CliDumper;
 use Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 use Symfony\Component\VarDumper\Dumper\DataDumperInterface;
-use Symfony\Component\VarDumper\Server\Connection;
+use Symfony\Component\VarDumper\Dumper\ServerDumper;
 
 /**
  * @author Nicolas Grekas <p@tchwork.com>
@@ -38,18 +38,17 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
     private $charset;
     private $requestStack;
     private $dumper;
+    private $dumperIsInjected;
     private $sourceContextProvider;
 
-    /**
-     * @param DataDumperInterface|Connection|null $dumper
-     */
-    public function __construct(Stopwatch $stopwatch = null, $fileLinkFormat = null, string $charset = null, RequestStack $requestStack = null, $dumper = null)
+    public function __construct(Stopwatch $stopwatch = null, $fileLinkFormat = null, string $charset = null, RequestStack $requestStack = null, DataDumperInterface $dumper = null)
     {
         $this->stopwatch = $stopwatch;
         $this->fileLinkFormat = $fileLinkFormat ?: ini_get('xdebug.file_link_format') ?: get_cfg_var('xdebug.file_link_format');
         $this->charset = $charset ?: ini_get('php.output_encoding') ?: ini_get('default_charset') ?: 'UTF-8';
         $this->requestStack = $requestStack;
         $this->dumper = $dumper;
+        $this->dumperIsInjected = null !== $dumper;
 
         // All clones share these properties by reference:
         $this->rootRefs = array(
@@ -59,7 +58,7 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
             &$this->clonesCount,
         );
 
-        $this->sourceContextProvider = $dumper instanceof Connection && isset($dumper->getContextProviders()['source']) ? $dumper->getContextProviders()['source'] : new SourceContextProvider($this->charset);
+        $this->sourceContextProvider = $dumper instanceof ServerDumper && isset($dumper->getContextProviders()['source']) ? $dumper->getContextProviders()['source'] : new SourceContextProvider($this->charset);
     }
 
     public function __clone()
@@ -72,17 +71,14 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
         if ($this->stopwatch) {
             $this->stopwatch->start('dump');
         }
+        if ($this->isCollected && !$this->dumper) {
+            $this->isCollected = false;
+        }
 
         list('name' => $name, 'file' => $file, 'line' => $line, 'file_excerpt' => $fileExcerpt) = $this->sourceContextProvider->getContext();
 
-        if ($this->dumper instanceof Connection) {
-            if (!$this->dumper->write($data)) {
-                $this->isCollected = false;
-            }
-        } elseif ($this->dumper) {
+        if ($this->dumper) {
             $this->doDump($this->dumper, $data, $name, $file, $line);
-        } else {
-            $this->isCollected = false;
         }
 
         $this->data[] = compact('data', 'name', 'file', 'line', 'fileExcerpt');
@@ -128,7 +124,7 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
         }
         $this->data = array();
         $this->dataCount = 0;
-        $this->isCollected = true;
+        $this->isCollected = false;
         $this->clonesCount = 0;
         $this->clonesIndex = 0;
     }
@@ -145,6 +141,9 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
         $this->data = array();
         $this->dataCount = 0;
         $this->isCollected = true;
+        if (!$this->dumperIsInjected) {
+            $this->dumper = null;
+        }
 
         return $ser;
     }
@@ -246,7 +245,7 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
             };
             $contextDumper = $contextDumper->bindTo($dumper, $dumper);
             $contextDumper($name, $file, $line, $this->fileLinkFormat);
-        } else {
+        } elseif (!$dumper instanceof ServerDumper) {
             $cloner = new VarCloner();
             $dumper->dump($cloner->cloneVar($name.' on line '.$line.':'));
         }

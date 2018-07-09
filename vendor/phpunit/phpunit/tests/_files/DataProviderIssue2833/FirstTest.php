@@ -15,6 +15,8 @@ class FirstTest extends TestCase
 {
     /**
      * @dataProvider provide
+     *
+     * @param mixed $x
      */
     public function testFirst($x): void
     {

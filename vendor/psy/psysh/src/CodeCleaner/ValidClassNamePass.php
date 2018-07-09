@@ -38,11 +38,13 @@ class ValidClassNamePass extends NamespaceAwarePass
     const INTERFACE_TYPE = 'interface';
     const TRAIT_TYPE     = 'trait';
 
+    protected $checkTraits;
     private $conditionalScopes = 0;
     private $atLeastPhp55;
 
     public function __construct()
     {
+        $this->checkTraits = function_exists('trait_exists');
         $this->atLeastPhp55 = version_compare(PHP_VERSION, '5.5', '>=');
     }
 
@@ -363,7 +365,7 @@ class ValidClassNamePass extends NamespaceAwarePass
      */
     protected function traitExists($name)
     {
-        return trait_exists($name) || $this->findInScope($name) === self::TRAIT_TYPE;
+        return $this->checkTraits && (trait_exists($name) || $this->findInScope($name) === self::TRAIT_TYPE);
     }
 
     /**

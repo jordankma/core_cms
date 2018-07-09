@@ -7,6 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace PHPUnit\TextUI;
 
 use PHPUnit\Framework\Error\Deprecated;
@@ -58,9 +59,7 @@ use SebastianBergmann\Environment\Runtime;
 class TestRunner extends BaseTestRunner
 {
     public const SUCCESS_EXIT   = 0;
-
     public const FAILURE_EXIT   = 1;
-
     public const EXCEPTION_EXIT = 2;
 
     /**
@@ -100,6 +99,7 @@ class TestRunner extends BaseTestRunner
 
     /**
      * @param ReflectionClass|Test $test
+     * @param array                $arguments
      * @param bool                 $exit
      *
      * @throws \RuntimeException
@@ -284,7 +284,7 @@ class TestRunner extends BaseTestRunner
         }
 
         $this->printer->write(
-            Version::getVersionString() . "\n"
+            Version::getVersionString() . PHP_EOL
         );
 
         self::$versionStringPrinted = true;
@@ -534,7 +534,7 @@ class TestRunner extends BaseTestRunner
             }
         }
 
-        $this->printer->write("\n");
+        $this->printer->write(PHP_EOL);
 
         if (isset($codeCoverage)) {
             $result->setCodeCoverage($codeCoverage);
@@ -591,7 +591,7 @@ class TestRunner extends BaseTestRunner
                     unset($writer);
                 } catch (CodeCoverageException $e) {
                     $this->printer->write(
-                        " failed\n" . $e->getMessage() . "\n"
+                        " failed\n" . $e->getMessage() . PHP_EOL
                     );
                 }
             }
@@ -609,7 +609,7 @@ class TestRunner extends BaseTestRunner
                     unset($writer);
                 } catch (CodeCoverageException $e) {
                     $this->printer->write(
-                        " failed\n" . $e->getMessage() . "\n"
+                        " failed\n" . $e->getMessage() . PHP_EOL
                     );
                 }
             }
@@ -635,7 +635,7 @@ class TestRunner extends BaseTestRunner
                     unset($writer);
                 } catch (CodeCoverageException $e) {
                     $this->printer->write(
-                        " failed\n" . $e->getMessage() . "\n"
+                        " failed\n" . $e->getMessage() . PHP_EOL
                     );
                 }
             }
@@ -653,7 +653,7 @@ class TestRunner extends BaseTestRunner
                     unset($writer);
                 } catch (CodeCoverageException $e) {
                     $this->printer->write(
-                        " failed\n" . $e->getMessage() . "\n"
+                        " failed\n" . $e->getMessage() . PHP_EOL
                     );
                 }
             }
@@ -692,7 +692,7 @@ class TestRunner extends BaseTestRunner
                     unset($writer);
                 } catch (CodeCoverageException $e) {
                     $this->printer->write(
-                        " failed\n" . $e->getMessage() . "\n"
+                        " failed\n" . $e->getMessage() . PHP_EOL
                     );
                 }
             }
@@ -751,14 +751,14 @@ class TestRunner extends BaseTestRunner
      */
     protected function runFailed(string $message): void
     {
-        $this->write($message . \PHP_EOL);
+        $this->write($message . PHP_EOL);
 
         exit(self::FAILURE_EXIT);
     }
 
     protected function write(string $buffer): void
     {
-        if (\PHP_SAPI != 'cli' && \PHP_SAPI != 'phpdbg') {
+        if (PHP_SAPI != 'cli' && PHP_SAPI != 'phpdbg') {
             $buffer = \htmlspecialchars($buffer);
         }
 
@@ -1198,7 +1198,7 @@ class TestRunner extends BaseTestRunner
     private function writeMessage(string $type, string $message): void
     {
         if (!$this->messagePrinted) {
-            $this->write("\n");
+            $this->write(PHP_EOL);
         }
 
         $this->write(

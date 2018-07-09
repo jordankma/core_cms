@@ -33,6 +33,7 @@ class Google_Service_JobService_JobQuery extends Google_Collection
   protected $locationFiltersDataType = 'array';
   public $publishDateRange;
   public $query;
+  public $tenantJobOnly;
 
   public function setCategories($categories)
   {
@@ -147,5 +148,13 @@ class Google_Service_JobService_JobQuery extends Google_Collection
   public function getQuery()
   {
     return $this->query;
+  }
+  public function setTenantJobOnly($tenantJobOnly)
+  {
+    $this->tenantJobOnly = $tenantJobOnly;
+  }
+  public function getTenantJobOnly()
+  {
+    return $this->tenantJobOnly;
   }
 }

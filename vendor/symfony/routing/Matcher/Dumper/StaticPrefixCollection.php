@@ -63,9 +63,11 @@ class StaticPrefixCollection
      *
      * @param array|self $route
      */
-    public function addRoute(string $prefix, $route)
+    public function addRoute(string $prefix, $route, string $staticPrefix = null)
     {
-        list($prefix, $staticPrefix) = $this->getCommonPrefix($prefix, $prefix);
+        if (null === $staticPrefix) {
+            list($prefix, $staticPrefix) = $this->getCommonPrefix($prefix, $prefix);
+        }
 
         for ($i = \count($this->items) - 1; 0 <= $i; --$i) {
             $item = $this->items[$i];
@@ -100,7 +102,7 @@ class StaticPrefixCollection
 
             if ($item instanceof self && $this->prefixes[$i] === $commonPrefix) {
                 // the new route is a child of a previous one, let's nest it
-                $item->addRoute($prefix, $route);
+                $item->addRoute($prefix, $route, $staticPrefix);
             } else {
                 // the new route and a previous one have a common prefix, let's merge them
                 $child = new self($commonPrefix);
@@ -185,12 +187,6 @@ class StaticPrefixCollection
             }
         }
         restore_error_handler();
-        if ($i < $end && 0b10 === (\ord($prefix[$i]) >> 6) && preg_match('//u', $prefix.' '.$anotherPrefix)) {
-            do {
-                // Prevent cutting in the middle of an UTF-8 characters
-                --$i;
-            } while (0b10 === (\ord($prefix[$i]) >> 6));
-        }
 
         return array(substr($prefix, 0, $i), substr($prefix, 0, $staticLength ?? $i));
     }

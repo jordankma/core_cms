@@ -12,6 +12,9 @@ class Issue2137Test extends PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideBrandService
      *
+     * @param mixed $provided
+     * @param mixed $expected
+     *
      * @throws Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -31,6 +34,9 @@ class Issue2137Test extends PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider provideBrandService
+     *
+     * @param mixed $provided
+     * @param mixed $expected
      *
      * @throws Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException

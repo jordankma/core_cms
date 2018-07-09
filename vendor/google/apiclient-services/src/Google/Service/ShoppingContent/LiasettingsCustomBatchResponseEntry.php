@@ -17,7 +17,7 @@
 
 class Google_Service_ShoppingContent_LiasettingsCustomBatchResponseEntry extends Google_Collection
 {
-  protected $collection_key = 'posDataProviders';
+  protected $collection_key = 'posProviders';
   public $batchId;
   protected $errorsType = 'Google_Service_ShoppingContent_Errors';
   protected $errorsDataType = '';
@@ -26,8 +26,8 @@ class Google_Service_ShoppingContent_LiasettingsCustomBatchResponseEntry extends
   public $kind;
   protected $liaSettingsType = 'Google_Service_ShoppingContent_LiaSettings';
   protected $liaSettingsDataType = '';
-  protected $posDataProvidersType = 'Google_Service_ShoppingContent_PosDataProviders';
-  protected $posDataProvidersDataType = 'array';
+  protected $posProvidersType = 'Google_Service_ShoppingContent_PosProviders';
+  protected $posProvidersDataType = 'array';
 
   public function setBatchId($batchId)
   {
@@ -88,17 +88,17 @@ class Google_Service_ShoppingContent_LiasettingsCustomBatchResponseEntry extends
     return $this->liaSettings;
   }
   /**
-   * @param Google_Service_ShoppingContent_PosDataProviders
+   * @param Google_Service_ShoppingContent_PosProviders
    */
-  public function setPosDataProviders($posDataProviders)
+  public function setPosProviders($posProviders)
   {
-    $this->posDataProviders = $posDataProviders;
+    $this->posProviders = $posProviders;
   }
   /**
-   * @return Google_Service_ShoppingContent_PosDataProviders
+   * @return Google_Service_ShoppingContent_PosProviders
    */
-  public function getPosDataProviders()
+  public function getPosProviders()
   {
-    return $this->posDataProviders;
+    return $this->posProviders;
   }
 }

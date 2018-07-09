@@ -1,10 +1,10 @@
 <?php
 
-namespace UniSharp\LaravelFilemanager\controllers;
+namespace Unisharp\Laravelfilemanager\controllers;
 
 use Illuminate\Support\Facades\File;
-use UniSharp\LaravelFilemanager\Events\ImageIsDeleting;
-use UniSharp\LaravelFilemanager\Events\ImageWasDeleted;
+use Unisharp\Laravelfilemanager\Events\ImageIsDeleting;
+use Unisharp\Laravelfilemanager\Events\ImageWasDeleted;
 
 /**
  * Class CropController.

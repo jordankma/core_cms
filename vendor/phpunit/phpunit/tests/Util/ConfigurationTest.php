@@ -7,6 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace PHPUnit\Util;
 
 use PHPUnit\Framework\Exception;
@@ -24,7 +25,7 @@ class ConfigurationTest extends TestCase
     protected function setUp(): void
     {
         $this->configuration = Configuration::getInstance(
-            \dirname(__DIR__) . \DIRECTORY_SEPARATOR . '_files' . \DIRECTORY_SEPARATOR . 'configuration.xml'
+            \dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'configuration.xml'
         );
     }
 
@@ -37,7 +38,7 @@ class ConfigurationTest extends TestCase
 
     public function testShouldReadColorsWhenTrueInConfigurationFile(): void
     {
-        $configurationFilename =  \dirname(__DIR__) . \DIRECTORY_SEPARATOR . '_files' . \DIRECTORY_SEPARATOR . 'configuration.colors.true.xml';
+        $configurationFilename =  \dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'configuration.colors.true.xml';
         $configurationInstance = Configuration::getInstance($configurationFilename);
         $configurationValues   = $configurationInstance->getPHPUnitConfiguration();
 
@@ -46,7 +47,7 @@ class ConfigurationTest extends TestCase
 
     public function testShouldReadColorsWhenFalseInConfigurationFile(): void
     {
-        $configurationFilename =  \dirname(__DIR__) . \DIRECTORY_SEPARATOR . '_files' . \DIRECTORY_SEPARATOR . 'configuration.colors.false.xml';
+        $configurationFilename =  \dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'configuration.colors.false.xml';
         $configurationInstance = Configuration::getInstance($configurationFilename);
         $configurationValues   = $configurationInstance->getPHPUnitConfiguration();
 
@@ -55,7 +56,7 @@ class ConfigurationTest extends TestCase
 
     public function testShouldReadColorsWhenEmptyInConfigurationFile(): void
     {
-        $configurationFilename =  \dirname(__DIR__) . \DIRECTORY_SEPARATOR . '_files' . \DIRECTORY_SEPARATOR . 'configuration.colors.empty.xml';
+        $configurationFilename =  \dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'configuration.colors.empty.xml';
         $configurationInstance = Configuration::getInstance($configurationFilename);
         $configurationValues   = $configurationInstance->getPHPUnitConfiguration();
 
@@ -64,7 +65,7 @@ class ConfigurationTest extends TestCase
 
     public function testShouldReadColorsWhenInvalidInConfigurationFile(): void
     {
-        $configurationFilename =  \dirname(__DIR__) . \DIRECTORY_SEPARATOR . '_files' . \DIRECTORY_SEPARATOR . 'configuration.colors.invalid.xml';
+        $configurationFilename =  \dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'configuration.colors.invalid.xml';
         $configurationInstance = Configuration::getInstance($configurationFilename);
         $configurationValues   = $configurationInstance->getPHPUnitConfiguration();
 
@@ -73,7 +74,7 @@ class ConfigurationTest extends TestCase
 
     public function testInvalidConfigurationGeneratesValidationErrors(): void
     {
-        $configurationFilename =  \dirname(__DIR__) . \DIRECTORY_SEPARATOR . '_files' . \DIRECTORY_SEPARATOR . 'configuration.colors.invalid.xml';
+        $configurationFilename =  \dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'configuration.colors.invalid.xml';
         $configurationInstance = Configuration::getInstance($configurationFilename);
 
         $this->assertTrue($configurationInstance->hasValidationErrors());
@@ -82,7 +83,7 @@ class ConfigurationTest extends TestCase
 
     public function testNonIntegerValueReturnsDefault(): void
     {
-        $configurationFilename =  \dirname(__DIR__) . \DIRECTORY_SEPARATOR . '_files' . \DIRECTORY_SEPARATOR . 'configuration.columns.default.xml';
+        $configurationFilename =  \dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'configuration.columns.default.xml';
         $configurationInstance = Configuration::getInstance($configurationFilename);
         $configurationValues   = $configurationInstance->getPHPUnitConfiguration();
 
@@ -96,8 +97,8 @@ class ConfigurationTest extends TestCase
      */
     public function testConfigurationRootOptions(string $optionName, string $optionValue, $expected): void
     {
-        $tmpFilename = \sys_get_temp_dir() . \DIRECTORY_SEPARATOR . 'phpunit.' . $optionName . \uniqid() . '.xml';
-        $xml         = "<phpunit $optionName='$optionValue'></phpunit>" . \PHP_EOL;
+        $tmpFilename = \sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'phpunit.' . $optionName . \uniqid() . '.xml';
+        $xml         = "<phpunit $optionName='$optionValue'></phpunit>" . PHP_EOL;
         \file_put_contents($tmpFilename, $xml);
 
         $configurationInstance = Configuration::getInstance($tmpFilename);
@@ -135,37 +136,46 @@ class ConfigurationTest extends TestCase
     {
         $this->assertEquals(
             [
-                'whitelist' => [
-                    'addUncoveredFilesFromWhitelist'     => true,
-                    'processUncoveredFilesFromWhitelist' => false,
-                    'include'                            => [
-                        'directory' => [
-                            0 => [
-                                'path'   => '/path/to/files',
-                                'prefix' => '',
-                                'suffix' => '.php',
-                                'group'  => 'DEFAULT'
+                'whitelist' =>
+                    [
+                        'addUncoveredFilesFromWhitelist'     => true,
+                        'processUncoveredFilesFromWhitelist' => false,
+                        'include'                            =>
+                            [
+                                'directory' =>
+                                    [
+                                        0 =>
+                                            [
+                                                'path'   => '/path/to/files',
+                                                'prefix' => '',
+                                                'suffix' => '.php',
+                                                'group'  => 'DEFAULT'
+                                            ],
+                                    ],
+                                'file' =>
+                                    [
+                                        0 => '/path/to/file',
+                                        1 => '/path/to/file',
+                                    ],
                             ],
-                        ],
-                        'file' => [
-                            0 => '/path/to/file',
-                            1 => '/path/to/file',
-                        ],
-                    ],
-                    'exclude' => [
-                        'directory' => [
-                            0 => [
-                                'path'   => '/path/to/files',
-                                'prefix' => '',
-                                'suffix' => '.php',
-                                'group'  => 'DEFAULT'
+                        'exclude' =>
+                            [
+                                'directory' =>
+                                    [
+                                        0 =>
+                                            [
+                                                'path'   => '/path/to/files',
+                                                'prefix' => '',
+                                                'suffix' => '.php',
+                                                'group'  => 'DEFAULT'
+                                            ],
+                                    ],
+                                'file' =>
+                                    [
+                                        0 => '/path/to/file',
+                                    ],
                             ],
-                        ],
-                        'file' => [
-                            0 => '/path/to/file',
-                        ],
                     ],
-                ],
             ],
             $this->configuration->getFilterConfiguration()
         );
@@ -175,12 +185,14 @@ class ConfigurationTest extends TestCase
     {
         $this->assertEquals(
             [
-                'include' => [
-                    0 => 'name',
-                ],
-                'exclude' => [
-                    0 => 'name',
-                ],
+                'include' =>
+                    [
+                        0 => 'name',
+                    ],
+                'exclude' =>
+                    [
+                        0 => 'name',
+                    ],
             ],
             $this->configuration->getGroupConfiguration()
         );
@@ -190,12 +202,14 @@ class ConfigurationTest extends TestCase
     {
         $this->assertEquals(
             [
-                'include' => [
-                    0 => 'name',
-                ],
-                'exclude' => [
-                    0 => 'name',
-                ],
+                'include' =>
+                    [
+                        0 => 'name',
+                    ],
+                'exclude' =>
+                    [
+                        0 => 'name',
+                    ],
             ],
             $this->configuration->getTestdoxGroupConfiguration()
         );
@@ -206,27 +220,30 @@ class ConfigurationTest extends TestCase
         $dir         = __DIR__;
         $includePath = \ini_get('include_path');
 
-        \ini_set('include_path', $dir . \PATH_SEPARATOR . $includePath);
+        \ini_set('include_path', $dir . PATH_SEPARATOR . $includePath);
 
         $this->assertEquals(
             [
-                0 => [
-                    'class'     => 'MyListener',
-                    'file'      => '/optional/path/to/MyListener.php',
-                    'arguments' => [
-                        0 => [
-                            0 => 'Sebastian',
-                        ],
-                        1 => 22,
-                        2 => 'April',
-                        3 => 19.78,
-                        4 => null,
-                        5 => new \stdClass,
-                        6 => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . '_files' . \DIRECTORY_SEPARATOR . 'MyTestFile.php',
-                        7 => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . '_files' . \DIRECTORY_SEPARATOR . 'MyRelativePath',
-                        8 => true,
+                0 =>
+                    [
+                        'class'     => 'MyListener',
+                        'file'      => '/optional/path/to/MyListener.php',
+                        'arguments' =>
+                            [
+                                0 =>
+                                    [
+                                        0 => 'Sebastian',
+                                    ],
+                                1 => 22,
+                                2 => 'April',
+                                3 => 19.78,
+                                4 => null,
+                                5 => new \stdClass,
+                                6 => \dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'MyTestFile.php',
+                                7 => \dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'MyRelativePath',
+                                8 => true,
+                            ],
                     ],
-                ],
                 [
                     'class'     => 'IncludePathListener',
                     'file'      => __FILE__,
@@ -235,10 +252,11 @@ class ConfigurationTest extends TestCase
                 [
                     'class'     => 'CompactArgumentsListener',
                     'file'      => '/CompactArgumentsListener.php',
-                    'arguments' => [
-                        0 => 42,
-                        1 => false,
-                    ],
+                    'arguments' =>
+                        [
+                            0 => 42,
+                            1 => false,
+                        ],
                 ],
             ],
             $this->configuration->getListenerConfiguration()
@@ -252,26 +270,29 @@ class ConfigurationTest extends TestCase
         $dir         = __DIR__;
         $includePath = \ini_get('include_path');
 
-        \ini_set('include_path', $dir . \PATH_SEPARATOR . $includePath);
+        \ini_set('include_path', $dir . PATH_SEPARATOR . $includePath);
 
         $this->assertEquals(
             [
-                0 => [
-                    'class'     => 'MyExtension',
-                    'file'      => '/optional/path/to/MyExtension.php',
-                    'arguments' => [
-                        0 => [
-                            0 => 'Sebastian',
-                        ],
-                        1 => 22,
-                        2 => 'April',
-                        3 => 19.78,
-                        4 => null,
-                        5 => new \stdClass,
-                        6 => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . '_files' . \DIRECTORY_SEPARATOR . 'MyTestFile.php',
-                        7 => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . '_files' . \DIRECTORY_SEPARATOR . 'MyRelativePath',
+                0 =>
+                    [
+                        'class'     => 'MyExtension',
+                        'file'      => '/optional/path/to/MyExtension.php',
+                        'arguments' =>
+                            [
+                                0 =>
+                                    [
+                                        0 => 'Sebastian',
+                                    ],
+                                1 => 22,
+                                2 => 'April',
+                                3 => 19.78,
+                                4 => null,
+                                5 => new \stdClass,
+                                6 => \dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'MyTestFile.php',
+                                7 => \dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'MyRelativePath',
+                            ],
                     ],
-                ],
                 [
                     'class'     => 'IncludePathExtension',
                     'file'      => __FILE__,
@@ -280,9 +301,10 @@ class ConfigurationTest extends TestCase
                 [
                     'class'     => 'CompactArgumentsExtension',
                     'file'      => '/CompactArgumentsExtension.php',
-                    'arguments' => [
-                        0 => 42
-                    ],
+                    'arguments' =>
+                        [
+                            0 => 42
+                        ],
                 ],
             ],
             $this->configuration->getExtensionConfiguration()
@@ -320,10 +342,11 @@ class ConfigurationTest extends TestCase
     {
         $this->assertEquals(
             [
-                'include_path' => [
-                    \dirname(__DIR__) . \DIRECTORY_SEPARATOR . '_files' . \DIRECTORY_SEPARATOR . '.',
-                    '/path/to/lib'
-                ],
+                'include_path' =>
+                    [
+                        \dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . '.',
+                        '/path/to/lib'
+                    ],
                 'ini'    => ['foo' => ['value' => 'bar']],
                 'const'  => ['FOO' => ['value' => false], 'BAR' => ['value' => true]],
                 'var'    => ['foo' => ['value' => false]],
@@ -346,13 +369,13 @@ class ConfigurationTest extends TestCase
     {
         $this->configuration->handlePHPConfiguration();
 
-        $path = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . '_files' . \DIRECTORY_SEPARATOR . '.' . \PATH_SEPARATOR . '/path/to/lib';
+        $path = \dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . '.' . PATH_SEPARATOR . '/path/to/lib';
         $this->assertStringStartsWith($path, \ini_get('include_path'));
         $this->assertFalse(\FOO);
         $this->assertTrue(\BAR);
         $this->assertFalse($GLOBALS['foo']);
-        $this->assertTrue((bool) $_ENV['foo']);
-        $this->assertEquals(1, \getenv('foo'));
+        $this->assertTrue($_ENV['foo']);
+        $this->assertEquals('forced', \getenv('foo_force'));
         $this->assertEquals('bar', $_POST['foo']);
         $this->assertEquals('bar', $_GET['foo']);
         $this->assertEquals('bar', $_COOKIE['foo']);
@@ -399,7 +422,7 @@ class ConfigurationTest extends TestCase
         \putenv('foo=putenv');
         $this->configuration->handlePHPConfiguration();
 
-        $this->assertEquals('putenv', $_ENV['foo']);
+        $this->assertTrue($_ENV['foo']);
         $this->assertEquals('putenv', \getenv('foo'));
     }
 
@@ -463,7 +486,7 @@ class ConfigurationTest extends TestCase
     public function testXincludeInConfiguration(): void
     {
         $configurationWithXinclude = Configuration::getInstance(
-            \dirname(__DIR__) . \DIRECTORY_SEPARATOR . '_files' . \DIRECTORY_SEPARATOR . 'configuration_xinclude.xml'
+            \dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'configuration_xinclude.xml'
         );
 
         $this->assertConfigurationEquals(
@@ -478,7 +501,7 @@ class ConfigurationTest extends TestCase
     public function testWithEmptyConfigurations(): void
     {
         $emptyConfiguration = Configuration::getInstance(
-            \dirname(__DIR__) . \DIRECTORY_SEPARATOR . '_files' . \DIRECTORY_SEPARATOR . 'configuration_empty.xml'
+            \dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'configuration_empty.xml'
         );
 
         $logging = $emptyConfiguration->getLoggingConfiguration();
@@ -505,7 +528,7 @@ class ConfigurationTest extends TestCase
     public function testGetTestSuiteNamesReturnsTheNamesIfDefined(): void
     {
         $configuration = Configuration::getInstance(
-            \dirname(__DIR__) . \DIRECTORY_SEPARATOR . '_files' . \DIRECTORY_SEPARATOR . 'configuration.suites.xml'
+            \dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'configuration.suites.xml'
         );
 
         $names = $configuration->getTestSuiteNames();
@@ -516,7 +539,7 @@ class ConfigurationTest extends TestCase
     public function testTestSuiteConfigurationForASingleFileInASuite(): void
     {
         $configuration = Configuration::getInstance(
-            \dirname(__DIR__) . \DIRECTORY_SEPARATOR . '_files' . \DIRECTORY_SEPARATOR . 'configuration.one-file-suite.xml'
+            \dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'configuration.one-file-suite.xml'
         );
 
         $config = $configuration->getTestSuiteConfiguration();
@@ -527,6 +550,9 @@ class ConfigurationTest extends TestCase
 
     /**
      * Asserts that the values in $actualConfiguration equal $expectedConfiguration.
+     *
+     * @param Configuration $expectedConfiguration
+     * @param Configuration $actualConfiguration
      *
      * @throws Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException

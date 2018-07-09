@@ -41,6 +41,11 @@ class InvocationMocker implements MethodNameMatch
      */
     private $configurableMethods;
 
+    /**
+     * @param MatcherCollection $collection
+     * @param Invocation        $invocationMatcher
+     * @param array             $configurableMethods
+     */
     public function __construct(MatcherCollection $collection, Invocation $invocationMatcher, array $configurableMethods)
     {
         $this->collection = $collection;
@@ -60,6 +65,8 @@ class InvocationMocker implements MethodNameMatch
     }
 
     /**
+     * @param mixed $id
+     *
      * @return InvocationMocker
      */
     public function id($id)
@@ -70,6 +77,8 @@ class InvocationMocker implements MethodNameMatch
     }
 
     /**
+     * @param Stub $stub
+     *
      * @return InvocationMocker
      */
     public function will(Stub $stub)
@@ -80,6 +89,9 @@ class InvocationMocker implements MethodNameMatch
     }
 
     /**
+     * @param mixed $value
+     * @param mixed $nextValues, ...
+     *
      * @return InvocationMocker
      */
     public function willReturn($value, ...$nextValues)
@@ -108,6 +120,8 @@ class InvocationMocker implements MethodNameMatch
     }
 
     /**
+     * @param array $valueMap
+     *
      * @return InvocationMocker
      */
     public function willReturnMap(array $valueMap)
@@ -118,6 +132,8 @@ class InvocationMocker implements MethodNameMatch
     }
 
     /**
+     * @param mixed $argumentIndex
+     *
      * @return InvocationMocker
      */
     public function willReturnArgument($argumentIndex)
@@ -150,6 +166,8 @@ class InvocationMocker implements MethodNameMatch
     }
 
     /**
+     * @param mixed $values, ...
+     *
      * @return InvocationMocker
      */
     public function willReturnOnConsecutiveCalls(...$values)
@@ -160,6 +178,8 @@ class InvocationMocker implements MethodNameMatch
     }
 
     /**
+     * @param \Exception $exception
+     *
      * @return InvocationMocker
      */
     public function willThrowException(\Exception $exception)
@@ -170,6 +190,8 @@ class InvocationMocker implements MethodNameMatch
     }
 
     /**
+     * @param mixed $id
+     *
      * @return InvocationMocker
      */
     public function after($id)

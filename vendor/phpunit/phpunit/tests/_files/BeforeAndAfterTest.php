@@ -12,7 +12,6 @@ use PHPUnit\Framework\TestCase;
 class BeforeAndAfterTest extends TestCase
 {
     public static $beforeWasRun;
-
     public static $afterWasRun;
 
     public static function resetProperties(): void

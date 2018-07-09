@@ -190,6 +190,7 @@ return [
         Spatie\Analytics\AnalyticsServiceProvider::class,
         Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class
     ],
 
     /*
@@ -251,6 +252,8 @@ return [
         'Charts' => ConsoleTVs\Charts\Facades\Charts::class,
         'Analytics' => Spatie\Analytics\AnalyticsFacade::class,
         'Image' => Intervention\Image\Facades\Image::class,
+        'JWTAuth'   => Tymon\JWTAuth\Facades\JWTAuth::class,
+        'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
     ],
 
 ];

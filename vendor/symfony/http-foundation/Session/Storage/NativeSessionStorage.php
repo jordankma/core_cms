@@ -87,7 +87,7 @@ class NativeSessionStorage implements SessionStorageInterface
      * url_rewriter.tags, "a=href,area=href,frame=src,form=,fieldset="
      * sid_length, "32"
      * sid_bits_per_character, "5"
-     * trans_sid_hosts, $_SERVER['SERVER_NAME']
+     * trans_sid_hosts, $_SERVER['HTTP_HOST']
      * trans_sid_tags, "a=href,area=href,frame=src,form="
      *
      * @param array                         $options Session configuration options

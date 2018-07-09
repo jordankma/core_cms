@@ -115,9 +115,7 @@ class InlineFragmentRenderer extends RoutableFragmentRenderer
             $server['HTTP_X_FORWARDED_FOR'] = ($currentXForwardedFor ? $currentXForwardedFor.', ' : '').$request->getClientIp();
         }
 
-        $trustedProxies = Request::getTrustedProxies();
-        $server['REMOTE_ADDR'] = $trustedProxies ? reset($trustedProxies) : '127.0.0.1';
-
+        $server['REMOTE_ADDR'] = '127.0.0.1';
         unset($server['HTTP_IF_MODIFIED_SINCE']);
         unset($server['HTTP_IF_NONE_MATCH']);
 

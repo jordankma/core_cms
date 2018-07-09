@@ -7,6 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace PHPUnit\Framework;
 
 use DeepCopy\DeepCopy;
@@ -55,7 +56,7 @@ use Throwable;
 
 abstract class TestCase extends Assert implements Test, SelfDescribing
 {
-    private const LOCALE_CATEGORIES = [\LC_ALL, \LC_COLLATE, \LC_CTYPE, \LC_MONETARY, \LC_NUMERIC, \LC_TIME];
+    private const LOCALE_CATEGORIES = [LC_ALL, LC_COLLATE, LC_CTYPE, LC_MONETARY, LC_NUMERIC, LC_TIME];
 
     /**
      * @var bool
@@ -333,6 +334,9 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
         return new InvokedAtIndexMatcher($index);
     }
 
+    /**
+     * @param mixed $value
+     */
     public static function returnValue($value): ReturnStub
     {
         return new ReturnStub($value);
@@ -348,6 +352,9 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
         return new ReturnArgumentStub($argumentIndex);
     }
 
+    /**
+     * @param mixed $callback
+     */
     public static function returnCallback($callback): ReturnCallbackStub
     {
         return new ReturnCallbackStub($callback);
@@ -375,6 +382,7 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
 
     /**
      * @param string $name
+     * @param array  $data
      * @param string $dataName
      */
     public function __construct($name = null, array $data = [], $dataName = '')
@@ -418,8 +426,7 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
     /**
      * Returns a string representation of the test case.
      *
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \ReflectionException
+     * @throws SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function toString(): string
     {
@@ -458,7 +465,7 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function getName(bool $withDataSet = true): ?string
     {
@@ -472,7 +479,7 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
     /**
      * Returns the size of the test.
      *
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function getSize(): int
     {
@@ -483,7 +490,7 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function hasSize(): bool
     {
@@ -491,7 +498,7 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function isSmall(): bool
     {
@@ -499,7 +506,7 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function isMedium(): bool
     {
@@ -507,7 +514,7 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function isLarge(): bool
     {
@@ -657,12 +664,12 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
      *
      * @throws CodeCoverageException
      * @throws ReflectionException
-     * @throws \SebastianBergmann\CodeCoverage\CoveredCodeNotExecutedException
-     * @throws \SebastianBergmann\CodeCoverage\InvalidArgumentException
-     * @throws \SebastianBergmann\CodeCoverage\MissingCoversAnnotationException
-     * @throws \SebastianBergmann\CodeCoverage\RuntimeException
-     * @throws \SebastianBergmann\CodeCoverage\UnintentionallyCoveredCodeException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws SebastianBergmann\CodeCoverage\CoveredCodeNotExecutedException
+     * @throws SebastianBergmann\CodeCoverage\InvalidArgumentException
+     * @throws SebastianBergmann\CodeCoverage\MissingCoversAnnotationException
+     * @throws SebastianBergmann\CodeCoverage\RuntimeException
+     * @throws SebastianBergmann\CodeCoverage\UnintentionallyCoveredCodeException
+     * @throws SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function run(TestResult $result = null): TestResult
     {
@@ -807,9 +814,6 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
         return $result;
     }
 
-    /**
-     * @throws \Throwable
-     */
     public function runBare(): void
     {
         $this->numAssertions = 0;
@@ -848,7 +852,7 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
             if (!empty($this->warnings)) {
                 throw new Warning(
                     \implode(
-                        "\n",
+                        PHP_EOL,
                         \array_unique($this->warnings)
                     )
                 );
@@ -1022,11 +1026,17 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
         return $this->inIsolation;
     }
 
+    /**
+     * @return mixed
+     */
     public function getResult()
     {
         return $this->testResult;
     }
 
+    /**
+     * @param mixed $result
+     */
     public function setResult($result): void
     {
         $this->testResult = $result;
@@ -1127,8 +1137,10 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
      * @throws AssertionFailedError
      * @throws Exception
      * @throws ExpectationFailedException
-     * @throws \SebastianBergmann\ObjectEnumerator\InvalidArgumentException
+     * @throws SebastianBergmann\ObjectEnumerator\InvalidArgumentException
      * @throws Throwable
+     *
+     * @return mixed
      */
     protected function runTest()
     {
@@ -1236,6 +1248,8 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
      * resets the modified php.ini setting to its original value after the
      * test is run.
      *
+     * @param mixed $newValue
+     *
      * @throws Exception
      */
     protected function iniSet(string $varName, $newValue): void
@@ -1270,7 +1284,7 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
         [$category, $locale] = $args;
 
         if (\defined('LC_MESSAGES')) {
-            $categories[] = \LC_MESSAGES;
+            $categories[] = LC_MESSAGES;
         }
 
         if (!\in_array($category, self::LOCALE_CATEGORIES, true)) {
@@ -1316,6 +1330,7 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
      * Returns a configured test double for the specified class.
      *
      * @param string|string[] $originalClassName
+     * @param array           $configuration
      *
      * @throws Exception
      * @throws \InvalidArgumentException
@@ -1370,6 +1385,7 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
      *
      * @param string $originalClassName
      * @param array  $methods
+     * @param array  $arguments
      * @param string $mockClassName
      * @param bool   $callOriginalConstructor
      * @param bool   $callOriginalClone
@@ -1402,6 +1418,7 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
      * To mock concrete methods, use the 7th parameter ($mockedMethods).
      *
      * @param string $originalClassName
+     * @param array  $arguments
      * @param string $mockClassName
      * @param bool   $callOriginalConstructor
      * @param bool   $callOriginalClone
@@ -1437,6 +1454,7 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
      * @param string $wsdlFile
      * @param string $originalClassName
      * @param string $mockClassName
+     * @param array  $methods
      * @param bool   $callOriginalConstructor
      * @param array  $options                 An array of options passed to SOAPClient::_construct
      *
@@ -1447,7 +1465,7 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
     protected function getMockFromWsdl($wsdlFile, $originalClassName = '', $mockClassName = '', array $methods = [], $callOriginalConstructor = true, array $options = []): MockObject
     {
         if ($originalClassName === '') {
-            $originalClassName = \pathinfo(\basename(\parse_url($wsdlFile)['path']), \PATHINFO_FILENAME);
+            $originalClassName = \pathinfo(\basename(\parse_url($wsdlFile)['path']), PATHINFO_FILENAME);
         }
 
         if (!\class_exists($originalClassName)) {
@@ -1482,6 +1500,7 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
      * `$mockedMethods` parameter.
      *
      * @param string $traitName
+     * @param array  $arguments
      * @param string $mockClassName
      * @param bool   $callOriginalConstructor
      * @param bool   $callOriginalClone
@@ -1515,6 +1534,7 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
      * Returns an object for the specified trait.
      *
      * @param string $traitName
+     * @param array  $arguments
      * @param string $traitClassName
      * @param bool   $callOriginalConstructor
      * @param bool   $callOriginalClone
@@ -1646,7 +1666,7 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
         );
 
         if (!empty($missingRequirements)) {
-            $this->markTestSkipped(\implode(\PHP_EOL, $missingRequirements));
+            $this->markTestSkipped(\implode(PHP_EOL, $missingRequirements));
         }
     }
 
@@ -1836,7 +1856,7 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
 
     /**
      * @throws RiskyTestError
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws \InvalidArgumentException
      */
     private function restoreGlobalState(): void
@@ -1916,7 +1936,7 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
 
     /**
      * @throws RiskyTestError
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws \InvalidArgumentException
      */
     private function compareGlobalStateSnapshots(Snapshot $before, Snapshot $after): void
@@ -1976,7 +1996,7 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
     }
 
     /**
-     * @throws \SebastianBergmann\ObjectEnumerator\InvalidArgumentException
+     * @throws SebastianBergmann\ObjectEnumerator\InvalidArgumentException
      */
     private function shouldInvocationMockerBeReset(MockObject $mock): bool
     {
@@ -2002,9 +2022,9 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
     }
 
     /**
-     * @throws \SebastianBergmann\ObjectEnumerator\InvalidArgumentException
-     * @throws \SebastianBergmann\ObjectReflector\InvalidArgumentException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws SebastianBergmann\ObjectEnumerator\InvalidArgumentException
+     * @throws SebastianBergmann\ObjectReflector\InvalidArgumentException
+     * @throws SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     private function registerMockObjectsFromTestArguments(array $testArguments, array &$visited = []): void
     {

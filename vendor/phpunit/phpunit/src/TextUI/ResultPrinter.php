@@ -7,6 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace PHPUnit\TextUI;
 
 use PHPUnit\Framework\AssertionFailedError;
@@ -30,19 +31,13 @@ use SebastianBergmann\Timer\Timer;
 class ResultPrinter extends Printer implements TestListener
 {
     public const EVENT_TEST_START      = 0;
-
     public const EVENT_TEST_END        = 1;
-
     public const EVENT_TESTSUITE_START = 2;
-
     public const EVENT_TESTSUITE_END   = 3;
 
     public const COLOR_NEVER   = 'never';
-
     public const COLOR_AUTO    = 'auto';
-
     public const COLOR_ALWAYS  = 'always';
-
     public const COLOR_DEFAULT = self::COLOR_NEVER;
 
     private const AVAILABLE_COLORS = [self::COLOR_NEVER, self::COLOR_AUTO, self::COLOR_ALWAYS];
@@ -138,9 +133,12 @@ class ResultPrinter extends Printer implements TestListener
     /**
      * Constructor.
      *
+     * @param mixed      $out
+     * @param bool       $verbose
      * @param string     $colors
+     * @param bool       $debug
      * @param int|string $numberOfColumns
-     * @param null|mixed $out
+     * @param bool       $reverse
      *
      * @throws Exception
      */
@@ -440,7 +438,7 @@ class ResultPrinter extends Printer implements TestListener
                 $color = 'fg-black, bg-yellow';
 
                 if ($this->verbose || !$result->allHarmless()) {
-                    $this->write("\n");
+                    $this->write(PHP_EOL);
                 }
 
                 $this->writeWithColor(
@@ -448,7 +446,7 @@ class ResultPrinter extends Printer implements TestListener
                     'OK, but incomplete, skipped, or risky tests!'
                 );
             } else {
-                $this->write("\n");
+                $this->write(PHP_EOL);
 
                 if ($result->errorCount()) {
                     $color = 'fg-white, bg-red';
@@ -520,7 +518,7 @@ class ResultPrinter extends Printer implements TestListener
     protected function writeNewLine(): void
     {
         $this->column = 0;
-        $this->write("\n");
+        $this->write(PHP_EOL);
     }
 
     /**
@@ -534,7 +532,7 @@ class ResultPrinter extends Printer implements TestListener
         }
 
         $codes   = \array_map('\trim', \explode(',', $color));
-        $lines   = \explode("\n", $buffer);
+        $lines   = \explode(PHP_EOL, $buffer);
         $padding = \max(\array_map('\strlen', $lines));
         $styles  = [];
 
@@ -550,7 +548,7 @@ class ResultPrinter extends Printer implements TestListener
             $styledLines[] = $style . \str_pad($line, $padding) . "\x1b[0m";
         }
 
-        return \implode("\n", $styledLines);
+        return \implode(PHP_EOL, $styledLines);
     }
 
     /**
@@ -561,7 +559,7 @@ class ResultPrinter extends Printer implements TestListener
         $this->write($this->formatWithColor($color, $buffer));
 
         if ($lf) {
-            $this->write("\n");
+            $this->write(PHP_EOL);
         }
     }
 

@@ -40,6 +40,8 @@ class Parameters extends StatelessInvocation
     private $parameterVerificationResult;
 
     /**
+     * @param array $parameters
+     *
      * @throws \PHPUnit\Framework\Exception
      */
     public function __construct(array $parameters)
@@ -55,6 +57,9 @@ class Parameters extends StatelessInvocation
         }
     }
 
+    /**
+     * @return string
+     */
     public function toString(): string
     {
         $text = 'with parameter';
@@ -71,6 +76,8 @@ class Parameters extends StatelessInvocation
     }
 
     /**
+     * @param BaseInvocation $invocation
+     *
      * @throws \Exception
      *
      * @return bool

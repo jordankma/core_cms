@@ -21,6 +21,7 @@ class RequestTest extends TestCase
 {
     protected function tearDown()
     {
+        // reset
         Request::setTrustedProxies(array(), -1);
         Request::setTrustedHosts(array());
     }
@@ -238,7 +239,7 @@ class RequestTest extends TestCase
     {
         // server is used by default
         $request = Request::create('/', 'DELETE', array(), array(), array(), array(
-            'SERVER_NAME' => 'example.com',
+            'HTTP_HOST' => 'example.com',
             'HTTPS' => 'on',
             'SERVER_PORT' => 443,
             'PHP_AUTH_USER' => 'fabien',
@@ -256,7 +257,7 @@ class RequestTest extends TestCase
 
         // URI has precedence over server
         $request = Request::create('http://thomas:pokemon@example.net:8080/?foo=bar', 'GET', array(), array(), array(), array(
-            'SERVER_NAME' => 'example.com',
+            'HTTP_HOST' => 'example.com',
             'HTTPS' => 'on',
             'SERVER_PORT' => 443,
         ));
@@ -386,7 +387,7 @@ class RequestTest extends TestCase
         // Standard Request on non default PORT
         // http://host:8080/index.php/path/info?query=string
 
-        $server['SERVER_NAME'] = 'host:8080';
+        $server['HTTP_HOST'] = 'host:8080';
         $server['SERVER_NAME'] = 'servername';
         $server['SERVER_PORT'] = '8080';
 
@@ -405,7 +406,7 @@ class RequestTest extends TestCase
         $this->assertEquals('http://host:8080/index.php/path/info?query=string', $request->getUri(), '->getUri() with non default port');
 
         // Use std port number
-        $server['SERVER_NAME'] = 'host';
+        $server['HTTP_HOST'] = 'host';
         $server['SERVER_NAME'] = 'servername';
         $server['SERVER_PORT'] = '80';
 
@@ -414,7 +415,7 @@ class RequestTest extends TestCase
         $this->assertEquals('http://host/index.php/path/info?query=string', $request->getUri(), '->getUri() with default port');
 
         // Without HOST HEADER
-        unset($server['SERVER_NAME']);
+        unset($server['HTTP_HOST']);
         $server['SERVER_NAME'] = 'servername';
         $server['SERVER_PORT'] = '80';
 
@@ -427,7 +428,7 @@ class RequestTest extends TestCase
         //   RewriteRule ^(.*)$ index.php [QSA,L]
         // http://host:8080/path/info?query=string
         $server = array();
-        $server['SERVER_NAME'] = 'host:8080';
+        $server['HTTP_HOST'] = 'host:8080';
         $server['SERVER_NAME'] = 'servername';
         $server['SERVER_PORT'] = '8080';
 
@@ -445,7 +446,7 @@ class RequestTest extends TestCase
 
         // Use std port number
         //  http://host/path/info?query=string
-        $server['SERVER_NAME'] = 'host';
+        $server['HTTP_HOST'] = 'host';
         $server['SERVER_NAME'] = 'servername';
         $server['SERVER_PORT'] = '80';
 
@@ -454,7 +455,7 @@ class RequestTest extends TestCase
         $this->assertEquals('http://host/path/info?query=string', $request->getUri(), '->getUri() with rewrite and default port');
 
         // Without HOST HEADER
-        unset($server['SERVER_NAME']);
+        unset($server['HTTP_HOST']);
         $server['SERVER_NAME'] = 'servername';
         $server['SERVER_PORT'] = '80';
 
@@ -465,7 +466,7 @@ class RequestTest extends TestCase
         // With encoded characters
 
         $server = array(
-            'SERVER_NAME' => 'host:8080',
+            'HTTP_HOST' => 'host:8080',
             'SERVER_NAME' => 'servername',
             'SERVER_PORT' => '8080',
             'QUERY_STRING' => 'query=string',
@@ -513,7 +514,7 @@ class RequestTest extends TestCase
         // Standard Request on non default PORT
         // http://host:8080/index.php/path/info?query=string
 
-        $server['SERVER_NAME'] = 'host:8080';
+        $server['HTTP_HOST'] = 'host:8080';
         $server['SERVER_NAME'] = 'servername';
         $server['SERVER_PORT'] = '8080';
 
@@ -532,7 +533,7 @@ class RequestTest extends TestCase
         $this->assertEquals('http://host:8080/index.php/some/path', $request->getUriForPath('/some/path'), '->getUriForPath() with non default port');
 
         // Use std port number
-        $server['SERVER_NAME'] = 'host';
+        $server['HTTP_HOST'] = 'host';
         $server['SERVER_NAME'] = 'servername';
         $server['SERVER_PORT'] = '80';
 
@@ -541,7 +542,7 @@ class RequestTest extends TestCase
         $this->assertEquals('http://host/index.php/some/path', $request->getUriForPath('/some/path'), '->getUriForPath() with default port');
 
         // Without HOST HEADER
-        unset($server['SERVER_NAME']);
+        unset($server['HTTP_HOST']);
         $server['SERVER_NAME'] = 'servername';
         $server['SERVER_PORT'] = '80';
 
@@ -554,7 +555,7 @@ class RequestTest extends TestCase
         //   RewriteRule ^(.*)$ index.php [QSA,L]
         // http://host:8080/path/info?query=string
         $server = array();
-        $server['SERVER_NAME'] = 'host:8080';
+        $server['HTTP_HOST'] = 'host:8080';
         $server['SERVER_NAME'] = 'servername';
         $server['SERVER_PORT'] = '8080';
 
@@ -572,7 +573,7 @@ class RequestTest extends TestCase
 
         // Use std port number
         //  http://host/path/info?query=string
-        $server['SERVER_NAME'] = 'host';
+        $server['HTTP_HOST'] = 'host';
         $server['SERVER_NAME'] = 'servername';
         $server['SERVER_PORT'] = '80';
 
@@ -581,7 +582,7 @@ class RequestTest extends TestCase
         $this->assertEquals('http://host/some/path', $request->getUriForPath('/some/path'), '->getUriForPath() with rewrite and default port');
 
         // Without HOST HEADER
-        unset($server['SERVER_NAME']);
+        unset($server['HTTP_HOST']);
         $server['SERVER_NAME'] = 'servername';
         $server['SERVER_PORT'] = '80';
 
@@ -722,18 +723,18 @@ class RequestTest extends TestCase
         $request->initialize(array('foo' => 'bar'));
         $this->assertEquals('', $request->getHost(), '->getHost() return empty string if not initialized');
 
-        $request->initialize(array(), array(), array(), array(), array(), array('SERVER_NAME' => 'www.example.com'));
+        $request->initialize(array(), array(), array(), array(), array(), array('HTTP_HOST' => 'www.example.com'));
         $this->assertEquals('www.example.com', $request->getHost(), '->getHost() from Host Header');
 
         // Host header with port number
-        $request->initialize(array(), array(), array(), array(), array(), array('SERVER_NAME' => 'www.example.com:8080'));
+        $request->initialize(array(), array(), array(), array(), array(), array('HTTP_HOST' => 'www.example.com:8080'));
         $this->assertEquals('www.example.com', $request->getHost(), '->getHost() from Host Header with port number');
 
         // Server values
         $request->initialize(array(), array(), array(), array(), array(), array('SERVER_NAME' => 'www.example.com'));
         $this->assertEquals('www.example.com', $request->getHost(), '->getHost() from server name');
 
-        $request->initialize(array(), array(), array(), array(), array(), array('SERVER_NAME' => 'www.example.com', 'SERVER_NAME' => 'www.host.com'));
+        $request->initialize(array(), array(), array(), array(), array(), array('SERVER_NAME' => 'www.example.com', 'HTTP_HOST' => 'www.host.com'));
         $this->assertEquals('www.host.com', $request->getHost(), '->getHost() value from Host header has priority over SERVER_NAME ');
     }
 
@@ -797,7 +798,7 @@ class RequestTest extends TestCase
     public function testGetHostWithFakeHttpHostValue()
     {
         $request = new Request();
-        $request->initialize(array(), array(), array(), array(), array(), array('SERVER_NAME' => 'www.host.com?query=string'));
+        $request->initialize(array(), array(), array(), array(), array(), array('HTTP_HOST' => 'www.host.com?query=string'));
         $request->getHost();
     }
 
@@ -2174,7 +2175,7 @@ class RequestTest extends TestCase
         }
 
         $server = array(
-            'SERVER_NAME' => 'host:8080',
+            'HTTP_HOST' => 'host:8080',
             'SERVER_PORT' => '8080',
             'QUERY_STRING' => $queryString,
             'PHP_SELF' => '/hello/app.php',

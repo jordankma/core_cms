@@ -111,6 +111,9 @@ class GeneratorTest extends TestCase
 
     /**
      * @dataProvider getMockForAbstractClassExpectsInvalidArgumentExceptionDataprovider
+     *
+     * @param mixed $className
+     * @param mixed $mockClassName
      */
     public function testGetMockForAbstractClassExpectingInvalidArgumentException($className, $mockClassName): void
     {

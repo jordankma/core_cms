@@ -15,6 +15,8 @@ class Issue498Test extends TestCase
      * @test
      * @dataProvider shouldBeTrueDataProvider
      * @group falseOnly
+     *
+     * @param mixed $testData
      */
     public function shouldBeTrue($testData): void
     {
@@ -25,6 +27,8 @@ class Issue498Test extends TestCase
      * @test
      * @dataProvider shouldBeFalseDataProvider
      * @group trueOnly
+     *
+     * @param mixed $testData
      */
     public function shouldBeFalse($testData): void
     {

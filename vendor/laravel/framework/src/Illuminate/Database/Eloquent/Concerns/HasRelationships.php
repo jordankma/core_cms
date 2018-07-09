@@ -693,7 +693,7 @@ trait HasRelationships
     }
 
     /**
-     * Set the given relationship on the model.
+     * Set the specific relationship in the model.
      *
      * @param  string  $relation
      * @param  mixed  $value
@@ -702,19 +702,6 @@ trait HasRelationships
     public function setRelation($relation, $value)
     {
         $this->relations[$relation] = $value;
-
-        return $this;
-    }
-
-    /**
-     * Unset a loaded relationship.
-     *
-     * @param  string  $relation
-     * @return $this
-     */
-    public function unsetRelation($relation)
-    {
-        unset($this->relations[$relation]);
 
         return $this;
     }

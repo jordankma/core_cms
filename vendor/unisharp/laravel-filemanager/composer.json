@@ -40,14 +40,27 @@
   },
   "autoload": {
     "psr-4": {
-      "UniSharp\\LaravelFilemanager\\": "src/"
+      "Unisharp\\Laravelfilemanager\\": "src/"
     }
   },
   "bin": ["bin/debug"],
+  "scripts": {
+    "post-install-cmd": [
+      "php artisan vendor:publish --tag=lfm_config",
+      "php artisan vendor:publish --tag=lfm_public",
+      "php artisan route:clear",
+      "php aritsan config:clear"
+    ],
+    "post-update-cmd": [
+      "php artisan vendor:publish --tag=lfm_public --force",
+      "php artisan route:clear",
+      "php aritsan config:clear"
+    ]
+  },
   "extra": {
     "laravel": {
       "providers": [
-        "UniSharp\\LaravelFilemanager\\LaravelFilemanagerServiceProvider"
+        "Unisharp\\Laravelfilemanager\\LaravelFilemanagerServiceProvider"
       ],
       "aliases": {
       }

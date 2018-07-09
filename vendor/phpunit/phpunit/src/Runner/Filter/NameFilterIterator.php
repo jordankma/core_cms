@@ -27,7 +27,6 @@ class NameFilterIterator extends RecursiveFilterIterator
      * @var int
      */
     protected $filterMin;
-
     /**
      * @var int
      */

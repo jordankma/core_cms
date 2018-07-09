@@ -3,7 +3,6 @@
 namespace Illuminate\Support;
 
 use ArrayAccess;
-use ArrayObject;
 
 class Optional implements ArrayAccess
 {
@@ -54,7 +53,7 @@ class Optional implements ArrayAccess
             return isset($this->value->{$name});
         }
 
-        if (is_array($this->value) || $this->value instanceof ArrayObject) {
+        if (is_array($this->value) || $this->value instanceof \ArrayObject) {
             return isset($this->value[$name]);
         }
 

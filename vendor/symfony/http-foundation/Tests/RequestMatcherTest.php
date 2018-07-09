@@ -69,7 +69,7 @@ class RequestMatcherTest extends TestCase
     public function testHost($pattern, $isMatch)
     {
         $matcher = new RequestMatcher();
-        $request = Request::create('', 'get', array(), array(), array(), array('SERVER_NAME' => 'foo.example.com'));
+        $request = Request::create('', 'get', array(), array(), array(), array('HTTP_HOST' => 'foo.example.com'));
 
         $matcher->matchHost($pattern);
         $this->assertSame($isMatch, $matcher->matches($request));

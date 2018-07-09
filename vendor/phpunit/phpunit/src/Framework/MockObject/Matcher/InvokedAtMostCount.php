@@ -30,6 +30,9 @@ class InvokedAtMostCount extends InvokedRecorder
         $this->allowedInvocations = $allowedInvocations;
     }
 
+    /**
+     * @return string
+     */
     public function toString(): string
     {
         return 'invoked at most ' . $this->allowedInvocations . ' times';

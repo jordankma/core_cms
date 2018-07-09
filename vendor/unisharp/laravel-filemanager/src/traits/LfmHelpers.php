@@ -1,6 +1,6 @@
 <?php
 
-namespace UniSharp\LaravelFilemanager\traits;
+namespace Unisharp\Laravelfilemanager\traits;
 
 use Illuminate\Support\Facades\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -332,7 +332,7 @@ trait LfmHelpers
      */
     public function isProcessingImages()
     {
-        return lcfirst(str_singular(request('type', ''))) === 'image';
+        return lcfirst(str_singular(request('type'))) === 'image';
     }
 
     /**

@@ -269,8 +269,7 @@ abstract class ReflectingCommand extends Command implements ContextAware
                 break;
 
             case 'ReflectionProperty':
-            case 'ReflectionClassConstant':
-            case 'Psy\Reflection\ReflectionClassConstant':
+            case 'Psy\Reflection\ReflectionConstant':
                 $classReflector = $reflector->getDeclaringClass();
                 $vars['__class'] = $classReflector->name;
                 if ($classReflector->inNamespace()) {
@@ -280,12 +279,6 @@ abstract class ReflectingCommand extends Command implements ContextAware
                 if ($fileName = $reflector->getDeclaringClass()->getFileName()) {
                     $vars['__file'] = $fileName;
                     $vars['__dir']  = dirname($fileName);
-                }
-                break;
-
-            case 'Psy\Reflection\ReflectionConstant_':
-                if ($reflector->inNamespace()) {
-                    $vars['__namespace'] = $reflector->getNamespaceName();
                 }
                 break;
         }

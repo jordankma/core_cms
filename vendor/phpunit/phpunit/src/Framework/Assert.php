@@ -7,6 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace PHPUnit\Framework;
 
 use ArrayAccess;
@@ -78,6 +79,7 @@ abstract class Assert
      *
      * @param int|string        $key
      * @param array|ArrayAccess $array
+     * @param string            $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -108,11 +110,13 @@ abstract class Assert
      *
      * @param array|ArrayAccess $subset
      * @param array|ArrayAccess $array
+     * @param bool              $strict  Check for object identity
+     * @param string            $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public static function assertArraySubset($subset, $array, bool $checkForObjectIdentity = false, string $message = ''): void
+    public static function assertArraySubset($subset, $array, bool $strict = false, string $message = ''): void
     {
         if (!(\is_array($subset) || $subset instanceof ArrayAccess)) {
             throw InvalidArgumentHelper::factory(
@@ -128,7 +132,7 @@ abstract class Assert
             );
         }
 
-        $constraint = new ArraySubset($subset, $checkForObjectIdentity);
+        $constraint = new ArraySubset($subset, $strict);
 
         static::assertThat($array, $constraint, $message);
     }
@@ -138,6 +142,7 @@ abstract class Assert
      *
      * @param int|string        $key
      * @param array|ArrayAccess $array
+     * @param string            $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -167,6 +172,13 @@ abstract class Assert
 
     /**
      * Asserts that a haystack contains a needle.
+     *
+     * @param mixed  $needle
+     * @param mixed  $haystack
+     * @param string $message
+     * @param bool   $ignoreCase
+     * @param bool   $checkForObjectIdentity
+     * @param bool   $checkForNonObjectIdentity
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -206,7 +218,13 @@ abstract class Assert
      * Asserts that a haystack that is stored in a static attribute of a class
      * or an attribute of an object contains a needle.
      *
+     * @param mixed         $needle
+     * @param string        $haystackAttributeName
      * @param object|string $haystackClassOrObject
+     * @param string        $message
+     * @param bool          $ignoreCase
+     * @param bool          $checkForObjectIdentity
+     * @param bool          $checkForNonObjectIdentity
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -225,6 +243,13 @@ abstract class Assert
 
     /**
      * Asserts that a haystack does not contain a needle.
+     *
+     * @param mixed  $needle
+     * @param mixed  $haystack
+     * @param string $message
+     * @param bool   $ignoreCase
+     * @param bool   $checkForObjectIdentity
+     * @param bool   $checkForNonObjectIdentity
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -268,7 +293,13 @@ abstract class Assert
      * Asserts that a haystack that is stored in a static attribute of a class
      * or an attribute of an object does not contain a needle.
      *
+     * @param mixed         $needle
+     * @param string        $haystackAttributeName
      * @param object|string $haystackClassOrObject
+     * @param string        $message
+     * @param bool          $ignoreCase
+     * @param bool          $checkForObjectIdentity
+     * @param bool          $checkForNonObjectIdentity
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -288,7 +319,10 @@ abstract class Assert
     /**
      * Asserts that a haystack contains only values of a given type.
      *
+     * @param string    $type
+     * @param iterable  $haystack
      * @param null|bool $isNativeType
+     * @param string    $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -312,6 +346,10 @@ abstract class Assert
     /**
      * Asserts that a haystack contains only instances of a given class name.
      *
+     * @param string   $className
+     * @param iterable $haystack
+     * @param string   $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -331,8 +369,11 @@ abstract class Assert
      * Asserts that a haystack that is stored in a static attribute of a class
      * or an attribute of an object contains only values of a given type.
      *
+     * @param string        $type
+     * @param string        $haystackAttributeName
      * @param object|string $haystackClassOrObject
      * @param bool          $isNativeType
+     * @param string        $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -350,7 +391,10 @@ abstract class Assert
     /**
      * Asserts that a haystack does not contain only values of a given type.
      *
+     * @param string    $type
+     * @param iterable  $haystack
      * @param null|bool $isNativeType
+     * @param string    $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -378,8 +422,11 @@ abstract class Assert
      * or an attribute of an object does not contain only values of a given
      * type.
      *
+     * @param string        $type
+     * @param string        $haystackAttributeName
      * @param object|string $haystackClassOrObject
      * @param bool          $isNativeType
+     * @param string        $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -397,7 +444,9 @@ abstract class Assert
     /**
      * Asserts the number of elements of an array, Countable or Traversable.
      *
+     * @param int                $expectedCount
      * @param Countable|iterable $haystack
+     * @param string             $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -419,7 +468,10 @@ abstract class Assert
      * Asserts the number of elements of an array, Countable or Traversable
      * that is stored in an attribute.
      *
+     * @param int           $expectedCount
+     * @param string        $haystackAttributeName
      * @param object|string $haystackClassOrObject
+     * @param string        $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -436,7 +488,9 @@ abstract class Assert
     /**
      * Asserts the number of elements of an array, Countable or Traversable.
      *
+     * @param int                $expectedCount
      * @param Countable|iterable $haystack
+     * @param string             $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -458,7 +512,10 @@ abstract class Assert
      * Asserts the number of elements of an array, Countable or Traversable
      * that is stored in an attribute.
      *
+     * @param int           $expectedCount
+     * @param string        $haystackAttributeName
      * @param object|string $haystackClassOrObject
+     * @param string        $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -474,6 +531,14 @@ abstract class Assert
 
     /**
      * Asserts that two variables are equal.
+     *
+     * @param mixed  $expected
+     * @param mixed  $actual
+     * @param string $message
+     * @param float  $delta
+     * @param int    $maxDepth
+     * @param bool   $canonicalize
+     * @param bool   $ignoreCase
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -494,7 +559,14 @@ abstract class Assert
     /**
      * Asserts that a variable is equal to an attribute of an object.
      *
+     * @param mixed         $expected
+     * @param string        $actualAttributeName
      * @param object|string $actualClassOrObject
+     * @param string        $message
+     * @param float         $delta
+     * @param int           $maxDepth
+     * @param bool          $canonicalize
+     * @param bool          $ignoreCase
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -515,10 +587,13 @@ abstract class Assert
     /**
      * Asserts that two variables are not equal.
      *
-     * @param float $delta
-     * @param int   $maxDepth
-     * @param bool  $canonicalize
-     * @param bool  $ignoreCase
+     * @param mixed  $expected
+     * @param mixed  $actual
+     * @param string $message
+     * @param float  $delta
+     * @param int    $maxDepth
+     * @param bool   $canonicalize
+     * @param bool   $ignoreCase
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -541,7 +616,14 @@ abstract class Assert
     /**
      * Asserts that a variable is not equal to an attribute of an object.
      *
+     * @param mixed         $expected
+     * @param string        $actualAttributeName
      * @param object|string $actualClassOrObject
+     * @param string        $message
+     * @param float         $delta
+     * @param int           $maxDepth
+     * @param bool          $canonicalize
+     * @param bool          $ignoreCase
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -562,6 +644,9 @@ abstract class Assert
     /**
      * Asserts that a variable is empty.
      *
+     * @param mixed  $actual
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -574,7 +659,9 @@ abstract class Assert
      * Asserts that a static attribute of a class or an attribute of an object
      * is empty.
      *
+     * @param string        $haystackAttributeName
      * @param object|string $haystackClassOrObject
+     * @param string        $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -590,6 +677,9 @@ abstract class Assert
     /**
      * Asserts that a variable is not empty.
      *
+     * @param mixed  $actual
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -602,7 +692,9 @@ abstract class Assert
      * Asserts that a static attribute of a class or an attribute of an object
      * is not empty.
      *
+     * @param string        $haystackAttributeName
      * @param object|string $haystackClassOrObject
+     * @param string        $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -618,6 +710,10 @@ abstract class Assert
     /**
      * Asserts that a value is greater than another value.
      *
+     * @param mixed  $expected
+     * @param mixed  $actual
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -629,7 +725,10 @@ abstract class Assert
     /**
      * Asserts that an attribute is greater than another value.
      *
+     * @param mixed         $expected
+     * @param string        $actualAttributeName
      * @param object|string $actualClassOrObject
+     * @param string        $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -646,6 +745,10 @@ abstract class Assert
     /**
      * Asserts that a value is greater than or equal to another value.
      *
+     * @param mixed  $expected
+     * @param mixed  $actual
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -661,7 +764,10 @@ abstract class Assert
     /**
      * Asserts that an attribute is greater than or equal to another value.
      *
+     * @param mixed         $expected
+     * @param string        $actualAttributeName
      * @param object|string $actualClassOrObject
+     * @param string        $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -678,6 +784,10 @@ abstract class Assert
     /**
      * Asserts that a value is smaller than another value.
      *
+     * @param mixed  $expected
+     * @param mixed  $actual
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -689,7 +799,10 @@ abstract class Assert
     /**
      * Asserts that an attribute is smaller than another value.
      *
+     * @param mixed         $expected
+     * @param string        $actualAttributeName
      * @param object|string $actualClassOrObject
+     * @param string        $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -706,6 +819,10 @@ abstract class Assert
     /**
      * Asserts that a value is smaller than or equal to another value.
      *
+     * @param mixed  $expected
+     * @param mixed  $actual
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -717,7 +834,10 @@ abstract class Assert
     /**
      * Asserts that an attribute is smaller than or equal to another value.
      *
+     * @param mixed         $expected
+     * @param string        $actualAttributeName
      * @param object|string $actualClassOrObject
+     * @param string        $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -734,6 +854,12 @@ abstract class Assert
     /**
      * Asserts that the contents of one file is equal to the contents of another
      * file.
+     *
+     * @param string $expected
+     * @param string $actual
+     * @param string $message
+     * @param bool   $canonicalize
+     * @param bool   $ignoreCase
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -758,6 +884,12 @@ abstract class Assert
      * Asserts that the contents of one file is not equal to the contents of
      * another file.
      *
+     * @param string $expected
+     * @param string $actual
+     * @param string $message
+     * @param bool   $canonicalize
+     * @param bool   $ignoreCase
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -780,6 +912,12 @@ abstract class Assert
     /**
      * Asserts that the contents of a string is equal
      * to the contents of a file.
+     *
+     * @param string $expectedFile
+     * @param string $actualString
+     * @param string $message
+     * @param bool   $canonicalize
+     * @param bool   $ignoreCase
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -804,6 +942,12 @@ abstract class Assert
      * Asserts that the contents of a string is not equal
      * to the contents of a file.
      *
+     * @param string $expectedFile
+     * @param string $actualString
+     * @param string $message
+     * @param bool   $canonicalize
+     * @param bool   $ignoreCase
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -825,6 +969,9 @@ abstract class Assert
     /**
      * Asserts that a file/dir is readable.
      *
+     * @param string $filename
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -835,6 +982,9 @@ abstract class Assert
 
     /**
      * Asserts that a file/dir exists and is not readable.
+     *
+     * @param string $filename
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -847,6 +997,9 @@ abstract class Assert
     /**
      * Asserts that a file/dir exists and is writable.
      *
+     * @param string $filename
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -857,6 +1010,9 @@ abstract class Assert
 
     /**
      * Asserts that a file/dir exists and is not writable.
+     *
+     * @param string $filename
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -869,6 +1025,9 @@ abstract class Assert
     /**
      * Asserts that a directory exists.
      *
+     * @param string $directory
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -880,6 +1039,9 @@ abstract class Assert
     /**
      * Asserts that a directory does not exist.
      *
+     * @param string $directory
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -890,6 +1052,9 @@ abstract class Assert
 
     /**
      * Asserts that a directory exists and is readable.
+     *
+     * @param string $directory
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -903,6 +1068,9 @@ abstract class Assert
     /**
      * Asserts that a directory exists and is not readable.
      *
+     * @param string $directory
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -914,6 +1082,9 @@ abstract class Assert
 
     /**
      * Asserts that a directory exists and is writable.
+     *
+     * @param string $directory
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -927,6 +1098,9 @@ abstract class Assert
     /**
      * Asserts that a directory exists and is not writable.
      *
+     * @param string $directory
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -939,6 +1113,9 @@ abstract class Assert
     /**
      * Asserts that a file exists.
      *
+     * @param string $filename
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -950,6 +1127,9 @@ abstract class Assert
     /**
      * Asserts that a file does not exist.
      *
+     * @param string $filename
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -960,6 +1140,9 @@ abstract class Assert
 
     /**
      * Asserts that a file exists and is readable.
+     *
+     * @param string $file
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -973,6 +1156,9 @@ abstract class Assert
     /**
      * Asserts that a file exists and is not readable.
      *
+     * @param string $file
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -984,6 +1170,9 @@ abstract class Assert
 
     /**
      * Asserts that a file exists and is writable.
+     *
+     * @param string $file
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -997,6 +1186,9 @@ abstract class Assert
     /**
      * Asserts that a file exists and is not writable.
      *
+     * @param string $file
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -1009,6 +1201,9 @@ abstract class Assert
     /**
      * Asserts that a condition is true.
      *
+     * @param mixed  $condition
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -1019,6 +1214,9 @@ abstract class Assert
 
     /**
      * Asserts that a condition is not true.
+     *
+     * @param mixed  $condition
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1031,6 +1229,9 @@ abstract class Assert
     /**
      * Asserts that a condition is false.
      *
+     * @param mixed  $condition
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -1041,6 +1242,9 @@ abstract class Assert
 
     /**
      * Asserts that a condition is not false.
+     *
+     * @param mixed  $condition
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1053,6 +1257,9 @@ abstract class Assert
     /**
      * Asserts that a variable is null.
      *
+     * @param mixed  $actual
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -1063,6 +1270,9 @@ abstract class Assert
 
     /**
      * Asserts that a variable is not null.
+     *
+     * @param mixed  $actual
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1075,6 +1285,9 @@ abstract class Assert
     /**
      * Asserts that a variable is finite.
      *
+     * @param mixed  $actual
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -1085,6 +1298,9 @@ abstract class Assert
 
     /**
      * Asserts that a variable is infinite.
+     *
+     * @param mixed  $actual
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1097,6 +1313,9 @@ abstract class Assert
     /**
      * Asserts that a variable is nan.
      *
+     * @param mixed  $actual
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -1107,6 +1326,10 @@ abstract class Assert
 
     /**
      * Asserts that a class has a specified attribute.
+     *
+     * @param string $attributeName
+     * @param string $className
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1126,6 +1349,10 @@ abstract class Assert
 
     /**
      * Asserts that a class does not have a specified attribute.
+     *
+     * @param string $attributeName
+     * @param string $className
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1152,6 +1379,10 @@ abstract class Assert
     /**
      * Asserts that a class has a specified static attribute.
      *
+     * @param string $attributeName
+     * @param string $className
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -1174,6 +1405,10 @@ abstract class Assert
 
     /**
      * Asserts that a class does not have a specified static attribute.
+     *
+     * @param string $attributeName
+     * @param string $className
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1200,7 +1435,9 @@ abstract class Assert
     /**
      * Asserts that an object has a specified attribute.
      *
+     * @param string $attributeName
      * @param object $object
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1225,7 +1462,9 @@ abstract class Assert
     /**
      * Asserts that an object does not have a specified attribute.
      *
+     * @param string $attributeName
      * @param object $object
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1254,6 +1493,10 @@ abstract class Assert
      * Used on objects, it asserts that two variables reference
      * the same object.
      *
+     * @param mixed  $expected
+     * @param mixed  $actual
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -1274,7 +1517,10 @@ abstract class Assert
      * Asserts that a variable and an attribute of an object have the same type
      * and value.
      *
+     * @param mixed         $expected
+     * @param string        $actualAttributeName
      * @param object|string $actualClassOrObject
+     * @param string        $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1292,6 +1538,10 @@ abstract class Assert
      * Asserts that two variables do not have the same type and value.
      * Used on objects, it asserts that two variables do not reference
      * the same object.
+     *
+     * @param mixed  $expected
+     * @param mixed  $actual
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1315,7 +1565,10 @@ abstract class Assert
      * Asserts that a variable and an attribute of an object do not have the
      * same type and value.
      *
+     * @param mixed         $expected
+     * @param string        $actualAttributeName
      * @param object|string $actualClassOrObject
+     * @param string        $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1331,6 +1584,10 @@ abstract class Assert
 
     /**
      * Asserts that a variable is of a given type.
+     *
+     * @param string $expected
+     * @param mixed  $actual
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1351,7 +1608,10 @@ abstract class Assert
     /**
      * Asserts that an attribute is of a given type.
      *
+     * @param string        $expected
+     * @param string        $attributeName
      * @param object|string $classOrObject
+     * @param string        $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1367,6 +1627,10 @@ abstract class Assert
 
     /**
      * Asserts that a variable is not of a given type.
+     *
+     * @param string $expected
+     * @param mixed  $actual
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1389,7 +1653,10 @@ abstract class Assert
     /**
      * Asserts that an attribute is of a given type.
      *
+     * @param string        $expected
+     * @param string        $attributeName
      * @param object|string $classOrObject
+     * @param string        $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1406,6 +1673,10 @@ abstract class Assert
     /**
      * Asserts that a variable is of a given type.
      *
+     * @param string $expected
+     * @param mixed  $actual
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -1421,7 +1692,10 @@ abstract class Assert
     /**
      * Asserts that an attribute is of a given type.
      *
+     * @param string        $expected
+     * @param string        $attributeName
      * @param object|string $classOrObject
+     * @param string        $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1437,6 +1711,10 @@ abstract class Assert
 
     /**
      * Asserts that a variable is not of a given type.
+     *
+     * @param string $expected
+     * @param mixed  $actual
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1455,7 +1733,10 @@ abstract class Assert
     /**
      * Asserts that an attribute is of a given type.
      *
+     * @param string        $expected
+     * @param string        $attributeName
      * @param object|string $classOrObject
+     * @param string        $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1472,6 +1753,10 @@ abstract class Assert
     /**
      * Asserts that a string matches a given regular expression.
      *
+     * @param string $pattern
+     * @param string $string
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -1482,6 +1767,10 @@ abstract class Assert
 
     /**
      * Asserts that a string does not match a given regular expression.
+     *
+     * @param string $pattern
+     * @param string $string
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1503,6 +1792,7 @@ abstract class Assert
      *
      * @param Countable|iterable $expected
      * @param Countable|iterable $actual
+     * @param string             $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1530,6 +1820,7 @@ abstract class Assert
      *
      * @param Countable|iterable $expected
      * @param Countable|iterable $actual
+     * @param string             $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1556,6 +1847,10 @@ abstract class Assert
     /**
      * Asserts that a string matches a given format string.
      *
+     * @param string $format
+     * @param string $string
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -1566,6 +1861,10 @@ abstract class Assert
 
     /**
      * Asserts that a string does not match a given format string.
+     *
+     * @param string $format
+     * @param string $string
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1583,6 +1882,10 @@ abstract class Assert
 
     /**
      * Asserts that a string matches a given format file.
+     *
+     * @param string $formatFile
+     * @param string $string
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1602,6 +1905,10 @@ abstract class Assert
 
     /**
      * Asserts that a string does not match a given format string.
+     *
+     * @param string $formatFile
+     * @param string $string
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1624,6 +1931,10 @@ abstract class Assert
     /**
      * Asserts that a string starts with a given prefix.
      *
+     * @param string $prefix
+     * @param string $string
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -1637,6 +1948,7 @@ abstract class Assert
      *
      * @param string $prefix
      * @param string $string
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1655,6 +1967,10 @@ abstract class Assert
     /**
      * Asserts that a string ends with a given suffix.
      *
+     * @param string $suffix
+     * @param string $string
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -1665,6 +1981,10 @@ abstract class Assert
 
     /**
      * Asserts that a string ends not with a given suffix.
+     *
+     * @param string $suffix
+     * @param string $string
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1683,6 +2003,10 @@ abstract class Assert
     /**
      * Asserts that two XML files are equal.
      *
+     * @param string $expectedFile
+     * @param string $actualFile
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -1696,6 +2020,10 @@ abstract class Assert
 
     /**
      * Asserts that two XML files are not equal.
+     *
+     * @param string $expectedFile
+     * @param string $actualFile
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1711,7 +2039,9 @@ abstract class Assert
     /**
      * Asserts that two XML documents are equal.
      *
+     * @param string             $expectedFile
      * @param DOMDocument|string $actualXml
+     * @param string             $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1727,7 +2057,9 @@ abstract class Assert
     /**
      * Asserts that two XML documents are not equal.
      *
+     * @param string             $expectedFile
      * @param DOMDocument|string $actualXml
+     * @param string             $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1745,6 +2077,7 @@ abstract class Assert
      *
      * @param DOMDocument|string $expectedXml
      * @param DOMDocument|string $actualXml
+     * @param string             $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1762,6 +2095,7 @@ abstract class Assert
      *
      * @param DOMDocument|string $expectedXml
      * @param DOMDocument|string $actualXml
+     * @param string             $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1776,6 +2110,11 @@ abstract class Assert
 
     /**
      * Asserts that a hierarchy of DOMElements matches.
+     *
+     * @param DOMElement $expectedElement
+     * @param DOMElement $actualElement
+     * @param bool       $checkAttributes
+     * @param string     $message
      *
      * @throws AssertionFailedError
      * @throws ExpectationFailedException
@@ -1804,7 +2143,7 @@ abstract class Assert
                 \sprintf(
                     '%s%sNumber of attributes on node "%s" does not match',
                     $message,
-                    !empty($message) ? "\n" : '',
+                    !empty($message) ? PHP_EOL : '',
                     $expectedElement->tagName
                 )
             );
@@ -1820,7 +2159,7 @@ abstract class Assert
                         \sprintf(
                             '%s%sCould not find attribute "%s" on node "%s"',
                             $message,
-                            !empty($message) ? "\n" : '',
+                            !empty($message) ? PHP_EOL : '',
                             $expectedAttribute->name,
                             $expectedElement->tagName
                         )
@@ -1838,7 +2177,7 @@ abstract class Assert
             \sprintf(
                 '%s%sNumber of child nodes of "%s" differs',
                 $message,
-                !empty($message) ? "\n" : '',
+                !empty($message) ? PHP_EOL : '',
                 $expectedElement->tagName
             )
         );
@@ -1856,6 +2195,10 @@ abstract class Assert
     /**
      * Evaluates a PHPUnit\Framework\Constraint matcher object.
      *
+     * @param mixed      $value
+     * @param Constraint $constraint
+     * @param string     $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -1869,6 +2212,9 @@ abstract class Assert
     /**
      * Asserts that a string is a valid JSON string.
      *
+     * @param string $actualJson
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -1879,6 +2225,10 @@ abstract class Assert
 
     /**
      * Asserts that two given JSON encoded objects or arrays are equal.
+     *
+     * @param string $expectedJson
+     * @param string $actualJson
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1896,6 +2246,7 @@ abstract class Assert
      *
      * @param string $expectedJson
      * @param string $actualJson
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1917,6 +2268,10 @@ abstract class Assert
     /**
      * Asserts that the generated JSON encoded object and the content of the given file are equal.
      *
+     * @param string $expectedFile
+     * @param string $actualJson
+     * @param string $message
+     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -1933,6 +2288,10 @@ abstract class Assert
 
     /**
      * Asserts that the generated JSON encoded object and the content of the given file are not equal.
+     *
+     * @param string $expectedFile
+     * @param string $actualJson
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1956,6 +2315,10 @@ abstract class Assert
 
     /**
      * Asserts that two JSON files are equal.
+     *
+     * @param string $expectedFile
+     * @param string $actualFile
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1983,6 +2346,10 @@ abstract class Assert
 
     /**
      * Asserts that two JSON files are not equal.
+     *
+     * @param string $expectedFile
+     * @param string $actualFile
+     * @param string $message
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -2249,6 +2616,8 @@ abstract class Assert
     /**
      * Fails a test with the given message.
      *
+     * @param string $message
+     *
      * @throws AssertionFailedError
      */
     public static function fail(string $message = ''): void
@@ -2263,8 +2632,11 @@ abstract class Assert
      * This also works for attributes that are declared protected or private.
      *
      * @param object|string $classOrObject
+     * @param string        $attributeName
      *
      * @throws Exception
+     *
+     * @return mixed
      */
     public static function readAttribute($classOrObject, string $attributeName)
     {
@@ -2303,8 +2675,13 @@ abstract class Assert
      * Returns the value of a static attribute.
      * This also works for attributes that are declared protected or private.
      *
+     * @param string $className
+     * @param string $attributeName
+     *
      * @throws Exception
      * @throws ReflectionException
+     *
+     * @return mixed
      */
     public static function getStaticAttribute(string $className, string $attributeName)
     {
@@ -2341,8 +2718,11 @@ abstract class Assert
      * This also works for attributes that are declared protected or private.
      *
      * @param object $object
+     * @param string $attributeName
      *
      * @throws Exception
+     *
+     * @return mixed
      */
     public static function getObjectAttribute($object, string $attributeName)
     {
@@ -2392,6 +2772,8 @@ abstract class Assert
     /**
      * Mark the test as incomplete.
      *
+     * @param string $message
+     *
      * @throws IncompleteTestError
      */
     public static function markTestIncomplete(string $message = ''): void
@@ -2401,6 +2783,8 @@ abstract class Assert
 
     /**
      * Mark the test as skipped.
+     *
+     * @param string $message
      *
      * @throws SkippedTestError
      */

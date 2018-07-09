@@ -13,6 +13,8 @@ class Issue2380Test extends TestCase
 {
     /**
      * @dataProvider generatorData
+     *
+     * @param mixed $data
      */
     public function testGeneratorProvider($data): void
     {

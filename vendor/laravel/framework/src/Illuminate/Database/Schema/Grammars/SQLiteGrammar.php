@@ -232,16 +232,6 @@ class SQLiteGrammar extends Grammar
     }
 
     /**
-     * Compile the SQL needed to drop all views.
-     *
-     * @return string
-     */
-    public function compileDropAllViews()
-    {
-        return "delete from sqlite_master where type in ('view')";
-    }
-
-    /**
      * Compile a drop column command.
      *
      * @param  \Illuminate\Database\Schema\Blueprint  $blueprint

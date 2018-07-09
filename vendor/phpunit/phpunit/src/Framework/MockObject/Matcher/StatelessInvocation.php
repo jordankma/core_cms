@@ -32,6 +32,8 @@ abstract class StatelessInvocation implements Invocation
      * If the matcher is a stub it will also have a return value.
      *
      * @param BaseInvocation $invocation Object containing information on a mocked or stubbed method which was invoked
+     *
+     * @return mixed
      */
     public function invoked(BaseInvocation $invocation)
     {
@@ -41,6 +43,8 @@ abstract class StatelessInvocation implements Invocation
      * Checks if the invocation $invocation matches the current rules. If it does
      * the matcher will get the invoked() method called which should check if an
      * expectation is met.
+     *
+     * @param Invocation $invocation Object containing information on a mocked or stubbed method which was invoked
      *
      * @return bool
      */

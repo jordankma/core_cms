@@ -14,6 +14,8 @@ namespace Psy\CodeCleaner;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Exit_;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Name\FullyQualified as FullyQualifiedName;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Expression;
@@ -46,7 +48,7 @@ class ImplicitReturnPass extends CodeCleanerPass
     {
         // If nodes is empty, it can't have a return value.
         if (empty($nodes)) {
-            return [new Return_(NoReturnValue::create())];
+            return [new Return_(new New_(new FullyQualifiedName('Psy\CodeCleaner\NoReturnValue')))];
         }
 
         $last = end($nodes);
@@ -102,7 +104,7 @@ class ImplicitReturnPass extends CodeCleanerPass
         // because code outside namespace statements doesn't really work, and
         // there's already an implicit return in the namespace statement anyway.
         if (self::isNonExpressionStmt($last)) {
-            $nodes[] = new Return_(NoReturnValue::create());
+            $nodes[] = new Return_(new New_(new FullyQualifiedName('Psy\CodeCleaner\NoReturnValue')));
         }
 
         return $nodes;

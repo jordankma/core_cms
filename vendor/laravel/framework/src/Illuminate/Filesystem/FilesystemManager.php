@@ -318,13 +318,11 @@ class FilesystemManager implements FactoryContract
      *
      * @param  string  $name
      * @param  mixed  $disk
-     * @return $this
+     * @return void
      */
     public function set($name, $disk)
     {
         $this->disks[$name] = $disk;
-
-        return $this;
     }
 
     /**

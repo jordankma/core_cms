@@ -7,6 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace PHPUnit\Util\Log;
 
 use PHPUnit\Framework\AssertionFailedError;
@@ -264,6 +265,9 @@ class TeamCity extends ResultPrinter
 
     /**
      * A test ended.
+     *
+     * @param Test  $test
+     * @param float $time
      */
     public function endTest(Test $test, float $time): void
     {
@@ -302,6 +306,9 @@ class TeamCity extends ResultPrinter
         $this->write("]\n");
     }
 
+    /**
+     * @param \Throwable $t
+     */
     private static function getMessage(\Throwable $t): string
     {
         $message = '';
@@ -320,6 +327,8 @@ class TeamCity extends ResultPrinter
     }
 
     /**
+     * @param \Throwable $t
+     *
      * @throws \InvalidArgumentException
      */
     private static function getDetails(\Throwable $t): string
@@ -329,16 +338,19 @@ class TeamCity extends ResultPrinter
 
         while ($previous) {
             $stackTrace .= "\nCaused by\n" .
-                TestFailure::exceptionToString($previous) . "\n" .
+                TestFailure::exceptionToString($previous) . PHP_EOL .
                 Filter::getFilteredStacktrace($previous);
 
             $previous = $previous instanceof ExceptionWrapper ?
                 $previous->getPreviousWrapped() : $previous->getPrevious();
         }
 
-        return ' ' . \str_replace("\n", "\n ", $stackTrace);
+        return ' ' . \str_replace(PHP_EOL, "\n ", $stackTrace);
     }
 
+    /**
+     * @param mixed $value
+     */
     private static function getPrimitiveValueAsString($value): ?string
     {
         if ($value === null) {
@@ -356,10 +368,13 @@ class TeamCity extends ResultPrinter
         return null;
     }
 
+    /**
+     * @param string $text
+     */
     private static function escapeValue(string $text): string
     {
         return \str_replace(
-            ['|', "'", "\n", "\r", ']', '['],
+            ['|', "'", PHP_EOL, "\r", ']', '['],
             ['||', "|'", '|n', '|r', '|]', '|['],
             $text
         );

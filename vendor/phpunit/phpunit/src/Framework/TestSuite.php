@@ -81,7 +81,6 @@ class TestSuite implements Test, SelfDescribing, IteratorAggregate
      * @var array
      */
     protected $foundClasses = [];
-
     /**
      * Last count of tests in this suite.
      *
@@ -105,7 +104,8 @@ class TestSuite implements Test, SelfDescribing, IteratorAggregate
     private $declaredClasses;
 
     /**
-     * @param string $name
+     * @param ReflectionClass $theClass
+     * @param string          $name
      *
      * @throws Exception
      */
@@ -164,7 +164,7 @@ class TestSuite implements Test, SelfDescribing, IteratorAggregate
                     $_message = $e->getMessage();
 
                     if (!empty($_message)) {
-                        $message .= "\n" . $_message;
+                        $message .= PHP_EOL . $_message;
                     }
 
                     $data = self::incompleteTest($className, $name, $message);
@@ -178,7 +178,7 @@ class TestSuite implements Test, SelfDescribing, IteratorAggregate
                     $_message = $e->getMessage();
 
                     if (!empty($_message)) {
-                        $message .= "\n" . $_message;
+                        $message .= PHP_EOL . $_message;
                     }
 
                     $data = self::skipTest($className, $name, $message);
@@ -198,7 +198,7 @@ class TestSuite implements Test, SelfDescribing, IteratorAggregate
                     $_message = $t->getMessage();
 
                     if (!empty($_message)) {
-                        $message .= "\n" . $_message;
+                        $message .= PHP_EOL . $_message;
                     }
 
                     $data = self::warning($message);
@@ -305,6 +305,9 @@ class TestSuite implements Test, SelfDescribing, IteratorAggregate
         return $test;
     }
 
+    /**
+     * @param ReflectionMethod $method
+     */
     public static function isTestMethod(ReflectionMethod $method): bool
     {
         if (\strpos($method->name, 'test') === 0) {
@@ -333,6 +336,7 @@ class TestSuite implements Test, SelfDescribing, IteratorAggregate
      *     name of an existing class) or constructs an empty TestSuite
      *     with the given name.
      *
+     * @param mixed  $theClass
      * @param string $name
      *
      * @throws Exception
@@ -447,6 +451,7 @@ class TestSuite implements Test, SelfDescribing, IteratorAggregate
     /**
      * Adds a test to the suite.
      *
+     * @param Test  $test
      * @param array $groups
      */
     public function addTest(Test $test, $groups = []): void
@@ -481,6 +486,8 @@ class TestSuite implements Test, SelfDescribing, IteratorAggregate
 
     /**
      * Adds the tests from the given class to the suite.
+     *
+     * @param mixed $testClass
      *
      * @throws Exception
      */
@@ -531,6 +538,8 @@ class TestSuite implements Test, SelfDescribing, IteratorAggregate
      * If the named file cannot be read or there are no new tests that can be
      * added, a <code>PHPUnit\Framework\WarningTestCase</code> will be created instead,
      * leaving the current test run untouched.
+     *
+     * @param string $filename
      *
      * @throws Exception
      */
@@ -673,6 +682,8 @@ class TestSuite implements Test, SelfDescribing, IteratorAggregate
 
     /**
      * Set tests groups of the test case
+     *
+     * @param array $groups
      */
     public function setGroupDetails(array $groups): void
     {
@@ -706,7 +717,7 @@ class TestSuite implements Test, SelfDescribing, IteratorAggregate
                     \class_exists($this->name, false) &&
                     \method_exists($this->name, $beforeClassMethod)) {
                     if ($missingRequirements = \PHPUnit\Util\Test::getMissingRequirements($this->name, $beforeClassMethod)) {
-                        $this->markTestSuiteSkipped(\implode(\PHP_EOL, $missingRequirements));
+                        $this->markTestSuiteSkipped(\implode(PHP_EOL, $missingRequirements));
                     }
 
                     \call_user_func([$this->name, $beforeClassMethod]);
@@ -812,6 +823,8 @@ class TestSuite implements Test, SelfDescribing, IteratorAggregate
 
     /**
      * Set tests of the test suite
+     *
+     * @param array $tests
      */
     public function setTests(array $tests): void
     {
@@ -894,6 +907,9 @@ class TestSuite implements Test, SelfDescribing, IteratorAggregate
     }
 
     /**
+     * @param ReflectionClass  $class
+     * @param ReflectionMethod $method
+     *
      * @throws Exception
      */
     protected function addTestMethod(ReflectionClass $class, ReflectionMethod $method): void

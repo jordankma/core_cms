@@ -13,6 +13,8 @@ class Issue2382Test extends TestCase
 {
     /**
      * @dataProvider dataProvider
+     *
+     * @param mixed $test
      */
     public function testOne($test): void
     {

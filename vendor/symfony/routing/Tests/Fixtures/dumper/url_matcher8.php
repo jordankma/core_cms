@@ -32,10 +32,10 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Matcher\UrlMatcher
                     .'|/(a)(*:11)'
                 .')$}sD',
             11 => '{^(?'
-                    .'|/(.)(*:22)'
+                    .'|/(.)(*:26)'
                 .')$}sDu',
-            22 => '{^(?'
-                    .'|/(.)(*:33)'
+            26 => '{^(?'
+                    .'|/(.)(*:41)'
                 .')$}sD',
         );
 
@@ -45,8 +45,8 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Matcher\UrlMatcher
                     default:
                         $routes = array(
                             11 => array(array('_route' => 'a'), array('a'), null, null),
-                            22 => array(array('_route' => 'b'), array('a'), null, null),
-                            33 => array(array('_route' => 'c'), array('a'), null, null),
+                            26 => array(array('_route' => 'b'), array('a'), null, null),
+                            41 => array(array('_route' => 'c'), array('a'), null, null),
                         );
 
                         list($ret, $vars, $requiredMethods, $requiredSchemes) = $routes[$m];
@@ -72,7 +72,7 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Matcher\UrlMatcher
                         return $ret;
                 }
 
-                if (33 === $m) {
+                if (41 === $m) {
                     break;
                 }
                 $regex = substr_replace($regex, 'F', $m - $offset, 1 + strlen($m));

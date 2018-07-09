@@ -27,12 +27,12 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Matcher\UrlMatcher
             $canonicalMethod = 'GET';
         }
 
-        $matchedPathinfo = $host.'.'.$pathinfo;
+        $matchedPathinfo = $host.$pathinfo;
         $regexList = array(
             0 => '{^(?'
-                .'|(?i:([^\\.]++)\\.exampple\\.com)\\.(?'
+                .'|(?i:([^\\.]++)\\.exampple\\.com)(?'
                     .'|/abc([^/]++)(?'
-                        .'|(*:56)'
+                        .'|(*:54)'
                     .')'
                 .')'
                 .')$}sD',
@@ -41,7 +41,7 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Matcher\UrlMatcher
         foreach ($regexList as $offset => $regex) {
             while (preg_match($regex, $matchedPathinfo, $matches)) {
                 switch ($m = (int) $matches['MARK']) {
-                    case 56:
+                    case 54:
                         $matches = array('foo' => $matches[1] ?? null, 'foo' => $matches[2] ?? null);
 
                         // r1
@@ -53,7 +53,7 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Matcher\UrlMatcher
                         break;
                 }
 
-                if (56 === $m) {
+                if (54 === $m) {
                     break;
                 }
                 $regex = substr_replace($regex, 'F', $m - $offset, 1 + strlen($m));

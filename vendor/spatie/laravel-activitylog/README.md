@@ -51,7 +51,7 @@ $activity->description; //returns 'updated'
 $activity->subject; //returns the instance of NewsItem that was created
 ```
 
-Calling `$activity->changes()` will return this array:
+Calling `$activity->changes` will return this array:
 
 ```php
 [
@@ -109,47 +109,38 @@ This is the contents of the published config file:
 ```php
 return [
 
-    /*
-     * If set to false, no activities will be saved to the database.
+    /**
+     * When set to false, activitylog will not 
+     * save any activities to the database.
      */
     'enabled' => env('ACTIVITY_LOGGER_ENABLED', true),
 
-    /*
-     * When the clean-command is executed, all recording activities older than
-     * the number of days specified here will be deleted.
+    /**
+     * Running the clean-command will delete all activities
+     * older than the number of days specified here.
      */
     'delete_records_older_than_days' => 365,
 
-    /*
-     * If no log name is passed to the activity() helper
-     * we use this default log name.
+
+    /**
+     * When not specifying a log name when logging activity
+     * we'll using this log name.
      */
     'default_log_name' => 'default',
 
-    /*
-     * You can specify an auth driver here that gets user models.
-     * If this is null we'll use the default Laravel auth driver.
-     */
-    'default_auth_driver' => null,
 
-    /*
-     * If set to true, the subject returns soft deleted models.
+    /**
+     * When set to true, the subject returns soft deleted models.
      */
-    'subject_returns_soft_deleted_models' => false,
-
-    /*
-     * This model will be used to log activity. The only requirement is that
-     * it should be or extend the Spatie\Activitylog\Models\Activity model.
+     'subject_returns_soft_deleted_models' => false,
+     
+     
+    /**
+     * The model used to log the activities. 
+     * It should be or extend the Spatie\Activitylog\Models\Activity model.
      */
-    'activity_model' => \Spatie\Activitylog\Models\Activity::class,
-    
-    /*
-     * This is the name of the table that will be created by the migration and
-     * used by the Activity model shipped with this package.
-     */
-    'table_name' => 'activity_log',
+    'activity_model' => \Spatie\Activitylog\Models\Activity::class,     
 ];
-
 ```
 
 ## Changelog

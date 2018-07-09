@@ -1,12 +1,12 @@
 <?php
 
-namespace UniSharp\LaravelFilemanager\controllers;
+namespace Unisharp\Laravelfilemanager\controllers;
 
 use Illuminate\Support\Facades\File;
-use UniSharp\LaravelFilemanager\Events\ImageIsRenaming;
-use UniSharp\LaravelFilemanager\Events\ImageWasRenamed;
-use UniSharp\LaravelFilemanager\Events\FolderIsRenaming;
-use UniSharp\LaravelFilemanager\Events\FolderWasRenamed;
+use Unisharp\Laravelfilemanager\Events\ImageIsRenaming;
+use Unisharp\Laravelfilemanager\Events\ImageWasRenamed;
+use Unisharp\Laravelfilemanager\Events\FolderIsRenaming;
+use Unisharp\Laravelfilemanager\Events\FolderWasRenamed;
 
 /**
  * Class RenameController.

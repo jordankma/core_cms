@@ -41,10 +41,6 @@ trait DetectsChanges
             }
         }
 
-        if (isset(static::$logAttributesToIgnore) && is_array(static::$logAttributesToIgnore)) {
-            $attributes = array_diff($attributes, static::$logAttributesToIgnore);
-        }
-
         return $attributes;
     }
 

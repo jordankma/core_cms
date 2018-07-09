@@ -16,12 +16,17 @@ use PHPUnit\Framework\MockObject\Invocation as BaseInvocation;
  */
 class AnyParameters extends StatelessInvocation
 {
+    /**
+     * @return string
+     */
     public function toString(): string
     {
         return 'with any parameters';
     }
 
     /**
+     * @param BaseInvocation $invocation
+     *
      * @return bool
      */
     public function matches(BaseInvocation $invocation)

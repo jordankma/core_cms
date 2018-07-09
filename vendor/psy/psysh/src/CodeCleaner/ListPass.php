@@ -60,13 +60,10 @@ class ListPass extends CodeCleanerPass
             throw new ParseErrorException('Cannot use empty list', $node->var->getLine());
         }
 
-        $itemFound = false;
         foreach ($items as $item) {
             if ($item === null) {
-                continue;
+                throw new ParseErrorException('Cannot use empty list', $item->getLine());
             }
-
-            $itemFound = true;
 
             // List_->$vars in PHP-Parser 2.x is Variable instead of ArrayItem.
             if (!$this->atLeastPhp71 && $item instanceof ArrayItem && $item->key !== null) {
@@ -80,10 +77,6 @@ class ListPass extends CodeCleanerPass
                 $msg = 'Assignments can only happen to writable values';
                 throw new ParseErrorException($msg, $item->getLine());
             }
-        }
-
-        if (!$itemFound) {
-            throw new ParseErrorException('Cannot use empty list');
         }
     }
 }

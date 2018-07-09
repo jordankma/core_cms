@@ -1,13 +1,13 @@
 <?php
 
-namespace UniSharp\LaravelFilemanager\controllers;
+namespace Unisharp\Laravelfilemanager\controllers;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Intervention\Image\Facades\Image;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use UniSharp\LaravelFilemanager\Events\ImageIsUploading;
-use UniSharp\LaravelFilemanager\Events\ImageWasUploaded;
+use Unisharp\Laravelfilemanager\Events\ImageIsUploading;
+use Unisharp\Laravelfilemanager\Events\ImageWasUploaded;
 
 /**
  * Class UploadController.
@@ -81,9 +81,7 @@ class UploadController extends LfmController
                 // Create (move) the file
                 File::move($file->getRealPath(), $new_file_path);
             }
-            if (config('lfm.should_change_file_mode', true)) {
-                chmod($new_file_path, config('lfm.create_file_mode', 0644));
-            }
+            chmod($new_file_path, config('lfm.create_file_mode', 0644));
         } catch (\Exception $e) {
             array_push($this->errors, parent::error('invalid'));
 

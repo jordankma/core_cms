@@ -18,7 +18,7 @@ class SampleArrayAccess implements ArrayAccess
 
     public function offsetSet($offset, $value): void
     {
-        if (null === $offset) {
+        if (\is_null($offset)) {
             $this->container[] = $value;
         } else {
             $this->container[$offset] = $value;

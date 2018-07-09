@@ -4,7 +4,6 @@ namespace Illuminate\Database\Eloquent;
 
 use LogicException;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Contracts\Queue\QueueableCollection;
@@ -80,13 +79,7 @@ class Collection extends BaseCollection implements QueueableCollection
                 $key = $value;
             }
 
-            $segments = explode('.', explode(':', $key)[0]);
-
-            if (Str::contains($key, ':')) {
-                $segments[count($segments) - 1] .= ':'.explode(':', $key)[1];
-            }
-
-            $path = array_combine($segments, $segments);
+            $path = array_combine($segments = explode('.', $key), $segments);
 
             if (is_callable($value)) {
                 $path[end($segments)] = $value;
@@ -142,7 +135,6 @@ class Collection extends BaseCollection implements QueueableCollection
     public function loadMorph($relation, $relations)
     {
         $this->pluck($relation)
-            ->filter()
             ->groupBy(function ($model) {
                 return get_class($model);
             })

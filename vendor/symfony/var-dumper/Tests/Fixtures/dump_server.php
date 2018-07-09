@@ -29,8 +29,6 @@ $server = new DumpServer(getenv('VAR_DUMPER_SERVER'));
 
 $server->start();
 
-echo "READY\n";
-
 $server->listen(function (Data $data, array $context, $clientId) {
     dump((string) $data, $context, $clientId);
 

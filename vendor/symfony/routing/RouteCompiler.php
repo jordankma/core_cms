@@ -321,7 +321,7 @@ class RouteCompiler implements RouteCompilerInterface
                 continue;
             }
             $regexp = substr_replace($regexp, '?:', $i, 0);
-            ++$i;
+            $i += 2;
         }
 
         return $regexp;

@@ -79,50 +79,50 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Matcher\UrlMatcher
                 return $ret;
         }
 
-        $matchedPathinfo = $host.'.'.$pathinfo;
+        $matchedPathinfo = $host.$pathinfo;
         $regexList = array(
             0 => '{^(?'
-                .'|(?:(?:[^.]*+\\.)++)(?'
-                    .'|/foo/(baz|symfony)(*:46)'
+                .'|[^/]*+(?'
+                    .'|/foo/(baz|symfony)(*:34)'
                     .'|/bar(?'
-                        .'|/([^/]++)(*:69)'
-                        .'|head/([^/]++)(*:89)'
+                        .'|/([^/]++)(*:57)'
+                        .'|head/([^/]++)(*:77)'
                     .')'
                     .'|/test/([^/]++)/(?'
-                        .'|(*:115)'
+                        .'|(*:103)'
                     .')'
-                    .'|/([\']+)(*:131)'
+                    .'|/([\']+)(*:119)'
                     .'|/a/(?'
                         .'|b\'b/([^/]++)(?'
-                            .'|(*:160)'
-                            .'|(*:168)'
+                            .'|(*:148)'
+                            .'|(*:156)'
                         .')'
-                        .'|(.*)(*:181)'
+                        .'|(.*)(*:169)'
                         .'|b\'b/([^/]++)(?'
-                            .'|(*:204)'
-                            .'|(*:212)'
+                            .'|(*:192)'
+                            .'|(*:200)'
                         .')'
                     .')'
-                    .'|/multi/hello(?:/([^/]++))?(*:248)'
+                    .'|/multi/hello(?:/([^/]++))?(*:236)'
                     .'|/([^/]++)/b/([^/]++)(?'
-                        .'|(*:279)'
-                        .'|(*:287)'
+                        .'|(*:267)'
+                        .'|(*:275)'
                     .')'
-                    .'|/aba/([^/]++)(*:309)'
-                .')|(?i:([^\\.]++)\\.example\\.com)\\.(?'
+                    .'|/aba/([^/]++)(*:297)'
+                .')|(?i:([^\\.]++)\\.example\\.com)(?'
                     .'|/route1(?'
-                        .'|3/([^/]++)(*:371)'
-                        .'|4/([^/]++)(*:389)'
+                        .'|3/([^/]++)(*:357)'
+                        .'|4/([^/]++)(*:375)'
                     .')'
-                .')|(?i:c\\.example\\.com)\\.(?'
-                    .'|/route15/([^/]++)(*:441)'
-                .')|(?:(?:[^.]*+\\.)++)(?'
-                    .'|/route16/([^/]++)(*:488)'
+                .')|(?i:c\\.example\\.com)(?'
+                    .'|/route15/([^/]++)(*:425)'
+                .')|[^/]*+(?'
+                    .'|/route16/([^/]++)(*:460)'
                     .'|/a/(?'
-                        .'|a\\.\\.\\.(*:509)'
+                        .'|a\\.\\.\\.(*:481)'
                         .'|b/(?'
-                            .'|([^/]++)(*:530)'
-                            .'|c/([^/]++)(*:548)'
+                            .'|([^/]++)(*:502)'
+                            .'|c/([^/]++)(*:520)'
                         .')'
                     .')'
                 .')'
@@ -132,7 +132,7 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Matcher\UrlMatcher
         foreach ($regexList as $offset => $regex) {
             while (preg_match($regex, $matchedPathinfo, $matches)) {
                 switch ($m = (int) $matches['MARK']) {
-                    case 115:
+                    case 103:
                         $matches = array('foo' => $matches[1] ?? null);
 
                         // baz4
@@ -159,7 +159,7 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Matcher\UrlMatcher
                         not_bazbaz6:
 
                         break;
-                    case 160:
+                    case 148:
                         $matches = array('foo' => $matches[1] ?? null);
 
                         // foo1
@@ -173,14 +173,14 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Matcher\UrlMatcher
                         not_foo1:
 
                         break;
-                    case 204:
+                    case 192:
                         $matches = array('foo1' => $matches[1] ?? null);
 
                         // foo2
                         return $this->mergeDefaults(array('_route' => 'foo2') + $matches, array());
 
                         break;
-                    case 279:
+                    case 267:
                         $matches = array('_locale' => $matches[1] ?? null, 'foo' => $matches[2] ?? null);
 
                         // foo3
@@ -189,23 +189,23 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Matcher\UrlMatcher
                         break;
                     default:
                         $routes = array(
-                            46 => array(array('_route' => 'foo', 'def' => 'test'), array('bar'), null, null),
-                            69 => array(array('_route' => 'bar'), array('foo'), array('GET' => 0, 'HEAD' => 1), null),
-                            89 => array(array('_route' => 'barhead'), array('foo'), array('GET' => 0), null),
-                            131 => array(array('_route' => 'quoter'), array('quoter'), null, null),
-                            168 => array(array('_route' => 'bar1'), array('bar'), null, null),
-                            181 => array(array('_route' => 'overridden'), array('var'), null, null),
-                            212 => array(array('_route' => 'bar2'), array('bar1'), null, null),
-                            248 => array(array('_route' => 'helloWorld', 'who' => 'World!'), array('who'), null, null),
-                            287 => array(array('_route' => 'bar3'), array('_locale', 'bar'), null, null),
-                            309 => array(array('_route' => 'foo4'), array('foo'), null, null),
-                            371 => array(array('_route' => 'route13'), array('var1', 'name'), null, null),
-                            389 => array(array('_route' => 'route14', 'var1' => 'val'), array('var1', 'name'), null, null),
-                            441 => array(array('_route' => 'route15'), array('name'), null, null),
-                            488 => array(array('_route' => 'route16', 'var1' => 'val'), array('name'), null, null),
-                            509 => array(array('_route' => 'a'), array(), null, null),
-                            530 => array(array('_route' => 'b'), array('var'), null, null),
-                            548 => array(array('_route' => 'c'), array('var'), null, null),
+                            34 => array(array('_route' => 'foo', 'def' => 'test'), array('bar'), null, null),
+                            57 => array(array('_route' => 'bar'), array('foo'), array('GET' => 0, 'HEAD' => 1), null),
+                            77 => array(array('_route' => 'barhead'), array('foo'), array('GET' => 0), null),
+                            119 => array(array('_route' => 'quoter'), array('quoter'), null, null),
+                            156 => array(array('_route' => 'bar1'), array('bar'), null, null),
+                            169 => array(array('_route' => 'overridden'), array('var'), null, null),
+                            200 => array(array('_route' => 'bar2'), array('bar1'), null, null),
+                            236 => array(array('_route' => 'helloWorld', 'who' => 'World!'), array('who'), null, null),
+                            275 => array(array('_route' => 'bar3'), array('_locale', 'bar'), null, null),
+                            297 => array(array('_route' => 'foo4'), array('foo'), null, null),
+                            357 => array(array('_route' => 'route13'), array('var1', 'name'), null, null),
+                            375 => array(array('_route' => 'route14', 'var1' => 'val'), array('var1', 'name'), null, null),
+                            425 => array(array('_route' => 'route15'), array('name'), null, null),
+                            460 => array(array('_route' => 'route16', 'var1' => 'val'), array('name'), null, null),
+                            481 => array(array('_route' => 'a'), array(), null, null),
+                            502 => array(array('_route' => 'b'), array('var'), null, null),
+                            520 => array(array('_route' => 'c'), array('var'), null, null),
                         );
 
                         list($ret, $vars, $requiredMethods, $requiredSchemes) = $routes[$m];
@@ -231,7 +231,7 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Matcher\UrlMatcher
                         return $ret;
                 }
 
-                if (548 === $m) {
+                if (520 === $m) {
                     break;
                 }
                 $regex = substr_replace($regex, 'F', $m - $offset, 1 + strlen($m));

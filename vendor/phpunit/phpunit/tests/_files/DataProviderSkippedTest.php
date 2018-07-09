@@ -14,13 +14,17 @@ class DataProviderSkippedTest extends TestCase
     public static function providerMethod()
     {
         return [
-            [0, 0, 0],
-            [0, 1, 1],
+          [0, 0, 0],
+          [0, 1, 1],
         ];
     }
 
     /**
      * @dataProvider skippedTestProviderMethod
+     *
+     * @param mixed $a
+     * @param mixed $b
+     * @param mixed $c
      */
     public function testSkipped($a, $b, $c): void
     {
@@ -29,6 +33,10 @@ class DataProviderSkippedTest extends TestCase
 
     /**
      * @dataProvider providerMethod
+     *
+     * @param mixed $a
+     * @param mixed $b
+     * @param mixed $c
      */
     public function testAdd($a, $b, $c): void
     {
@@ -40,8 +48,8 @@ class DataProviderSkippedTest extends TestCase
         $this->markTestSkipped('skipped');
 
         return [
-            [0, 0, 0],
-            [0, 1, 1],
+          [0, 0, 0],
+          [0, 1, 1],
         ];
     }
 }

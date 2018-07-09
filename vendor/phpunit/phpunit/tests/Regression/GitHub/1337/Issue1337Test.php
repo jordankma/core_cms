@@ -13,6 +13,8 @@ class Issue1337Test extends TestCase
 {
     /**
      * @dataProvider dataProvider
+     *
+     * @param mixed $a
      */
     public function testProvider($a): void
     {
@@ -22,8 +24,8 @@ class Issue1337Test extends TestCase
     public function dataProvider()
     {
         return [
-            'c:\\'=> [true],
-            0.9   => [true]
+          'c:\\'=> [true],
+          0.9   => [true]
         ];
     }
 }

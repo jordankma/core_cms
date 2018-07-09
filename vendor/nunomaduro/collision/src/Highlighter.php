@@ -40,7 +40,7 @@ class Highlighter extends BaseHighlighter implements HighlighterContract
     /**
      * Creates an instance of the Highlighter.
      *
-     * @param \JakubOnderka\PhpConsoleColor\ConsoleColor|null $color
+     * @param \JakubOnderka\PhpConsoleHighlighter\ConsoleColor|null $color
      */
     public function __construct(ConsoleColor $color = null)
     {
