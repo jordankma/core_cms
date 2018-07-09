@@ -57,6 +57,10 @@ $("#commentForm").bootstrapValidator({
                 },
                 emailAddress: {
                     message: 'The input is not a valid email address'
+                },
+                remote: {
+                    message: 'The email is not available',
+                    url: check_user_available
                 }
             }
         },
@@ -94,7 +98,9 @@ $('#rootwizard').bootstrapWizard({
         return $validator.isValid();
     },
     onTabClick: function(tab, navigation, index) {
-        return false;
+        // return false;
+        var $validator = $('#commentForm').data('bootstrapValidator').validate();
+        return $validator.isValid();
     },
     onTabShow: function(tab, navigation, index) {
         var $total = navigation.find('li').length;

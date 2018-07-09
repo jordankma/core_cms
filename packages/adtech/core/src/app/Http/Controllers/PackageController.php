@@ -385,7 +385,7 @@ class PackageController extends Controller
 
                     $composerObject->require = $require;
                     $composerObject->repositories = $repositoriesEmpty;
-                    $composerObject->autoload__dev->classmap = $autoload_dev_classmap;
+                    $composerObject->autoload__dev->classmap = array_values($autoload_dev_classmap);
                     $composerObject->autoload->psr__4 = $autoload_psr4;
 
                     file_put_contents($path, str_replace('__', '-', str_replace('\/', '/', json_encode($composerObject))));

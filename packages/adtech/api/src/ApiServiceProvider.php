@@ -44,7 +44,7 @@ class ApiServiceProvider extends ServiceProvider
         }
 
         $this->app['router']->middlewareGroup('jwt.auth', ['\Tymon\JWTAuth\Middleware\GetUserFromToken']);
-        $this->app['router']->middlewareGroup('jwt.refresh', ['Tymon\JWTAuth\Middleware\RefreshToken']);
+        $this->app['router']->middlewareGroup('jwt.refresh', ['\Tymon\JWTAuth\Middleware\RefreshToken']);
     }
 
     /**

@@ -12,9 +12,11 @@
 */
 
 Route::group(array('prefix' => 'auth'), function () {
-    Route::post('login', 'Auth\LoginController@login');
+    Route::get('login', 'Auth\LoginController@login');
 
-    Route::middleware('jwt.auth')->get('verify', 'Auth\LoginController@verify');
+    Route::group(['middleware' => ['jwt.auth']], function () {
 
-    Route::middleware('jwt.auth')->post('register', 'Auth\RegisterController@create');
+        Route::get('get-info', 'Auth\LoginController@getUserInfo');
+        Route::get('verify', 'Auth\LoginController@verify');
+    });
 });

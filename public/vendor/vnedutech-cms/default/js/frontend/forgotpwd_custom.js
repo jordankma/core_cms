@@ -1,12 +1,12 @@
 $(".omb_loginForm").bootstrapValidator({
     fields: {
-        email: {
+        inputEmail: {
             validators: {
                 notEmpty: {
-                    message: 'The email address is required'
+                    message: 'Yêu cầu nhập email'
                 },
                 emailAddress: {
-                    message: 'The input is not a valid email address'
+                    message: 'Email không chính xác'
                 }
             }
         }
