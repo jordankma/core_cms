@@ -9,9 +9,6 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class LoginController extends Controller
 {
-    protected $user;
-
-
     public function login(Request $request)
     {
         // grab credentials from the request
