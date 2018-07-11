@@ -20,7 +20,7 @@ class Menu extends Model
 
     protected $primaryKey = 'menu_id';
 
-    protected $fillable = ['parent', 'name', 'route_name', 'domain_id', 'group'];
+    protected $fillable = ['type', 'parent', 'name', 'route_name', 'domain_id', 'group'];
 
     protected $dates = ['deleted_at'];
 

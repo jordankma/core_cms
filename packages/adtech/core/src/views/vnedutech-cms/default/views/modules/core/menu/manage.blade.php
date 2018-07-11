@@ -32,16 +32,22 @@
         <div class="row">
             <div class="panel panel-primary ">
                 <div class="panel-heading clearfix">
-                    <div class="pull-left">
+                    <div class="pull-left" style="margin-right: 5px">
                         <select class="form-control select2" id="select_domain">
                             @foreach($domains as $domain)
                                 <option value="{{$domain->domain_id}}" {{ ($domain->domain_id == $domain_id) ? 'selected' : '' }}>{{$domain->name}}</option>
                             @endforeach
                         </select>
                     </div>
+                    <div class="pull-left">
+                        <select class="form-control select2" id="select_type">
+                            <option value="0" {{ ($type == 0) ? 'selected' : '' }}> Backend </option>
+                            <option value="1" {{ ($type == 1) ? 'selected' : '' }}> Frontend </option>
+                        </select>
+                    </div>
                     <div class="pull-right">
                         @if ($USER_LOGGED->canAccess('adtech.core.menu.create'))
-                            <a href="{{ route('adtech.core.menu.create', ['domain_id' => $domain_id]) }}" class="btn btn-sm btn-default"><span
+                            <a href="{{ route('adtech.core.menu.create', ['domain_id' => $domain_id, 'type' => $type]) }}" class="btn btn-sm btn-default"><span
                                     class="glyphicon glyphicon-plus"></span> {{ trans('adtech-core::buttons.create') }}</a>
                         @endif
                     </div>
@@ -78,10 +84,11 @@
 
     <script>
         $(function () {
+            var url = '{{ route('adtech.core.menu.data', ['domain_id' => $domain_id, 'type' => $type]) }}';
             var table = $('#table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('adtech.core.menu.data', ['domain_id' => $domain_id]) }}',
+                ajax: url.replace("amp;", ""),
                 columns: [
                     { data: 'DT_Row_Index', name: 'DT_Row_Index' },
                     { data: 'name', name: 'name' },
@@ -126,10 +133,32 @@
             }).on("change", function (e) {
                 var domain_id = this.options[this.selectedIndex].value;
                 var url = window.location.pathname;
+
+                var e = document.getElementById("select_type");
+                var select_type = e.options[e.selectedIndex].value;
+
                 if (url.indexOf('?') > -1){
-                    url += '&domain_id=' + domain_id
+                    url += '&domain_id=' + domain_id + '&type=' + select_type
                 }else{
-                    url += '?domain_id=' + domain_id
+                    url += '?domain_id=' + domain_id + '&type=' + select_type
+                }
+                window.location.href = url;
+            });
+
+            $("#select_type").select2({
+                theme:"bootstrap",
+                placeholder:"select a domain"
+            }).on("change", function (e) {
+                var select_type = this.options[this.selectedIndex].value;
+                var url = window.location.pathname;
+
+                var e = document.getElementById("select_domain");
+                var select_domain = e.options[e.selectedIndex].value;
+
+                if (url.indexOf('?') > -1){
+                    url += '&domain_id=' + select_domain + '&type=' + select_type
+                }else{
+                    url += '?domain_id=' + select_domain + '&type=' + select_type
                 }
                 window.location.href = url;
             });

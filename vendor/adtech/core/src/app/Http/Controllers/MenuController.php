@@ -34,10 +34,11 @@ class MenuController extends Controller
     {
         if ($request->has('domain_id') && $request->input('domain_id') > 0) {
 
-            $parent = $request->input('parent');
-            $route_name = $request->input('route_name');
-            $domain_id = $request->input('domain_id');
-            $group = $request->input('group');
+            $parent = $request->input('parent', 0);
+            $route_name = $request->input('route_name', '');
+            $domain_id = $request->input('domain_id',  0);
+            $type = $request->input('type', 0);
+            $group = $request->input('group', '');
 
             if ($parent > 0) {
                 if (!Route::has($route_name))
@@ -59,9 +60,9 @@ class MenuController extends Controller
                     ->withProperties($request->all())
                     ->log('User: :causer.email - Add menu - name: :properties.name, menu_id: ' . $menu->menu_id);
 
-                return redirect()->route('adtech.core.menu.manage', ['domain_id' => $domain_id])->with('success', trans('adtech-core::messages.success.create'));
+                return redirect()->route('adtech.core.menu.manage', ['domain_id' => $domain_id, 'type' => $type])->with('success', trans('adtech-core::messages.success.create'));
             } else {
-                return redirect()->route('adtech.core.menu.manage', ['domain_id' => $domain_id])->with('error', trans('adtech-core::messages.error.create'));
+                return redirect()->route('adtech.core.menu.manage', ['domain_id' => $domain_id, 'type' => $type])->with('error', trans('adtech-core::messages.error.create'));
             }
 
         } else {
@@ -72,11 +73,10 @@ class MenuController extends Controller
 
     public function create(Request $request)
     {
-        $domain_id = 0;
-        if ($request->has('domain_id')) {
-            $domain_id = $request->input('domain_id');
-        }
-        self::getMenu($domain_id);
+        $domain_id = $request->input('domain_id', 0);
+        $type = $request->input('type', 0);
+
+        self::getMenu($domain_id, $type);
         $menus = $this->_menuList;
         if (empty($menus))
             $menus = array();
@@ -93,7 +93,8 @@ class MenuController extends Controller
         }
 
         $menusGroups =$this->_menuTop;
-        return view('ADTECH-CORE::modules.core.menu.create', compact('domain_id', 'menus', 'listRouteName', 'menusGroups'));
+
+        return view('ADTECH-CORE::modules.core.menu.create', compact('domain_id', 'menus', 'listRouteName', 'menusGroups', 'type'));
     }
 
     public function delete(MenuRequest $request)
@@ -124,8 +125,12 @@ class MenuController extends Controller
         if ($request->has('domain_id')) {
             $domain_id = $request->input('domain_id');
         }
+        $type = 0;
+        if ($request->has('type')) {
+            $type = $request->input('type');
+        }
 
-        return view('ADTECH-CORE::modules.core.menu.manage', compact('domains', 'domain_id'));
+        return view('ADTECH-CORE::modules.core.menu.manage', compact('domains', 'domain_id', 'type'));
     }
 
     public function show(MenuRequest $request)
@@ -160,12 +165,13 @@ class MenuController extends Controller
         $name = $request->input('name');
         $route_name = $request->input('route_name');
         $domain_id = $request->input('domain_id');
+        $type = $request->input('type');
         $sort = $request->input('sort');
         $icon = $request->input('icon');
 
         if ($parent > 0) {
             if (!Route::has($route_name))
-                return redirect()->route('adtech.core.menu.manage', ['domain_id' => $domain_id])->with('error', trans('adtech-core::messages.error.create'));
+                return redirect()->route('adtech.core.menu.manage', ['domain_id' => $domain_id, 'type' => $type])->with('error', trans('adtech-core::messages.error.create'));
         }
 
         $menu = $this->menu->find($menu_id);
@@ -188,7 +194,7 @@ class MenuController extends Controller
                 ->withProperties($request->all())
                 ->log('User: :causer.email - Update menu - menu_id: :properties.menu_id, name: :properties.name');
 
-            return redirect()->route('adtech.core.menu.manage', ['domain_id' => $menu->domain_id])->with('success', trans('adtech-core::messages.success.update'));
+            return redirect()->route('adtech.core.menu.manage', ['domain_id' => $menu->domain_id, 'type' => $type])->with('success', trans('adtech-core::messages.success.update'));
         } else {
             return redirect()->route('adtech.core.menu.show', ['menu_id' => $request->input('menu_id')])->with('error', trans('adtech-core::messages.error.update'));
         }
@@ -247,12 +253,13 @@ class MenuController extends Controller
     {
         if ($request->has('domain_id')) {
             $domain_id = $request->input('domain_id');
+            $type = $request->input('type', 0);//0: backend, 1: frontend
 
             $menuData = array(
                 'items' => array(),
                 'parents' => array()
             );
-            self::getMenu($domain_id);
+            self::getMenu($domain_id, $type);
             $menus = Collection::make($this->_menuList);
             return Datatables::of($menus)
                 ->addIndexColumn()
@@ -288,11 +295,12 @@ class MenuController extends Controller
         return null;
     }
 
-    function getMenu($domain_id = 0) {
+    function getMenu($domain_id = 0, $type = 0) {
         $menusGroups = Menu::select('group')->where('group', '!=', '')->distinct()->get();
         $this->_menuTop = $menusGroups;
 
-        $menus = Menu::where('domain_id', $domain_id)->orderBy('parent')->orderBy('sort')->get();
+        $menus = Menu::where('domain_id', $domain_id)->where('type', $type)->orderBy('parent')->orderBy('sort')->get();
+        $this->_menuList = new Collection();
         if (count($menus) > 0) {
             foreach ($menus as $menu) {
 
@@ -302,7 +310,6 @@ class MenuController extends Controller
                 $menuData['items'][$menu_id] = $menu;
                 $menuData['parents'][$parent_id][] = $menu_id;
             }
-            $this->_menuList = new Collection();
             self::buildMenu(0, $menuData);
         }
     }

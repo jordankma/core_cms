@@ -175,7 +175,6 @@ class DomainController extends Controller
     //Table Data to index page
     public function data()
     {
-        $domains = new Collection();
         $domainsDir = base_path() . '/packages/adtech/application/src/configs';
         $ls = @scandir($domainsDir);
         if ($ls) {
@@ -191,8 +190,7 @@ class DomainController extends Controller
             }
         }
 
-        $domains = Domain::query();
-        return Datatables::of($domains)
+        return Datatables::of($this->domain->findAll())
             ->editColumn('name', function ($domains) {
                 if ($this->user->canAccess('adtech.core.package.manage')) {
                     return $actions = '<a href=' . route('adtech.core.package.manage', ['id' => $domains->domain_id]) . '>' . $domains->name . '</a>';
@@ -217,6 +215,7 @@ class DomainController extends Controller
 
                 return $actions;
             })
+            ->addIndexColumn()
             ->rawColumns(['actions', 'name'])
             ->make();
     }

@@ -282,9 +282,8 @@ class MemberController extends Controller
         return Datatables::of($members)
             ->addIndexColumn()
             ->addColumn('actions', function ($members) {
-                $actions = '';
                 if ($this->user->canAccess('dhcd.member.member.log')) {
-                    $actions .= '<a href=' . route('dhcd.member.member.log', ['type' => 'member', 'id' => $members->member_id]) . ' data-toggle="modal" data-target="#log"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#F99928" data-hc="#F99928" title="log member"></i></a>';
+                    $actions = '<a href=' . route('dhcd.member.member.log', ['type' => 'member', 'id' => $members->member_id]) . ' data-toggle="modal" data-target="#log"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#F99928" data-hc="#F99928" title="log member"></i></a>';
                 }
                 if ($this->user->canAccess('dhcd.member.member.show')) {
                     $actions .='<a href=' . route('dhcd.member.member.show', ['member_id' => $members->member_id]) . '><i class="livicon" data-name="edit" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="update member"></i></a>';

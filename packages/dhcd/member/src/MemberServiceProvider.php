@@ -60,6 +60,8 @@ class MemberServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/views/' . $groupName . '/' . $skin . '/public' => public_path('vendor/' . $groupName . '/' . $skin . '/' . $this->package . '/' . $this->module),
         ], $this->package . '_' . $this->module . '_public');
+
+        $this->app['router']->middlewareGroup('dhcd.auth', ['\Dhcd\Member\App\Middleware\AuthMiddleware']);
     }
 
     /**

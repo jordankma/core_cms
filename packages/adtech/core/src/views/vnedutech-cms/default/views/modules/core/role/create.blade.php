@@ -5,7 +5,7 @@
 
 {{-- page styles --}}
 @section('header_styles')
-    <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-switch/css/bootstrap-switch.css') }}" rel="stylesheet" type="text/css"/>
+    {{--<link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-switch/css/bootstrap-switch.css') }}" rel="stylesheet" type="text/css"/>--}}
     <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/css/pages/blog.css') }}" rel="stylesheet" type="text/css">
 @stop
 <!--end of page css-->
@@ -37,20 +37,21 @@
                     <div class="col-sm-8">
                         <label>Role Name</label>
                         <div class="form-group {{ $errors->first('name', 'has-error') }}">
-                            {!! Form::text('name', null, array('class' => 'form-control', 'autofocus'=>'autofocus', 'placeholder'=> trans('adtech-core::common.role.name_here'))) !!}
+                            {!! Form::text('name', null, array('class' => 'form-control', 'autofocus'=>'autofocus',
+                            "required" => true, 'placeholder'=> trans('adtech-core::common.role.name_here'))) !!}
                             <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                         </div>
-                        <label>Role Sort</label>
-                        <div class="form-group {{ $errors->first('sort', 'has-error') }}">
-                            {!! Form::number('sort', null, array('min' => 0, 'max' => 99,'class' => 'form-control', 'placeholder'=> trans('adtech-core::common.role.sort_here'))) !!}
-                            <span class="help-block">{{ $errors->first('sort', ':message') }}</span>
-                        </div>
-                        <div class="form-group">
-                            <label>Permission Lock</label>
-                            <div class="form-group">
-                                {!! Form::checkbox('permission_locked', null, false, array('data-size'=> 'mini')) !!}
-                            </div>
-                        </div>
+                        {{--<label>Role Sort</label>--}}
+                        {{--<div class="form-group {{ $errors->first('sort', 'has-error') }}">--}}
+                            {{--{!! Form::number('sort', null, array('min' => 0, 'max' => 99,'class' => 'form-control', 'placeholder'=> trans('adtech-core::common.role.sort_here'))) !!}--}}
+                            {{--<span class="help-block">{{ $errors->first('sort', ':message') }}</span>--}}
+                        {{--</div>--}}
+                        {{--<div class="form-group">--}}
+                            {{--<label>Permission Lock</label>--}}
+                            {{--<div class="form-group">--}}
+                                {{--{!! Form::checkbox('permission_locked', null, false, array('data-size'=> 'mini')) !!}--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
                     </div>
                     <!-- /.col-sm-8 -->
                     <div class="col-sm-4">
@@ -75,9 +76,9 @@
 {{-- page level scripts --}}
 @section('footer_scripts')
     <!-- begining of page js -->
-    <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-switch/js/bootstrap-switch.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrapvalidator/js/bootstrapValidator.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/js/pages/add_role.js') }}" type="text/javascript"></script>
+    {{--<script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-switch/js/bootstrap-switch.js') }}" type="text/javascript"></script>--}}
+    {{--<script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrapvalidator/js/bootstrapValidator.min.js') }}" type="text/javascript"></script>--}}
+    {{--<script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/js/pages/add_role.js') }}" type="text/javascript"></script>--}}
     <!--end of page js-->
     <script>
         $(function () {

@@ -17,6 +17,7 @@ class AdtechCoreMenus extends Migration
         Schema::connection('mysql_core')->create('adtech_core_menus', function (Blueprint $table) {
             $table->increments('menu_id')->index();
             $table->string('name');
+            $table->string('type')->default('0')->comment('0:backend, 1:frontend');
             $table->string('group')->nullable();
             $table->string('route_name')->default('');
             $table->string('icon')->default('question');

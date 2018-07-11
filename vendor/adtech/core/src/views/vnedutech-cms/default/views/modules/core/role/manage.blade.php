@@ -47,12 +47,12 @@
                         <table class="table table-bordered" id="table">
                             <thead>
                             <tr class="filters">
-                                <th class="fit-content">{{ trans('adtech-core::common.id') }}</th>
+                                <th class="fit-content">{{ trans('adtech-core::common.sequence') }}</th>
                                 <th>{{ trans('adtech-core::common.role.name') }}</th>
-                                <th class="fit-content">{{ trans('adtech-core::common.role.sort') }}</th>
+                                {{--<th class="fit-content">{{ trans('adtech-core::common.role.sort') }}</th>--}}
                                 <th style="width: 120px">{{ trans('adtech-core::common.created_at') }}</th>
                                 <th style="width: 120px">{{ trans('adtech-core::common.update_at') }}</th>
-                                <th class="fit-content">{{ trans('adtech-core::common.role.status') }}</th>
+                                {{--<th class="fit-content">{{ trans('adtech-core::common.role.status') }}</th>--}}
                                 <th>{{ trans('adtech-core::common.action') }}</th>
                             </tr>
                             </thead>
@@ -82,12 +82,12 @@
                     }
                 },
                 columns: [
-                    { data: 'DT_Row_Index', name: 'DT_Row_Index' },
+                    { data: 'DT_Row_Index', name: 'role_id' },
                     { data: 'name', name: 'name' },
-                    { data: 'sort', name: 'sort' },
+                    // { data: 'sort', name: 'sort' },
                     { data: 'created_at', name: 'created_at'},
                     { data: 'updated_at', name: 'updated_at'},
-                    { data: 'status', name: 'status' },
+                    // { data: 'status', name: 'status' },
                     { data: 'actions', name: 'actions', orderable: false, searchable: false, className: 'fit-content'}
                 ]
             });

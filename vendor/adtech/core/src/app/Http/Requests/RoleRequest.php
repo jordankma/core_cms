@@ -28,20 +28,18 @@ class RoleRequest extends FormRequest
             case 'GET':
             case 'DELETE': {
                 return [
-                    'role_id' => 'required'
+                    'role_id' => 'required|numeric'
                 ];
             }
             case 'POST': {
                 return [
-                    'name' => 'required',
-                    'sort' => 'required|integer|min:0|max:99'
+                    'name' => 'required'
                 ];
             }
             case 'PUT':{
                 return [
-                    'role_id' => 'required',
-                    'name' => 'required',
-                    'sort' => 'required|integer|min:0|max:99'
+                    'role_id' => 'required|numeric',
+                    'name' => 'required'
                 ];
             }
             case 'PATCH':

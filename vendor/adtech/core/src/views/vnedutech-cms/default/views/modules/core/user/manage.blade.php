@@ -47,7 +47,7 @@
                 <table class="table table-bordered width100" id="table">
                     <thead>
                         <tr class="filters">
-                            <th class="fit-content">{{ trans('adtech-core::common.id') }}</th>
+                            <th class="fit-content">{{ trans('adtech-core::common.sequence') }}</th>
                             <th>{{ trans('adtech-core::common.user.email') }}</th>
                             <th>{{ trans('adtech-core::common.user.contact_name') }}</th>
                             <th>{{ trans('adtech-core::common.user.role') }}</th>
@@ -79,7 +79,7 @@
             serverSide: true,
             ajax: '{!! route('adtech.core.user.data') !!}',
             columns: [
-                { data: 'user_id', name: 'user_id' },
+                { data: 'DT_Row_Index', name: 'user_id' },
                 { data: 'email', name: 'email' },
                 { data: 'contact_name', name: 'contact_name' },
                 { data: 'role_name', name: 'role_name' },

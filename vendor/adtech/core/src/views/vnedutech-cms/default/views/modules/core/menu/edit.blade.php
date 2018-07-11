@@ -1328,6 +1328,12 @@
                         <div class="form-group">
                             {!! Form::hidden('menu_id') !!}
                         </div>
+                        <div class="form-group">
+                            {!! Form::hidden('domain_id') !!}
+                        </div>
+                        <div class="form-group">
+                            {!! Form::hidden('type') !!}
+                        </div>
                     </div>
                     <!-- /.col-sm-8 -->
                     <div class="col-sm-4">

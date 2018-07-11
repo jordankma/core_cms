@@ -96,14 +96,21 @@ class PackageController extends Controller
                                                 $vendor_alias = strtolower(preg_replace('([^a-zA-Z0-9])', '', self::stripUnicode($vendor)));
                                                 $module_alias = strtolower(preg_replace('([^a-zA-Z0-9])', '', self::stripUnicode($packageItem)));
 
-                                                $packages = new Package();
-                                                $packages->space = $space;
-                                                $packages->package = $vendor;
-                                                $packages->package_alias = $vendor_alias;
-                                                $packages->module = $packageItem;
-                                                $packages->module_alias = $module_alias;
-                                                $packages->create_by = $this->user->user_id;
-                                                $packages->save();
+                                                $packages = $this->package->findWhere([
+                                                    'package_alias' => $vendor_alias,
+                                                    'module_alias' => $module_alias
+                                                ])->first();
+
+                                                if (null == $packages) {
+                                                    $packages = new Package();
+                                                    $packages->space = $space;
+                                                    $packages->package = $vendor;
+                                                    $packages->package_alias = $vendor_alias;
+                                                    $packages->module = $packageItem;
+                                                    $packages->module_alias = $module_alias;
+                                                    $packages->create_by = $this->user->user_id;
+                                                    $packages->save();
+                                                }
 
                                                 if ($packages->package_id) {
                                                     $domainsPackage = new DomainsPackage();
@@ -130,12 +137,20 @@ class PackageController extends Controller
                     } else {
                         return redirect()->route('adtech.core.package.manage')->with('error', trans('adtech-core::messages.error.create'));
                     }
-                } else { //Create new
-                    $packages = new Package($request->all());
-                    $packages->create_by = $this->user->user_id;
-                    $packages->package_alias = $vendor_alias;
-                    $packages->module_alias = $module_alias;
-                    $packages->save();
+                } else { //Create new\
+
+                    $packages = $this->package->findWhere([
+                        'package_alias' => $vendor_alias,
+                        'module_alias' => $module_alias
+                    ])->first();
+
+                    if (null == $packages) {
+                        $packages = new Package($request->all());
+                        $packages->create_by = $this->user->user_id;
+                        $packages->package_alias = $vendor_alias;
+                        $packages->module_alias = $module_alias;
+                        $packages->save();
+                    }
 
                     $backend = ($request->input('space') == 'Backend') ? 1 : 0;
                     if ($packages->package_id) {
@@ -220,10 +235,10 @@ class PackageController extends Controller
                             ]);
                         } elseif ($request->input('type') == 'db') {
                             //migrate + seed
+                            $db_connection = "mysql_" . $package->package_alias;
                             $pathDatabase = 'packages/' . $package->package_alias . '/' . $package->module_alias . '/src/database/migrations';
-//                            shell_exec('cd ../ && /egserver/php/bin/php artisan migrate:refresh --path="' . $pathDatabase . '"');
-                            shell_exec('cd ../ && php artisan migrate:refresh --path="' . $pathDatabase . '"');
-                            
+//                            shell_exec('cd ../ && /egserver/php/bin/php artisan migrate:refresh --path="' . $pathDatabase . '" --database="' . $db_connection . '"');
+                            shell_exec('cd ../ && php artisan migrate:refresh --path="' . $pathDatabase . '" --database="' . $db_connection . '"');
                         }
                     }
                     return redirect()->route('adtech.core.package.manage', ['id' => $domain_id])->with('success', trans('adtech-core::messages.success.update'));
@@ -298,9 +313,10 @@ class PackageController extends Controller
                             ->log('User: :causer.email - Update Status Package - domain_id: :properties.domain_id, package_id: :properties.package_id, status: ' . $domainsPackage->status);
 
                         //migrate + seed
+                        $db_connection = "mysql_" . $package->package_alias;
                         $pathDatabase = 'packages/' . $package->package_alias . '/' . $package->module_alias . '/src/database/migrations';
-//                        shell_exec('cd ../ && /egserver/php/bin/php artisan migrate --path="' . $pathDatabase . '"');
-                        shell_exec('cd ../ && php artisan migrate --path="' . $pathDatabase . '"');
+//                        shell_exec('cd ../ && /egserver/php/bin/php artisan migrate --path="' . $pathDatabase . '" --database="' . $db_connection . '"');
+                        shell_exec('cd ../ && php artisan migrate --path="' . $pathDatabase . '" --database="' . $db_connection . '"');
 
                         // Dump autoload.
 //                        $this->composer->dumpAutoloads();
@@ -392,9 +408,10 @@ class PackageController extends Controller
                 }
 
                 //delete migrate
+                $db_connection = "mysql_" . $package->package_alias;
                 $pathDatabase = 'packages/' . $package->package_alias . '/' . $package->module_alias . '/src/database/migrations';
-//                shell_exec('cd ../ && /egserver/php/bin/php artisan migrate:reset --path="' . $pathDatabase . '"');
-                shell_exec('cd ../ && php artisan migrate:reset --path="' . $pathDatabase . '"');
+//                shell_exec('cd ../ && /egserver/php/bin/php artisan migrate:reset --path="' . $pathDatabase . '" --database="' . $db_connection . '"');
+                shell_exec('cd ../ && php artisan migrate:reset --path="' . $pathDatabase . '" --database="' . $db_connection . '"');
 
                 //Delete folder package
                 if ($package->package_alias != 'adtech')
@@ -775,25 +792,23 @@ class PackageController extends Controller
             ->editColumn('status', function ($packages) use ($domain_id) {
                 $status = '';
                 if (count($packages->domains) > 0) {
-                    foreach ($packages->domains as $package) {
-                        if ($package->domain_id == $domain_id) {
-                            if ($package->pivot->status == 1) {
-                                if ($this->user->canAccess('adtech.core.package.confirm-status')) {
-                                    $status = '<a href=' . route('adtech.core.package.confirm-status', ['package_id' => $packages->package_id, 'domain_id' => $domain_id]) . ' data-toggle="modal" data-target="#status_confirm"><span class="label label-sm label-success">Enable</span></a>
-                                    <a href=' . route('adtech.core.package.confirm-public', ['package_id' => $packages->package_id, 'domain_id' => $domain_id, 'type' => 'db']) . ' data-toggle="modal" data-target="#public_confirm"><span class="label label-sm label-info">Refesh DB</span></a>
-                                    <a href=' . route('adtech.core.package.confirm-public', ['package_id' => $packages->package_id, 'domain_id' => $domain_id, 'type' => 'public']) . ' data-toggle="modal" data-target="#public_confirm"><span class="label label-sm label-info">Public</span></a>';
-                                } else {
-                                    $status = '<a href="#" data-toggle="modal" data-target="#status_confirm"><span class="label label-sm label-success">Enable</span></a>';
-                                }
+                    $package = $packages->domains[count($packages->domains) - 1];
+                    if ($package->domain_id == $domain_id) {
+                        if ($package->pivot->status == 1) {
+                            if ($this->user->canAccess('adtech.core.package.confirm-status')) {
+                                $status = '<a href=' . route('adtech.core.package.confirm-status', ['package_id' => $packages->package_id, 'domain_id' => $domain_id]) . ' data-toggle="modal" data-target="#status_confirm"><span class="label label-sm label-success">Enable</span></a>
+                                <a href=' . route('adtech.core.package.confirm-public', ['package_id' => $packages->package_id, 'domain_id' => $domain_id, 'type' => 'db']) . ' data-toggle="modal" data-target="#public_confirm"><span class="label label-sm label-info">Refesh DB</span></a>
+                                <a href=' . route('adtech.core.package.confirm-public', ['package_id' => $packages->package_id, 'domain_id' => $domain_id, 'type' => 'public']) . ' data-toggle="modal" data-target="#public_confirm"><span class="label label-sm label-info">Public</span></a>';
                             } else {
-                                if ($this->user->canAccess('adtech.core.package.confirm-status')) {
-                                    $status = '<a href=' . route('adtech.core.package.confirm-status', ['package_id' => $packages->package_id, 'domain_id' => $domain_id]) . ' data-toggle="modal" data-target="#status_confirm"><span class="label label-sm label-warning">Disable</span></a>
-                                    <a href=' . route('adtech.core.package.confirm-delete', ['package_id' => $packages->package_id, 'domain_id' => $domain_id]) . ' data-toggle="modal" data-target="#delete_confirm"><span class="label label-sm label-danger">Remove</span></a>';
-                                } else {
-                                    $status = '<a href="#" data-toggle="modal" data-target="#status_confirm"><span class="label label-sm label-warning">Disable</span></a>';
-                                }
+                                $status = '<a href="#" data-toggle="modal" data-target="#status_confirm"><span class="label label-sm label-success">Enable</span></a>';
                             }
-                            break;
+                        } else {
+                            if ($this->user->canAccess('adtech.core.package.confirm-status')) {
+                                $status = '<a href=' . route('adtech.core.package.confirm-status', ['package_id' => $packages->package_id, 'domain_id' => $domain_id]) . ' data-toggle="modal" data-target="#status_confirm"><span class="label label-sm label-warning">Disable</span></a>
+                                <a href=' . route('adtech.core.package.confirm-delete', ['package_id' => $packages->package_id, 'domain_id' => $domain_id]) . ' data-toggle="modal" data-target="#delete_confirm"><span class="label label-sm label-danger">Remove</span></a>';
+                            } else {
+                                $status = '<a href="#" data-toggle="modal" data-target="#status_confirm"><span class="label label-sm label-warning">Disable</span></a>';
+                            }
                         }
                     }
                 }

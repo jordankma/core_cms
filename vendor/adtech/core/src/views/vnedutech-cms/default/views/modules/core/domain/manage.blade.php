@@ -47,7 +47,7 @@
                         <table class="table table-bordered" id="table">
                             <thead>
                             <tr class="filters">
-                                <th class="fit-content">{{ trans('adtech-core::common.id') }}</th>
+                                <th class="fit-content">{{ trans('adtech-core::common.sequence') }}</th>
                                 <th>{{ trans('adtech-core::common.domain.name') }}</th>
                                 <th style="width: 120px">{{ trans('adtech-core::common.created_at') }}</th>
                                 <th style="width: 120px">{{ trans('adtech-core::common.update_at') }}</th>
@@ -74,7 +74,7 @@
                 serverSide: true,
                 ajax: '{{ route('adtech.core.domain.data') }}',
                 columns: [
-                    { data: 'domain_id', name: 'domain_id' },
+                    { data: 'DT_Row_Index', name: 'domain_id' },
                     { data: 'name', name: 'name' },
                     { data: 'created_at', name: 'created_at'},
                     { data: 'updated_at', name: 'updated_at'},

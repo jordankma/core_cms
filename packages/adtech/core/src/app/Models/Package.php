@@ -26,7 +26,7 @@ class Package extends Model
 
     public function domains()
     {
-        return $this->belongsToMany('Adtech\Core\App\Models\Domain', 'adtech_core_domains_package', 'package_id', 'domain_id')->withPivot('status');
+        return $this->belongsToMany('Adtech\Core\App\Models\Domain', 'adtech_core_domains_package', 'package_id', 'domain_id')->withPivot(['status', 'created_at', 'updated_at', 'deleted_at']);
     }
 
     public function api()

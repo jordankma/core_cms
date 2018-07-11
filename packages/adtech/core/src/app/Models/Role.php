@@ -22,7 +22,7 @@ class Role extends Model
 
     protected $guarded = ['role_id'];
 
-    protected $fillable = ['name', 'sort'];
+    protected $fillable = ['name'];
 
     protected $dates = ['deleted_at'];
 

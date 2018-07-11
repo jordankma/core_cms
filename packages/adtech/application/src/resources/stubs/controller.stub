@@ -155,6 +155,7 @@ class controller_namespaceController extends Controller
 
                 return $actions;
             })
+            ->addIndexColumn()
             ->rawColumns(['actions'])
             ->make();
     }

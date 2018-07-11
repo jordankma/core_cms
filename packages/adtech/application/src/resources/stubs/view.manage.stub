@@ -45,7 +45,7 @@
                         <table class="table table-bordered" id="table">
                             <thead>
                             <tr class="filters">
-                                <th class="fit-content">{{ trans('vendor_name-package_name::language.table.id') }}</th>
+                                <th class="fit-content">{{ trans('adtech-core::common.sequence') }}</th>
                                 <th>{{ trans('vendor_name-package_name::language.table.controller_name.name') }}</th>
                                 <th style="width: 120px">{{ trans('vendor_name-package_name::language.table.created_at') }}</th>
                                 <th style="width: 120px">{{ trans('vendor_name-package_name::language.table.updated_at') }}</th>
@@ -72,7 +72,7 @@
                 serverSide: true,
                 ajax: '{{ route('vendor_name.package_name.controller_name.data') }}',
                 columns: [
-                    { data: 'rownum', name: 'rownum' },
+                    { data: 'DT_Row_Index', name: 'id' },
                     { data: 'name', name: 'name' },
                     { data: 'created_at', name: 'created_at'},
                     { data: 'updated_at', name: 'updated_at'},

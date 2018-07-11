@@ -103,10 +103,10 @@ class RoleController extends Controller
         $role_id = $request->input('role_id');
 
         $role = $this->role->find($role_id);
-        $role->name = $request->input('name');
-        $role->sort = $request->input('sort');
-        $role->status = ($request->has('status')) ? 1 : 0;
-        $role->permission_locked = ($request->has('permission_locked')) ? 1 : 0;
+        $role->name = $request->input('name', '');
+//        $role->sort = $request->input('sort');
+//        $role->status = ($request->has('status')) ? 1 : 0;
+//        $role->permission_locked = ($request->has('permission_locked')) ? 1 : 0;
 
         if ($role->save()) {
 
@@ -168,33 +168,19 @@ class RoleController extends Controller
     //Table Data to index page
     public function data(Request $request)
     {
-        $role_id = $this->_user->role_id;
-        $role = $this->role->find($role_id);
-        $roles = Role::where('sort', '>=', $role->sort)->get();
-
-        return Datatables::of($roles)
-            ->editColumn('status', function ($roles) {
-                if ($roles->status == 1) {
-                    $status = '<span class="label label-sm label-success">Enable</span>';
-                } else {
-                    $status = '<span class="label label-sm label-danger">Disable</span>';
-                }
-                return $status;
-            })
+        return Datatables::of($this->role->findAll())
             ->editColumn('name', function ($roles) {
-                if ($roles->permission_locked == 1) {
+                if ($roles->role_id == 1) {
                     return $roles->name;
+                } elseif ($this->_user->canAccess('adtech.core.permission.manage', ['object_type' => 'role', 'role_id' => $roles->role_id])) {
+                    return $actions = '<a href=' . route('adtech.core.permission.manage', ['object_type' => 'role', 'role_id' => $roles->role_id]) . '>' . $roles->name . '</a>';
                 } else {
-                    if ($this->_user->canAccess('adtech.core.permission.manage', ['object_type' => 'role', 'role_id' => $roles->role_id])) {
-                        return $actions = '<a href=' . route('adtech.core.permission.manage', ['object_type' => 'role', 'role_id' => $roles->role_id]) . '>' . $roles->name . '</a>';
-                    } else {
-                        return $roles->name;
-                    }
+                    return $roles->name;
                 }
             })
             ->addColumn('actions', function ($roles) {
                 $actions = '';
-                if ($roles->permission_locked != 1) {
+                if ($roles->role_id != 1) {
                     if ($this->_user->canAccess('adtech.core.role.log', ['object_type' => 'role', 'id' => $roles->role_id])) {
                         $actions .= '<a href=' . route('adtech.core.role.log', ['type' => 'role', 'id' => $roles->role_id]) . ' data-toggle="modal" data-target="#log"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#F99928" data-hc="#F99928" title="Log Role"></i></a>';
                     }
@@ -211,7 +197,7 @@ class RoleController extends Controller
                 return $actions;
             })
             ->addIndexColumn()
-            ->rawColumns(['actions', 'name', 'status'])
+            ->rawColumns(['actions', 'name'])
             ->make();
     }
 }

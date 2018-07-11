@@ -1,5 +1,29 @@
 <?php
 $adminPrefix = config('site.admin_prefix');
+
+/**
+ * Frontend Routes
+ */
+Route::group(array('prefix' => null), function () {
+    Route::match(['get', 'post'], 'login', 'Auth\LoginController@login')->name('dhcd.member.auth.login');
+
+    Route::group(['middleware' => ['dhcd.auth']], function () {
+        Route::get('', '\Adtech\Core\App\Http\Controllers\FrontendController@index')->name('frontend.homepage');
+
+        Route::get('logout', 'Auth\LoginController@logout')->name('dhcd.member.auth.logout');
+
+        Route::get('test1', function (){
+            echo 'test1';
+        })->name('test1');
+        Route::get('test2', function (){
+            echo 'test2';
+        })->name('test2');
+        Route::get('test3', function (){
+            echo 'test3';
+        })->name('test3');
+    });
+});
+
 Route::group(array('prefix' => $adminPrefix), function() {
     Route::group(['middleware' => ['adtech.auth', 'adtech.acl']], function () {
         //member
@@ -23,6 +47,7 @@ Route::group(array('prefix' => $adminPrefix), function() {
         Route::post('dhcd/member/member/excel/post/import', 'MemberController@postImport')->name('dhcd.member.member.excel.post.import');
     });
 });
+
 Route::group(array('prefix' => 'dev'), function() {
     Route::post('post/login', 'ApiMemberController@postLogin');
     Route::get('get/register', 'ApiMemberController@getRegister');

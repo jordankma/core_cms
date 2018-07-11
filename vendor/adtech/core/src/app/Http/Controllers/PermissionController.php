@@ -49,13 +49,13 @@ class PermissionController extends Controller
         $objectType = strtolower($objectType);
         switch ($objectType) {
             case 'role':
-                $object = $this->_roleRepository->getById($objectId);
+                $object = $this->_roleRepository->find($objectId);
                 if ($object->sort < $role->sort) abort(404);
                 break;
             case 'group':
                 break;
             case 'user':
-                $object = $this->_userRepository->getById($objectId);
+                $object = $this->_userRepository->find($objectId);
                 break;
         }
 
@@ -88,13 +88,13 @@ class PermissionController extends Controller
         $objectType = strtolower($objectType);
         switch ($objectType) {
             case 'role':
-                $object = $this->_roleRepository->getById($objectId);
+                $object = $this->_roleRepository->find($objectId);
                 if ($object->sort < $role->sort) abort(404);
                 break;
             case 'group':
                 break;
             case 'user':
-                $object = $this->_userRepository->getById($objectId);
+                $object = $this->_userRepository->find($objectId);
                 break;
         }
 
@@ -134,13 +134,13 @@ class PermissionController extends Controller
 
             switch ($objectType) {
                 case 'role':
-                    $object = $this->_roleRepository->getById($objectId);
+                    $object = $this->_roleRepository->find($objectId);
                     if ($object->sort < $role->sort) abort(404);
                     break;
                 case 'group':
                     break;
                 case 'user':
-                    $object = $this->_userRepository->getById($objectId);
+                    $object = $this->_userRepository->find($objectId);
                     break;
             }
 
@@ -261,12 +261,12 @@ class PermissionController extends Controller
         $objectType = strtolower($request->input('object_type'));
         switch ($objectType) {
             case 'role':
-                $object_data = $this->_roleRepository->getById($request->input('object_id'));
+                $object_data = $this->_roleRepository->find($request->input('object_id'));
                 break;
             case 'group':
                 break;
             case 'user':
-                $object_data = $this->_userRepository->getById($request->input('object_id'));
+                $object_data = $this->_userRepository->find($request->input('object_id'));
                 break;
         }
 
@@ -485,12 +485,12 @@ class PermissionController extends Controller
         $objectType = strtolower($request->input('object_type'));
         switch ($objectType) {
             case 'role':
-                $object_data = $this->_roleRepository->getById($request->input('object_id'));
+                $object_data = $this->_roleRepository->find($request->input('object_id'));
                 break;
             case 'group':
                 break;
             case 'user':
-                $object_data = $this->_userRepository->getById($request->input('object_id'));
+                $object_data = $this->_userRepository->find($request->input('object_id'));
                 break;
         }
 

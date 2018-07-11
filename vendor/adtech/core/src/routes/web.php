@@ -1,12 +1,4 @@
 <?php
-
-/**
- * Frontend Routes
- */
-Route::group(array('prefix' => null), function () {
-
-});
-
 /**
  * Backend Routes
  */
@@ -48,8 +40,8 @@ Route::group(array('prefix' => $adminPrefix), function () {
         Route::put('adtech/core/setting/update', 'SettingController@update')->name('adtech.core.setting.update');
         Route::match(['get', 'post'], '/adtech/core/file/upload-test', 'DashboardController@fileuploadtest')->name('adtech.core.file.upload-test');
         Route::get('/adtech/core/file/manage', 'DashboardController@filemanage')->name('adtech.core.file.manage');
-        Route::get('/laravel-filemanager', '\Unisharp\LaravelFilemanager\controllers\LfmController@show')->name('adtech.core.file.manager');
-        Route::post('/laravel-filemanager/upload', '\Unisharp\LaravelFilemanager\controllers\UploadController@upload')->name('adtech.core.file.upload');
+        Route::get('/laravel-filemanager', '\UniSharp\LaravelFilemanager\Controllers\LfmController@show')->name('adtech.core.file.manager');
+        Route::post('/laravel-filemanager/upload', '\UniSharp\LaravelFilemanager\Controllers\UploadController@upload')->name('adtech.core.file.upload');
 
         Route::get('adtech/core/role/log', 'RoleController@log')->name('adtech.core.role.log');
         Route::get('adtech/core/role/data', 'RoleController@data')->name('adtech.core.role.data');

@@ -17,7 +17,7 @@ class DhcdMemberTable extends Migration
             $table->increments('member_id');
             $table->string('token')->nullable();
             $table->string('name');
-            $table->string('u_name');
+            $table->string('u_name')->unique();
             $table->string('password');
             $table->string('position')->nullable();
             $table->string('gender')->nullable();

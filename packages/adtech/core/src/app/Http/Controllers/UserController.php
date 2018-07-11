@@ -217,13 +217,7 @@ class UserController extends Controller
     //Table Data to index page
     public function data(Request $request)
     {
-        $role_id = $this->_user->role_id;
-        $role = $this->role->find($role_id);
-        $users = User::with('roles')
-            ->whereHas('roles', function ($query) use ($role) {
-                $query->where('adtech_core_roles.sort', '>=', $role->sort);
-            });
-        return Datatables::of($users)
+        return Datatables::of($this->user->findAll())
             ->addColumn('role_name', function($users) {
                 return $users->roles[0]->name;
             })
@@ -236,7 +230,7 @@ class UserController extends Controller
                 return $status;
             })
             ->editColumn('email', function ($users) {
-                if ($users->permission_locked == 1) {
+                if ($users->roles[0]->role_id == 1) {
                     return $users->email;
                 } else {
                     if ($this->_user->canAccess('adtech.core.permission.manage', ['object_type' => 'user', 'user_id' => $users->user_id])) {
@@ -248,7 +242,7 @@ class UserController extends Controller
             })
             ->addColumn('actions', function ($users) {
                 $actions = '';
-                if ($users->permission_locked != 1) {
+                if ($users->roles[0]->role_id != 1) {
                     if ($this->_user->canAccess('adtech.core.user.log', ['object_type' => 'user', 'id' => $users->user_id])) {
                         $actions .= '<a href=' . route('adtech.core.user.log', ['type' => 'user', 'id' => $users->user_id]) . ' data-toggle="modal" data-target="#log"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#F99928" data-hc="#F99928" title="Log User"></i></a>';
                     }
@@ -265,6 +259,7 @@ class UserController extends Controller
 
                 return $actions;
             })
+            ->addIndexColumn()
             ->rawColumns(['actions', 'email', 'status'])
             ->make();
     }
