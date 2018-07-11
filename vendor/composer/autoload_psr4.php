@@ -69,6 +69,7 @@ return array(
     'Dhcd\\News\\' => array($baseDir . '/packages/dhcd/news/src', $vendorDir . '/dhcd/news/src'),
     'Dhcd\\Member\\' => array($baseDir . '/packages/dhcd/member/src', $vendorDir . '/dhcd/member/src'),
     'Dhcd\\Banner\\' => array($baseDir . '/packages/dhcd/banner/src', $vendorDir . '/dhcd/banner/src'),
+    'Dhcd\\Art\\' => array($baseDir . '/packages/dhcd/art/src'),
     'Dhcd\\Administration\\' => array($baseDir . '/packages/dhcd/administration/src', $vendorDir . '/dhcd/administration/src'),
     'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),
     'Cron\\' => array($vendorDir . '/dragonmantank/cron-expression/src/Cron'),
