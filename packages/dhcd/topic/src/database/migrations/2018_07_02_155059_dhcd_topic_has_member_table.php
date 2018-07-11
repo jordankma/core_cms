@@ -13,11 +13,12 @@ class DhcdTopicHasMemberTable extends Migration
      */
     public function up()
     {
-        Schema::create('dhcd_topic_has_member', function (Blueprint $table) {
+        Schema::connection('mysql_dhcd')->create('dhcd_topic_has_member', function (Blueprint $table) {
             $table->increments('topic_has_member_id');
             $table->integer("topic_id",false,true);
             $table->integer("member_id",false,true);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -28,6 +29,6 @@ class DhcdTopicHasMemberTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dhcd_topic_has_member');
+        Schema::connection('mysql_dhcd')->dropIfExists('dhcd_topic_has_member');
     }
 }

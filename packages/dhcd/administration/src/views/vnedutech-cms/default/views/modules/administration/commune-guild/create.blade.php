@@ -38,48 +38,37 @@
                 <div class="row">
                     <!-- /.col-sm-8 -->
                     <div class="col-sm-8">
-                        <label> Name</label>
+                        <label> {{ trans('dhcd-administration::language.label.name') }}</label>
                         <div class="form-group">
-                            <input type="text" name="name" class="form-control" placeholder="{{ trans('dhcd-administration::language.placeholder.commune_guild.name') }}">
+                            <input type="text" name="name" class="form-control" placeholder="{{ trans('dhcd-administration::language.placeholder.name') }}">
                         </div>
-                        <label>In Country Districty</label>
-                        <select class="form-control select2" id="country_district" name="country_district">
-                        @if(!empty($country_district))
-                        @foreach($country_district as $c_d)
-                            <option value="{{$c_d->code}}">{{$c_d->name_with_type}}</option>
-                        @endforeach
-                        @endif
+                        <label> {{ trans('dhcd-administration::language.label.name') }}</label>
+                        <div class="form-group">
+                            <input type="radio" name="type" id="phuong" value="phuong" checked="checked"><label for="phuong">Phường</label>
+                            <input type="radio" name="type" id="xa" value="xa"> <label for="xa"> Xã</label>
+                            <input type="radio" name="type" id="thi-tran" value="thi-tran"> <label for="thi-tran">Thị trấn</label> 
+                        </div>
+                        <label>{{ trans('dhcd-administration::language.label.provine_city') }}</label>
+                        <select class="form-control" required="" id="provine_city" name="provine_city">
+                            @if(!empty($provine_city))
+                            @foreach($provine_city as $p_c)
+                                <option value="{{$p_c->provine_city_id}}">{{$p_c->name_with_type}}</option>
+                            @endforeach
+                            @endif
                         </select>
-                        <label> Type</label>
-                        <div class="form-group">
-                            <input type="radio" name="type"  value="phuong" checked="checked"> Phường
-                            <input type="radio" name="type"  value="xa">  Xã
-                            <input type="radio" name="type"  value="thi-tran">  Thị trấn
-                        </div>
-                        <label> Name with type</label>
-                        <div class="form-group">
-                            <input type="text" name="name_with_type" class="form-control" value="" placeholder="{{ trans('dhcd-administration::language.placeholder.commune_guild.name_with_type') }}">
-                            <p>vd: Tỉnh Hà Tĩnh, Thành phố Hà Nội </p>
-                        </div>
-                        <label> Path</label>
-                        <div class="form-group">
-                            <input type="text" name="path" class="form-control" value="" placeholder="{{ trans('dhcd-administration::language.placeholder.commune_guild.path') }}">
-                            <p>vd: Thanh Xuân,Hà Nội </p>
-                        </div>
-                        <label> Path with type</label>
-                        <div class="form-group">
-                            <input type="text" name="path_with_type" class="form-control" value="" placeholder="{{ trans('dhcd-administration::language.placeholder.commune_guild.path_with_type') }}">
-                            <p>vd: Quận Thanh Xuân, Thành phố Hà Nội </p>
-                        </div>
-                        <label> Code</label>
-                        <div class="form-group">
-                            <input type="number" name="code" class="form-control" value="" placeholder="{{ trans('dhcd-administration::language.placeholder.commune_guild.code') }}">
-                        </div>
+                        <label>{{ trans('dhcd-administration::language.label.country_district') }}</label>
+                        <select class="form-control" required="" id="country_district" name="country_district">
+                            @if(!empty($country_district))
+                            @foreach($country_district as $c_d)
+                                <option value="{{$c_d->country_district_id}}">{{$c_d->name_with_type}}</option>
+                            @endforeach
+                            @endif
+                        </select>
                         <div class="form-group">
                             <label for="blog_category" class="">Actions</label>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-success">{{ trans('dhcd-administration::language.buttons.create') }}</button>
-                                <a href="{!! route('dhcd.administration.provine-city.create') !!}"
+                                <a href="{!! route('dhcd.administration.provine-city.manage') !!}"
                                    class="btn btn-danger">{{ trans('dhcd-administration::language.buttons.discard') }}</a>
                             </div>
                         </div>
@@ -108,53 +97,33 @@
     <script>
         $(function () {
             $("[name='permission_locked']").bootstrapSwitch();
-            $('#country_district').select2({
-                theme:"bootstrap",
-                placeholder:"select a provine city"
-            });
             $('#form-add-country-district').bootstrapValidator({
-            feedbackIcons: {
-                // validating: 'glyphicon glyphicon-refresh'
-            },
-            fields: {
-                name: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Trường này không được bỏ trống'
-                        }
-                    }
+                feedbackIcons: {
+                    // validating: 'glyphicon glyphicon-refresh'
                 },
-                name_with_type: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Trường này không được bỏ trống'
+                fields: {
+                    name: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Trường này không được bỏ trống'
+                            },
+                            stringLength: {
+                                max: 200,
+                                message: 'Tên không được quá dài'
+                            }
                         }
-                    }
-                },
-                path: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Trường này không được bỏ trống'
-                        }
-                    }
-                },
-                path_with_type: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Trường này không được bỏ trống'
-                        }
-                    }
-                },
-                code: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Trường này không được bỏ trống'
-                        }
-                    }
-                },
+                    },
 
-            }
-        }); 
+                }
+            }); 
+            //get phuong xa
+            $('#provine_city').change(function(event) {
+                var provine_city_id = $(this).val();
+                $("#country_district").html('');
+                $.get("{{ route('dhcd.administration.country-district.member') }}" + "?provine_city_id=" + provine_city_id, function(data){
+                    $("#country_district").html(data);
+                }); 
+            });
         })
     </script>
 @stop

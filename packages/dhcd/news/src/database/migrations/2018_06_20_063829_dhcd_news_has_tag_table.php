@@ -13,7 +13,7 @@ class DhcdNewsHasTagTable extends Migration
      */
     public function up()
     {
-        Schema::create('dhcd_news_has_tag', function (Blueprint $table) {
+        Schema::connection('mysql_dhcd')->create('dhcd_news_has_tag', function (Blueprint $table) {
             $table->increments('news_has_tag_id')->comment('id');
             $table->integer('news_id',false,true);
             $table->integer('news_tag_id',false,true);
@@ -33,6 +33,6 @@ class DhcdNewsHasTagTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dhcd_news_has_tag');
+        Schema::connection('mysql_dhcd')->dropIfExists('dhcd_news_has_tag');
     }
 }

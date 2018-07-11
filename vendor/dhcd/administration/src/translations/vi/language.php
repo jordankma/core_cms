@@ -58,6 +58,13 @@ return [
         "type" => "Nhập kiểu",
         "code" =>" Nhập code"
     ],
+    "label" => [
+        "name" => "Tên",
+        "type" => "Kiểu",
+        "code" =>" Code",
+        "provine_city" => "Thuộc thành phố",
+        "country_district" => "Thuộc quận huyện"
+    ],
     "messages" => [
         "success" => [
             "create" => "Thêm thành công",

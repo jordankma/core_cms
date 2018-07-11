@@ -20,9 +20,14 @@ class ApiNewsController extends BaseController
     );
 	public function getNews(ApiNewsRequest $request){
 		$data_message = ['success' => false, 'message' => 'Lỗi khi lấy tin tức home'];
-		$limit = $request->limit;
+		if(isset($request->limit) && $request->limit !=''){
+			$limit = $request->limit;
+		}
+		else{
+			$limit = 8;	
+		}
 		$data_list_news = array();
-		$list_news = News::where('visible',1)->paginate($limit)->toArray();
+		$list_news = News::where('status',1)->paginate($limit)->toArray();
 		if(!empty($list_news)){
 			$total_page = $list_news['total'];
 			$current_page = $list_news['current_page'];
@@ -57,9 +62,14 @@ class ApiNewsController extends BaseController
 	}   
 	public function getNewsHome(ApiNewsRequest $request){
 		$data_message = ['success' => false, 'message' => 'Lỗi khi lấy tin tức'];
-		$limit = $request->limit;
+		if(isset($request->limit) && $request->limit !=''){
+			$limit = $request->limit;
+		}
+		else{
+			$limit = 8;	
+		}
 		$data_list_news = array();
-		$list_news = News::where('visible',1)->orderBy('is_hot', 'asc')->paginate($limit)->toArray();
+		$list_news = News::where('status',1)->orderBy('is_hot', 'asc')->paginate($limit)->toArray();
 		if(!empty($list_news)){
 			$total_page = $list_news['total'];
 			$current_page = $list_news['current_page'];

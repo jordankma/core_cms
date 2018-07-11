@@ -47,15 +47,10 @@
                         <table class="table table-bordered" id="table">
                             <thead>
                             <tr class="filters">
-                                <th>{{ trans('dhcd-administration::language.table.id') }}</th>
-                                <th>{{ trans('dhcd-administration::language.table.commune_guild.name') }}</th>
-                                <th>{{ trans('dhcd-administration::language.table.commune_guild.country_district') }}</th>
-                                <th>{{ trans('dhcd-administration::language.table.commune_guild.type') }}</th>
+                                <th class="fit-content">#</th>
                                 <th>{{ trans('dhcd-administration::language.table.commune_guild.name_with_type') }}</th>
-                                <th>{{ trans('dhcd-administration::language.table.commune_guild.path') }}</th>
-                                <th>{{ trans('dhcd-administration::language.table.commune_guild.path_with_type') }}</th>
-                                <th>{{ trans('dhcd-administration::language.table.commune_guild.code') }}</th>
-                                <th>{{ trans('dhcd-administration::language.table.action') }}</th>
+                                <th>{{ trans('dhcd-administration::language.table.commune_guild.country_district') }}</th>
+                                <th class="fit-content">{{ trans('dhcd-administration::language.table.action') }}</th>
                             </tr>
                             </thead>
                         </table>
@@ -78,14 +73,9 @@
                 serverSide: true,
                 ajax: '{{ route('dhcd.administration.commune-guild.data') }}',
                 columns: [
-                    { data: 'commune_guild_id', name: 'commune_guild_id' },
-                    { data: 'name', name: 'name' },
-                    { data: 'parent_code', name: 'parent_code' },
-                    { data: 'type', name: 'type' },
+                    { data: 'rownum', name: 'rownum' },
                     { data: 'name_with_type', name: 'name_with_type' },
-                    { data: 'path', name: 'path' },
-                    { data: 'path_with_type', name: 'path_with_type' },
-                    { data: 'code', name: 'code' },
+                    { data: 'country_district', name: 'country_district' },
                     { data: 'actions', name: 'actions', orderable: false, searchable: false}
                 ]
             });

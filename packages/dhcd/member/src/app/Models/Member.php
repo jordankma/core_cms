@@ -22,6 +22,7 @@ class Member extends Model implements AuthenticatableContract, CanResetPasswordC
      *
      * @var string
      */
+    protected $guard = "member";
     protected $table = 'dhcd_member';
 
     protected $primaryKey = 'member_id';

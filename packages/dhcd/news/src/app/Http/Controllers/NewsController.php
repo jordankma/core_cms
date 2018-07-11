@@ -77,22 +77,23 @@ class NewsController extends Controller
 		return view('DHCD-NEWS::modules.news.news.create',$data);
 	}
 	public function add(NewsRequest $request){
-		$user_id = $this->user->email;
+        
+		$create_by = $this->user->email;
 		$title = $request->title;
 		$news_cat = $request->news_cat;
 		$news_tag = $request->news_tag;
 		$title = $request->title;
 		$title_alias = $request->title_alias;
 		$desc = $request->desc;
-		$content = $request->content;
-		$is_hot = !empty($request->is_hot) ? $request->is_hot : 0;
+		$content = $request->input('content');
+		$is_hot = $request->is_hot;
 		$priority = $request->priority;
 		$desc_seo = !empty($request->desc_seo) ? $request->desc_seo : '';
 		$filepath = $request->filepath !='' ? $request->filepath : asset('test.png');
 		$key_word_seo = explode(",",$request->key_word_seo[0]);
 
 		$news = new News();
-		$news->user_id = $user_id;
+		$news->create_by = $create_by;
 		$news->title = $title;
 		$news->news_cat = json_encode($news_cat);
 		$news->news_tag = json_encode($news_tag);
@@ -150,24 +151,29 @@ class NewsController extends Controller
         }
 	}
 	public function show($news_id){
-		// $list_news_cat = $this->news_cat->all();
+
 		self::getCate();
         $list_news_cat = $this->_newsCatList;
 		$list_news_tag = $this->news_tag->all();
 		$news = $this->news->find($news_id);
 		$list_id_cat = [];
+        $list_id_tag = [];
 		$list_tag = [];
 		if(!empty($news->news_cat)){
 			$news_cat = json_decode($news->news_cat,true);
-			foreach ($news_cat as $key => $value) {
-				$list_id_cat[] = $value['news_cat_id'];
-			} 
+            if(!empty($news_cat)){
+                foreach ($news_cat as $key => $value) {
+                    $list_id_cat[] = $value['news_cat_id'];
+                } 
+            }
 		}
 		if(!empty($news->news_tag)){
 			$news_tag = json_decode($news->news_tag,true);
-			foreach ($news_tag as $key => $value) {
-				$list_id_tag[] = $value['news_tag_id'];
-			}	
+            if(!empty($news_tag)){
+    			foreach ($news_tag as $key => $value) {
+    				$list_id_tag[] = $value['news_tag_id'];
+    			}
+            }	
 		}
 		$list_key_word_seo_string = implode(',', json_decode($news->key_word_seo,true));
 		$data = [
@@ -181,19 +187,17 @@ class NewsController extends Controller
 		return view('DHCD-NEWS::modules.news.news.edit',$data);
 	}	
 	public function update($news_id,NewsRequest $request){
-		// $list_tag_id_old = NewsHasTag::where('news_id',$news_id)->select('news_tag_id') ->get()->toArray();
-		// DB::table('dhcd_news_tag')->whereIn('news_tag_id',$list_tag_id_old)->delete();
+
 		DB::table('dhcd_news_has_tag')->where('news_id',$news_id)->delete();
 		DB::table('dhcd_news_has_cat')->where('news_id',$news_id)->delete();
 
-		$user_id = $this->user->user_id;
 		$title = $request->title;
 		$news_cat = $request->news_cat;
 		$news_tag = $request->news_tag;
 		$title = $request->title;
 		$title_alias = $request->title_alias;
 		$desc = $request->desc;
-		$content = $request->content;
+		$content = $request->input('content');
 		$image = $request->image;
 		$filepath = $request->filepath !='' ? $request->filepath : asset('test.png');
 		$is_hot = $request->is_hot;
@@ -202,7 +206,6 @@ class NewsController extends Controller
 		$key_word_seo = explode(",",$request->key_word_seo[0]);
 
 		$news = $this->news->find($news_id);
-		$news->user_id = $user_id;
 		$news->title = $title;
 		$news->news_cat = json_encode($news_cat);
 		$news->news_tag = json_encode($news_tag);
@@ -258,35 +261,7 @@ class NewsController extends Controller
             return redirect()->route('dhcd.news.news.manager')->with('error', trans('DHCD-NEWS::language.messages.error.create'));
         }		
 	}
-	public function postAddImages(){
-		$y = date('Y');
-	    $m = date('m');
-	    $CKEditor = Input::get('CKEditor');
-	    $funcNum = Input::get('CKEditorFuncNum');
-	    $message = $url = '';
-	    if (Input::hasFile('upload')) {
-	        $file = Input::file('upload');
-	        if ($file->isValid()) {
-	            $path = "uploads/media/news/images/$y/$m/";
-	            $path_media = "uploads/media/news/images/$y/$m/";
-	            //$file_extension = $file->extension();
-	            $originalName = $file->getClientOriginalName();
-	            $tmp = explode('.', $originalName);
-	            $file_extension = end($tmp);
-	            $filename = self::stripUnicode('Image') . '-' . time() . "." . $file_extension;
-	          
-	            $file->move($path, $filename);
-	            $url = URL::to('').'/'.$path . $filename;
-	        } 
-	        else{
-	        	$message = 'An error occured while uploading the file.';
-	        }
-	    }
-	    else{
-	    	$message = 'No file uploaded.';
-	    }
-	    return '<script>window.parent.CKEDITOR.tools.callFunction('.$funcNum.', "'.$url.'", "'.$message.'")</script>';
-	}
+
 	public function log(Request $request)
     {
         $model = 'news';
@@ -314,8 +289,7 @@ class NewsController extends Controller
         $news_id = $request->news_id;
         $news = $this->news->find($news_id);
         if (null != $news) {
-            $news->visible = 0;
-            $news->save();
+            $this->news->delete($news_id);
             activity('news')
                 ->performedOn($news)
                 ->withProperties($request->all())
@@ -354,17 +328,23 @@ class NewsController extends Controller
     		'is_hot'=> $request->is_hot
     	];
     	if($request->name!=null || $request->news_time!=null || $request->news_cat!=null || $request->is_hot!=null){
-    		$list_news = News::getListNews($params);
+    		$list_news = $this->news->getListNews($params);
     	}
     	else{
-    		$list_news = News::where('visible',1)->get();	
+    		$list_news = $this->news->findAll();	
     	}
         return Datatables::of($list_news)
             ->addColumn('actions', function ($list_news) {
-                $actions = '<a href=' . route('dhcd.news.news.log', ['type' => 'news', 'news_id' => $list_news->news_id]) . ' data-toggle="modal" data-target="#log"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#F99928" data-hc="#F99928" title="log news cat"></i></a>
-                        <a href=' . route('dhcd.news.news.show', ['news_id' => $list_news->news_id]) . '><i class="livicon" data-name="edit" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="update news cat"></i></a>
-                        <a href=' . route('dhcd.news.news.confirm-delete', ['news_id' => $list_news->news_id]) . ' data-toggle="modal" data-target="#delete_confirm"><i class="livicon" data-name="trash" data-size="18" data-loop="true" data-c="#f56954" data-hc="#f56954" title="delete news cat"></i></a>';
-
+                $actions = '';
+                if ($this->user->canAccess('dhcd.news.news.log')) {
+                    $actions .= '<a href=' . route('dhcd.news.news.log', ['type' => 'news', 'news_id' => $list_news->news_id]) . ' data-toggle="modal" data-target="#log"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#F99928" data-hc="#F99928" title="log news cat"></i></a>';
+                }
+                if ($this->user->canAccess('dhcd.news.news.show')) {
+                    $actions .= '<a href=' . route('dhcd.news.news.show', ['news_id' => $list_news->news_id]) . '><i class="livicon" data-name="edit" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="update news cat"></i></a>';
+                }
+                if ($this->user->canAccess('dhcd.news.news.confirm-delete')) {
+                    $actions .=  '<a href=' . route('dhcd.news.news.confirm-delete', ['news_id' => $list_news->news_id]) . ' data-toggle="modal" data-target="#delete_confirm"><i class="livicon" data-name="trash" data-size="18" data-loop="true" data-c="#f56954" data-hc="#f56954" title="delete news cat"></i></a>';
+                }
                 return $actions;
             })
             ->addColumn('title', function ($list_news) {

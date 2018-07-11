@@ -182,8 +182,9 @@ class PositionController extends Controller
         return Datatables::of($positions)
             ->addIndexColumn()
             ->addColumn('actions', function ($positions) {
+                $actions = '';
                 if ($this->user->canAccess('dhcd.banner.position.log', ['object_type' => 'positions', 'banner_position_id' => $positions->banner_position_id])) {
-                    $actions = '<a href=' . route('dhcd.banner.position.log', ['type' => 'position', 'id' => $positions->banner_position_id]) . ' data-toggle="modal" data-target="#log"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#F99928" data-hc="#F99928" title="log position"></i></a>';
+                    $actions .= '<a href=' . route('dhcd.banner.position.log', ['type' => 'position', 'id' => $positions->banner_position_id]) . ' data-toggle="modal" data-target="#log"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#F99928" data-hc="#F99928" title="log position"></i></a>';
                 }
                 if ($this->user->canAccess('dhcd.banner.position.show')) {
                     $actions .= '<a href=' . route('dhcd.banner.position.show', ['banner_position_id' => $positions->banner_position_id]) . '><i class="livicon" data-name="edit" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="update position"></i></a>';

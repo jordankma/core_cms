@@ -13,7 +13,7 @@ class DhcdNewsTagHasCatTable extends Migration
      */
     public function up()
     {
-        Schema::create('dhcd_news_tag_has_cat', function (Blueprint $table) {
+        Schema::connection('mysql_dhcd')->create('dhcd_news_tag_has_cat', function (Blueprint $table) {
             $table->increments('news_tag_has_cat_id');
             $table->integer('news_cat_id', false, true)->index();
             $table->integer('news_tag_id', false, true)->index();
@@ -33,6 +33,6 @@ class DhcdNewsTagHasCatTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dhcd_news_tag_has_cat');
+        Schema::connection('mysql_dhcd')->dropIfExists('dhcd_news_tag_has_cat');
     }
 }

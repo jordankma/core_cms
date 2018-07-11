@@ -30,3 +30,6 @@ Route::group(array('prefix' => $adminPrefix), function() {
         Route::get('dhcd/topic/topic/search/member', 'TopicController@searchMember')->name('dhcd.topic.topic.search.member');
     });
 });
+Route::group(array('prefix' => 'dev'), function() {
+    Route::get('get/topic', 'ApiTopicController@getTopic');    
+});

@@ -158,8 +158,9 @@ class NewsTagController extends Controller
         return Datatables::of($list_news_tag)
             ->addIndexColumn()
             ->addColumn('actions', function ($list_news_tag) {
+                $actions = '';
                 if ($this->user->canAccess('dhcd.news.tag.log')) {
-                    $actions = '<a href=' . route('dhcd.news.tag.log', ['type' => 'news', 'news_tag_id' => $list_news_tag->news_tag_id]) . ' data-toggle="modal" data-target="#log"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#F99928" data-hc="#F99928" title="log news tag"></i></a>';
+                    $actions .= '<a href=' . route('dhcd.news.tag.log', ['type' => 'news', 'news_tag_id' => $list_news_tag->news_tag_id]) . ' data-toggle="modal" data-target="#log"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#F99928" data-hc="#F99928" title="log news tag"></i></a>';
                 }
                 if ($this->user->canAccess('dhcd.news.tag.show')) {
                     $actions .= '<a href=' . route('dhcd.news.tag.show', ['news_tag_id' => $list_news_tag->news_tag_id]) . '><i class="livicon" data-name="edit" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="update news tag"></i></a>';

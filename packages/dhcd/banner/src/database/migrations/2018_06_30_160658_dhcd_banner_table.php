@@ -13,7 +13,7 @@ class DhcdBannerTable extends Migration
      */
     public function up()
     {
-        Schema::create('dhcd_banner', function (Blueprint $table) {
+        Schema::connection('mysql_dhcd')->create('dhcd_banner', function (Blueprint $table) {
             $table->increments('banner_id');
             $table->string("create_by")->nullable();
             $table->string("name");
@@ -39,6 +39,6 @@ class DhcdBannerTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dhcd_banner');
+        Schema::connection('mysql_dhcd')->dropIfExists('dhcd_banner');
     }
 }

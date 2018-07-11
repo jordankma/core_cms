@@ -36,16 +36,16 @@
                 <div class="row">
                     <!-- /.col-sm-8 -->
                     <div class="col-sm-8">
-                        <label> Name</label>
+                        <label> {{ trans('dhcd-administration::language.label.name') }}</label>
                         <div class="form-group">
                             <input type="text" name="name" class="form-control" placeholder="{{ trans('dhcd-administration::language.placeholder.name') }}">
                         </div>
-                        <label> Type</label>
+                        <label> {{ trans('dhcd-administration::language.label.type') }}</label>
                         <div class="form-group">
-                            <input type="radio" name="type"  value="tinh" checked="checked"> Tỉnh
-                            <input type="radio" name="type"  value="thanh-pho">  Thành phố
+                            <input type="radio" name="type"  value="tinh" checked="checked" id="tinh"> <label for="tinh"> Tỉnh </label>
+                            <input type="radio" name="type"  value="thanh-pho" id="thanh-pho"> <label for="thanh-pho"> Thành phố </label>
                         </div>
-                        <label> Code</label>
+                        <label> {{ trans('dhcd-administration::language.label.code') }}</label>
                         <div class="form-group">
                             <input type="number" name="code" min=1 class="form-control" value="" placeholder="{{ trans('dhcd-administration::language.placeholder.code') }}">
                         </div>

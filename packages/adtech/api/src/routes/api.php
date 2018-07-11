@@ -12,10 +12,8 @@
 */
 
 Route::group(array('prefix' => 'auth'), function () {
-    Route::get('login', 'Auth\LoginController@login');
-
+    Route::post('login', 'Auth\LoginController@login');
     Route::group(['middleware' => ['jwt.auth']], function () {
-
         Route::get('get-info', 'Auth\LoginController@getUserInfo');
         Route::get('verify', 'Auth\LoginController@verify');
     });

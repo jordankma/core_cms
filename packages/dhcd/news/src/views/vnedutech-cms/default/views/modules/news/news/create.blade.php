@@ -55,7 +55,7 @@
                                 @endforeach
                             @endif
                             <div class="form-group">
-                                <label>{{trans('dhcd-news::language.form.text.title')}} {{'(*)'}}</label>
+                                <label>{{trans('dhcd-news::language.form.text.title')}} <span style="color: red">(*)</span></label>
                                 <input type="text" required id="title" name="title" class="form-control" placeholder="{{trans('dhcd-news::language.form.title_placeholder')}}">
                                 <p id="alias" style="color: red"></p>
                             </div>
@@ -64,7 +64,7 @@
                                 <textarea rows="5" cols="101" name="desc" class="form-control" placeholder="{{trans('dhcd-news::language.form.desc_placeholder')}}"></textarea>
                             </div>
                             <div class="form-group" >
-                                <label>{{trans('dhcd-news::language.form.text.content')}} {{'(*)'}}</label><br>
+                                <label>{{trans('dhcd-news::language.form.text.content')}} <span style="color: red">(*)</span></label><br>
                                 <div class='box-body pad form-group'>
                                     <textarea name="content" id="ckeditor" placeholder="{{trans('dhcd-news::language.form.content_placeholder')}}"></textarea>
                                 </div>
@@ -74,7 +74,7 @@
                         <!-- /.col-sm-4 -->
                         <div class="col-md-4 col-sm-4">
                             <div class="form-group">
-                                <label>{{trans('dhcd-news::language.form.text.cat')}}(*)</label><br>
+                                <label>{{trans('dhcd-news::language.form.text.cat')}}</label><br>
                                 <select id="cate" class="form-control" name="news_cat[]" required="" multiple="multiple">
                                     @if(!empty($list_news_cat))
                                     @foreach($list_news_cat as $news_cat)

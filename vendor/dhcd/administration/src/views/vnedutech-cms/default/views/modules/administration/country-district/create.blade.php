@@ -38,34 +38,29 @@
                 <div class="row">
                     <!-- /.col-sm-8 -->
                     <div class="col-sm-8">
-                        <label> Name</label>
+                        <label> {{ trans('dhcd-administration::language.label.name') }}</label>
                         <div class="form-group">
-                            <input type="text" name="name" class="form-control" placeholder="{{ trans('dhcd-administration::language.placeholder.country_district.name') }}">
+                            <input type="text" name="name" class="form-control" placeholder="{{ trans('dhcd-administration::language.placeholder.name') }}">
                         </div>
-                        <label>In Provine City</label>
-                        <select class="form-control select2" id="provine_city" name="provine_city">
+                        <label>{{ trans('dhcd-administration::language.label.provine_city') }}</label>
+                        <select class="form-control select2" required="" id="provine_city" name="provine_city">
                         @if(!empty($provine_city))
                         @foreach($provine_city as $p_c)
-                            <option value="{{$p_c->code}}">{{$p_c->name_with_type}}</option>
+                            <option value="{{$p_c->provine_city_id}}">{{$p_c->name_with_type}}</option>
                         @endforeach
                         @endif
                         </select>
-                        <label> Type</label>
+                        <label> {{ trans('dhcd-administration::language.label.type') }}</label>
                         <div class="form-group">
-                            <input type="radio" name="type"  value="thanh-pho" checked="checked"> Thành phố
-                            <input type="radio" name="type"  value="huyen">  Huyện
-                            <input type="radio" name="type"  value="quan">  Quận
-                            <input type="radio" name="type"  value="thi-xa">  Thị xã
+                            <input type="radio" name="type"  value="thanh-pho" id="thanh-pho" checked="checked"> <label for="thanh-pho">Thành phố</label> 
+                            <input type="radio" name="type" id="huyen" value="huyen">  <label for="huyen">Huyện</label>
+                            <input type="radio" name="type" id="quan" value="quan">  <label for="quan">Quận</label>
+                            <input type="radio" name="type" id="thi-xa" value="thi-xa">  <label for="thi-xa">Thị Xã</label>
                         </div>
-                        <label> Name with type</label>
+                        {{-- <label>{{ trans('dhcd-administration::language.label.code') }}</label>
                         <div class="form-group">
-                            <input type="text" name="name_with_type" class="form-control" value="" placeholder="{{ trans('dhcd-administration::language.placeholder.country_district.name_with_type') }}">
-                            <p>vd: Tỉnh Hà Tĩnh, Thành phố Hà Nội </p>
-                        </div> 
-                        <label> Code</label>
-                        <div class="form-group">
-                            <input type="number" name="code" class="form-control" value="" placeholder="{{ trans('dhcd-administration::language.placeholder.country_district.code') }}">
-                        </div>
+                            <input type="number" name="code" class="form-control" value="" placeholder="{{ trans('dhcd-administration::language.placeholder.code') }}">
+                        </div> --}}
                         <div class="form-group">
                             <label for="blog_category" class="">Actions</label>
                             <div class="form-group">
@@ -112,38 +107,13 @@
                     validators: {
                         notEmpty: {
                             message: 'Trường này không được bỏ trống'
+                        },
+                        stringLength: {
+                            max: 200,
+                            message: 'Tên không được quá dài'
                         }
                     }
-                },
-                name_with_type: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Trường này không được bỏ trống'
-                        }
-                    }
-                },
-                path: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Trường này không được bỏ trống'
-                        }
-                    }
-                },
-                path_with_type: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Trường này không được bỏ trống'
-                        }
-                    }
-                },
-                code: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Trường này không được bỏ trống'
-                        }
-                    }
-                },
-
+                }
             }
         }); 
         })

@@ -1,6 +1,6 @@
 {
-  "package": "news",
-  "module": "dhcd",
+  "package": "dhcd",
+  "module": "news",
   "description": "Permission route by group",
   "details": [
     {
@@ -42,29 +42,29 @@
         {
           "name": "View list",
           "routes": [
-            "dhcd.news.news.cat.manager",
-            "dhcd.news.news.cat.data"
+            "dhcd.news.cat.manager",
+            "dhcd.news.cat.data"
           ]
         },
         {
           "name": "Create",
           "routes": [
-            "dhcd.news.news.cat.create",
-            "dhcd.news.news.cat.add"
+            "dhcd.news.cat.create",
+            "dhcd.news.cat.add"
           ]
         },
         {
           "name": "Update",
           "routes": [
-            "dhcd.news.news.cat.show",
-            "dhcd.news.news.cat.update"
+            "dhcd.news.cat.show",
+            "dhcd.news.cat.update"
           ]
         },
         {
           "name": "Delete",
           "routes": [
-            "dhcd.news.news.cat.delete",
-            "dhcd.news.news.cat.confirm-delete"
+            "dhcd.news.cat.delete",
+            "dhcd.news.cat.confirm-delete"
           ]
         }
       ]

@@ -1,6 +1,6 @@
 {
-  "package": "member",
-  "module": "dhcd",
+  "package": "dhcd",
+  "module": "member",
   "description": "Permission route by group",
   "details": [
     {
@@ -38,8 +38,6 @@
             "dhcd.member.member.confirm-delete"
           ]
         }
-      ]
-    }
       ]
     }
   ]

@@ -47,15 +47,10 @@
                         <table class="table table-bordered" id="table">
                             <thead>
                             <tr class="filters">
-                                <th>{{ trans('dhcd-administration::language.table.id') }}</th>
+                                <th class="fit-content" style="width: 30px">#</th>
                                 <th>{{ trans('dhcd-administration::language.table.country_district.name') }}</th>
                                 <th>{{ trans('dhcd-administration::language.table.country_district.provine_city') }}</th>
-                                <th>{{ trans('dhcd-administration::language.table.country_district.type') }}</th>
-                                <th>{{ trans('dhcd-administration::language.table.country_district.name_with_type') }}</th>
-                                <th>{{ trans('dhcd-administration::language.table.country_district.path') }}</th>
-                                <th>{{ trans('dhcd-administration::language.table.country_district.path_with_type') }}</th>
-                                <th>{{ trans('dhcd-administration::language.table.country_district.code') }}</th>
-                                <th>{{ trans('dhcd-administration::language.table.action') }}</th>
+                                <th class="fit-content" style="width: 100px">{{ trans('dhcd-administration::language.table.action') }}</th>
                             </tr>
                             </thead>
                         </table>
@@ -78,14 +73,9 @@
                 serverSide: true,
                 ajax: '{{ route('dhcd.administration.country-district.data') }}',
                 columns: [
-                    { data: 'country_district_id', name: 'country_district_id' },
-                    { data: 'name', name: 'name' },
-                    { data: 'parent_code', name: 'parent_code' },
-                    { data: 'type', name: 'type' },
+                    { data: 'rownum', name: 'rownum' },
                     { data: 'name_with_type', name: 'name_with_type' },
-                    { data: 'path', name: 'path' },
-                    { data: 'path_with_type', name: 'path_with_type' },
-                    { data: 'code', name: 'code' },
+                    { data: 'provine_city', name: 'provine_city' },
                     { data: 'actions', name: 'actions', orderable: false, searchable: false}
                 ]
             });

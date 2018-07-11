@@ -4,12 +4,15 @@ namespace Dhcd\Topic\App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Dhcd\Member\App\Models\Member;
+use Illuminate\Database\Eloquent\SoftDeletes;
 class Topic extends Model {
+    use SoftDeletes;
     /**
      * The database table used by the model.
      *
      * @var string
      */
+    protected $dates = ['deleted_at'];
     protected $table = 'dhcd_topic';
 
     protected $primaryKey = 'topic_id';

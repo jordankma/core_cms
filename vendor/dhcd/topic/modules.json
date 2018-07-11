@@ -1,6 +1,6 @@
 {
-  "package": "topic",
-  "module": "dhcd",
+  "package": "dhcd",
+  "module": "topic",
   "description": "Permission route by group",
   "details": [
     {
@@ -11,7 +11,7 @@
           "routes": [
             "dhcd.topic.topic.manage",
             "dhcd.topic.topic.data",
-            "dhcd.topic.topic.log",
+            "dhcd.topic.topic.log"
           ]
         },
         {

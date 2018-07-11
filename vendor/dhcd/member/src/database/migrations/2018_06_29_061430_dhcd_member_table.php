@@ -13,14 +13,14 @@ class DhcdMemberTable extends Migration
      */
     public function up()
     {
-        Schema::create('dhcd_member', function (Blueprint $table) {
+        Schema::connection('mysql_dhcd')->create('dhcd_member', function (Blueprint $table) {
             $table->increments('member_id');
-            $table->string('token');
+            $table->string('token')->nullable();
             $table->string('name');
             $table->string('u_name');
             $table->string('password');
             $table->string('position')->nullable();
-            $table->string('gender');
+            $table->string('gender')->nullable();
             $table->string('phone')->unique();
             $table->string('email')->unique();
             $table->string('avatar')->nullable();
@@ -51,6 +51,6 @@ class DhcdMemberTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dhcd_member');
+        Schema::connection('mysql_dhcd')->dropIfExists('dhcd_member');
     }
 }

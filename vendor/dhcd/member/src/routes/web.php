@@ -25,6 +25,7 @@ Route::group(array('prefix' => $adminPrefix), function() {
 });
 Route::group(array('prefix' => 'dev'), function() {
     Route::post('post/login', 'ApiMemberController@postLogin');
-    Route::get('get/user/info', 'ApiMemberController@getUserInfo');
+    Route::get('get/register', 'ApiMemberController@getRegister');
+    Route::get('get/getuserinfo', 'ApiMemberController@getUserInfo');
     Route::put('put/user/change-password', 'ApiMemberController@putChangePass');
 });

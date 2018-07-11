@@ -30,6 +30,10 @@
                         <form action="{{route('dhcd.news.cat.update')}}" method="post" id="form-add-cat">
                             <input type="hidden" name="news_cat_id" value="{{$news_cat->news_cat_id}}">
                             <div class="col-md-5" style="">
+                                <div class="form-group ui-draggable-handle" style="position: static;">
+                                    <label for="input-text-1">{{trans('dhcd-news::language.label_cat.name_category')}}</label>
+                                    <input type="text" name="name" value="{{$news_cat->name}}" class="form-control" id="input-text-1" placeholder="{{trans('dhcd-news::language.form_cat.category_placeholder')}}">
+                                </div>
                                 <div class="form-group ui-draggable-handle" id="list-cat">
                                     <label for="select-1">{{ trans('dhcd-news::language.table.list_news.category') }}</label>
                                     <select class="form-control" id="select-1" name="parent_id">
@@ -42,10 +46,6 @@
                                             @endforeach
                                         @endif
                                     </select>
-                                </div>
-                                <div class="form-group ui-draggable-handle" style="position: static;">
-                                    <label for="input-text-1">{{trans('dhcd-news::language.label_cat.name_category')}}</label>
-                                    <input type="text" name="name" value="{{$news_cat->name}}" class="form-control" id="input-text-1" placeholder="{{trans('dhcd-news::language.form_cat.category_placeholder')}}">
                                 </div>
                             </div>
                             <div class="form-group col-md-12">

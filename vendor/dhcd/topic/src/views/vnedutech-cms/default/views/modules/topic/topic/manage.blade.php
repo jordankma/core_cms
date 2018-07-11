@@ -47,7 +47,7 @@
                         <table class="table table-bordered" id="table">
                             <thead>
                             <tr class="filters">
-                                <th class="fit-content">{{ trans('dhcd-topic::language.table.id') }}</th>
+                                <th class="fit-content">#</th>
                                 <th>{{ trans('dhcd-topic::language.table.demo.name') }}</th>
                                 <th style="width: 120px">{{ trans('dhcd-topic::language.table.created_at') }}</th>
                                 <th style="width: 120px">{{ trans('dhcd-topic::language.table.updated_at') }}</th>
@@ -75,7 +75,7 @@
                 serverSide: true,
                 ajax: '{{ route('dhcd.topic.topic.data') }}',
                 columns: [
-                    { data: 'topic_id', name: 'topic_id' },
+                    { data: 'rownum', name: 'rownum' },
                     { data: 'name', name: 'name' },
                     { data: 'created_at', name: 'created_at'},
                     { data: 'updated_at', name: 'updated_at'},

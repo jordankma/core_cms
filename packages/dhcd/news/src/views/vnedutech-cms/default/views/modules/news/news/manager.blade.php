@@ -97,13 +97,13 @@
                             <table class="table table-bordered" id="table">
                                 <thead >
                                     <tr>                                             
-                                        <th class="fit-content">{{ trans('dhcd-news::language.table.id') }}</th>
+                                        <th class="fit-content">#</th>
                                         <th>{{ trans('dhcd-news::language.table.list_news.title') }}</th>
                                         <th>{{ trans('dhcd-news::language.table.list_news.image') }}</th>
                                         <th>{{ trans('dhcd-news::language.table.list_news.author') }}</th>
                                         <th>{{ trans('dhcd-news::language.table.list_news.category') }}</th>
                                         <th>{{ trans('dhcd-news::language.table.list_news.priority') }}</th>
-                                        <th>{{ trans('dhcd-news::language.table.action') }}</th>
+                                        <th class="fit-content">{{ trans('dhcd-news::language.table.action') }}</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -153,10 +153,10 @@
                 serverSide: true,
                 ajax: '{!! route('dhcd.news.news.data', ['name' => $params['name'],'news_time'=>$params['news_time'],'news_cat'=>$params['news_cat'],'is_hot'=>$params['is_hot']]) !!}',
                 columns: [
-                    { data: 'news_id', name: 'news_id' },
+                    { data: 'rownum', name: 'rownum' },
                     { data: 'title', name: 'title' },
                     { data: 'image', name: 'image' },
-                    { data: 'user_id', name: 'user_id' },
+                    { data: 'create_by', name: 'create_by' },
                     { data: 'news_cat', name: 'news_cat' },
                     { data: 'priority', name: 'priority' },
                     { data: 'actions', name: 'actions', orderable: false, searchable: false}

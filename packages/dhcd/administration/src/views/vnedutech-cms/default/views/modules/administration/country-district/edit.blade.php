@@ -39,43 +39,24 @@
                 <div class="row">
                     <!-- /.col-sm-8 -->
                     <div class="col-sm-8">
-                        <label> Name</label>
+                        <label> {{ trans('dhcd-administration::language.label.name') }}</label>
                         <div class="form-group">
                             <input type="text" name="name" class="form-control" value="{{$country_district->name}}" placeholder="{{ trans('dhcd-administration::language.placeholder.country_district.name') }}">
                         </div>
-                        <label>In Provine City</label>
-                        <select class="form-control select2" id="provine_city" name="provine_city">
+                        <label>{{ trans('dhcd-administration::language.label.provine_city') }}</label>
+                        <select class="form-control select2" id="provine_city" required="" name="provine_city">
                         @if(!empty($provine_city))
                         @foreach($provine_city as $p_c)
-                            <option value="{{$p_c->code}}" @if($p_c->code==$country_district->parent_code) selected="selected"  @endif>{{$p_c->name}}</option>
+                            <option value="{{$p_c->provine_city_id}}" @if($p_c->provine_city_id==$country_district->provine_city_id) selected="selected"  @endif>{{$p_c->name}}</option>
                         @endforeach
                         @endif
                         </select>
-                        <label> Type</label>
+                        <label>{{ trans('dhcd-administration::language.label.type') }}</label>
                         <div class="form-group">
-                            <input type="radio" name="type"  value="thanh-pho" @if($country_district->type=='thanh-pho') checked="checked" @endif> Thành phố
-                            <input type="radio" name="type"  value="huyen" @if($country_district->type=='huyen') checked="checked" @endif>  Huyện
-                            <input type="radio" name="type"  value="quan" @if($country_district->type=='quan') checked="checked" @endif>  Quận
-                            <input type="radio" name="type"  value="thi-xa" @if($country_district->type=='thi-xa') checked="checked" @endif>  Thị xã
-                        </div>
-                        <label> Name with type</label>
-                        <div class="form-group">
-                            <input type="text" name="name_with_type" class="form-control" value="{{$country_district->name_with_type}}" placeholder="{{ trans('dhcd-administration::language.placeholder.country_district.name_with_type') }}">
-                            <p>vd: Tỉnh Hà Tĩnh, Thành phố Hà Nội </p>
-                        </div>
-                        <label> Path</label>
-                        <div class="form-group">
-                            <input type="text" name="path" class="form-control" value="{{$country_district->path}}" placeholder="{{ trans('dhcd-administration::language.placeholder.country_district.path') }}">
-                            <p>vd: Thanh Xuân,Hà Nội </p>
-                        </div>
-                        <label> Path with type</label>
-                        <div class="form-group">
-                            <input type="text" name="path_with_type" class="form-control" value="{{$country_district->path_with_type}}" placeholder="{{ trans('dhcd-administration::language.placeholder.country_district.path_with_type') }}">
-                            <p>vd: Quận Thanh Xuân, Thành phố Hà Nội </p>
-                        </div>
-                        <label> Code</label>
-                        <div class="form-group">
-                            <input type="number" name="code" class="form-control" value="{{$country_district->code}}" placeholder="{{ trans('dhcd-administration::language.placeholder.country_district.code') }}">
+                            <input type="radio" name="type"  id="thanh-pho" value="thanh-pho" @if($country_district->type=='thanh-pho') checked="checked" @endif> <label for="thanh-pho">Thành phố</label> 
+                            <input type="radio" name="type" id="huyen" value="huyen" @if($country_district->type=='huyen') checked="checked" @endif>  <label for="huyen">Huyện</label>
+                            <input type="radio" name="type" id="quan" value="quan" @if($country_district->type=='quan') checked="checked" @endif>  <label for="quan">Quận</label>
+                            <input type="radio" name="type" id="thi-xa" value="thi-xa" @if($country_district->type=='thi-xa') checked="checked" @endif>  <label for="thi-xa">Thị xã</label>
                         </div>
                         <div class="form-group">
                             <label for="blog_category" class="">Actions</label>
@@ -123,38 +104,13 @@
                     validators: {
                         notEmpty: {
                             message: 'Trường này không được bỏ trống'
+                        },
+                        stringLength: {
+                            max: 200,
+                            message: 'Tên không được quá dài'
                         }
                     }
                 },
-                name_with_type: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Trường này không được bỏ trống'
-                        }
-                    }
-                },
-                path: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Trường này không được bỏ trống'
-                        }
-                    }
-                },
-                path_with_type: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Trường này không được bỏ trống'
-                        }
-                    }
-                },
-                code: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Trường này không được bỏ trống'
-                        }
-                    }
-                },
-
             }
         }); 
         })

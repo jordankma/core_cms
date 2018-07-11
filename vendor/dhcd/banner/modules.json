@@ -1,6 +1,6 @@
 {
-  "package": "banner",
-  "module": "dhcd",
+  "package": "dhcd",
+  "module": "banner",
   "description": "Permission route by group",
   "details": [
     {

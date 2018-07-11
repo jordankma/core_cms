@@ -3,7 +3,7 @@
 namespace Dhcd\News\App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 class NewsCat extends Model
 {
     /**
@@ -11,6 +11,8 @@ class NewsCat extends Model
      *
      * @var string
      */
+    use SoftDeletes;
+    protected $dates = ['deleted_at'];
     protected $table = 'dhcd_news_cat';
 
     protected $primaryKey = 'news_cat_id';

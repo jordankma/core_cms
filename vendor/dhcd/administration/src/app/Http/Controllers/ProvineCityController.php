@@ -53,20 +53,23 @@ class ProvineCityController extends Controller
     public function add(ProvineCityRequest $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|min:4|max:100',
+            'name' => 'required|min:1|max:200',
             'code' => 'required|unique:dhcd_provine_city,code',
+            'type' => 'required'
         ], $this->messages);
         if (!$validator->fails()) {
+            $type = $request->input('type'); 
+            $name = $request->input('name');
             $provine_citys = new ProvineCity();
-            $provine_citys->user_id = $this->user->email; 
-            $provine_citys->name = $request->name; 
-            $provine_citys->alias = self::stripUnicode($request->name);
-            $provine_citys->type = $request->type; 
-            if($type = 'tinh'){   
-                $provine_citys->name_with_type = 'Tỉnh '.$request->name; 
+            $provine_citys->create_by = $this->user->email; 
+            $provine_citys->name = $name; 
+            $provine_citys->alias = self::stripUnicode($name);
+            $provine_citys->type = $type; 
+            if($type == 'tinh'){   
+                $provine_citys->name_with_type = 'Tỉnh '.$name; 
             }
             else{
-                $provine_citys->name_with_type = 'Thành phố '.$request->name;     
+                $provine_citys->name_with_type = 'Thành phố '.$name;     
             }
             $provine_citys->code = $request->code; 
             $provine_citys->created_at = new DateTime();
@@ -92,6 +95,9 @@ class ProvineCityController extends Controller
     {
         $provine_city_id = $request->input('provine_city_id');
         $provine_city = $this->provine_city->find($provine_city_id);
+        if(empty($provine_city)){
+            return redirect()->route('dhcd.administration.provine-city.manage')->with('error', trans('DHCD-ADMINISTRATION::language.messages.error.update'));
+        }
         $data = [
             'provine_city' => $provine_city
         ];
@@ -100,29 +106,38 @@ class ProvineCityController extends Controller
 
     public function update(Request $request)
     {
-        $provine_city_id = $request->provine_city_id;
-        $provine_city = $this->provine_city->find($provine_city_id);
-        $provine_city->user_id = $this->user->email; 
-        $provine_city->name = $request->name; 
-        $provine_city->alias = self::stripUnicode($request->name);
-        $provine_city->type = $request->type; 
-        if($type = 'tinh'){   
-            $provine_city->name_with_type = 'Tỉnh '.$request->name; 
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:1|max:200',
+            'type' => 'required'
+        ], $this->messages);
+        if (!$validator->fails()) {
+            $provine_city_id = $request->input('provine_city_id');
+            $name = $request->input('name');
+            $type = $request->input('type');
+            $provine_city = $this->provine_city->find($provine_city_id);
+            $provine_city->name = $request->input('name'); 
+            $provine_city->alias = self::stripUnicode($name);
+            $provine_city->type = $type ; 
+            if($type == 'tinh'){   
+                $provine_city->name_with_type = 'Tỉnh ' . $name; 
+            }
+            else{
+                $provine_city->name_with_type = 'Thành phố ' . $name;     
+            }
+            $provine_city->updated_at = new DateTime();
+            if ($provine_city->save()) {
+                activity('provine_city')
+                    ->performedOn($provine_city)
+                    ->withProperties($request->all())
+                    ->log('User: :causer.email - Update Provine City - provine_city_id: :properties.provine_city_id, name: :properties.name');
+
+                return redirect()->route('dhcd.administration.provine-city.manage')->with('success', trans('DHCD-ADMINISTRATION::language.messages.success.update'));
+            } else {
+                return redirect()->route('dhcd.administration.provine-city.show', ['provine_city_id' => $request->input('provine_city_id')])->with('error', trans('DHCD-ADMINISTRATION::language.messages.error.update'));
+            }
         }
         else{
-            $provine_city->name_with_type = 'Thành phố '.$request->name;     
-        }
-        $provine_city->updated_at = new DateTime();
-        $provine_city->save();
-        if ($provine_city->save()) {
-            activity('provine_city')
-                ->performedOn($provine_city)
-                ->withProperties($request->all())
-                ->log('User: :causer.email - Update Provine City - provine_city_id: :properties.provine_city_id, name: :properties.name');
-
-            return redirect()->route('dhcd.administration.provine-city.manage')->with('success', trans('DHCD-ADMINISTRATION::language.messages.success.update'));
-        } else {
-            return redirect()->route('dhcd.administration.provine-city.show', ['provine_city_id' => $request->input('provine_city_id')])->with('error', trans('DHCD-ADMINISTRATION::language.messages.error.update'));
+            return $validator->messages();   
         }
     }
 
@@ -151,8 +166,7 @@ class ProvineCityController extends Controller
         $provine_city = $this->provine_city->find($provine_city_id);
 
         if (null != $provine_city) {
-            $provine_city->visible = 0;
-            $provine_city->save();
+            $this->provine_city->delete($provine_city_id);
             activity('provine_city')
                 ->performedOn($provine_city)
                 ->withProperties($request->all())
@@ -190,13 +204,20 @@ class ProvineCityController extends Controller
     //Table Data to index page
     public function data()
     {
-        $provine_city = ProvineCity::where('visible',1)->get();
+        $provine_city = $this->provine_city->findAll();
         return Datatables::of($provine_city)
+            ->addIndexColumn()
             ->addColumn('actions', function ($provine_city) {
-                $actions = '<a href=' . route('dhcd.administration.provine-city.log', ['type' => 'provine-city', 'id' => $provine_city->provine_city_id]) . ' data-toggle="modal" data-target="#log"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#F99928" data-hc="#F99928" title="log provine-city"></i></a>
-                        <a href=' . route('dhcd.administration.provine-city.show', ['provine_city_id' => $provine_city->provine_city_id]) . '><i class="livicon" data-name="edit" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="update provine-city"></i></a>
-                        <a href=' . route('dhcd.administration.provine-city.confirm-delete', ['provine_city_id' => $provine_city->provine_city_id]) . ' data-toggle="modal" data-target="#delete_confirm"><i class="livicon" data-name="trash" data-size="18" data-loop="true" data-c="#f56954" data-hc="#f56954" title="delete provine-city"></i></a>';
-
+                $actions = '';
+                if ($this->user->canAccess('dhcd.administration.provine-city.log')) {
+                    $actions .= '<a href=' . route('dhcd.administration.provine-city.log', ['type' => 'provine-city', 'id' => $provine_city->provine_city_id]) . ' data-toggle="modal" data-target="#log"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#F99928" data-hc="#F99928" title="log provine-city"></i></a>';
+                }
+                if ($this->user->canAccess('dhcd.administration.provine-city.show')) {
+                    $actions .= '<a href=' . route('dhcd.administration.provine-city.show', ['provine_city_id' => $provine_city->provine_city_id]) . '><i class="livicon" data-name="edit" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="update provine-city"></i></a>';
+                }
+                if ($this->user->canAccess('dhcd.administration.provine-city.confirm-delete')) {
+                    $actions .= '<a href=' . route('dhcd.administration.provine-city.confirm-delete', ['provine_city_id' => $provine_city->provine_city_id]) . ' data-toggle="modal" data-target="#delete_confirm"><i class="livicon" data-name="trash" data-size="18" data-loop="true" data-c="#f56954" data-hc="#f56954" title="delete provine-city"></i></a>';
+                }
                 return $actions;
             })
             ->rawColumns(['actions'])
@@ -206,7 +227,7 @@ class ProvineCityController extends Controller
     public function checkCode(Request $request){
         $data['valid'] = true;
         if ($request->ajax()) {
-            $provine_city =  ProvineCity::where(['code' => $request->code])->first();
+            $provine_city =  ProvineCity::withTrashed()->where(['code' => $request->input('code')])->first();
             if ($provine_city) {
                 $data['valid'] = false; // true là có user
             }

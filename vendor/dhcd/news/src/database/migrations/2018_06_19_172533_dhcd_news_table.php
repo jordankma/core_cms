@@ -13,9 +13,9 @@ class DhcdNewsTable extends Migration
      */
     public function up()
     {
-        Schema::create('dhcd_news', function (Blueprint $table) {
+        Schema::connection('mysql_dhcd')->create('dhcd_news', function (Blueprint $table) {
             $table->increments('news_id');
-            $table->string('user_id')->comment('user_id cua nguoi dang tin');
+            $table->string('create_by')->comment(' cua nguoi dang tin');
             $table->string('news_cat')->comment('json chua cac chuyen muc');
             $table->string('news_tag')->comment('json chua cac tag');
             $table->string('title')->comment('tieu de');
@@ -41,6 +41,6 @@ class DhcdNewsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dhcd_news');
+        Schema::connection('mysql_dhcd')->dropIfExists('dhcd_news');
     }
 }

@@ -29,20 +29,20 @@
                 <div class="row">
                         <form action="{{route('dhcd.news.cat.add')}}" method="post" id="form-add-cat">
                             <div class="col-md-5" style="">
-                                    <div class="form-group ui-draggable-handle" id="list-cat">
-                                        <label for="select-1">{{ trans('dhcd-news::language.table.list_news.category') }}</label>
-                                        <select class="form-control" id="select-1" name="parent_id">
-                                            <option value="0">Chuyên mục tổng</option>
-                                            @if(!empty($list_news_cat))
-                                                @foreach($list_news_cat as $news_cat)
-                                                    <option value="{{$news_cat->news_cat_id}}">{{str_repeat('---', $news_cat->level) .$news_cat->name}}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                    </div>
                                 <div class="form-group ui-draggable-handle" style="position: static;">
                                     <label for="input-text-1">{{trans('dhcd-news::language.label_cat.name_category')}}</label>
                                     <input type="text" name="name" class="form-control" id="input-text-1" placeholder="{{trans('dhcd-news::language.form_cat.category_placeholder')}}">
+                                </div>
+                                <div class="form-group ui-draggable-handle" id="list-cat">
+                                    <label for="select-1">{{ trans('dhcd-news::language.table.list_news.category') }}</label>
+                                    <select class="form-control" id="select-1" name="parent_id">
+                                        <option value="0">Chuyên mục tổng</option>
+                                        @if(!empty($list_news_cat))
+                                            @foreach($list_news_cat as $news_cat)
+                                                <option value="{{$news_cat->news_cat_id}}">{{str_repeat('---', $news_cat->level) .$news_cat->name}}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group col-md-12">

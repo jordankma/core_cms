@@ -13,7 +13,7 @@ class DhcdNewsTagTable extends Migration
      */
     public function up()
     {
-        Schema::create('dhcd_news_tag', function (Blueprint $table) {
+        Schema::connection('mysql_dhcd')->create('dhcd_news_tag', function (Blueprint $table) {
             $table->increments('news_tag_id');
             $table->string('name');
             $table->string('alias');
@@ -31,6 +31,6 @@ class DhcdNewsTagTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dhcd_news_tag');
+        Schema::connection('mysql_dhcd')->dropIfExists('dhcd_news_tag');
     }
 }

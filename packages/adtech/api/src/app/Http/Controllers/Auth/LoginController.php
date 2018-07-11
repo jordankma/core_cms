@@ -9,10 +9,14 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class LoginController extends Controller
 {
+    public function __construct()
+    {
+        config()->set( 'auth.defaults.guard', 'member' );
+    }
     public function login(Request $request)
     {
         // grab credentials from the request
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->only('u_name', 'password');
         $response = [
             'status' => 'RESULT_NOT_OK',
         ];

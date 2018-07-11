@@ -62,11 +62,10 @@ class NewsCatController extends Controller
         $name = $request->name;
         $news_cat = new NewsCat();
         $news_cat->name = $name;
-        $news_cat->cat_alias = self::stripUnicode($name);
+        $news_cat->alias = self::stripUnicode($name);
         $news_cat->created_at = new DateTime();
         $news_cat->updated_at = new DateTime();
         $news_cat->status = 1;
-        $news_cat->visible = 1;
         $news_cat->parent = $request->parent_id;
 		$news_cat->save();
 		if ($news_cat->news_cat_id) {
@@ -129,11 +128,11 @@ class NewsCatController extends Controller
         $news_cat_id = $request->news_cat_id;
         $news_cat = $this->news_cat->find($news_cat_id);
         if (null != $news_cat) {
-            if($news_cat->news_cat_id==0){
-                DB::table('dhcd_news_cat')->where('parent_news_cat_id',$news_cat_id)->update(array(
-                    'parent_news_cat_id'=>0,
-                ));
-            }
+            // if($news_cat->news_cat_id==0){
+            //     DB::table('dhcd_news_cat')->where('parent_news_cat_id',$news_cat_id)->update(array(
+            //         'parent_news_cat_id'=>0,
+            //     ));
+            // }
             $news_cat->delete();
             activity('news_cat')
                 ->performedOn($news_cat)
@@ -201,8 +200,9 @@ class NewsCatController extends Controller
                 return $name;
             })
             ->addColumn('actions', function ($list_news_cat) {
+                $actions = '';
                 if ($this->user->canAccess('dhcd.news.cat.log')) {
-                    $actions = '<a href=' . route('dhcd.news.cat.log', ['type' => 'news', 'news_cat_id' => $list_news_cat->news_cat_id]) . ' data-toggle="modal" data-target="#log"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#F99928" data-hc="#F99928" title="log news cat"></i></a>';
+                    $actions .= '<a href=' . route('dhcd.news.cat.log', ['type' => 'news', 'news_cat_id' => $list_news_cat->news_cat_id]) . ' data-toggle="modal" data-target="#log"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#F99928" data-hc="#F99928" title="log news cat"></i></a>';
                 }
                 if ($this->user->canAccess('dhcd.news.cat.show')) {
                     $actions .= '<a href=' . route('dhcd.news.cat.show', ['news_cat_id' => $list_news_cat->news_cat_id]) . '><i class="livicon" data-name="edit" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="update news cat"></i></a>';

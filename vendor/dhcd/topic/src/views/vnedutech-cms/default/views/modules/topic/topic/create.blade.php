@@ -22,7 +22,7 @@
                     {{ trans('adtech-core::labels.home') }}
                 </a>
             </li>
-            <li class="active"><a href="#">{{ $title }}</a></li>
+            <li class="active"><a href="#">{{ $title }} </a></li>
         </ol>
     </section>
     <!--section ends-->
@@ -45,7 +45,16 @@
                             <input type="radio" name="is_hot" value="1" id="topic_hot"> <label for="topic_hot" > {{trans('dhcd-topic::language.form.text.hot') }} </label> 
                             <input type="radio" name="is_hot" value="2" id="topic_normal" checked=""> <label for="topic_normal" style="margin-right: 40px"> {{trans('dhcd-topic::language.form.text.normal') }} </label>
                         </div>
-                        <div class="form-group col-xs-12">
+                        <label>Chọn ảnh đại diện</label>
+                        <div class="input-group">
+                           <span class="input-group-btn">
+                             <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
+                               <i class="fa fa-picture-o"></i> Chọn
+                             </a>
+                           </span>
+                           <input id="thumbnail" value="{{asset('/vendor/' . $group_name . '/' . $skin . '/dhcd/topic/uploads/media/images/Avatar.jpg')}}" class="form-control" type="text" name="image">
+                         </div>
+                        <div class="form-group col-xs-12" style="margin-top: 20px;">
                             <label for="blog_category" class="">Actions</label>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-success">{{ trans('dhcd-topic::language.buttons.create') }}</button>
@@ -71,12 +80,16 @@
     <!-- begining of page js -->
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-switch/js/bootstrap-switch.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrapvalidator/js/bootstrapValidator.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/vendor/laravel-filemanager/js/lfm.js') }}" type="text/javascript" ></script>
     <!--end of page js-->
     <script>
         $(function () {
             $("[name='permission_locked']").bootstrapSwitch();
         })
+        var domain = "/admin/laravel-filemanager/";
+        $('#lfm').filemanager('image', {prefix: domain});
     </script>
+
     <script type="text/javascript">
         $('#form-add-topic').bootstrapValidator({
             feedbackIcons: {

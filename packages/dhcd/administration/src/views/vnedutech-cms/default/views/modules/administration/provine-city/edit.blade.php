@@ -37,14 +37,14 @@
                 <div class="row">
                     <!-- /.col-sm-8 -->
                     <div class="col-sm-8">
-                        <label> Name</label>
+                        <label>{{ trans('dhcd-administration::language.label.name') }}</label>
                         <div class="form-group">
                             <input type="text" name="name" class="form-control" value ="{{$provine_city->name}}" placeholder="{{ trans('dhcd-administration::language.placeholder.provine_city.name') }}">
                         </div>
-                        <label> Type</label>
+                        <label> {{ trans('dhcd-administration::language.label.type') }}</label>
                         <div class="form-group">
-                            <input type="radio" name="type"  value="tinh" @if($provine_city->type=='tinh') checked="checked" @endif> Tỉnh
-                            <input type="radio" name="type"  value="thanh-pho" @if($provine_city->type=='thanh-pho') checked="checked" @endif>  Thành phố
+                            <input type="radio" name="type"  value="tinh" id="tinh" @if($provine_city->type=='tinh') checked="checked" @endif> <label for="tinh"> Tỉnh </label>
+                            <input type="radio" name="type"  value="thanh-pho" id="thanh-pho" @if($provine_city->type=='thanh-pho') checked="checked" @endif>  <label for="thanh-pho"> Thành phố </label>
                         </div>
                         <div class="form-group">
                             <label for="blog_category" class="">Actions</label>
@@ -92,7 +92,7 @@
                             message: 'Tên không được bỏ trống'
                         },
                         stringLength: {
-                            max: 250,
+                            max: 200,
                             message: 'Tên không được quá dài'
                         }
                     }

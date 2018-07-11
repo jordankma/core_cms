@@ -55,7 +55,7 @@
                                 @endforeach
                             @endif
                             <div class="form-group">
-                                <label>{{trans('dhcd-news::language.form.text.title')}}</label>
+                                <label>{{trans('dhcd-news::language.form.text.title')}}<span style="color: red">(*)</span></label>
                                 <input type="text" required name="title" value="{{$news->title}}" class="form-control" placeholder="{{trans('dhcd-news::language.form.title_placeholder')}}">
                             </div>
                             <div class="form-group">
@@ -77,7 +77,7 @@
                         <!-- /.col-sm-4 -->
                         <div class="col-md-4 col-sm-4">
                             <div class="form-group">
-                                <label>{{trans('dhcd-news::language.form.text.cat')}}</label><br>
+                                <label>{{trans('dhcd-news::language.form.text.cat')}} <span style="color: red">(*)</span></label><br>
                                 <select id="cate" class="form-control" name="news_cat[]" required multiple="multiple">
                                     @if(!empty($list_news_cat))
                                     @foreach($list_news_cat as $news_cat)
@@ -120,9 +120,9 @@
                              <img id="holder" src="{{$news->image}}" style="margin-top:15px;max-height:100px;">
                             <div class="form-group">
                                 <input type="radio" id="hot" @if($news->is_hot==1) checked @endif name="is_hot" value="1">
-                                <label for="normal">{{trans('dhcd-news::language.form.text.news_hot')}}    </label> <br>
+                                <label for="hot">{{trans('dhcd-news::language.form.text.news_hot')}}    </label> <br>
                                 <input type="radio" @if($news->is_hot==2) checked @endif id="normal" name="is_hot" value="0">
-                                <label>    {{trans('dhcd-news::language.form.text.news_normal')}}</label>
+                                <label for="normal">    {{trans('dhcd-news::language.form.text.news_normal')}}</label>
                             </div>
                             <div class="form-group">
                                 <label>{{trans('dhcd-news::language.form.text.priority')}}</label>

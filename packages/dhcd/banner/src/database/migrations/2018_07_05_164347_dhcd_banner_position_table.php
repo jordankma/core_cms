@@ -13,7 +13,7 @@ class DhcdBannerPositionTable extends Migration
      */
     public function up()
     {
-        Schema::create('dhcd_banner_position', function (Blueprint $table) {
+        Schema::connection('mysql_dhcd')->create('dhcd_banner_position', function (Blueprint $table) {
             $table->increments('banner_position_id');
             $table->string("create_by")->nullable();
             $table->string("name");
@@ -33,6 +33,6 @@ class DhcdBannerPositionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dhcd_banner_position');
+        Schema::connection('mysql_dhcd')->dropIfExists('dhcd_banner_position');
     }
 }

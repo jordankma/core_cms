@@ -25,8 +25,9 @@ class ApiMemberRequest extends FormRequest
     {
 
         switch ($this->method()) {
-            case 'GET':{return [
-                    
+            case 'GET':{
+                return [
+                       
                 ];
             }
             case 'DELETE': {
@@ -36,12 +37,12 @@ class ApiMemberRequest extends FormRequest
             }
             case 'POST': {
                 return [
-                    
+                    'token' => 'required'    
                 ];
             }
             case 'PUT':{
                 return [
-                    
+                    'token' => 'required'    
                 ];
             }
             case 'PATCH':

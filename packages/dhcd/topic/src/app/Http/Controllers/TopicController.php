@@ -52,13 +52,13 @@ class TopicController extends Controller
         ], $this->messages);
         if (!$validator->fails()) {
             $topics = new Topic();
-            $topics->name = $request->name; 
-            $topics->alias = self::stripUnicode($request->name); 
-            $topics->is_hot = $request->is_hot; 
+            $topics->name = $request->input('name'); 
+            $topics->image = $request->input('image'); 
+            $topics->alias = self::stripUnicode($request->input('name')); 
+            $topics->is_hot = $request->input('is_hot'); 
             $topics->created_at = new DateTime();
             $topics->updated_at = new DateTime();
-            $topics->save();
-            if ($topics->topic_id) {
+            if ($topics->save()) {
 
                 activity('topic')
                     ->performedOn($topics)
@@ -79,6 +79,9 @@ class TopicController extends Controller
     {
         $topic_id = $request->input('topic_id');
         $topic = $this->topic->find($topic_id);
+        if(empty($topic)){
+            return redirect()->route('dhcd.topic.topic.manage')->with('error', trans('dhcd-topic::language.messages.error.update'));    
+        }
         $data = [
             'topic' => $topic
         ];
@@ -93,14 +96,13 @@ class TopicController extends Controller
             'is_hot' => 'required'
         ], $this->messages);
         if (!$validator->fails()) {
-            $topic_id = $request->topic_id;
+            $topic_id = $request->input('topic_id');
             $topic = $this->topic->find($topic_id);
             $topic->name = $request->input('name');
+            $topics->image = $request->input('image'); 
             $topic->is_hot = $request->input('is_hot');
             $topic->updated_at = new DateTime();
-
             if ($topic->save()) {
-
                 activity('topic')
                     ->performedOn($topic)
                     ->withProperties($request->all())
@@ -142,7 +144,7 @@ class TopicController extends Controller
         $topic = $this->topic->find($topic_id);
 
         if (null != $topic) {
-            $this->topic->deleteID($topic_id);
+            $this->topic->delete($topic_id);
 
             activity('topic')
                 ->performedOn($topic)
@@ -282,11 +284,13 @@ class TopicController extends Controller
     //Table Data to index page
     public function data()
     {
-        $topics = Topic::where('visible',1)->get();
+        $topics = $this->topic->findAll();
         return Datatables::of($topics)
+            ->addIndexColumn()
             ->addColumn('actions', function ($topics) {
+                $actions = '';
                 if ($this->user->canAccess('dhcd.topic.topic.log')) {
-                    $actions = '<a href=' . route('dhcd.topic.topic.log', ['type' => 'topic', 'id' => $topics->topic_id]) . ' data-toggle="modal" data-target="#log"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#F99928" data-hc="#F99928" title="log topic"></i></a>';
+                    $actions .= '<a href=' . route('dhcd.topic.topic.log', ['type' => 'topic', 'id' => $topics->topic_id]) . ' data-toggle="modal" data-target="#log"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#F99928" data-hc="#F99928" title="log topic"></i></a>';
                 }
                 if ($this->user->canAccess('dhcd.topic.topic.show')) {
                     $actions .= '<a href=' . route('dhcd.topic.topic.show', ['topic_id' => $topics->topic_id]) . '><i class="livicon" data-name="edit" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="update topic"></i></a>';
@@ -300,9 +304,10 @@ class TopicController extends Controller
                 return $actions;
             })
             ->addColumn('status', function ($topics) {
+                $status = '';
                 if( $topics->status==0 ){
                     if ( $this->user->canAccess('dhcd.topic.topic.confirm-status') ) {
-                        $status = '<a href=' . route('dhcd.topic.topic.confirm-status', ['topic_id' => $topics->topic_id]) . ' data-toggle="modal" data-target="#status_confirm"><span class="label label-sm label-danger">Disable</span></a> ';
+                        $status .= '<a href=' . route('dhcd.topic.topic.confirm-status', ['topic_id' => $topics->topic_id]) . ' data-toggle="modal" data-target="#status_confirm"><span class="label label-sm label-danger">Disable</span></a> ';
                     }
                 }
                 else{
@@ -413,7 +418,7 @@ class TopicController extends Controller
 
     public function dataMember(Request $request)
     {
-        $topic_id = $request->topic_id;
+        $topic_id = $request->input('topic_id');
         $topic = Topic::where('topic_id', $topic_id)->with('getMember')->first();
         $members = $topic->getMember;
         return Datatables::of($members)
@@ -431,8 +436,8 @@ class TopicController extends Controller
     public function searchMember(Request $request) {
         $data = [];
         if ($request->ajax()) {
-            $keyword = $request->keyword;
-            $topic_id = $request->topic_id;
+            $keyword = $request->input('keyword');
+            $topic_id = $request->input('topic_id');
             if(!empty($keyword)){
                 $list_member_old = TopicHasMember::where('topic_id',$topic_id)->select('member_id')->get();
                 $list_members = Member::where('name', 'like', '%' . $keyword . '%')->whereNotIn('member_id', $list_member_old)->get();

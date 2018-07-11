@@ -41,27 +41,27 @@
                     <!-- /.col-sm-8 -->
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label>{{trans('dhcd-member::language.form.title.name') }} (*)</label>
+                            <label>{{trans('dhcd-member::language.form.title.name') }} <span style="color: red">(*)</span></label>
                             <input type="text" name="name" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.name')}}">
                         </div>
                         <div class="form-group">
-                            <label>{{trans('dhcd-member::language.form.title.u_name') }} (*)</label>
+                            <label>{{trans('dhcd-member::language.form.title.u_name') }} <span style="color: red">(*)</span></label>
                             <input type="text" name="u_name" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.u_name')}}">
                         </div>
                         <div class="form-group">
-                            <label>{{trans('dhcd-member::language.form.title.password') }} (*)</label>
+                            <label>{{trans('dhcd-member::language.form.title.password') }} <span style="color: red">(*)</span></label>
                             <input type="password" name="password" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.password')}}">
                         </div>
                         <div class="form-group">
-                            <label>{{trans('dhcd-member::language.form.title.conf_password') }} (*)</label>
+                            <label>{{trans('dhcd-member::language.form.title.conf_password') }} <span style="color: red">(*)</span></label>
                             <input type="password" name="conf_password" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.conf_password')}}">
                         </div>
                         <div class="form-group">
-                            <label>{{trans('dhcd-member::language.form.title.email') }} (*)</label>
+                            <label>{{trans('dhcd-member::language.form.title.email') }} <span style="color: red">(*)</span></label>
                             <input type="text" name="email" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.email')}}">
                         </div>
                         <div class="form-group">
-                            <label>{{trans('dhcd-member::language.form.title.phone') }} (*)</label>
+                            <label>{{trans('dhcd-member::language.form.title.phone') }} <span style="color: red">(*)</span></label>
                             <input type="text" name="phone" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.phone')}}">
                         </div>
                         <label>{{trans('dhcd-member::language.form.title.position') }}</label>
@@ -154,8 +154,8 @@
                                     <i class="fa fa-picture-o"></i> Choose
                                 </a>
                             </span>
-                            <input id="thumbnail" class="form-control" type="text" name="avatar">
-                            <img id="holder" style="margin-top:15px;max-height:100px;">
+                            <input id="thumbnail" class="form-control" type="text" value="{{asset('/vendor/' . $group_name . '/' . $skin . '/dhcd/member/uploads/media/images/Avatar.jpg')}}" name="avatar">
+                            <img src="{{asset('/vendor/' . $group_name . '/' . $skin . '/dhcd/member/uploads/media/images/Avatar.jpg')}}" id="holder" style="margin-top:15px;max-height:100px;">
                         </div>
                         <div class="form-group">
                             <label for="blog_category" class="">Actions</label>

@@ -1,6 +1,6 @@
 {
-  "package": "administration",
-  "module": "dhcd",
+  "package": "dhcd",
+  "module": "administration",
   "description": "Permission route by group",
   "details": [
     {
@@ -65,6 +65,39 @@
           "routes": [
             "dhcd.administration.country-district.delete",
             "dhcd.administration.country-district.confirm-delete"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Quản lý commune-guild",
+      "groups": [
+        {
+          "name": "View list",
+          "routes": [
+            "dhcd.administration.commune-guild.manager",
+            "dhcd.administration.commune-guild.data"
+          ]
+        },
+        {
+          "name": "Create",
+          "routes": [
+            "dhcd.administration.commune-guild.create",
+            "dhcd.administration.commune-guild.add"
+          ]
+        },
+        {
+          "name": "Update",
+          "routes": [
+            "dhcd.administration.commune-guild.show",
+            "dhcd.administration.commune-guild.update"
+          ]
+        },
+        {
+          "name": "Delete",
+          "routes": [
+            "dhcd.administration.commune-guild.delete",
+            "dhcd.administration.commune-guild.confirm-delete"
           ]
         }
       ]

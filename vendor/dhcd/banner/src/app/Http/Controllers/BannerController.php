@@ -216,8 +216,9 @@ class BannerController extends Controller
         return Datatables::of($banners)
             ->addIndexColumn()
             ->addColumn('actions', function ($banners) {
+                $actions = '';
                 if ($this->user->canAccess('dhcd.banner.banner.log', ['object_type' => 'banners', 'banner_id' => $banners->banner_id])) {
-                    $actions = '<a href=' . route('dhcd.banner.banner.log', ['type' => 'banner', 'id' => $banners->banner_id]) . ' data-toggle="modal" data-target="#log"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#F99928" data-hc="#F99928" title="log banner"></i></a>';
+                    $actions .= '<a href=' . route('dhcd.banner.banner.log', ['type' => 'banner', 'id' => $banners->banner_id]) . ' data-toggle="modal" data-target="#log"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#F99928" data-hc="#F99928" title="log banner"></i></a>';
                 }
                 if ($this->user->canAccess('dhcd.banner.banner.show')) {
                     $actions .= '<a href=' . route('dhcd.banner.banner.show', ['banner_id' => $banners->banner_id]) . '><i class="livicon" data-name="edit" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="update banner"></i></a>';

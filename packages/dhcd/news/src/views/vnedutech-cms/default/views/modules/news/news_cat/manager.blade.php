@@ -52,7 +52,7 @@
                             <table class="table table-bordered" id="table">
                                 <thead>
                                     <tr>                                             
-                                        <th class="fit-content">{{ trans('dhcd-news::language.table.id') }}</th>
+                                        <th class="fit-content">#</th>
                                         <th>{{ trans('dhcd-news::language.table.list_news.title') }}</th>
                                         {{-- <th style="width: 120px">{{ trans('dhcd-news::language.table.list_news_cat.title_cat_paren') }}</th> --}}
                                         {{-- <th style="width: 120px">{{ trans('dhcd-news::language.table.created_at') }}</th> --}}
