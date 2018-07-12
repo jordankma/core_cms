@@ -26,6 +26,7 @@ Route::group(array('prefix' => $adminPrefix), function() {
         Route::get('dhcd/art/document/van-kien', 'ArtController@vanKienList');
         Route::get('dhcd/art/document/van-kien', 'ArtController@vanKienDetail');
 
+        Route::get('dhcd/art/member/profile', 'ArtController@memberProfile');
 
     });
 });

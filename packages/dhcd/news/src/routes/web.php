@@ -5,7 +5,7 @@ Route::group(array('prefix' => $adminPrefix), function() {
 
         Route::get('dhcd/news/news/log', 'NewsController@log')->name('dhcd.news.news.log');
         Route::get('dhcd/news/news/data', 'NewsController@data')->name('dhcd.news.news.data');
-        Route::get('dhcd/news/news/manager', 'NewsController@manager')->name('dhcd.news.news.manager');
+        Route::get('dhcd/news/news/manager', 'NewsController@manager')->name('dhcd.news.news.manager')->where('as','Quản lý tin tức');
         Route::get('dhcd/news/news/create', 'NewsController@create')->name('dhcd.news.news.create');
         Route::post('dhcd/news/news/add', 'NewsController@add')->name('dhcd.news.news.add');
         Route::get('dhcd/news/news/show/{news_id}', 'NewsController@show')->where('news_id', '[0-9]+')->name('dhcd.news.news.show');
@@ -17,7 +17,7 @@ Route::group(array('prefix' => $adminPrefix), function() {
         //route news cat
         Route::get('dhcd/news/cat/log', 'NewsCatController@log')->name('dhcd.news.cat.log');
         Route::get('dhcd/news/cat/data', 'NewsCatController@data')->name('dhcd.news.cat.data');
-        Route::get('dhcd/news/cat/manager', 'NewsCatController@manager')->name('dhcd.news.cat.manager');
+        Route::get('dhcd/news/cat/manager', 'NewsCatController@manager')->name('dhcd.news.cat.manager')->where('as','Quản lý danh mục');
         Route::get('dhcd/news/cat/create', 'NewsCatController@create')->name('dhcd.news.cat.create');
         Route::post('dhcd/news/cat/add', 'NewsCatController@add')->name('dhcd.news.cat.add');
         Route::get('dhcd/news/cat/show', 'NewsCatController@show')->where('news_cat_id', '[0-9]+')->name('dhcd.news.cat.show');
@@ -28,7 +28,7 @@ Route::group(array('prefix' => $adminPrefix), function() {
         //route new tag 
         Route::get('dhcd/news/tag/log', 'NewsTagController@log')->name('dhcd.news.tag.log');
         Route::get('dhcd/news/tag/data', 'NewsTagController@data')->name('dhcd.news.tag.data');
-        Route::get('dhcd/news/tag/manager', 'NewsTagController@manager')->name('dhcd.news.tag.manager');
+        Route::get('dhcd/news/tag/manager', 'NewsTagController@manager')->name('dhcd.news.tag.manager')->where('as','Quản lý tag');
         Route::get('dhcd/news/tag/create', 'NewsTagController@create')->name('dhcd.news.tag.create');
         Route::post('dhcd/news/tag/add', 'NewsTagController@add')->name('dhcd.news.tag.add');
         Route::get('dhcd/news/tag/show', 'NewsTagController@show')->where('news_id', '[0-9]+')->name('dhcd.news.tag.show');

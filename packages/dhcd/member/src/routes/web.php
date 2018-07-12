@@ -8,7 +8,7 @@ Route::group(array('prefix' => null), function () {
     Route::match(['get', 'post'], 'login', 'Auth\LoginController@login')->name('dhcd.member.auth.login');
 
     Route::group(['middleware' => ['dhcd.auth']], function () {
-        Route::get('', '\Adtech\Core\App\Http\Controllers\FrontendController@index')->name('frontend.homepage');
+        // Route::get('', '\Adtech\Core\App\Http\Controllers\FrontendController@index')->name('frontend.homepage');
 
         Route::get('logout', 'Auth\LoginController@logout')->name('dhcd.member.auth.logout');
 
@@ -29,7 +29,7 @@ Route::group(array('prefix' => $adminPrefix), function() {
         //member
         Route::get('dhcd/member/member/log', 'MemberController@log')->name('dhcd.member.member.log');
         Route::get('dhcd/member/member/data', 'MemberController@data')->name('dhcd.member.member.data');
-        Route::get('dhcd/member/member/manage', 'MemberController@manage')->name('dhcd.member.member.manage');
+        Route::get('dhcd/member/member/manage', 'MemberController@manage')->name('dhcd.member.member.manage')->where('as','Quản lý người dùng');
         Route::get('dhcd/member/member/create', 'MemberController@create')->name('dhcd.member.member.create');
         Route::post('dhcd/member/member/add', 'MemberController@add')->name('dhcd.member.member.add');
         Route::get('dhcd/member/member/show', 'MemberController@show')->name('dhcd.member.member.show');
@@ -43,7 +43,7 @@ Route::group(array('prefix' => $adminPrefix), function() {
         Route::post('dhcd/member/member/check-email-exist', 'MemberController@checkEmailExist')->name('dhcd.member.member.check-email-exist');
         Route::post('dhcd/member/member/check-phone-exist', 'MemberController@checkPhoneExist')->name('dhcd.member.member.check-phone-exist');
 
-        Route::get('dhcd/member/member/excel/get/import', 'MemberController@getImport')->name('dhcd.member.member.excel.get.import');
+        Route::get('dhcd/member/member/excel/get/import', 'MemberController@getImport')->name('dhcd.member.member.excel.get.import')->where('as','Upload excel');
         Route::post('dhcd/member/member/excel/post/import', 'MemberController@postImport')->name('dhcd.member.member.excel.post.import');
     });
 });

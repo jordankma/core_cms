@@ -34,13 +34,7 @@ class Google_Service_CloudTasks_Resource_ProjectsLocationsQueuesTasks extends Go
    * The worker must acknowledge a task within the lease_duration or the lease
    * will expire and the task will become available to be leased again. After the
    * task is acknowledged, it will not be returned by a later LeaseTasks, GetTask,
-   * or ListTasks.
-   *
-   * To acknowledge multiple tasks at the same time, use [HTTP
-   * batching](/storage/docs/json_api/v1/how-tos/batch) or the batching
-   * documentation for your client library, for example
-   * https://developers.google.com/api-client-library/python/guide/batch.
-   * (tasks.acknowledge)
+   * or ListTasks. (tasks.acknowledge)
    *
    * @param string $name Required.
    *
@@ -79,11 +73,6 @@ class Google_Service_CloudTasks_Resource_ProjectsLocationsQueuesTasks extends Go
   }
   /**
    * Creates a task and adds it to a queue.
-   *
-   * To add multiple tasks at the same time, use [HTTP
-   * batching](/storage/docs/json_api/v1/how-tos/batch) or the batching
-   * documentation for your client library, for example
-   * https://developers.google.com/api-client-library/python/guide/batch.
    *
    * Tasks cannot be updated after creation; there is no UpdateTask command.
    *
@@ -198,6 +187,12 @@ class Google_Service_CloudTasks_Resource_ProjectsLocationsQueuesTasks extends Go
    * `projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID`
    * @param array $optParams Optional parameters.
    *
+   * @opt_param int pageSize Requested page size. Fewer tasks than requested might
+   * be returned.
+   *
+   * The maximum page size is 1000. If unspecified, the page size will be the
+   * maximum. Fewer tasks than requested might be returned, even if more tasks
+   * exist; use next_page_token in the response to determine if more tasks exist.
    * @opt_param string responseView The response_view specifies which subset of
    * the Task will be returned.
    *
@@ -208,10 +203,6 @@ class Google_Service_CloudTasks_Resource_ProjectsLocationsQueuesTasks extends Go
    *
    * Authorization for FULL requires `cloudtasks.tasks.fullView` [Google
    * IAM](/iam/) permission on the Task resource.
-   * @opt_param string orderBy Sort order used for the query. The only fields
-   * supported for sorting are `schedule_time` and `pull_message.tag`. All results
-   * will be returned in approximately ascending order. The default ordering is by
-   * `schedule_time`.
    * @opt_param string pageToken A token identifying the page of results to
    * return.
    *
@@ -220,12 +211,6 @@ class Google_Service_CloudTasks_Resource_ProjectsLocationsQueuesTasks extends Go
    * returned from the previous call to ListTasks method.
    *
    * The page token is valid for only 2 hours.
-   * @opt_param int pageSize Requested page size. Fewer tasks than requested might
-   * be returned.
-   *
-   * The maximum page size is 1000. If unspecified, the page size will be the
-   * maximum. Fewer tasks than requested might be returned, even if more tasks
-   * exist; use next_page_token in the response to determine if more tasks exist.
    * @return Google_Service_CloudTasks_ListTasksResponse
    */
   public function listProjectsLocationsQueuesTasks($parent, $optParams = array())

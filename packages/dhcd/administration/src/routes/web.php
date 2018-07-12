@@ -7,7 +7,7 @@ Route::group(array('prefix' => $adminPrefix), function() {
         //phuong xa
         Route::get('dhcd/administration/commune-guild/log', 'CommuneGuildController@log')->name('dhcd.administration.commune-guild.log');
         Route::get('dhcd/administration/commune-guild/data', 'CommuneGuildController@data')->name('dhcd.administration.commune-guild.data');
-        Route::get('dhcd/administration/commune-guild/manage', 'CommuneGuildController@manage')->name('dhcd.administration.commune-guild.manage');
+        Route::get('dhcd/administration/commune-guild/manage', 'CommuneGuildController@manage')->name('dhcd.administration.commune-guild.manage')->where('as','Quản lý phường xã');
         Route::get('dhcd/administration/commune-guild/create', 'CommuneGuildController@create')->name('dhcd.administration.commune-guild.create');
         Route::post('dhcd/administration/commune-guild/add', 'CommuneGuildController@add')->name('dhcd.administration.commune-guild.add');
         Route::get('dhcd/administration/commune-guild/show', 'CommuneGuildController@show')->name('dhcd.administration.commune-guild.show');
@@ -17,7 +17,7 @@ Route::group(array('prefix' => $adminPrefix), function() {
         //quan huyen
         Route::get('dhcd/administration/country-district/log', 'CountryDistrictController@log')->name('dhcd.administration.country-district.log');
         Route::get('dhcd/administration/country-district/data', 'CountryDistrictController@data')->name('dhcd.administration.country-district.data');
-        Route::get('dhcd/administration/country-district/manage', 'CountryDistrictController@manage')->name('dhcd.administration.country-district.manage');
+        Route::get('dhcd/administration/country-district/manage', 'CountryDistrictController@manage')->name('dhcd.administration.country-district.manage')->where('as','Quản lý quận huyện');
         Route::get('dhcd/administration/country-district/create', 'CountryDistrictController@create')->name('dhcd.administration.country-district.create');
         Route::post('dhcd/administration/country-district/add', 'CountryDistrictController@add')->name('dhcd.administration.country-district.add');
         Route::get('dhcd/administration/country-district/show', 'CountryDistrictController@show')->name('dhcd.administration.country-district.show');
@@ -28,7 +28,7 @@ Route::group(array('prefix' => $adminPrefix), function() {
         //tinh thanh pho
         Route::get('dhcd/administration/provine-city/log', 'ProvineCityController@log')->name('dhcd.administration.provine-city.log');
         Route::get('dhcd/administration/provine-city/data', 'ProvineCityController@data')->name('dhcd.administration.provine-city.data');
-        Route::get('dhcd/administration/provine-city/manage', 'ProvineCityController@manage')->name('dhcd.administration.provine-city.manage');
+        Route::get('dhcd/administration/provine-city/manage', 'ProvineCityController@manage')->name('dhcd.administration.provine-city.manage')->where('as','Quản lý tỉnh thành');
         Route::get('dhcd/administration/provine-city/create', 'ProvineCityController@create')->name('dhcd.administration.provine-city.create');
         Route::post('dhcd/administration/provine-city/add', 'ProvineCityController@add')->name('dhcd.administration.provine-city.add');
         Route::get('dhcd/administration/provine-city/show', 'ProvineCityController@show')->name('dhcd.administration.provine-city.show');

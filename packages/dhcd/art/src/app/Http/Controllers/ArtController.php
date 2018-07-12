@@ -27,4 +27,8 @@ class ArtController extends Controller
 	public function eventsList(){
 		return view('DHCD-ART::modules.art.events.list');	
 	}
+
+	public function memberProfile(){
+		return view('DHCD-ART::modules.art.profile.detail');	
+	}
 }
