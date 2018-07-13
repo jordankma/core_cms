@@ -32,11 +32,11 @@ class ApiTopicController extends BaseController
 			"message" => "Lấy danh sách thất bại",	
 		];
 		$validator = Validator::make($request->all(), [
-            'member_id' => 'required|min:1|numeric',
+            'id' => 'required|min:1|numeric',
             'token' => 'required'
         ], $this->messages);
         if (!$validator->fails()) {
-        	$member_id = $request->input('member_id');
+        	$member_id = $request->input('id');
         	//list topic thuoc member
         	$list_topic_id_tmp = $list_topic_id = array();
 			$list_topic_id_tmp = TopicHasMember::where('member_id', $member_id)->select('topic_id')->get();
@@ -50,12 +50,12 @@ class ApiTopicController extends BaseController
 				$data_topic = array();
 				foreach ($topics as $key => $topic) {
 					$data_topic[] = [
-                        "topic_id"   => $topic->topic_id,
+                        "id"   => $topic->topic_id,
                         "title" => $topic->name,
                         "photo" => $topic->image != '' ? $topic->image : '',
                         "isEnable" => in_array($topic->topic_id, $list_topic_id) ? true : false,
-                        "date_created" => $topic->created_at,
-                        "date_modified" => $topic->updated_at
+                        "date_created" => date_format($topic->created_at, 'd-m-Y'),
+                        "date_modified" => date_format($topic->updated_at, 'd-m-Y'),
 					];	
 				}
 				$data = [

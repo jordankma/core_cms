@@ -14,6 +14,8 @@ use Auth;
 use DateTime;
 use Dhcd\Administration\App\Models\ProvineCity;
 use Dhcd\Administration\App\Models\CountryDistrict;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 class MemberController extends Controller
 {
     private $messages = array(
@@ -22,7 +24,6 @@ class MemberController extends Controller
         'numeric'  => "Phải là số",
         'phone.regex' =>'Sai định dạng'
     );
-
     public function __construct(MemberRepository $memberRepository)
     {
         parent::__construct();
@@ -338,7 +339,25 @@ class MemberController extends Controller
         echo json_encode($data);
     }
 
-    public function getImport(){
+    public function getImport(Request $request){
+        $group_name = config('site.group_name');
+        $skin = config('site.desktop.skin');
+        $url = public_path('/vendor/' . $group_name . '/' . $skin .'/dhcd/news/uploads/tnxh.xlsx');
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($url);
+        $worksheet = $spreadsheet->getActiveSheet();
+        $rows = [];
+        foreach ($worksheet->getRowIterator() AS $row) {
+            $cellIterator = $row->getCellIterator();
+            $cellIterator->setIterateOnlyExistingCells(FALSE); // This loops through all cells,
+            $cells = [];
+            foreach ($cellIterator as $cell) {
+                $cells[] = $cell->getValue();
+            }
+            $rows[] = $cells;
+        }
+        // echo '<pre>';
+        // print_r($rows);
+        // echo '</pre>'; die;
         return view('DHCD-MEMBER::modules.member.member.import');    
     }
 

@@ -2,9 +2,7 @@
 
 return [
     "titles" => [
-        "demo" => [
-            "manage" => "Manage demo"
-        ]
+        "list" => "Danh sách tin tức"
     ],
     "table" => [
         "id" => "#",

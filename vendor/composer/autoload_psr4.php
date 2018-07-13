@@ -67,6 +67,7 @@ return array(
     'Dotenv\\' => array($vendorDir . '/vlucas/phpdotenv/src'),
     'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator'),
     'Doctrine\\Common\\Inflector\\' => array($vendorDir . '/doctrine/inflector/lib/Doctrine/Common/Inflector'),
+    'Dhcd\\Topicfrontend\\' => array($baseDir . '/packages/dhcd/topicfrontend/src'),
     'Dhcd\\Topic\\' => array($baseDir . '/packages/dhcd/topic/src'),
     'Dhcd\\Profile\\' => array($baseDir . '/packages/dhcd/profile/src'),
     'Dhcd\\Newsfrontend\\' => array($baseDir . '/packages/dhcd/newsfrontend/src'),

@@ -11,7 +11,11 @@
           "routes": [
             "dhcd.topic.topic.manage",
             "dhcd.topic.topic.data",
-            "dhcd.topic.topic.log"
+            "dhcd.topic.topic.log",
+            "dhcd.topic.topic.create.member",
+            "dhcd.topic.topic.confirm-status",
+            "dhcd.topic.topic.confirm-status",
+            "dhcd.topic.topic.confirm_add_all_member"
           ]
         },
         {

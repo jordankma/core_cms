@@ -4,6 +4,6 @@ $adminPrefix = '';
 Route::group(array('prefix' => $adminPrefix), function() {
 
     Route::group(['middleware' => ['dhcd.auth']], function () {
-	    Route::get('events/list', 'EventsFrontendController@list')->name('events.frontend.list')->where('as','Chương trình');
+	    Route::get('events/list', 'EventsfrontendController@list')->name('events.frontend.list')->where('as','Chương trình');
 	});
 });

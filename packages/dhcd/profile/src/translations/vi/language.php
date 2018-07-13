@@ -2,9 +2,7 @@
 
 return [
     "titles" => [
-        "demo" => [
-            "manage" => "Manage demo"
-        ]
+        "profile" => "Trang các nhân"
     ],
     "table" => [
         "id" => "#",

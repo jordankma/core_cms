@@ -140,6 +140,7 @@ class ComposerStaticInitdc9850d770de88aec98785f608228e20
             'Dotenv\\' => 7,
             'Doctrine\\Instantiator\\' => 22,
             'Doctrine\\Common\\Inflector\\' => 26,
+            'Dhcd\\Topicfrontend\\' => 19,
             'Dhcd\\Topic\\' => 11,
             'Dhcd\\Profile\\' => 13,
             'Dhcd\\Newsfrontend\\' => 18,
@@ -421,6 +422,10 @@ class ComposerStaticInitdc9850d770de88aec98785f608228e20
         'Doctrine\\Common\\Inflector\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Common/Inflector',
+        ),
+        'Dhcd\\Topicfrontend\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/packages/dhcd/topicfrontend/src',
         ),
         'Dhcd\\Topic\\' => 
         array (
@@ -891,9 +896,7 @@ class ComposerStaticInitdc9850d770de88aec98785f608228e20
         'Dhcd\\Events\\App\\Models\\Events' => __DIR__ . '/../..' . '/packages/dhcd/events/src/app/Models/Events.php',
         'Dhcd\\Events\\App\\Repositories\\EventsRepository' => __DIR__ . '/../..' . '/packages/dhcd/events/src/app/Repositories/EventsRepository.php',
         'Dhcd\\Events\\EventsServiceProvider' => __DIR__ . '/../..' . '/packages/dhcd/events/src/EventsServiceProvider.php',
-        'Dhcd\\Eventsfrontend\\App\\Http\\Controllers\\DemoController' => __DIR__ . '/../..' . '/packages/dhcd/eventsfrontend/src/app/Http/Controllers/DemoController.php',
-        'Dhcd\\Eventsfrontend\\App\\Models\\Demo' => __DIR__ . '/../..' . '/packages/dhcd/eventsfrontend/src/app/Models/Demo.php',
-        'Dhcd\\Eventsfrontend\\App\\Repositories\\DemoRepository' => __DIR__ . '/../..' . '/packages/dhcd/eventsfrontend/src/app/Repositories/DemoRepository.php',
+        'Dhcd\\Eventsfrontend\\App\\Http\\Controllers\\EventsfrontendController' => __DIR__ . '/../..' . '/packages/dhcd/eventsfrontend/src/app/Http/Controllers/EventsfrontendController.php',
         'Dhcd\\Eventsfrontend\\EventsfrontendServiceProvider' => __DIR__ . '/../..' . '/packages/dhcd/eventsfrontend/src/EventsfrontendServiceProvider.php',
         'Dhcd\\Index\\App\\Http\\Controllers\\IndexController' => __DIR__ . '/../..' . '/packages/dhcd/index/src/app/Http/Controllers/IndexController.php',
         'Dhcd\\Index\\App\\Models\\Demo' => __DIR__ . '/../..' . '/packages/dhcd/index/src/app/Models/Demo.php',
@@ -909,7 +912,6 @@ class ComposerStaticInitdc9850d770de88aec98785f608228e20
         'Dhcd\\Member\\App\\Repositories\\DemoRepository' => __DIR__ . '/../..' . '/packages/dhcd/member/src/app/Repositories/DemoRepository.php',
         'Dhcd\\Member\\App\\Repositories\\MemberRepository' => __DIR__ . '/../..' . '/packages/dhcd/member/src/app/Repositories/MemberRepository.php',
         'Dhcd\\Member\\MemberServiceProvider' => __DIR__ . '/../..' . '/packages/dhcd/member/src/MemberServiceProvider.php',
-        'Dhcd\\NewsFrontend\\App\\Http\\Controllers\\NewsFrontendController' => __DIR__ . '/../..' . '/packages/dhcd/newsfrontend/src/app/Http/Controllers/NewsFrontendController.php',
         'Dhcd\\News\\App\\Http\\Controllers\\ApiNewsController' => __DIR__ . '/../..' . '/packages/dhcd/news/src/app/Http/Controllers/ApiNewsController.php',
         'Dhcd\\News\\App\\Http\\Controllers\\NewsCatController' => __DIR__ . '/../..' . '/packages/dhcd/news/src/app/Http/Controllers/NewsCatController.php',
         'Dhcd\\News\\App\\Http\\Controllers\\NewsController' => __DIR__ . '/../..' . '/packages/dhcd/news/src/app/Http/Controllers/NewsController.php',
@@ -930,6 +932,7 @@ class ComposerStaticInitdc9850d770de88aec98785f608228e20
         'Dhcd\\News\\App\\Repositories\\NewsRepository' => __DIR__ . '/../..' . '/packages/dhcd/news/src/app/Repositories/NewsRepository.php',
         'Dhcd\\News\\App\\Repositories\\NewsTagRepository' => __DIR__ . '/../..' . '/packages/dhcd/news/src/app/Repositories/NewsTagRepository.php',
         'Dhcd\\News\\NewsServiceProvider' => __DIR__ . '/../..' . '/packages/dhcd/news/src/NewsServiceProvider.php',
+        'Dhcd\\Newsfrontend\\App\\Http\\Controllers\\NewsfrontendController' => __DIR__ . '/../..' . '/packages/dhcd/newsfrontend/src/app/Http/Controllers/NewsfrontendController.php',
         'Dhcd\\Newsfrontend\\NewsfrontendServiceProvider' => __DIR__ . '/../..' . '/packages/dhcd/newsfrontend/src/NewsfrontendServiceProvider.php',
         'Dhcd\\Profile\\App\\Http\\Controllers\\ProfileController' => __DIR__ . '/../..' . '/packages/dhcd/profile/src/app/Http/Controllers/ProfileController.php',
         'Dhcd\\Profile\\App\\Models\\Demo' => __DIR__ . '/../..' . '/packages/dhcd/profile/src/app/Models/Demo.php',
@@ -945,6 +948,10 @@ class ComposerStaticInitdc9850d770de88aec98785f608228e20
         'Dhcd\\Topic\\App\\Repositories\\TopicHasMemberRepository' => __DIR__ . '/../..' . '/packages/dhcd/topic/src/app/Repositories/TopicHasMemberRepository.php',
         'Dhcd\\Topic\\App\\Repositories\\TopicRepository' => __DIR__ . '/../..' . '/packages/dhcd/topic/src/app/Repositories/TopicRepository.php',
         'Dhcd\\Topic\\TopicServiceProvider' => __DIR__ . '/../..' . '/packages/dhcd/topic/src/TopicServiceProvider.php',
+        'Dhcd\\Topicfrontend\\App\\Http\\Controllers\\DemoController' => __DIR__ . '/../..' . '/packages/dhcd/topicfrontend/src/app/Http/Controllers/DemoController.php',
+        'Dhcd\\Topicfrontend\\App\\Models\\Demo' => __DIR__ . '/../..' . '/packages/dhcd/topicfrontend/src/app/Models/Demo.php',
+        'Dhcd\\Topicfrontend\\App\\Repositories\\DemoRepository' => __DIR__ . '/../..' . '/packages/dhcd/topicfrontend/src/app/Repositories/DemoRepository.php',
+        'Dhcd\\Topicfrontend\\TopicfrontendServiceProvider' => __DIR__ . '/../..' . '/packages/dhcd/topicfrontend/src/TopicfrontendServiceProvider.php',
         'Doctrine\\Common\\Inflector\\Inflector' => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Common/Inflector/Inflector.php',
         'Doctrine\\Common\\Lexer\\AbstractLexer' => __DIR__ . '/..' . '/doctrine/lexer/lib/Doctrine/Common/Lexer/AbstractLexer.php',
         'Doctrine\\Instantiator\\Exception\\ExceptionInterface' => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator/Exception/ExceptionInterface.php',

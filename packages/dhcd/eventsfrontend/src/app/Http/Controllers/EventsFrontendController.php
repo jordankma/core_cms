@@ -1,6 +1,6 @@
 <?php
 
-namespace Dhcd\EventsFrontend\App\Http\Controllers;
+namespace Dhcd\Eventsfrontend\App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Adtech\Application\Cms\Controllers\MController as Controller;
@@ -11,7 +11,7 @@ use Dhcd\Events\App\Models\Events;
 
 use Validator;
 
-class EventsFrontendController extends Controller
+class EventsfrontendController extends Controller
 {
     private $messages = array(
         'name.regex' => "Sai định dạng",

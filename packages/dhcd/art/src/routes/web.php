@@ -1,5 +1,9 @@
 <?php
 $adminPrefix = config('site.admin_prefix');
+
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 Route::group(array('prefix' => $adminPrefix), function() {
     Route::group(['middleware' => ['adtech.auth', 'adtech.acl']], function () {
 
@@ -27,6 +31,7 @@ Route::group(array('prefix' => $adminPrefix), function() {
         Route::get('dhcd/art/document/van-kien', 'ArtController@vanKienDetail');
 
         Route::get('dhcd/art/member/profile', 'ArtController@memberProfile');
+        
 
     });
 });

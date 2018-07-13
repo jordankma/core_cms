@@ -2,7 +2,7 @@
 
 return [
     "titles" => [
-        "index" => "Trang chủ"
+        "list" => "Danh sách thảo luận"
     ],
     "table" => [
         "id" => "#",

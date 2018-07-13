@@ -1,13 +1,13 @@
 <?php
 
-namespace Dhcd\Eventsfrontend\App\Repositories;
+namespace Dhcd\Topicfrontend\App\Repositories;
 
 use Adtech\Application\Cms\Repositories\Eloquent\Repository;
 use Illuminate\Support\Facades\DB;
 
 /**
  * Class DemoRepository
- * @package Dhcd\Eventsfrontend\Repositories
+ * @package Dhcd\Topicfrontend\Repositories
  */
 class DemoRepository extends Repository
 {
@@ -17,7 +17,7 @@ class DemoRepository extends Repository
      */
     public function model()
     {
-        return 'Dhcd\Eventsfrontend\App\Models\Demo';
+        return 'Dhcd\Topicfrontend\App\Models\Demo';
     }
 
     public function findAll() {

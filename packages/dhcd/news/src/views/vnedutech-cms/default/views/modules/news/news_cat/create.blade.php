@@ -53,7 +53,7 @@
                 </div>
             </div>
     </section>
-    <!--main content ends-->            
+    <!--main content ends--> 
 @stop
 {{-- page level scripts --}}
 @section('footer_scripts')
@@ -61,7 +61,6 @@
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrapvalidator/js/bootstrapValidator.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin .'/vendors/select2/js/select2.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin .'/dhcd/news/js/news_cat/add.js') }}" type="text/javascript" ></script>
-    <script src="{{ asset('/vendor/' . $group_name . '/' . $skin .'/dhcd/news/js/news_cat/test.js') }}" type="text/javascript" ></script>
     <!--end of page js-->
     <script type="text/javascript">
         $('#form-add-cat').bootstrapValidator({

@@ -32,10 +32,15 @@ class ApiNewsController extends BaseController
 			$total_page = $list_news['total'];
 			$current_page = $list_news['current_page'];
 			foreach ($list_news['data'] as $key => $news) {
+				$cate_name = '';
+			    $cate = json_decode($news['news_cat'],true);
+			    if(isset($cate[0]['name'])){
+			        $cate_name = $cate[0]['name'];    
+			    }
 				$data_list_news[] =[
 					"id" => $news['news_id'],
                     "title" => base64_encode($news['title']),
-                    "sub_title" => base64_encode(json_decode($news['news_cat'],true)[0]['name'].' - '.$news['created_at']),
+                    "sub_title" => base64_encode($cate_name.' - '.$news['created_at']),
                     "describe" => base64_encode($news['desc']),
                     "photo" => $news['image'],
                     "content" => base64_encode($news['content']),
@@ -74,10 +79,15 @@ class ApiNewsController extends BaseController
 			$total_page = $list_news['total'];
 			$current_page = $list_news['current_page'];
 			foreach ($list_news['data'] as $key => $news) {
+				$cate_name = '';
+			    $cate = json_decode($news['news_cat'],true);
+			    if(isset($cate[0]['name'])){
+			        $cate_name = $cate[0]['name'];    
+			    }
 				$data_list_news[] =[
 					"id" => $news['news_id'],
                     "title" => base64_encode($news['title']),
-                    "sub_title" => base64_encode(json_decode($news['news_cat'],true)[0]['name'].' - '.$news['created_at']),
+                    "sub_title" => base64_encode($cate_name.' - '.$news['created_at']),
                     "describe" => base64_encode($news['desc']),
                     "photo" => $news['image'],
                     "content" => base64_encode($news['content']),

@@ -1,6 +1,6 @@
 <?php
 
-namespace Dhcd\NewsFrontend\App\Http\Controllers;
+namespace Dhcd\Newsfrontend\App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Adtech\Application\Cms\Controllers\MController as Controller;
@@ -11,7 +11,7 @@ use Dhcd\News\App\Models\News;
 
 use Validator;
 
-class NewsFrontendController extends Controller
+class NewsfrontendController extends Controller
 {
     private $messages = array(
         'name.regex' => "Sai định dạng",
