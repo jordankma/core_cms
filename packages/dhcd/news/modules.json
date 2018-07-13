@@ -10,14 +10,17 @@
           "name": "View list",
           "routes": [
             "dhcd.news.news.manager",
-            "dhcd.news.news.data"
+            "dhcd.news.news.data",
+            "dhcd.news.news.log"
           ]
         },
         {
           "name": "Create",
           "routes": [
             "dhcd.news.news.create",
-            "dhcd.news.news.add"
+            "dhcd.news.news.add",
+            "dhcd.news.news.alias",
+            "dhcd.news.tag.ajax.add"
           ]
         },
         {
@@ -43,7 +46,8 @@
           "name": "View list",
           "routes": [
             "dhcd.news.cat.manager",
-            "dhcd.news.cat.data"
+            "dhcd.news.cat.data",
+            "dhcd.news.tag.log"
           ]
         },
         {

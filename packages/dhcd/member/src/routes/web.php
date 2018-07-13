@@ -48,7 +48,7 @@ Route::group(array('prefix' => $adminPrefix), function() {
     });
 });
 
-Route::group(array('prefix' => 'dev'), function() {
+Route::group(array('prefix' => 'resource/dev'), function() {
     Route::post('post/login', 'ApiMemberController@postLogin');
     Route::get('get/register', 'ApiMemberController@getRegister');
     Route::get('get/getuserinfo', 'ApiMemberController@getUserInfo');

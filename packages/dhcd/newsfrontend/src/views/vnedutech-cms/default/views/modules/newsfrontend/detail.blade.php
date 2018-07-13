@@ -18,7 +18,6 @@
     #detail-news .title{
         font-size: 25px;
         font-weight: bold;
-        text-transform: uppercase;
         color: #3498db;
     }
     .author {
@@ -58,10 +57,10 @@
                 <p class="time">{{ $cate_name.' - '.$date_created }}</p>
                 <img src="{{asset('/vendor/' . $group_name . '/' . $skin . '/dhcd/member/uploads/media/images/Avatar.jpg')}}" class="img-reponsive">
                 <p class="desc">
-                    {{$news->desc}}
+                    {!!$news->desc!!}
                 </p>
                 <p>
-                    {{$news->content}}
+                    {!!$news->content!!}
                 </p>
                 <p class="author">{{$news->create_by}}</p>
             </div>

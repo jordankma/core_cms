@@ -1,16 +1,37 @@
 {
-  "package": "package",
-  "module": "module",
-  "description": "Tin tức",
+  "package": "dhcd",
+  "module": "newsfrontend",
+  "description": "Permission route by group",
   "details": [
     {
-      "name": "Tin tức",
+      "name": "Tin tức frontend",
       "groups": [
         {
           "name": "View list",
           "routes": [
             "news.frontend.list",
-            "news.frontend.detail"
+            "router name 02"
+          ]
+        },
+        {
+          "name": "Create",
+          "routes": [
+            "news.frontend.detail",
+            "router name 04"
+          ]
+        },
+        {
+          "name": "Update",
+          "routes": [
+            "router name 05",
+            "router name 06"
+          ]
+        },
+        {
+          "name": "Delete",
+          "routes": [
+            "router name 07",
+            "router name 08"
           ]
         }
       ]

@@ -3,14 +3,16 @@ $adminPrefix = config('site.admin_prefix');
 Route::group(array('prefix' => $adminPrefix), function() {
     Route::group(['middleware' => ['adtech.auth', 'adtech.acl']], function () {
 
-        Route::get('dhcd/notification/demo/log', 'DemoController@log')->name('dhcd.notification.demo.log');
-        Route::get('dhcd/notification/demo/data', 'DemoController@data')->name('dhcd.notification.demo.data');
-        Route::get('dhcd/notification/demo/manage', 'DemoController@manage')->name('dhcd.notification.demo.manage');
-        Route::get('dhcd/notification/demo/create', 'DemoController@create')->name('dhcd.notification.demo.create');
-        Route::post('dhcd/notification/demo/add', 'DemoController@add')->name('dhcd.notification.demo.add');
-        Route::get('dhcd/notification/demo/show', 'DemoController@show')->name('dhcd.notification.demo.show');
-        Route::put('dhcd/notification/demo/update', 'DemoController@update')->name('dhcd.notification.demo.update');
-        Route::get('dhcd/notification/demo/delete', 'DemoController@delete')->name('dhcd.notification.demo.delete');
-        Route::get('dhcd/notification/demo/confirm-delete', 'DemoController@getModalDelete')->name('dhcd.notification.demo.confirm-delete');
+        Route::get('dhcd/notification/notification/log', 'NotificationController@log')->name('dhcd.notification.notification.log');
+        Route::get('dhcd/notification/notification/data', 'NotificationController@data')->name('dhcd.notification.notification.data');
+        Route::get('dhcd/notification/notification/manage', 'NotificationController@manage')->name('dhcd.notification.notification.manage');
+        Route::get('dhcd/notification/notification/create', 'NotificationController@create')->name('dhcd.notification.notification.create');
+        Route::post('dhcd/notification/notification/add', 'NotificationController@add')->name('dhcd.notification.notification.add');
+        Route::get('dhcd/notification/notification/show', 'NotificationController@show')->name('dhcd.notification.notification.show');
+        Route::put('dhcd/notification/notification/update', 'NotificationController@update')->name('dhcd.notification.notification.update');
+        Route::get('dhcd/notification/notification/delete', 'NotificationController@delete')->name('dhcd.notification.notification.delete');
+        Route::get('dhcd/notification/notification/confirm-delete', 'NotificationController@getModalDelete')->name('dhcd.notification.notification.confirm-delete');
+
+        Route::get('dhcd/notification/notification/search/member', 'NotificationController@searchMember')->name('dhcd.notification.notification.search.member');
     });
 });

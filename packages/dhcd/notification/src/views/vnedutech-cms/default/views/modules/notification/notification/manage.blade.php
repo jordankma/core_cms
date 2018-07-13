@@ -35,8 +35,9 @@
                         {{ $title }}
                     </h4>
                     <div class="pull-right">
-                        <a href="{{ route('dhcd.notification.demo.create') }}" class="btn btn-sm btn-default"><span
-                                    class="glyphicon glyphicon-plus"></span> {{ trans('dhcd-notification::language.buttons.create') }}</a>
+                        @if ($USER_LOGGED->canAccess('dhcd.notification.notification.create'))
+                        <a href="{{ route('dhcd.notification.notification.create') }}" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-plus"></span> {{ trans('dhcd-notification::language.buttons.create') }}</a>
+                        @endif
                     </div>
                 </div>
                 <br/>
@@ -70,7 +71,7 @@
             var table = $('#table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('dhcd.notification.demo.data') }}',
+                ajax: '{{ route('dhcd.notification.notification.data') }}',
                 columns: [
                     { data: 'DT_Row_Index', name: 'id' },
                     { data: 'name', name: 'name' },

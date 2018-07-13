@@ -9,8 +9,11 @@
         {
           "name": "View list",
           "routes": [
-            "dhcd.member.member.manager",
-            "dhcd.member.member.data"
+            "dhcd.member.member.manage",
+            "dhcd.member.member.data",
+            "dhcd.member.member.log",
+            "dhcd.member.member.excel.get.import",
+            "dhcd.member.member.excel.post.import"
           ]
         },
         {
@@ -18,7 +21,6 @@
           "routes": [
             "dhcd.member.member.create",
             "dhcd.member.member.add",
-            "dhcd.member.member.country-district",
             "dhcd.member.member.check-username-exist",
             "dhcd.member.member.check-email-exist",
             "dhcd.member.member.check-phone-exist"

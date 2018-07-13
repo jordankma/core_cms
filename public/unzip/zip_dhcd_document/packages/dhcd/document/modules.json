@@ -1,0 +1,69 @@
+{
+  "package": "package",
+  "module": "module",
+  "description": "Permission route by group",
+  "details": [
+    {
+      "name": "Quản lý danh mục tài liệu",
+      "groups": [
+        {
+          "name": "View list",
+          "routes": [
+            "dhcd.document.cate.manage"            
+          ]
+        },
+        {
+          "name": "Create",
+          "routes": [
+            "dhcd.document.cate.add", 
+            "dhcd.document.cate.create" 
+          ]
+        },
+        {
+          "name": "Update",
+          "routes": [
+            "dhcd.document.cate.edit", 
+            "dhcd.document.cate.update" 
+          ]
+        },
+        {
+          "name": "Delete",
+          "routes": [
+            "dhcd.document.cate.delete"             
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Quản lý kiểu tài liệu",
+      "groups": [
+        {
+          "name": "View list",
+          "routes": [
+            "dhcd.document.type.manage"            
+          ]
+        },
+        {
+          "name": "Create",
+          "routes": [
+            "dhcd.document.type.add", 
+            "dhcd.document.type.create" 
+          ]
+        },
+        {
+          "name": "Update",
+          "routes": [
+            "dhcd.document.type.edit", 
+            "dhcd.document.type.update" 
+          ]
+        },
+        {
+          "name": "Delete",
+          "routes": [
+            "dhcd.document.type.delete"             
+          ]
+        }
+      ]
+    }
+  ]
+}

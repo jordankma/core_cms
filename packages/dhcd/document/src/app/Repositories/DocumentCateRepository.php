@@ -1,15 +1,15 @@
 <?php
 
-namespace Dhcd\Notification\App\Repositories;
+namespace Dhcd\Document\App\Repositories;
 
 use Adtech\Application\Cms\Repositories\Eloquent\Repository;
 use Illuminate\Support\Facades\DB;
 
 /**
  * Class DemoRepository
- * @package Dhcd\Notification\Repositories
+ * @package Dhcd\Document\Repositories
  */
-class DemoRepository extends Repository
+class DocumentCateRepository extends Repository
 {
 
     /**
@@ -17,7 +17,7 @@ class DemoRepository extends Repository
      */
     public function model()
     {
-        return 'Dhcd\Notification\App\Models\Demo';
+        return 'Dhcd\Document\App\Models\DocumentCate';
     }
 
     public function findAll() {

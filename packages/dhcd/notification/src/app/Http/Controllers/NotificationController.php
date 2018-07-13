@@ -4,13 +4,13 @@ namespace Dhcd\Notification\App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Adtech\Application\Cms\Controllers\Controller as Controller;
-use Dhcd\Notification\App\Repositories\DemoRepository;
-use Dhcd\Notification\App\Models\Demo;
+use Dhcd\Notification\App\Repositories\NotificationRepository;
+use Dhcd\Notification\App\Models\Notification;
 use Spatie\Activitylog\Models\Activity;
 use Yajra\Datatables\Datatables;
-use Validator;
-
-class DemoController extends Controller
+use Validator,DateTime;
+use Dhcd\Member\App\Models\Member;
+class NotificationController extends Controller
 {
     private $messages = array(
         'name.regex' => "Sai định dạng",
@@ -18,33 +18,67 @@ class DemoController extends Controller
         'numeric'  => "Phải là số"
     );
 
-    public function __construct(DemoRepository $demoRepository)
+    public function __construct(NotificationRepository $notificationRepository)
     {
         parent::__construct();
-        $this->demo = $demoRepository;
+        $this->notification = $notificationRepository;
     }
 
     public function add(Request $request)
     {
-        $demos = new Demo($request->all());
-        $demos->save();
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+        ], $this->messages);
+        if (!$validator->fails()) {
+            $time_sent = '';
+            if(isset($request->time_sent) && $request->input('time_sent') != ''){
+                $date = new DateTime($request->input('time_sent'));
+                $time_sent = $date->format('Y-m-d H:i:s');
+            }
 
-        if ($demos->demo_id) {
+            $type_sent = $request->input('type_sent');
+            $member_sent = array();
+            if($type_sent == 1){
+                $member_sent = $request->input('list_member_sent');
+            }
+            // if($time_sent !=''){
 
-            activity('demo')
-                ->performedOn($demos)
-                ->withProperties($request->all())
-                ->log('User: :causer.email - Add Demo - name: :properties.name, demo_id: ' . $demos->demo_id);
+            // }
+            // else{
+            //     if($type_sent==1){
+            //         $this->sentNotification();
+                    
+            //     }
+            // }
+            $notifications = new Notification();
+            $notifications->name = $request->input('name');
+            $notifications->name = self::stripUnicode($request->input('name'));
+            $notifications->content = $request->input('content');
+            $notifications->type_sent = $type_sent;
+            $notifications->type_sent = $time_sent;
+            $notifications->member_sent = json_encode($member_sent);
+            $notifications->created_at = new DateTime();
+            $notifications->updated_at = new DateTime();
+            if ($notifications->save()) {
 
-            return redirect()->route('dhcd.notification.demo.manage')->with('success', trans('dhcd-notification::language.messages.success.create'));
-        } else {
-            return redirect()->route('dhcd.notification.demo.manage')->with('error', trans('dhcd-notification::language.messages.error.create'));
+                activity('notification')
+                    ->performedOn($notifications)
+                    ->withProperties($request->all())
+                    ->log('User: :causer.email - Add notification - name: :properties.name, notification_id: ' . $notifications->notification_id);
+
+                return redirect()->route('dhcd.notification.notification.manage')->with('success', trans('dhcd-notification::language.messages.success.create'));
+            } else {
+                return redirect()->route('dhcd.notification.notification.manage')->with('error', trans('dhcd-notification::language.messages.error.create'));
+            }
+        }
+        else {
+            return $validator->messages();
         }
     }
 
     public function create()
     {
-        return view('DHCD-NOTIFICATION::modules.notification.demo.create');
+        return view('DHCD-NOTIFICATION::modules.notification.notification.create');
     }
 
     public function delete(Request $request)
@@ -68,7 +102,7 @@ class DemoController extends Controller
 
     public function manage()
     {
-        return view('DHCD-NOTIFICATION::modules.notification.demo.manage');
+        return view('DHCD-NOTIFICATION::modules.notification.notification.manage');
     }
 
     public function show(Request $request)
@@ -158,5 +192,28 @@ class DemoController extends Controller
             ->addIndexColumn()
             ->rawColumns(['actions'])
             ->make();
+    }
+
+    public function searchMember(Request $request) {
+        $data = [];
+        if ($request->ajax()) {
+            $keyword = $request->input('keyword');
+            if(!empty($keyword)){
+                $list_members = Member::where('name', 'like', '%' . $keyword . '%')->get();
+                if(!empty($list_members)){
+                    foreach($list_members as $member){
+                        $data[] = [
+                            'name' => $member->name,
+                            'member_id' => $member->member_id
+                        ];
+                    }
+                }
+            }
+        }
+        echo json_encode($data);
+    }
+
+    public function sentNotification(){
+
     }
 }

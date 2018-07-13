@@ -1,15 +1,37 @@
 {
   "package": "dhcd",
   "module": "index",
-  "description": "Hiển thị trang chủ",
+  "description": "Permission route by group",
   "details": [
     {
-      "name": "Hiển thị trang chủ",
+      "name": "Trang chủ frontend",
       "groups": [
         {
           "name": "View list",
           "routes": [
-            "frontend.homepaged"
+            "frontend.homepage",
+            "router name 02"
+          ]
+        },
+        {
+          "name": "Create",
+          "routes": [
+            "router name 03",
+            "router name 04"
+          ]
+        },
+        {
+          "name": "Update",
+          "routes": [
+            "router name 05",
+            "router name 06"
+          ]
+        },
+        {
+          "name": "Delete",
+          "routes": [
+            "router name 07",
+            "router name 08"
           ]
         }
       ]

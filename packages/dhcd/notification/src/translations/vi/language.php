@@ -2,8 +2,10 @@
 
 return [
     "titles" => [
-        "demo" => [
-            "manage" => "Manage demo"
+        "notification" => [
+            "manage" => "Quản lý thông báo",
+            "create" => "Thêm thông báo",
+            "update" => "Cập nhật thông báo"
         ]
     ],
     "table" => [
@@ -11,30 +13,44 @@ return [
         "created_at" => "Created at",
         "updated_at" => "Updated at",
         "action" => "Actions",
-        "demo" => [
-            "name" => "Name"
+        "notification" => [
+            "time_sent" => "Thời gian gửi",
+            "name" => "Tên",
+            "content" => "Nội dung",
+
         ]
     ],
     "buttons" => [
-        "create" => "Create",
-        "discard" => "Discard"
+        "create" => "Thêm",
+        "discard" => "Hủy",
+        "update" => "Cập nhật"
+    ],
+    "label" => [
+        "name" => "Tên",
+        "content" => "Nội dung",
+        "time_sent" => "Thời gian gửi",
+        "type_sent" => "Kiểu gửi"
     ],
     "placeholder" => [
-        "demo" => [
-            "name_here" => "Name here..."
+        "notification" => [
+            "name_here" => "Nhập tên",
+            "content_here" => "Nhập nội dung",
+            "time_sent_here" => "Chọn thời gian gửi",
+            "sent_all" => "Gửi tất cả",
+            "sent_single" => "Gửi theo nhóm"
         ]
     ],
     "messages" => [
         "success" => [
-            "create" => "Create successfully",
-            "update" => "Update successfully",
-            "delete" => "Delete successfully"
+            "create" => "Thêm thành công",
+            "update" => "Cập nhật thành công",
+            "delete" => "Xóa thành công"
         ],
         "error" => [
             "permission" => "Permission lock",
-            "create" => "Create failed",
-            "update" => "Update failed",
-            "delete" => "Delete failed"
+            "create" => "Thêm thất bại",
+            "update" => "Cập nhật thất bại",
+            "delete" => "Xóa thất bại"
         ]
     ]
 ];
