@@ -1,4 +1,3 @@
-*
-!default.local.vn
-!dhcd.local.vn
-!.gitignore
+
+default.local.vn
+.gitignore
