@@ -1,0 +1,18 @@
+{
+  "package": "dhcd",
+  "module": "eventsfrontend",
+  "description": "Chương trình",
+  "details": [
+    {
+      "name": "Chương trình",
+      "groups": [
+        {
+          "name": "View list",
+          "routes": [
+            "events.frontend.list"
+          ]
+        }
+      ]
+    }
+  ]
+}

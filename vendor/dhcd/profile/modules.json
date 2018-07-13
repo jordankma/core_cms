@@ -1,0 +1,19 @@
+{
+  "package": "package",
+  "module": "module",
+  "description": "Trang profile",
+  "details": [
+    {
+      "name": "Trang profile",
+      "groups": [
+        {
+          "name": "View list",
+          "routes": [
+            "profile.frontend.member",
+            "changepass.frontend.member"
+          ]
+        }
+      ]
+    }
+  ]
+}
