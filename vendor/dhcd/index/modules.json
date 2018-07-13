@@ -1,0 +1,18 @@
+{
+  "package": "dhcd",
+  "module": "index",
+  "description": "Hiển thị trang chủ",
+  "details": [
+    {
+      "name": "Hiển thị trang chủ",
+      "groups": [
+        {
+          "name": "View list",
+          "routes": [
+            "frontend.homepaged"
+          ]
+        }
+      ]
+    }
+  ]
+}
