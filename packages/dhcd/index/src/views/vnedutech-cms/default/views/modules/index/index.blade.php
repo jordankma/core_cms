@@ -59,7 +59,7 @@
                             <a href="#events" data-toggle="tab" class="nav-link">Chương trình</a>
                         </li>
                     </ul>
-                    <div class="tab-content" id="slim2">
+                    <div class="tab-content" id="slim1">
                         <div class="tab-pane active" id="news">
                             {{-- list news --}}
                             <ul class="list-group list-group-flush">
