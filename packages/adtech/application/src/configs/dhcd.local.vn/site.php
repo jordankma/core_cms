@@ -56,6 +56,7 @@ return [
     | Website backend url
     |--------------------------------------------------------------------------
     */
+    'url_storage' => 'http://dhcd.local.vn',
     'api_prefix' => '/resource/dev/get',
     'admin_prefix' => '/admin',
     'homepage' => [

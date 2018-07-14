@@ -30,9 +30,11 @@ class IndexController extends Controller
     {
         $list_news = News::paginate(10);
         $list_events = Events::all();
+        $url_storage = config('site.url_storage');
         $data = [
             'list_news' => $list_news,
-            'list_events' => $list_events
+            'list_events' => $list_events,
+            'url_storage' => $url_storage
         ];
         return view('DHCD-INDEX::modules.index.index',$data);
     }

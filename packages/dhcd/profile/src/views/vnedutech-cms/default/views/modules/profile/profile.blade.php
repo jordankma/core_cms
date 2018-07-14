@@ -32,16 +32,7 @@
 {{-- Page content --}}
 @section('content')
     <section class="content-header">
-        <h1>Trang cá nhân</h1>
-        <ol class="breadcrumb">
-            <li>
-                <a href="{{ route('frontend.homepage') }}">
-                    <i class="livicon" data-name="home" data-size="16" data-color="#000"></i>
-                    {{ trans('adtech-core::labels.home') }}
-                </a>
-            </li>
-            <li class="active"><a href="#">{{ $title }}</a></li>
-        </ol>
+        <h1>{{$title}}</h1>
     </section>
     <!--section ends-->
     <section class="content paddingleft_right15">
@@ -52,10 +43,10 @@
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
                         <li class=" nav-item active">
-                            <a href="#info" data-toggle="tab" class="nav-link">Thông tin</a>
+                            <a href="#info" data-toggle="tab" class="nav-link">{{ trans('dhcd-profile::language.tabs.info') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a href="#changepass" data-toggle="tab" class="nav-link">Đổi mật khẩu</a>
+                            <a href="#changepass" data-toggle="tab" class="nav-link">{{ trans('dhcd-profile::language.tabs.change_pass') }}</a>
                         </li>
                     </ul>
                     <div class="tab-content" id="slim2">
@@ -69,7 +60,7 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="img-file">
-                                            <img src="{{asset('/vendor/' . $group_name . '/' . $skin . '/dhcd/member/uploads/media/images/Avatar.jpg')}}" alt="img" class="img-fluid" style="max-width: 350px" />
+                                            <img src="{{$member->avatar != null ? $url_storage.$member->avatar : 'http://dhcd1.vnedutech.vn/photos/Logo-Dai-hoi-Cong-Doan.png'}}" alt="img" class="img-fluid" style="max-width: 350px" />
                                         </div>
                                     </div>
                                     <div class="col-md-8">
@@ -140,7 +131,7 @@
                             <form action="{{route('changepass.frontend.member')}}" method="post" id="form-change-pass">
                                 <div class="form-group row">
                                     <label for="old_password" class="col-md-2">
-                                        Mật khẩu cũ
+                                        {{ trans('dhcd-profile::language.label.old_password') }}
                                         <span class='require'>*</span>
                                     </label>
                                     <div class="col-md-3">
@@ -149,7 +140,7 @@
                                 </div>  
                                 <div class="form-group row">
                                     <label for="password" class="col-md-2">
-                                        Mật khẩu mới
+                                        {{ trans('dhcd-profile::language.label.password') }}
                                         <span class='require'>*</span>
                                     </label>
                                     <div class="col-md-3">
@@ -158,14 +149,16 @@
                                 </div> 
                                 <div class="form-group row">
                                     <label for="conf_password" class="col-md-2">
-                                        Xác nhận mật khẩu mới
+                                        {{ trans('dhcd-profile::language.label.conf_password') }}
                                         <span class='require'>*</span>
                                     </label>
                                     <div class="col-md-3">
                                         <input type="password" id="conf_password" placeholder="{{ trans('dhcd-profile::language.form.placeholder.conf_password') }}" name="conf_password"  class="form-control"/>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Xác nhận</button>
+                                <button type="submit" class="btn btn-primary">
+                                    {{ trans('dhcd-profile::language.buttons.confirm') }}
+                                </button>
                             </form>
                         </div>
                         <!-- /.tab-pane -->

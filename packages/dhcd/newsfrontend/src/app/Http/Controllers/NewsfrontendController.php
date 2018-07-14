@@ -28,8 +28,10 @@ class NewsfrontendController extends Controller
     public function list()
     {
         $list_news = News::paginate(10);
+        $url_storage = config('site.url_storage');
         $data = [
-            'list_news' => $list_news
+            'list_news' => $list_news,
+            'url_storage' => $url_storage
         ];
         return view('DHCD-NEWSFRONTEND::modules.newsfrontend.list',$data);
     }

@@ -44,7 +44,7 @@
                         </div>
                         <label>{{trans('dhcd-notification::language.label.content')}}</label>
                         <div class="form-group">
-                            <textarea required id="content" name="content" class="form-control" placeholder=""></textarea>
+                            <textarea id="content" name="content" class="form-control" placeholder=""></textarea>
                         </div>
                         <label>{{trans('dhcd-notification::language.label.time_sent')}}</label>
                          <div class="form-group">
@@ -70,12 +70,12 @@
                     <div class="col-sm-4">
                         <label>{{trans('dhcd-notification::language.label.type_sent')}}</label>
                         <div class="form-group">
-                            <input type="radio" id="sent-all" name="type_sent" value="1"checked="checked">
+                            <input type="radio" id="sent-all" name="type_sent" value="1" checked="checked">
                             <label for="sent-all">{{trans('dhcd-notification::language.placeholder.notification.sent_all')}}    </label> <br>
                             <input type="radio" id="sent-single" name="type_sent" value="2">
                             <label for="sent-single">{{trans('dhcd-notification::language.placeholder.notification.sent_single')}}</label>
                             <div id="area-sent-single">
-                                <input type="text" id="searchProduct" name="keyword" class="typeahead form-control" placeholder="Nhập tên người cần thêm" required="">
+                                <input type="text" id="searchProduct" name="keyword" class="typeahead form-control" placeholder="Nhập tên người cần thêm">
                                 <ul class="list-group" id="list_member_sent" style="height: 200px;overflow: auto;">
 
                                 </ul>

@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 {{-- Page title --}}
-@section('title'){{ $title = trans('dhcd-notification::language.titles.demo.manage') }}@stop
+@section('title'){{ $title = trans('dhcd-notification::language.titles.notification.manage') }}@stop
 
 {{-- page level styles --}}
 @section('header_styles')
@@ -46,10 +46,11 @@
                         <table class="table table-bordered" id="table">
                             <thead>
                             <tr class="filters">
-                                <th class="fit-content">{{ trans('adtech-core::common.sequence') }}</th>
-                                <th>{{ trans('dhcd-notification::language.table.demo.name') }}</th>
+                                <th class="fit-content">#</th>
+                                <th>{{ trans('dhcd-notification::language.table.notification.name') }}</th>
+                                <th>{{ trans('dhcd-notification::language.table.notification.content') }}</th>
+                                <th style="width: 120px">{{ trans('dhcd-notification::language.table.notification.time_sent') }}</th>
                                 <th style="width: 120px">{{ trans('dhcd-notification::language.table.created_at') }}</th>
-                                <th style="width: 120px">{{ trans('dhcd-notification::language.table.updated_at') }}</th>
                                 <th>{{ trans('dhcd-notification::language.table.action') }}</th>
                             </tr>
                             </thead>
@@ -73,10 +74,11 @@
                 serverSide: true,
                 ajax: '{{ route('dhcd.notification.notification.data') }}',
                 columns: [
-                    { data: 'DT_Row_Index', name: 'id' },
+                    { data: 'rownum', name: 'rownum' },
                     { data: 'name', name: 'name' },
+                    { data: 'content', name: 'content' },
+                    { data: 'time_sent', name: 'time_sent'},
                     { data: 'created_at', name: 'created_at'},
-                    { data: 'updated_at', name: 'updated_at'},
                     { data: 'actions', name: 'actions', orderable: false, searchable: false, className: 'fit-content'}
                 ]
             });

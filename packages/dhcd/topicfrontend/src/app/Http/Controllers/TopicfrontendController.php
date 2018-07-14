@@ -26,6 +26,7 @@ class TopicfrontendController extends Controller
     }
 
     public function list(){
+        $url_storage = config('site.url_storage');
         $member_id = $this->user->member_id;
         //list topic thuoc member
         $list_topic_id_tmp = $list_topic_id = array();
@@ -38,7 +39,8 @@ class TopicfrontendController extends Controller
         $list_topics = Topic::where('status',1)->paginate(10);
         $data = [
             "list_topic_id" => $list_topic_id,
-            "list_topics" => $list_topics
+            "list_topics" => $list_topics,
+            'url_storage' => $url_storage
         ];
         return view('DHCD-TOPICFRONTEND::modules.topicfrontend.list',$data);
     }

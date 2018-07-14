@@ -17,7 +17,7 @@ return [
             "time_sent" => "Thời gian gửi",
             "name" => "Tên",
             "content" => "Nội dung",
-
+            
         ]
     ],
     "buttons" => [

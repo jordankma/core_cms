@@ -59,7 +59,7 @@
                         <div class="row">
                             <div class="col-md-2 ">
                                 <a href="{{route('news.frontend.detail',['news_id'=>$news->news_id])}}">
-                                    <img src="{{asset('/vendor/' . $group_name . '/' . $skin . '/dhcd/member/uploads/media/images/Avatar.jpg')}}" class="img-display-news img-reponsive">
+                                    <img src="{{$news->image != null ? $url_storage.$news->image : 'http://dhcd1.vnedutech.vn/photos/Logo-Dai-hoi-Cong-Doan.png'}}" class="img-display-news img-reponsive">
                                 </a>
                             </div>
                             <div class="col-md-10">

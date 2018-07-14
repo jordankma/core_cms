@@ -2,7 +2,7 @@
 
 return [
     "titles" => [
-        "profile" => "Trang các nhân"
+        "profile" => "Trang cá nhân"
     ],
     "table" => [
         "id" => "#",
@@ -30,9 +30,19 @@ return [
             "ngay_vao_dang" => "Ngày vào đảng",
         ],
     ],
+    "tabs" => [
+        "info" => "Thông tin",
+        "change_pass" => "Đổi mật khẩu"
+    ],
+    "label" => [
+        "old_password" => "Mật khẩu cũ",
+        "password" => "Mật khẩu mới",
+        "conf_password" => "Xác nhận mật khẩu mới",
+    ],
     "buttons" => [
         "create" => "Create",
-        "discard" => "Discard"
+        "discard" => "Discard",
+        "confirm" => "Xác nhận "
     ],
     "placeholder" => [
         "demo" => [

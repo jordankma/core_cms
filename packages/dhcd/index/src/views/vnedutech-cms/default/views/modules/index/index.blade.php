@@ -43,15 +43,6 @@
 @section('content')
     <section class="content-header">
         <h1>TRANG CHỦ</h1>
-        {{-- <ol class="breadcrumb">
-            <li>
-                <a href="{{ route('frontend.homepage') }}">
-                    <i class="livicon" data-name="home" data-size="16" data-color="#000"></i>
-                    {{ trans('adtech-core::labels.home') }}
-                </a>
-            </li>
-            <li class="active"><a href="#">{{ $title }}</a></li>
-        </ol> --}}
     </section>
     <!--section ends-->
     <section class="content paddingleft_right15">
@@ -87,7 +78,7 @@
                                     <div class="row">
                                         <div class="col-md-2 ">
                                             <a href="{{route('news.frontend.detail',['news_id'=>$news->news_id])}}">
-                                                <img src="{{asset('/vendor/' . $group_name . '/' . $skin . '/dhcd/member/uploads/media/images/Avatar.jpg')}}" class="img-display-news img-reponsive">
+                                                <img src="{{$url_storage.$news->image}}" class="img-display-news img-reponsive">
                                             </a>
                                         </div>
                                         <div class="col-md-10">

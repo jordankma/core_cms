@@ -28,15 +28,6 @@
 @section('content')
     <section class="content-header">
         <h1>Chương trình</h1>
-        {{-- <ol class="breadcrumb">
-            <li>
-                <a href="{{ route('backend.homepage') }}">
-                    <i class="livicon" data-name="home" data-size="16" data-color="#000"></i>
-                    {{ trans('adtech-core::labels.home') }}
-                </a>
-            </li>
-            <li class="active"><a href="#">{{ $title }}</a></li>
-        </ol> --}}
     </section>
     <!--section ends-->
     <section class="content paddingleft_right15">

@@ -28,13 +28,15 @@ class ProfileController extends Controller
     
     public function profile(){
         $member_id = $this->user->member_id;
+        $url_storage = config('site.url_storage');
         $member = Member::find($member_id);
         if(empty($member)){
             return false;
         }
         $data = [
-            'member' => $member    
-        ];
+            'member' => $member,
+            'url_storage' => $url_storage   
+        ]; 
         return view('DHCD-PROFILE::modules.profile.profile',$data);
     }
 

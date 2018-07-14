@@ -10,7 +10,7 @@ Route::group(array('prefix' => null), function () {
     Route::group(['middleware' => ['dhcd.auth']], function () {
         // Route::get('', '\Adtech\Core\App\Http\Controllers\FrontendController@index')->name('frontend.homepage');
 
-        Route::get('logout', 'Auth\LoginController@logout')->name('dhcd.member.auth.logout');
+        Route::get('logout', 'Auth\LoginController@logout')->name('dhcd.member.auth.logout')->where('as','Đăng xuất');
 
         Route::get('test1', function (){
             echo 'test1';

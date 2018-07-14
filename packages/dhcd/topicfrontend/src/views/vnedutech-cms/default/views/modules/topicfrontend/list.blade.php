@@ -1,7 +1,7 @@
 @extends('layouts.frontend')
 
 {{-- Page title --}}
-@section('title'){{ $title = trans('dhcd-art::language.titles.list') }}@stop
+@section('title'){{ $title = trans('dhcd-topicfrontend::language.titles.list') }}@stop
 
 {{-- page styles --}}
 @section('header_styles')
@@ -49,7 +49,7 @@
                         <div class="row">
                             <div class="col-md-2 ">
                                 <a href="{{route('topic.frontend.detail',['topics_id'=>$topics->topics_id])}}">
-                                    <img src="{{asset('/vendor/' . $group_name . '/' . $skin . '/dhcd/member/uploads/media/images/Avatar.jpg')}}" class="img-display-topics img-reponsive">
+                                    <img src="{{$topics->image}}" class="img-display-topics img-reponsive">
                                 </a>
                             </div>
                             <div class="col-md-9">

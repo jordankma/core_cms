@@ -22,7 +22,10 @@ class NotificationRepository extends Repository
 
     public function findAll() {
 
+        DB::statement(DB::raw('set @rownum=0'));
         $result = $this->model::query();
+        $result->select('dhcd_notification.*', DB::raw('@rownum  := @rownum  + 1 AS rownum'));
+
         return $result;
     }
 }

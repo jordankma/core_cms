@@ -13,7 +13,7 @@ class DhcdNotificationTable extends Migration
      */
     public function up()
     {
-        Schema::create('dhcd_notification', function (Blueprint $table) {
+        Schema::connection('mysql_dhcd')->create('dhcd_notification', function (Blueprint $table) {
             $table->increments('notification_id');
             $table->string('name');
             $table->string('content')->nullable();
@@ -33,6 +33,6 @@ class DhcdNotificationTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dhcd_notification');
+        Schema::connection('mysql_dhcd')->dropIfExists('dhcd_notification');
     }
 }
