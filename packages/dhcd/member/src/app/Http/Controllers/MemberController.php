@@ -162,7 +162,6 @@ class MemberController extends Controller
             $member->ngay_vao_dang = $ngay_vao_dang;
             $member->avatar = $avatar;
             $member->updated_at = new DateTime();
-            $member->save();
             if ($member->save()) {
                 activity('member')
                     ->performedOn($member)
