@@ -10,7 +10,7 @@ return [
     "sLengthMenu" => "Show _MENU_ entries",
     "sLoadingRecords" => "Loading...",
     "sProcessing" => "Processing...",
-    "sSearch" => "Search:",
+    "sSearch" => "Tìm kiếm:",
     "sZeroRecords" => "No matching records found",
     "oPaginate" => [
         "sFirst" => "First",
