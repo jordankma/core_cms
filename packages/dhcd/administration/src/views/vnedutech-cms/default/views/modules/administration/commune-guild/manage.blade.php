@@ -48,7 +48,7 @@
                             <thead>
                             <tr class="filters">
                                 <th class="fit-content">#</th>
-                                <th>{{ trans('dhcd-administration::language.table.commune_guild.name_with_type') }}</th>
+                                <th>{{ trans('dhcd-administration::language.table.commune_guild.name') }}</th>
                                 <th>{{ trans('dhcd-administration::language.table.commune_guild.country_district') }}</th>
                                 <th class="fit-content">{{ trans('dhcd-administration::language.table.action') }}</th>
                             </tr>

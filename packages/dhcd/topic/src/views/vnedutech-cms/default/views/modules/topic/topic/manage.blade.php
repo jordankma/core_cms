@@ -48,7 +48,7 @@
                             <thead>
                             <tr class="filters">
                                 <th class="fit-content">#</th>
-                                <th>{{ trans('dhcd-topic::language.table.demo.name') }}</th>
+                                <th>{{ trans('dhcd-topic::language.table.name') }}</th>
                                 <th style="width: 120px">{{ trans('dhcd-topic::language.table.created_at') }}</th>
                                 <th style="width: 120px">{{ trans('dhcd-topic::language.table.updated_at') }}</th>
                                 <th class="fit-content" style="width: 100px">{{ trans('dhcd-topic::language.table.status') }}</th>

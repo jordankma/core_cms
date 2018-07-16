@@ -2,7 +2,8 @@
 
 return [
     "titles" => [
-        "list" => "Danh sách thảo luận"
+        "list" => "Danh sách thảo luận",
+        "detail" => "Chi tiết thảo luận"
     ],
     "table" => [
         "id" => "#",

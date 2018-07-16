@@ -46,7 +46,7 @@ class TopicfrontendController extends Controller
     }
 
     public function detail(){
-
+        return view('DHCD-TOPICFRONTEND::modules.topicfrontend.detail');
     }
 
 }

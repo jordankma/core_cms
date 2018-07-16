@@ -49,7 +49,7 @@
                             <tr class="filters">
                                 <th>#</th>
                                 {{-- <th>{{ trans('dhcd-administration::language.table.provine_city.name') }}</th>   --}}
-                                <th>{{ trans('dhcd-administration::language.table.provine_city.name_with_type') }}</th>
+                                <th>{{ trans('dhcd-administration::language.table.provine_city.name') }}</th>
                                 <th>{{ trans('dhcd-administration::language.table.provine_city.code') }}</th>
                                 <th class="fit-content" style="width: 120px">{{ trans('dhcd-administration::language.table.action') }}</th>
                             </tr>

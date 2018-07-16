@@ -58,7 +58,7 @@ class CountryDistrictController extends Controller
     public function add(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|min:4|max:200',
+            'name' => 'required|min:1|max:200',
             'type' => 'required'
         ], $this->messages);
         if (!$validator->fails()) {
@@ -103,17 +103,24 @@ class CountryDistrictController extends Controller
 
     public function show(Request $request)
     {
-        $country_district_id = $request->input('country_district_id');
-        $provine_city = ProvineCity::all();
-        $country_district = $this->country_district->find($country_district_id);
-        if(empty($country_district)){
-            return redirect()->route('dhcd.administration.country-district.manage')->with('error', trans('DHCD-ADMINISTRATION::language.messages.error.update'));    
+        $validator = Validator::make($request->all(), [
+            'country_district_id' => 'required|numeric',
+        ], $this->messages);
+        if (!$validator->fails()) {
+            $country_district_id = $request->input('country_district_id');
+            $provine_city = ProvineCity::all();
+            $country_district = $this->country_district->find($country_district_id);
+            if(empty($country_district)){
+                return redirect()->route('dhcd.administration.country-district.manage')->with('error', trans('DHCD-ADMINISTRATION::language.messages.error.update'));    
+            }
+            $data = [
+                'country_district' => $country_district,
+                'provine_city'=>$provine_city
+            ];
+            return view('DHCD-ADMINISTRATION::modules.administration.country-district.edit', $data);
+        } else {
+            return $validator->messages();    
         }
-        $data = [
-            'country_district' => $country_district,
-            'provine_city'=>$provine_city
-        ];
-        return view('DHCD-ADMINISTRATION::modules.administration.country-district.edit', $data);
     }
 
     public function update(Request $request)
@@ -182,18 +189,25 @@ class CountryDistrictController extends Controller
 
     public function delete(Request $request)
     {
-        $country_district_id = $request->input('country_district_id');
-        $country_district = $this->country_district->find($country_district_id);
-        if (null != $country_district) {
-            $this->country_district->delete($country_district_id);
-            activity('country_district')
-                ->performedOn($country_district)
-                ->withProperties($request->all())
-                ->log('User: :causer.email - Delete country district - country_district_id: :properties.country_district_id, name: ' . $country_district->name);
+        $validator = Validator::make($request->all(), [
+            'country_district_id' => 'required|numeric',
+        ], $this->messages);
+        if (!$validator->fails()) {
+            $country_district_id = $request->input('country_district_id');
+            $country_district = $this->country_district->find($country_district_id);
+            if (null != $country_district) {
+                $this->country_district->delete($country_district_id);
+                activity('country_district')
+                    ->performedOn($country_district)
+                    ->withProperties($request->all())
+                    ->log('User: :causer.email - Delete country district - country_district_id: :properties.country_district_id, name: ' . $country_district->name);
 
-            return redirect()->route('dhcd.administration.country-district.manage')->with('success', trans('DHCD-ADMINISTRATION::language.messages.success.delete'));
+                return redirect()->route('dhcd.administration.country-district.manage')->with('success', trans('DHCD-ADMINISTRATION::language.messages.success.delete'));
+            } else {
+                return redirect()->route('dhcd.administration.country-district.manage')->with('error', trans('DHCD-ADMINISTRATION::language.messages.error.delete'));
+            }
         } else {
-            return redirect()->route('dhcd.administration.country-district.manage')->with('error', trans('DHCD-ADMINISTRATION::language.messages.error.delete'));
+            return $validator->messages();    
         }
     }
 
@@ -249,11 +263,18 @@ class CountryDistrictController extends Controller
     }
 
     public function getCountryDistrict(Request $request){
-        $country_district = CountryDistrict::where('provine_city_id',$request->provine_city_id)->get();
-        if(!empty($country_district)){
-            foreach ($country_district as $cd ) {        
-                echo "<option value='".$cd->provine_city_id."'>".$cd->name_with_type."</option>";
+        $validator = Validator::make($request->all(), [
+            'provine_city_id' => 'required|numeric',
+        ], $this->messages);
+        if (!$validator->fails()) {
+            $country_district = CountryDistrict::where('provine_city_id',$request->input('provine_city_id'))->get();
+            if(!empty($country_district)){
+                foreach ($country_district as $cd ) {        
+                    echo "<option value='".$cd->provine_city_id."'>".$cd->name_with_type."</option>";
+                }
             }
+        } else {
+            return $validator->messages();    
         }
     }
 

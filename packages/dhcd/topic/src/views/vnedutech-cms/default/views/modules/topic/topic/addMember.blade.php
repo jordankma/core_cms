@@ -59,7 +59,7 @@
                                             <th class="fit-content">{{ trans('dhcd-topic::language.table.id') }}</th>
                                             <th>{{ trans('dhcd-topic::language.table.add_member.name') }}</th>
                                             <th>{{ trans('dhcd-topic::language.table.add_member.email') }}</th>
-                                            <th class="fit-content" style="width: 100px">{{ trans('dhcd-topic::language.table.action') }}</th>
+                                            <th class="fit-content" style="width: 100px">{{ trans('dhcd-topic::language.table.delete') }}</th>
                                         </tr>
                                         </thead>
                                     </table>
@@ -184,7 +184,7 @@
                     var obj_data = JSON.parse(data);
                     if(obj_data.length>0){
                         for (i in obj_data) {
-                            text += '<li class="list-group-item"><input type="checkbox" name="list_members[]" value="'+obj_data[i].member_id+'">'+obj_data[i].name+'</li>';
+                            text += '<li class="list-group-item"><input id="m-del-'+obj_data[i].member_id+'" type="checkbox" name="list_members[]" value="'+obj_data[i].member_id+'"><label for="m-del-'+obj_data[i].member_id+'">'+'  '+obj_data[i].name+'</label></li>';
                         }
                         $('#list_members').html('');
                         $('#list_members').append(text);

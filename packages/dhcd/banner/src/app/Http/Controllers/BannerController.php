@@ -93,18 +93,25 @@ class BannerController extends Controller
 
     public function show(Request $request)
     {
-        $banner_id = $request->input('banner_id');
-        $banner = $this->banner->find($banner_id);
-        $positions = Position::all();
-        $date = new DateTime($banner->close_at);
-        $close_at = date_format($date, 'd-m-y');
-        $data = [
-            'banner' => $banner,
-            'positions' => $positions,
-            'close_at' => $close_at
-        ];
+        $validator = Validator::make($request->all(), [
+            'banner_id' => 'required|numeric',
+        ], $this->messages);
+        if (!$validator->fails()) {
+            $banner_id = $request->input('banner_id');
+            $banner = $this->banner->find($banner_id);
+            $positions = Position::all();
+            $date = new DateTime($banner->close_at);
+            $close_at = date_format($date, 'd-m-y');
+            $data = [
+                'banner' => $banner,
+                'positions' => $positions,
+                'close_at' => $close_at
+            ];
 
-        return view('DHCD-BANNER::modules.banner.banner.edit', $data);
+            return view('DHCD-BANNER::modules.banner.banner.edit', $data);
+        } else {
+            return $validator->messages();
+        }
     }
 
     public function update(BannerRequest $request)
@@ -120,6 +127,9 @@ class BannerController extends Controller
 
             $banner_id = $request->banner_id;
             $banners = $this->banner->find($banner_id);
+            if(null==$banners) {
+                return redirect()->route('dhcd.banner.banner.manage')->with('error', trans('dhcd-banner::language.messages.error.create'));    
+            }
             $banners->name = $request->name;
             $banners->desc = $request->desc;
             $banners->position = $request->position;
@@ -171,18 +181,25 @@ class BannerController extends Controller
 
     public function delete(Request $request)
     {
-        $banner_id = $request->input('banner_id');
-        $banner = $this->banner->find($banner_id);
-        if (null != $banner) {
-            $this->banner->delete($banner_id);
-            activity('banner')
-                ->performedOn($banner)
-                ->withProperties($request->all())
-                ->log('User: :causer.email - Delete banner - banner_id: :properties.banner_id, name: ' . $banner->name);
+        $validator = Validator::make($request->all(), [
+            'banner_id' => 'required|numeric',
+        ], $this->messages);
+        if (!$validator->fails()) {
+            $banner_id = $request->input('banner_id');
+            $banner = $this->banner->find($banner_id);
+            if (null != $banner) {
+                $this->banner->delete($banner_id);
+                activity('banner')
+                    ->performedOn($banner)
+                    ->withProperties($request->all())
+                    ->log('User: :causer.email - Delete banner - banner_id: :properties.banner_id, name: ' . $banner->name);
 
-            return redirect()->route('dhcd.banner.banner.manage')->with('success', trans('dhcd-banner::language.messages.success.delete'));
+                return redirect()->route('dhcd.banner.banner.manage')->with('success', trans('dhcd-banner::language.messages.success.delete'));
+            } else {
+                return redirect()->route('dhcd.banner.banner.manage')->with('error', trans('dhcd-banner::language.messages.error.delete'));
+            }
         } else {
-            return redirect()->route('dhcd.banner.banner.manage')->with('error', trans('dhcd-banner::language.messages.error.delete'));
+            return $validator->messages();    
         }
     }
 
@@ -232,12 +249,16 @@ class BannerController extends Controller
                 $image = '<img  style="width:100px;height:100px"src="'.$banners->image.'">'; 
                 return $image;   
             })
+            ->addColumn('link', function ($banners) {
+                $link = '<a href="'.$banners->link.'" target="_blank" rel="nofollow" >'.$banners->link.'</a>'; 
+                return $link;   
+            })
             ->addColumn('close_at', function ($banners) {
                 $date = new DateTime($banners->close_at);
                 $close_at = date_format($date, 'd-m-Y');
                 return $close_at;   
             })
-            ->rawColumns(['actions','image','close_at'])
+            ->rawColumns(['actions','image','link','close_at'])
             ->make();
     }
 }

@@ -14,10 +14,9 @@ return [
         "created_at" => "Ngày tạo",
         "updated_at" => "Ngày sửa",
         "action" => "Thao tác",
+        "name" => "Tên",
         "status" => "Trạng thái",
-        "demo" => [
-            "name" => "Tên"
-        ],
+        "delete" => "Xóa",
         "add_member" => [
             "email" => "Email",
             "name" => "Tên"

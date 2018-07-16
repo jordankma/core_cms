@@ -79,9 +79,10 @@ class TopicController extends Controller
     {
         $topic_id = $request->input('topic_id');
         $topic = $this->topic->find($topic_id);
-        if(empty($topic)){
+        if(null == $topic) {
             return redirect()->route('dhcd.topic.topic.manage')->with('error', trans('dhcd-topic::language.messages.error.update'));    
         }
+
         $data = [
             'topic' => $topic
         ];
@@ -98,6 +99,7 @@ class TopicController extends Controller
         if (!$validator->fails()) {
             $topic_id = $request->input('topic_id');
             $topic = $this->topic->find($topic_id);
+            //check 
             $topic->name = $request->input('name');
             $topics->image = $request->input('image'); 
             $topic->is_hot = $request->input('is_hot');
@@ -140,20 +142,27 @@ class TopicController extends Controller
 
     public function delete(Request $request)
     {
-        $topic_id = $request->input('topic_id');
-        $topic = $this->topic->find($topic_id);
+        $validator = Validator::make($request->all(), [
+            'topic_id' => 'required|numeric',
+        ], $this->messages);
+        if (!$validator->fails()) {
+            $topic_id = $request->input('topic_id');
+            $topic = $this->topic->find($topic_id);
 
-        if (null != $topic) {
-            $this->topic->delete($topic_id);
+            if (null != $topic) {
+                $this->topic->delete($topic_id);
 
-            activity('topic')
-                ->performedOn($topic)
-                ->withProperties($request->all())
-                ->log('User: :causer.email - Delete topic - topic_id: :properties.topic_id, name: ' . $topic->name);
+                activity('topic')
+                    ->performedOn($topic)
+                    ->withProperties($request->all())
+                    ->log('User: :causer.email - Delete topic - topic_id: :properties.topic_id, name: ' . $topic->name);
 
-            return redirect()->route('dhcd.topic.topic.manage')->with('success', trans('dhcd-topic::language.messages.success.delete'));
-        } else {
-            return redirect()->route('dhcd.topic.topic.manage')->with('error', trans('dhcd-topic::language.messages.error.delete'));
+                return redirect()->route('dhcd.topic.topic.manage')->with('success', trans('dhcd-topic::language.messages.success.delete'));
+            } else {
+                return redirect()->route('dhcd.topic.topic.manage')->with('error', trans('dhcd-topic::language.messages.error.delete'));
+            }
+        } else { 
+            return $validator->messages();
         }
     }
 
@@ -179,26 +188,26 @@ class TopicController extends Controller
 
     public function status(Request $request)
     {
-        $topic_id = $request->input('topic_id');
-        $topic = $this->topic->find($topic_id);
+        $validator = Validator::make($request->all(), [
+            'topic_id' => 'required|numeric',
+        ], $this->messages);
+        if (!$validator->fails()) {
+            $topic_id = $request->input('topic_id');
+            $topic = $this->topic->find($topic_id);
 
-        if (null != $topic) {
-            if($topic->status == 0){
-                $topic->status = 1;    
-            }
-            else{
-                $topic->status = 0;
-            }
-            if($topic->save()){
-
-            activity('topic')
-                ->performedOn($topic)
-                ->withProperties($request->all())
-                ->log('User: :causer.email - Change status topic - topic_id: :properties.topic_id, name: ' . $topic->name);
-            return redirect()->route('dhcd.topic.topic.manage')->with('success', trans('dhcd-topic::language.messages.success.status'));
+            if (null != $topic) {
+                $topic->status = ($topic->status == 0) ? 1 : 0;
+                if($topic->save()){
+                    activity('topic')
+                        ->performedOn($topic)
+                        ->withProperties($request->all())
+                        ->log('User: :causer.email - Change status topic - topic_id: :properties.topic_id, name: ' . $topic->name);
+                    return redirect()->route('dhcd.topic.topic.manage')->with('success', trans('dhcd-topic::language.messages.success.status'));
+                }
+                return redirect()->route('dhcd.topic.topic.manage')->with('error', trans('dhcd-topic::language.messages.error.status'));
+            } 
         } else {
-        }
-            return redirect()->route('dhcd.topic.topic.manage')->with('error', trans('dhcd-topic::language.messages.error.status'));
+            return $validator->messages();
         }
     }
 
@@ -224,38 +233,45 @@ class TopicController extends Controller
 
     public function addAllMember(Request $request)
     {
-        $topic_id = $request->input('topic_id');
-        $topic = $this->topic->find($topic_id);
+        $validator = Validator::make($request->all(), [
+            'topic_id' => 'required|numeric',
+        ], $this->messages);
+        if (!$validator->fails()) {
+            $topic_id = $request->input('topic_id');
+            $topic = $this->topic->find($topic_id);
 
-        if (null != $topic) {
-            $members = Member::select('member_id')->get();
-            $data_insert = array();
-            if(!empty($members)){
-                foreach ($members as $key => $member) {
-                    if (!TopicHasMember::where([
-                        'topic_id' => $topic_id,
-                        'member_id' => $member->member_id,
-                    ])->exists()
-                    )
-                    {
-                        $data_insert[] = [
+            if (null != $topic) {
+                $members = Member::select('member_id')->get();
+                $data_insert = array();
+                if(!empty($members)){
+                    foreach ($members as $key => $member) {
+                        if (!TopicHasMember::where([
                             'topic_id' => $topic_id,
-                            'member_id' => $member->member_id
-                        ];
+                            'member_id' => $member->member_id,
+                        ])->exists()
+                        )
+                        {
+                            $data_insert[] = [
+                                'topic_id' => $topic_id,
+                                'member_id' => $member->member_id
+                            ];
+                        }
                     }
                 }
+                if(!empty($data_insert)){
+                    DB::table('dhcd_topic_has_member')->insert($data_insert);
+                }
+                activity('topic')
+                    ->performedOn($topic)
+                    ->withProperties($request->all())
+                    ->log('User: :causer.email - Add all member topic - topic_id: :properties.topic_id, name: ' . $topic->name);
+                return redirect()->route('dhcd.topic.topic.manage')->with('success', trans('dhcd-topic::language.messages.success.status'));
             }
-            if(!empty($data_insert)){
-                DB::table('dhcd_topic_has_member')->insert($data_insert);
+            else{
+                return redirect()->route('dhcd.topic.topic.manage')->with('error', trans('dhcd-topic::language.messages.error.status'));
             }
-            activity('topic')
-                ->performedOn($topic)
-                ->withProperties($request->all())
-                ->log('User: :causer.email - Add all member topic - topic_id: :properties.topic_id, name: ' . $topic->name);
-            return redirect()->route('dhcd.topic.topic.manage')->with('success', trans('dhcd-topic::language.messages.success.status'));
-        }
-        else{
-            return redirect()->route('dhcd.topic.topic.manage')->with('error', trans('dhcd-topic::language.messages.error.status'));
+        } else {
+            return $validator->messages();
         }
     }
     public function log(Request $request)
@@ -309,8 +325,7 @@ class TopicController extends Controller
                     if ( $this->user->canAccess('dhcd.topic.topic.confirm-status') ) {
                         $status .= '<a href=' . route('dhcd.topic.topic.confirm-status', ['topic_id' => $topics->topic_id]) . ' data-toggle="modal" data-target="#status_confirm"><span class="label label-sm label-danger">Disable</span></a> ';
                     }
-                }
-                else{
+                } else {
                     if ( $this->user->canAccess('dhcd.topic.topic.confirm-status') ) {
                         $status = '<a href=' . route('dhcd.topic.topic.confirm-status', ['topic_id' => $topics->topic_id]) . ' data-toggle="modal" data-target="#status_confirm"><span class="label label-sm label-success">Enable</span></a> ';
                     }  
@@ -320,58 +335,73 @@ class TopicController extends Controller
                 }
                 return $status;   
             })
-            ->addColumn('created_at', function ($banners) {
-                $date = new DateTime($banners->created_at);
+            ->addColumn('created_at', function ($topics) {
+                $date = new DateTime($topics->created_at);
                 $created_at = date_format($date, 'd-m-Y');
                 return $created_at;   
             })
-            ->addColumn('updated_at', function ($banners) {
-                $date = new DateTime($banners->updated_at);
+            ->addColumn('updated_at', function ($topics) {
+                $date = new DateTime($topics->updated_at);
                 $updated_at = date_format($date, 'd-m-Y');
                 return $updated_at;   
             })
-            ->rawColumns(['actions','status'])
+            ->rawColumns(['actions','status','created_at','updated_at'])
             ->make();
     }
 
     // add xoa tung member 
     public function createMember(Request $request){
-        $topic_id = $request->topic_id;
-        return view('DHCD-TOPIC::modules.topic.topic.addMember',compact('topic_id')); 
+        $validator = Validator::make($request->all(), [
+            'topic_id' => 'required|numeric',
+        ], $this->messages);
+        if (!$validator->fails()) {
+            $topic_id = $request->input('topic_id');
+            return view('DHCD-TOPIC::modules.topic.topic.addMember',compact('topic_id')); 
+        } else {
+            return $validator->messages();
+        }
     }
 
     public function addMember(Request $request){
-        $topic_id = $request->input('topic_id');
-        $members = $request->list_members;
-        $topic = $this->topic->find($topic_id);
-        if (null != $topic && !empty($members)) {
-            $data_insert = array();
-            if(!empty($members)){
-                foreach ($members as $key => $member) {
-                    if (!TopicHasMember::where([
-                        'topic_id' => $topic_id,
-                        'member_id' => $member,
-                    ])->exists()
-                    )
-                    {
-                        $data_insert[] = [
+        $validator = Validator::make($request->all(), [
+            'topic_id' => 'required|numeric',
+        ], $this->messages);
+        if (!$validator->fails()) {
+
+            $topic_id = $request->input('topic_id');
+            $members = $request->list_members;
+            $topic = $this->topic->find($topic_id);
+            if (null != $topic && !empty($members)) {
+                $data_insert = array();
+                if(!empty($members)){
+                    foreach ($members as $key => $member) {
+                        if (!TopicHasMember::where([
                             'topic_id' => $topic_id,
-                            'member_id' => $member
-                        ];
+                            'member_id' => $member,
+                        ])->exists()
+                        )
+                        {
+                            $data_insert[] = [
+                                'topic_id' => $topic_id,
+                                'member_id' => $member
+                            ];
+                        }
                     }
                 }
+                if(!empty($data_insert)){
+                    DB::table('dhcd_topic_has_member')->insert($data_insert);
+                }
+                activity('topic')
+                    ->performedOn($topic)
+                    ->withProperties($request->all())
+                    ->log('User: :causer.email - Add single member topic - topic_id: :properties.topic_id, name: ' . $topic->name);
+                return redirect()->route('dhcd.topic.topic.create.member',['topic_id' => $topic_id])->with('success', trans('dhcd-topic::language.messages.success.status'));
             }
-            if(!empty($data_insert)){
-                DB::table('dhcd_topic_has_member')->insert($data_insert);
+            else{
+                return redirect()->route('dhcd.topic.topic.create.member',['topic_id' => $topic_id])->with('error', trans('dhcd-topic::language.messages.error.status'));
             }
-            activity('topic')
-                ->performedOn($topic)
-                ->withProperties($request->all())
-                ->log('User: :causer.email - Add single member topic - topic_id: :properties.topic_id, name: ' . $topic->name);
-            return redirect()->route('dhcd.topic.topic.create.member',['topic_id' => $topic_id])->with('success', trans('dhcd-topic::language.messages.success.status'));
-        }
-        else{
-            return redirect()->route('dhcd.topic.topic.create.member',['topic_id' => $topic_id])->with('error', trans('dhcd-topic::language.messages.error.status'));
+        } else {
+            return $validator->messages();
         }
     }
 
@@ -398,22 +428,32 @@ class TopicController extends Controller
 
     public function deleteMember(Request $request)
     {
-        $topic_id = $request->input('topic_id');
-        $topic = $this->topic->find($topic_id);
-        $members = explode(",",$request->input('member'));
-        if (!empty($members)) {
-            foreach ($members as $key => $member) {
-                DB::table('dhcd_topic_has_member')->where(['topic_id' => $topic_id,'member_id' => $member])->delete();
-            }
-            activity('topic')
-                ->performedOn($topic)
-                ->withProperties($request->all())
-                ->log('User: :causer.email - Delete member topic - topic_id: :properties.topic_id, name: ' . $topic->name);
+        $validator = Validator::make($request->all(), [
+            'topic_id' => 'required|numeric',
+            'member' => 'required',
+        ], $this->messages);
+        if (!$validator->fails()) {
+            
+            $topic_id = $request->input('topic_id');
+            $topic = $this->topic->find($topic_id);
+            $members = explode(",",$request->input('member'));
+            if (!empty($members)) {
+                foreach ($members as $key => $member) {
+                    DB::table('dhcd_topic_has_member')->where(['topic_id' => $topic_id,'member_id' => $member])->delete();
+                }
+                activity('topic')
+                    ->performedOn($topic)
+                    ->withProperties($request->all())
+                    ->log('User: :causer.email - Delete member topic - topic_id: :properties.topic_id, name: ' . $topic->name);
 
-            return redirect()->route('dhcd.topic.topic.create.member',['topic_id' => $topic_id])->with('success', trans('dhcd-topic::language.messages.success.delete'));
+                return redirect()->route('dhcd.topic.topic.create.member',['topic_id' => $topic_id])->with('success', trans('dhcd-topic::language.messages.success.delete'));
+            } else {
+                return redirect()->route('dhcd.topic.topic.create.member',['topic_id' => $topic_id])->with('error', trans('dhcd-topic::language.messages.error.delete'));
+            }
+
         } else {
-            return redirect()->route('dhcd.topic.topic.create.member',['topic_id' => $topic_id])->with('error', trans('dhcd-topic::language.messages.error.delete'));
-        }
+            return $validator->messages();
+        }   
     }
 
     public function dataMember(Request $request)

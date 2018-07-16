@@ -93,15 +93,22 @@ class ProvineCityController extends Controller
 
     public function show(Request $request)
     {
-        $provine_city_id = $request->input('provine_city_id');
-        $provine_city = $this->provine_city->find($provine_city_id);
-        if(empty($provine_city)){
-            return redirect()->route('dhcd.administration.provine-city.manage')->with('error', trans('DHCD-ADMINISTRATION::language.messages.error.update'));
+        $validator = Validator::make($request->all(), [
+            'provine_city_id' => 'required|numeric',
+        ], $this->messages);
+        if (!$validator->fails()) {
+            $provine_city_id = $request->input('provine_city_id');
+            $provine_city = $this->provine_city->find($provine_city_id);
+            if(empty($provine_city)){
+                return redirect()->route('dhcd.administration.provine-city.manage')->with('error', trans('DHCD-ADMINISTRATION::language.messages.error.update'));
+            }
+            $data = [
+                'provine_city' => $provine_city
+            ];
+            return view('DHCD-ADMINISTRATION::modules.administration.provine-city.edit', $data);
+        } else {
+            return $validator->messages();     
         }
-        $data = [
-            'provine_city' => $provine_city
-        ];
-        return view('DHCD-ADMINISTRATION::modules.administration.provine-city.edit', $data);
     }
 
     public function update(Request $request)
@@ -161,20 +168,27 @@ class ProvineCityController extends Controller
     }
 
     public function delete(Request $request)
-    {
-        $provine_city_id = $request->input('provine_city_id');
-        $provine_city = $this->provine_city->find($provine_city_id);
+    {   
+        $validator = Validator::make($request->all(), [
+            'provine_city_id' => 'required|numeric',
+        ], $this->messages);
+        if (!$validator->fails()) {
+            $provine_city_id = $request->input('provine_city_id');
+            $provine_city = $this->provine_city->find($provine_city_id);
+            
+            if (null != $provine_city) {
+                $this->provine_city->delete($provine_city_id);
+                activity('provine_city')
+                    ->performedOn($provine_city)
+                    ->withProperties($request->all())
+                    ->log('User: :causer.email - Delete Provine City - provine_city_id: :properties.provine_city_id, name: ' . $provine_city->name);
 
-        if (null != $provine_city) {
-            $this->provine_city->delete($provine_city_id);
-            activity('provine_city')
-                ->performedOn($provine_city)
-                ->withProperties($request->all())
-                ->log('User: :causer.email - Delete Provine City - provine_city_id: :properties.provine_city_id, name: ' . $provine_city->name);
-
-            return redirect()->route('dhcd.administration.provine-city.manage')->with('success', trans('DHCD-ADMINISTRATION::language.messages.success.delete'));
+                return redirect()->route('dhcd.administration.provine-city.manage')->with('success', trans('DHCD-ADMINISTRATION::language.messages.success.delete'));
+            } else {
+                return redirect()->route('dhcd.administration.provine-city.manage')->with('error', trans('DHCD-ADMINISTRATION::language.messages.error.delete'));
+            }
         } else {
-            return redirect()->route('dhcd.administration.provine-city.manage')->with('error', trans('DHCD-ADMINISTRATION::language.messages.error.delete'));
+            return $validator->messages();    
         }
     }
     

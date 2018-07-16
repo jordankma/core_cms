@@ -71,7 +71,13 @@
                     <div class="col-sm-6">
                         <label>{{trans('dhcd-banner::language.placeholder.banner.close_at') }}</label>
                          <div class="form-group">
-                            <input type="button" class="form-control" name="close_at" id="close_at" placeholder="{{trans('dhcd-banner::language.placeholder.banner.close_at') }}">
+                            {{-- <input type="button" class="form-control" name="close_at" id="close_at" placeholder="{{trans('dhcd-banner::language.placeholder.banner.close_at') }}"> --}}
+                            <div class='input-group date'>
+                                <input type='button' class="form-control" name="close_at" id="close_at" placeholder="{{trans('dhcd-banner::language.placeholder.banner.close_at') }}"/>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
                             <p style="color: red">Không chọn mặc định thời hạn là 30 ngày</p>
                         </div>
                         <label>{{trans('dhcd-banner::language.label.link') }}</label>
@@ -79,15 +85,17 @@
                             <input type="text" name="link" class="form-control" placeholder="{{trans('dhcd-banner::language.placeholder.banner.link') }}">
                         </div>
                         <label>{{trans('dhcd-banner::language.label.image') }}</label>
-                        <div class=" input-group">
-                            <span class="input-group-btn">
-                                <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
-                                    <i class="fa fa-picture-o"></i> Choose
-                                </a>
-                            </span>
-                            <input id="thumbnail" class="form-control" type="text" name="image">
-                            <img id="holder" style="margin-top:15px;max-height:100px;">
+                        <div class="form-group">
+                            <div class=" input-group">
+                                <span class="input-group-btn">
+                                    <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
+                                        <i class="fa fa-picture-o"></i> Chọn ảnh
+                                    </a>
+                                </span>
+                                <input id="thumbnail" class="form-control" type="text" name="image">
+                            </div>
                         </div>
+                        <img id="holder" style="margin-top:15px;max-height:100px;">
                     </div>
                     <!-- /.col-sm-4 -->
                 </div>
@@ -139,7 +147,7 @@
                                 message: 'Bạn chưa chọn ảnh banner'
                             }
                         }
-                    },
+                    }
                 }
             }); 
         })

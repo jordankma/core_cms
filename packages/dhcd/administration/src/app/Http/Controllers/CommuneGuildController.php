@@ -51,15 +51,15 @@ class CommuneGuildController extends Controller
             return redirect()->route('dhcd.administration.commune-guild.manage')->with('error','Bạn cần thêm tỉnh thành trước');   
         }
         $provine_city_id_first = $provine_city[0]->provine_city_id;
-        $country_district = CountryDistrict::where('provine_city_id',$provine_city_id_first)->get();
-        if(count($country_district) <= 0){
-            return redirect()->route('dhcd.administration.commune-guild.manage')->with('error','Bạn cần thêm quận huyện trước');   
+        $country_district = CountryDistrict::where( 'provine_city_id',$provine_city_id_first )->get();
+        if(count( $country_district ) <= 0){
+            return redirect()->route( 'dhcd.administration.commune-guild.manage' )->with( 'error','Bạn cần thêm quận huyện trước' );   
         }
         $data = [
-            'provine_city' =>$provine_city,
-            'country_district' =>$country_district
+            'provine_city' => $provine_city,
+            'country_district' => $country_district
         ];
-        return view('DHCD-ADMINISTRATION::modules.administration.commune-guild.create',$data);
+        return view( 'DHCD-ADMINISTRATION::modules.administration.commune-guild.create',$data );
     }
 
     public function add(Request $request)
@@ -108,22 +108,29 @@ class CommuneGuildController extends Controller
 
     public function show(Request $request)
     {
-        $commune_guild_id = $request->input('commune_guild_id');
-        $commune_guild = $this->commune_guild->find($commune_guild_id);
-        if(empty($commune_guild)){
-            return redirect()->route('dhcd.administration.commune-guild.manage')->with('error', trans('DHCD-ADMINISTRATION::language.messages.error.update'));
+        $validator = Validator::make($request->all(), [
+            'commune_guild_id' => 'required|min:1|max:200',
+        ], $this->messages);
+        if (!$validator->fails()) {
+            $commune_guild_id = $request->input('commune_guild_id');
+            $commune_guild = $this->commune_guild->find($commune_guild_id);
+            if(empty($commune_guild)){
+                return redirect()->route('dhcd.administration.commune-guild.manage')->with('error', trans('DHCD-ADMINISTRATION::language.messages.error.update'));
+            }
+            $provine_city = ProvineCity::all();
+            $country_district = CountryDistrict::where('country_district_id',$commune_guild->country_district_id)->get();
+            if(empty($provine_city) || empty($country_district)){
+                return redirect()->route('dhcd.administration.commune-guild.manage')->with('error', trans('DHCD-ADMINISTRATION::language.messages.error.update'));   
+            }
+            $data = [
+                'provine_city' => $provine_city,
+                'country_district'=>$country_district,
+                'commune_guild' => $commune_guild
+            ];
+            return view('DHCD-ADMINISTRATION::modules.administration.commune-guild.edit', $data);
+        } else {
+            return $validator->messages();    
         }
-        $provine_city = ProvineCity::all();
-        $country_district = CountryDistrict::where('country_district_id',$commune_guild->country_district_id)->get();
-        if(empty($provine_city) || empty($country_district)){
-            return redirect()->route('dhcd.administration.commune-guild.manage')->with('error', trans('DHCD-ADMINISTRATION::language.messages.error.update'));   
-        }
-        $data = [
-            'provine_city' => $provine_city,
-            'country_district'=>$country_district,
-            'commune_guild' => $commune_guild
-        ];
-        return view('DHCD-ADMINISTRATION::modules.administration.commune-guild.edit', $data);
     }
 
     public function update(Request $request)
@@ -194,18 +201,25 @@ class CommuneGuildController extends Controller
 
     public function delete(Request $request)
     {
-        $commune_guild_id = $request->input('commune_guild_id');
-        $commune_guild = $this->commune_guild->find($commune_guild_id);
-        if (null != $commune_guild) {
-            $this->commune_guild->delete($commune_guild_id);
-            activity('commune_guild')
-                ->performedOn($commune_guild)
-                ->withProperties($request->all())
-                ->log('User: :causer.email - Delete country district - commune_guild_id: :properties.commune_guild_id, name: ' . $commune_guild->name);
+        $validator = Validator::make($request->all(), [
+            'commune_guild_id' => 'required|numeric',
+        ], $this->messages);
+        if (!$validator->fails()) {
+            $commune_guild_id = $request->input('commune_guild_id');
+            $commune_guild = $this->commune_guild->find($commune_guild_id);
+            if (null != $commune_guild) {
+                $this->commune_guild->delete($commune_guild_id);
+                activity('commune_guild')
+                    ->performedOn($commune_guild)
+                    ->withProperties($request->all())
+                    ->log('User: :causer.email - Delete country district - commune_guild_id: :properties.commune_guild_id, name: ' . $commune_guild->name);
 
-            return redirect()->route('dhcd.administration.commune-guild.manage')->with('success', trans('DHCD-ADMINISTRATION::language.messages.success.delete'));
+                return redirect()->route('dhcd.administration.commune-guild.manage')->with('success', trans('DHCD-ADMINISTRATION::language.messages.success.delete'));
+            } else {
+                return redirect()->route('dhcd.administration.commune-guild.manage')->with('error', trans('DHCD-ADMINISTRATION::language.messages.error.delete'));
+            }
         } else {
-            return redirect()->route('dhcd.administration.commune-guild.manage')->with('error', trans('DHCD-ADMINISTRATION::language.messages.error.delete'));
+            return $validator->messages();    
         }
     }
 

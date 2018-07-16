@@ -1,40 +1,40 @@
-{
-  "package": "dhcd",
-  "module": "profile",
-  "description": "Permission route by group",
-  "details": [
-    {
-      "name": "Profile frontend",
-      "groups": [
-        {
-          "name": "View list",
-          "routes": [
-            "profile.frontend.member",
-            "changepass.frontend.member"
-          ]
-        },
-        {
-          "name": "Create",
-          "routes": [
-            "router name 03",
-            "router name 04"
-          ]
-        },
-        {
-          "name": "Update",
-          "routes": [
-            "router name 05",
-            "router name 06"
-          ]
-        },
-        {
-          "name": "Delete",
-          "routes": [
-            "router name 07",
-            "router name 08"
-          ]
-        }
-      ]
-    }
-  ]
-}
+// {
+//   "package": "dhcd",
+//   "module": "profile",
+//   "description": "Permission route by group",
+//   "details": [
+//     {
+//       "name": "Profile frontend",
+//       "groups": [
+//         {
+//           "name": "View list",
+//           "routes": [
+//             "profile.frontend.member",
+//             "changepass.frontend.member"
+//           ]
+//         },
+//         {
+//           "name": "Create",
+//           "routes": [
+//             "router name 03",
+//             "router name 04"
+//           ]
+//         },
+//         {
+//           "name": "Update",
+//           "routes": [
+//             "router name 05",
+//             "router name 06"
+//           ]
+//         },
+//         {
+//           "name": "Delete",
+//           "routes": [
+//             "router name 07",
+//             "router name 08"
+//           ]
+//         }
+//       ]
+//     }
+//   ]
+// }

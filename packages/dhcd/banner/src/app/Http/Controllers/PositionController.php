@@ -42,7 +42,7 @@ class PositionController extends Controller
     public function add(PositionRequest $request)
     {   
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
+            'name' => 'required|min:1|max:200',
             'width' => 'required|numeric',
             'height' => 'required|numeric',
         ], $this->messages);
@@ -74,25 +74,39 @@ class PositionController extends Controller
 
     public function show(Request $request)
     {
-        $banner_position_id = $request->input('banner_position_id');
-        $position = $this->position->find($banner_position_id);
-        $data = [
-            'position' => $position
-        ];
-        return view('DHCD-BANNER::modules.banner.position.edit', $data);
+        $validator = Validator::make($request->all(), [
+            'banner_position_id' => 'required|numeric',
+        ], $this->messages);
+        if (!$validator->fails()) {
+            $banner_position_id = $request->input('banner_position_id');
+            $position = $this->position->find($banner_position_id);
+            if(null==$positions){   
+                return redirect()->route('dhcd.banner.position.manage')->with('error', trans('dhcd-banner::language.messages.error.create'));    
+            } else{
+                $data = [
+                    'position' => $position
+                ];
+                return view('DHCD-BANNER::modules.banner.position.edit', $data);
+            }
+        } else {
+            return $validator->messages();
+        }
     }
 
     public function update(PositionRequest $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
+            'name' => 'required|min:1|max:200',
             'width' => 'required|numeric',
             'height' => 'required|numeric',
+            'banner_position_id' => 'required|numeric'
         ], $this->messages);
         if (!$validator->fails()) {
-            $positions = new Position();
-            $banner_position_id = $request->banner_position_id;
+            $banner_position_id = $request->input('banner_position_id');
             $positions = $this->position->find($banner_position_id);
+            if(null==$positions){
+                return redirect()->route('dhcd.banner.position.manage')->with('error', trans('dhcd-banner::language.messages.error.create'));         
+            }
             $positions->create_by = $this->user->email;
             $positions->name = $request->name;
             $positions->width = $request->width;

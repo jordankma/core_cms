@@ -1,40 +1,40 @@
-{
-  "package": "dhcd",
-  "module": "topicfrontend",
-  "description": "Permission route by group",
-  "details": [
-    {
-      "name": "Quản lý thảo luận frontend",
-      "groups": [
-        {
-          "name": "View list",
-          "routes": [
-            "topic.frontend.list",
-            "topic.frontend.detail"
-          ]
-        },
-        {
-          "name": "Create",
-          "routes": [
-            "router name 03",
-            "router name 04"
-          ]
-        },
-        {
-          "name": "Update",
-          "routes": [
-            "router name 05",
-            "router name 06"
-          ]
-        },
-        {
-          "name": "Delete",
-          "routes": [
-            "router name 07",
-            "router name 08"
-          ]
-        }
-      ]
-    }
-  ]
-}
+// {
+//   "package": "dhcd",
+//   "module": "topicfrontend",
+//   "description": "Permission route by group",
+//   "details": [
+//     {
+//       "name": "Quản lý thảo luận frontend",
+//       "groups": [
+//         {
+//           "name": "View list",
+//           "routes": [
+//             "topic.frontend.list",
+//             "topic.frontend.detail"
+//           ]
+//         },
+//         {
+//           "name": "Create",
+//           "routes": [
+//             "router name 03",
+//             "router name 04"
+//           ]
+//         },
+//         {
+//           "name": "Update",
+//           "routes": [
+//             "router name 05",
+//             "router name 06"
+//           ]
+//         },
+//         {
+//           "name": "Delete",
+//           "routes": [
+//             "router name 07",
+//             "router name 08"
+//           ]
+//         }
+//       ]
+//     }
+//   ]
+// }
