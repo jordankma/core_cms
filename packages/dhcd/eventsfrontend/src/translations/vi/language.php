@@ -2,8 +2,8 @@
 
 return [
     "titles" => [
-        "demo" => [
-            "manage" => "Manage demo"
+        "events" => [
+            "list" => "Danh sách chương trình"
         ]
     ],
     "table" => [

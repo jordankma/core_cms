@@ -1,7 +1,7 @@
 @extends('layouts.frontend')
 
 {{-- Page title --}}
-@section('title'){{ $title = trans('dhcd-art::language.titles.demo.create') }}@stop
+@section('title'){{ $title = trans('dhcd-eventsfrontend::language.titles.events.list') }}@stop
 
 {{-- page styles --}}
 @section('header_styles')
