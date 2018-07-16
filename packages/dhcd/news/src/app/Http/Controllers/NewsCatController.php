@@ -23,7 +23,7 @@ use Spatie\Activitylog\Models\Activity;
 use Yajra\Datatables\Datatables;
 use Validator;
 use Auth;
-use DateTime;
+use DateTime,Cache;
 class NewsCatController extends Controller
 {	
     protected $_newsCatList;
