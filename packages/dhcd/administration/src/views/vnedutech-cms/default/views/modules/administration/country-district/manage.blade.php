@@ -77,7 +77,8 @@
                     { data: 'name_with_type', name: 'name_with_type' },
                     { data: 'provine_city', name: 'provine_city' },
                     { data: 'actions', name: 'actions', orderable: false, searchable: false}
-                ]
+                ],
+                language: $.parseJSON('{!! $DATATABLE_TRANS !!}')
             });
             table.on('draw', function () {
                 $('.livicon').each(function () {

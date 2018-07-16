@@ -27,7 +27,7 @@ class NewsfrontendController extends Controller
     
     public function list()
     {
-        $list_news = News::paginate(10);
+        $list_news = News::paginate(15);
         $url_storage = config('site.url_storage');
         $data = [
             'list_news' => $list_news,

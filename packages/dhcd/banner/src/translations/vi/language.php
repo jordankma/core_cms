@@ -22,7 +22,7 @@ return [
         "position" => "Vị trí",
         "close_at" => "Thời gian hết hạn",
         "width" => "Chiều rộng",
-        "height" => "Chiều cao",
+        "height" => "Chiều cao"
     ],
     "table" => [
         "id" => "#",

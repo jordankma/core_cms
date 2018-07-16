@@ -122,6 +122,7 @@ class Controller extends BaseController
             'skin'  => config('site.desktop.skin'),
             'mtemplate'  => config('site.mobile.template'),
             'mskin'  => config('site.mobile.skin'),
+            'DATATABLE_TRANS' => '{ "tuan":"test"}'
         ];
 
         view()->share($share);

@@ -107,7 +107,8 @@
                     { data: 'address', name: 'address' },
                     { data: 'status', name: 'status', orderable: false, searchable: false, className: 'fit-content'},
                     { data: 'actions', name: 'actions', orderable: false, searchable: false, className: 'fit-content'}
-                ]
+                ],
+                language: $.parseJSON('{!! $DATATABLE_TRANS !!}')
             });
             table.on('draw', function () {
                 $('.livicon').each(function () {

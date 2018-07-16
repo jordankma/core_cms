@@ -160,7 +160,8 @@
                     { data: 'news_cat', name: 'news_cat' },
                     { data: 'priority', name: 'priority' },
                     { data: 'actions', name: 'actions', orderable: false, searchable: false}
-                ]
+                ],
+                language: $.parseJSON('{!! $DATATABLE_TRANS !!}')
             });
             table.on('draw', function () {
                 $('.livicon').each(function () {

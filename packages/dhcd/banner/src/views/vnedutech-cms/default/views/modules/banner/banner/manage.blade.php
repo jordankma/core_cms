@@ -81,7 +81,8 @@
                     { data: 'link', name: 'link'},
                     { data: 'close_at', name: 'close_at'},
                     { data: 'actions', name: 'actions', orderable: false, searchable: false, className: 'fit-content'}
-                ]
+                ],
+                language: $.parseJSON('{!! $DATATABLE_TRANS !!}')
             });
             table.on('draw', function () {
                 $('.livicon').each(function () {

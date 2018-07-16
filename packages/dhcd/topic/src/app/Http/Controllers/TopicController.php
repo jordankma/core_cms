@@ -18,7 +18,7 @@ use Spatie\Activitylog\Models\Activity;
 use Yajra\Datatables\Datatables;
 use Validator;
 use Auth;
-use DateTime,DB;
+use DateTime,DB,Cache;
 
 class TopicController extends Controller
 {
@@ -54,12 +54,14 @@ class TopicController extends Controller
             $topics = new Topic();
             $topics->name = $request->input('name'); 
             $topics->image = $request->input('image'); 
+            $topics->desc = $request->input('desc'); 
             $topics->alias = self::stripUnicode($request->input('name')); 
             $topics->is_hot = $request->input('is_hot'); 
             $topics->created_at = new DateTime();
             $topics->updated_at = new DateTime();
             if ($topics->save()) {
-
+                Cache::forget('cache_api_topic');
+                Cache::forget('cache_topic');
                 activity('topic')
                     ->performedOn($topics)
                     ->withProperties($request->all())
@@ -94,17 +96,21 @@ class TopicController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'is_hot' => 'required'
+            'is_hot' => 'required',
+            'topic_id' => 'required|numeric'
         ], $this->messages);
         if (!$validator->fails()) {
             $topic_id = $request->input('topic_id');
             $topic = $this->topic->find($topic_id);
             //check 
             $topic->name = $request->input('name');
-            $topics->image = $request->input('image'); 
+            $topic->image = $request->input('image'); 
+            $topic->desc = $request->input('desc');
             $topic->is_hot = $request->input('is_hot');
             $topic->updated_at = new DateTime();
             if ($topic->save()) {
+                Cache::forget('cache_api_topic');
+                Cache::forget('cache_topic');
                 activity('topic')
                     ->performedOn($topic)
                     ->withProperties($request->all())
@@ -151,7 +157,8 @@ class TopicController extends Controller
 
             if (null != $topic) {
                 $this->topic->delete($topic_id);
-
+                Cache::forget('cache_api_topic');
+                Cache::forget('cache_topic');
                 activity('topic')
                     ->performedOn($topic)
                     ->withProperties($request->all())
@@ -198,6 +205,8 @@ class TopicController extends Controller
             if (null != $topic) {
                 $topic->status = ($topic->status == 0) ? 1 : 0;
                 if($topic->save()){
+                    Cache::forget('cache_api_topic');
+                    Cache::forget('cache_topic');
                     activity('topic')
                         ->performedOn($topic)
                         ->withProperties($request->all())
@@ -261,6 +270,8 @@ class TopicController extends Controller
                 if(!empty($data_insert)){
                     DB::table('dhcd_topic_has_member')->insert($data_insert);
                 }
+                Cache::forget('cache_api_topic');
+                Cache::forget('cache_topic');
                 activity('topic')
                     ->performedOn($topic)
                     ->withProperties($request->all())
@@ -391,6 +402,8 @@ class TopicController extends Controller
                 if(!empty($data_insert)){
                     DB::table('dhcd_topic_has_member')->insert($data_insert);
                 }
+                Cache::forget('cache_api_topic');
+                Cache::forget('cache_topic');
                 activity('topic')
                     ->performedOn($topic)
                     ->withProperties($request->all())
@@ -441,6 +454,8 @@ class TopicController extends Controller
                 foreach ($members as $key => $member) {
                     DB::table('dhcd_topic_has_member')->where(['topic_id' => $topic_id,'member_id' => $member])->delete();
                 }
+                Cache::forget('cache_api_topic');
+                Cache::forget('cache_topic');
                 activity('topic')
                     ->performedOn($topic)
                     ->withProperties($request->all())

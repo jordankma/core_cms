@@ -9,8 +9,8 @@
 <!--end of page css-->
 <style type="text/css">
     #index .img-display-news{
-        max-height: 125px;
-        width: 100%;
+        height: 125px;
+        width: 120px;
     }
     #index .time{
         margin-top: 5px;
@@ -18,7 +18,7 @@
         color: gray;
     }
     #index .title{
-        font-size: 22px;
+        font-size: 16px;
         font-weight: bold;
     }  
     #index .nav-tabs a{
@@ -38,6 +38,14 @@
         font-weight: bold;
         padding-left: 8px;
     } 
+    .the-box{
+        padding: 15px;
+        margin-bottom: 30px;
+        border: 1px solid #D5DAE0;
+        position: relative;
+        background: white;
+
+    }
 </style>
 {{-- Page content --}}
 @section('content')
@@ -76,12 +84,12 @@
                             	@endphp
                                 <li class="list-group-item">
                                     <div class="row">
-                                        <div class="col-md-2 ">
+                                        <div class="col-md-1">
                                             <a href="{{route('news.frontend.detail',['news_id'=>$news->news_id])}}">
                                                 <img src="{{$url_storage.$news->image}}" class="img-display-news img-reponsive">
                                             </a>
                                         </div>
-                                        <div class="col-md-10">
+                                        <div class="col-md-11">
                                             <p class="time">{{ $cate_name.' - '.$date_created }}</p>
                                             <a href="{{route('news.frontend.detail',['news_id'=>$news->news_id])}}" class="title">{{$news->title}}</a>
                                             <p class="desc">

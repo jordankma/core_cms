@@ -36,7 +36,7 @@ class TopicfrontendController extends Controller
                 $list_topic_id[] = $value1->topic_id;
             }
         }
-        $list_topics = Topic::where('status',1)->paginate(10);
+        $list_topics = Topic::where('status',1)->paginate(15);
         $data = [
             "list_topic_id" => $list_topic_id,
             "list_topics" => $list_topics,

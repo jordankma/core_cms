@@ -80,7 +80,8 @@
                     { data: 'time_sent', name: 'time_sent'},
                     { data: 'created_at', name: 'created_at'},
                     { data: 'actions', name: 'actions', orderable: false, searchable: false, className: 'fit-content'}
-                ]
+                ],
+                language: $.parseJSON('{!! $DATATABLE_TRANS !!}')
             });
             table.on('draw', function () {
                 $('.livicon').each(function () {

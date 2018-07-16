@@ -9,8 +9,8 @@
 <!--end of page css-->
 <style type="text/css">
     #content-news .img-display-news{
-        max-height: 125px;
-        width: 100%;
+        height: 125px;
+        width: 120px;
     }
     #content-news .time{
         margin-top: 5px;
@@ -18,9 +18,26 @@
         color: gray;
     }
     #content-news .title{
-        font-size: 22px;
+        font-size: 16px;
         font-weight: bold;
-        text-transform: uppercase;
+    }
+    .the-box{
+        padding: 15px;
+        margin-bottom: 30px;
+        border: 1px solid #D5DAE0;
+        position: relative;
+        background: white;
+    }
+    .content-right{
+        margin-left: 20px;
+    }
+    .the-box{
+        padding: 15px;
+        margin-bottom: 30px;
+        border: 1px solid #D5DAE0;
+        position: relative;
+        background: white;
+
     }
 </style>
 
@@ -28,15 +45,6 @@
 @section('content')
     <section class="content-header">
         <h1>TIN TỨC</h1>
-        {{-- <ol class="breadcrumb">
-            <li>
-                <a href="{{ route('frontend.homepage') }}">
-                    <i class="livicon" data-name="home" data-size="16" data-color="#000"></i>
-                    {{ trans('adtech-core::labels.home') }}
-                </a>
-            </li>
-            <li class="active"><a href="#">{{ $title }}</a></li>
-        </ol> --}}
     </section>
     <!--section ends-->
     <section class="content paddingleft_right15">
@@ -57,12 +65,12 @@
                     @endphp
                     <li class="list-group-item">
                         <div class="row">
-                            <div class="col-md-2 ">
+                            <div class="col-md-1">
                                 <a href="{{route('news.frontend.detail',['news_id'=>$news->news_id])}}">
                                     <img src="{{$news->image != null ? $url_storage.$news->image : 'http://dhcd1.vnedutech.vn/photos/Logo-Dai-hoi-Cong-Doan.png'}}" class="img-display-news img-reponsive">
                                 </a>
                             </div>
-                            <div class="col-md-10">
+                            <div class="col-md-10 content-right">
                                 <p class="time">{{ $cate_name.' - '.$date_created }}</p>
                                 <a href="{{route('news.frontend.detail',['news_id'=>$news->news_id])}}" class="title">{{$news->title}}</a>
                                 <p class="desc">

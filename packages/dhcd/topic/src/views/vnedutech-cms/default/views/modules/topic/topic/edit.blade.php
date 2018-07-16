@@ -41,11 +41,28 @@
                             <input type="text" value="{{$topic->name}}" class="form-control" name="name" placeholder="{{trans('dhcd-topic::language.placeholder.topic.name_here')}}">
                             <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                         </div>
+                        <label>{{trans('dhcd-topic::language.form.text.desc') }}</label>
+                        <div class="form-group {{ $errors->first('name', 'has-error') }}">
+                            <textarea type="text" class="form-control" name="desc" placeholder="{{trans('dhcd-topic::language.placeholder.topic.desc_here')}}">{{$topic->desc}}</textarea>
+                            <span class="help-block">{{ $errors->first('desc', ':message') }}</span>
+                        </div>
                         <label>{{trans('dhcd-topic::language.form.text.topic_hot') }}</label>
                         <div class="form-group {{ $errors->first('name', 'has-error') }}">
                             <input type="radio" name="is_hot" value="1" id="topic_hot" @if($topic->is_hot==1) checked="" @endif> <label for="topic_hot" style="margin-right: 40px"> {{trans('dhcd-topic::language.form.text.hot') }} </label> 
                             <input type="radio" name="is_hot" value="2" id="topic_normal" @if($topic->is_hot==2) checked="" @endif> <label for="topic_normal"> {{trans('dhcd-topic::language.form.text.normal') }} </label>
                             <span class="help-block">{{ $errors->first('name', ':message') }}</span>
+                        </div>
+                        <label>{{trans('dhcd-topic::language.form.text.select_image') }}</label>
+                        <div class="form-group">
+                            <div class="input-group">
+                               <span class="input-group-btn">
+                                 <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
+                                   <i class="fa fa-picture-o"></i> Chọn ảnh
+                                 </a>
+                               </span>
+                               <input id="thumbnail" value="{{$topic->image}}" class="form-control" type="text" name="image">
+                            </div>
+                            <img id="holder" src="{{$topic->image}}" style="margin-top:15px;max-height:100px;">
                         </div>
                         <div class="form-group col-xs-12">
                             <label for="blog_category" class="">Actions</label>
@@ -73,11 +90,14 @@
     <!-- begining of page js -->
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-switch/js/bootstrap-switch.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrapvalidator/js/bootstrapValidator.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/vendor/laravel-filemanager/js/lfm.js') }}" type="text/javascript" ></script>
     <!--end of page js-->
     <script>
         $(function () {
             $("[name='permission_locked']").bootstrapSwitch();
         })
+        var domain = "/admin/laravel-filemanager/";
+        $('#lfm').filemanager('image', {prefix: domain});
     </script>
     <script type="text/javascript">
         $('#form-add-topic').bootstrapValidator({
@@ -93,6 +113,13 @@
                         stringLength: {
                             max: 250,
                             message: 'Tên không được quá dài'
+                        }
+                    }
+                },
+                image: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Bạn chưa chọn ảnh đại diện'
                         }
                     }
                 }

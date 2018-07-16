@@ -29,16 +29,19 @@ return [
             "topic_hot" => "Topic Hot",
             "hot" => "Hot",
             "normal" => "Thường",
+            "desc" => "Mô tả",
+            "select_image" => "Chọn ảnh đại diện"
         ],
     ],
     "buttons" => [
         "create" => "Thêm",
         "discard" => "Hủy",
-        "update" => "cập nhật",
+        "update" => "Cập nhật",
     ],
     "placeholder" => [
         "topic" => [
-            "name_here" => "Nhập tên..."
+            "name_here" => "Nhập tên...",
+            "desc_here" => "Nhập mô tả..."
         ]
     ],
     "labels" => [

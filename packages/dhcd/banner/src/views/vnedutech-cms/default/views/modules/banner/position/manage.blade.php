@@ -75,7 +75,8 @@
                     { data: 'rownum', name: 'rownum'},
                     { data: 'name', name: 'name' },
                     { data: 'actions', name: 'actions', orderable: false, searchable: false, className: 'fit-content'}
-                ]
+                ],
+                language: $.parseJSON('{!! $DATATABLE_TRANS !!}')
             });
             table.on('draw', function () {
                 $('.livicon').each(function () {

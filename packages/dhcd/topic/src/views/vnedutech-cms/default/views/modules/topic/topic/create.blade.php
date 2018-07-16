@@ -34,26 +34,34 @@
                 <form action="{{route('dhcd.topic.topic.add')}}" method="post" id="form-add-topic">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
                 <div class="row">
-                    <div class="col-sm-8">
+                    <div class="col-sm-7">
                         <label>{{trans('dhcd-topic::language.form.text.name') }}</label>
                         <div class="form-group {{ $errors->first('name', 'has-error') }}">
                             <input type="text" class="form-control" name="name" placeholder="{{trans('dhcd-topic::language.placeholder.topic.name_here')}}">
                             <span class="help-block">{{ $errors->first('name', ':message') }}</span>
+                        </div>
+                        <label>{{trans('dhcd-topic::language.form.text.desc') }}</label>
+                        <div class="form-group {{ $errors->first('name', 'has-error') }}">
+                            <textarea type="text" class="form-control" name="desc" placeholder="{{trans('dhcd-topic::language.placeholder.topic.desc_here')}}"></textarea>
+                            <span class="help-block">{{ $errors->first('desc', ':message') }}</span>
                         </div>
                         <label>{{trans('dhcd-topic::language.form.text.topic_hot') }}</label>
                         <div class="form-group">
                             <input type="radio" name="is_hot" value="1" id="topic_hot"> <label for="topic_hot" > {{trans('dhcd-topic::language.form.text.hot') }} </label> 
                             <input type="radio" name="is_hot" value="2" id="topic_normal" checked=""> <label for="topic_normal" style="margin-right: 40px"> {{trans('dhcd-topic::language.form.text.normal') }} </label>
                         </div>
-                        <label>Chọn ảnh đại diện</label>
-                        <div class="input-group">
-                           <span class="input-group-btn">
-                             <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
-                               <i class="fa fa-picture-o"></i> Chọn
-                             </a>
-                           </span>
-                           <input id="thumbnail" value="{{asset('/vendor/' . $group_name . '/' . $skin . '/dhcd/topic/uploads/media/images/Avatar.jpg')}}" class="form-control" type="text" name="image">
-                         </div>
+                        <label>{{trans('dhcd-topic::language.form.text.select_image') }}</label>
+                        <div class="form-group">
+                            <div class="input-group">
+                               <span class="input-group-btn">
+                                 <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
+                                   <i class="fa fa-picture-o"></i> Chọn ảnh
+                                 </a>
+                               </span>
+                               <input id="thumbnail" value="" class="form-control" type="text" name="image">
+                            </div>
+                            <img id="holder" style="margin-top:15px;max-height:100px;">
+                        </div>
                         <div class="form-group col-xs-12" style="margin-top: 20px;">
                             <label for="blog_category" class="">Actions</label>
                             <div class="form-group">
@@ -104,6 +112,13 @@
                         stringLength: {
                             max: 250,
                             message: 'Tên không được quá dài'
+                        }
+                    }
+                },
+                image: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Bạn chưa chọn ảnh đại diện'
                         }
                     }
                 }

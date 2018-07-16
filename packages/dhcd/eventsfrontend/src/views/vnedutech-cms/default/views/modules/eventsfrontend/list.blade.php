@@ -22,6 +22,13 @@
         font-weight: bold;
         padding-left: 8px;
     }
+    .the-box{
+        padding: 15px;
+        margin-bottom: 30px;
+        border: 1px solid #D5DAE0;
+        position: relative;
+        background: white;
+    }
 </style>
 
 {{-- Page content --}}

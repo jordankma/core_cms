@@ -9,8 +9,8 @@
 <!--end of page css-->
 <style type="text/css">
     #list-topic .img-display-topics{
-        max-height: 125px;
-        width: 100%;
+        height : 125px;
+        width: 125px;
     }
     #list-topic .time{
         margin-top: 5px;
@@ -18,13 +18,23 @@
         color: gray;
     }
     #list-topic .title{
-        font-size: 22px;
+        font-size: 16px;
         font-weight: bold;
-        text-transform: uppercase;
     }
     .lock{
         color: red;
         margin-top: 4%;
+    }
+    .the-box{
+        padding: 15px;
+        margin-bottom: 30px;
+        border: 1px solid #D5DAE0;
+        position: relative;
+        background: white;
+
+    }
+    .content-right{
+        margin-left: 20px;
     }
 </style>
 
@@ -51,12 +61,12 @@
                     @endphp
                     <li class="list-group-item">
                         <div class="row">
-                            <div class="col-md-2 ">
+                            <div class="col-md-1">
                                 <a href="{{route('topic.frontend.detail',['topics_id'=>$topics->topics_id])}}" data-lock="{{$lock}}" class="check-lock">
                                     <img src="{{$topics->image}}" class="img-display-topics img-reponsive">
                                 </a>
                             </div>
-                            <div class="col-md-9">
+                            <div class="col-md-9 content-right" >
                                 <p class="time">{{ $date_created }}</p>
                                 <a href="{{route('topic.frontend.detail',['topics_id'=>$topics->topics_id])}}" data-lock="{{$lock}}" class="check-lock title">{{$topics->name}}</a>
                                 <p class="desc">
@@ -72,12 +82,8 @@
                     </li>
                     @endforeach
                     @endif
-                    <div class="row" id="hidden">
-                        <div class="col-md-12">
-                            <div class="center">
-                                {{$list_topics->links()}}
-                            </div>
-                        </div>
+                    <div class="center" id="hidden">
+                        {{$list_topics->links()}}
                     </div>
                 </ul>
             </div>

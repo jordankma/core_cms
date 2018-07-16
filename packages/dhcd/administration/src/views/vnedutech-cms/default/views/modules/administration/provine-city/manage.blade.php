@@ -75,11 +75,11 @@
                 ajax: '{{ route('dhcd.administration.provine-city.data') }}',
                 columns: [
                     { data: 'rownum', name: 'rownum' },
-                    // { data: 'name', name: 'name' },
                     { data: 'name_with_type', name: 'name_with_type'},
                     { data: 'code', name: 'code'},
                     { data: 'actions', name: 'actions', orderable: false, searchable: false}
-                ]
+                ],
+                language: $.parseJSON('{!! $DATATABLE_TRANS !!}')
             });
             table.on('draw', function () {
                 $('.livicon').each(function () {

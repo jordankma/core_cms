@@ -141,6 +141,8 @@ class NewsController extends Controller
             $news->save();
         }
 		if ($news->news_id) {
+            Cache::forget('cache_api_news');
+            Cache::forget('cache_news');
             activity('news')
                 ->performedOn($news)
                 ->withProperties($request->all())
@@ -252,6 +254,8 @@ class NewsController extends Controller
             $news->save();
         }
 		if ($news->news_id) {
+            Cache::forget('cache_api_news');
+            Cache::forget('cache_news');
             activity('news')
                 ->performedOn($news)
                 ->withProperties($request->all())
@@ -290,6 +294,8 @@ class NewsController extends Controller
         $news = $this->news->find($news_id);
         if (null != $news) {
             $this->news->delete($news_id);
+            Cache::forget('cache_api_news');
+            Cache::forget('cache_news');
             activity('news')
                 ->performedOn($news)
                 ->withProperties($request->all())

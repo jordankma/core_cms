@@ -77,7 +77,8 @@
                     { data: 'name_with_type', name: 'name_with_type' },
                     { data: 'country_district', name: 'country_district' },
                     { data: 'actions', name: 'actions', orderable: false, searchable: false}
-                ]
+                ],
+                language: $.parseJSON('{!! $DATATABLE_TRANS !!}')
             });
             table.on('draw', function () {
                 $('.livicon').each(function () {
