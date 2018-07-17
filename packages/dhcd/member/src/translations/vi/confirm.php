@@ -5,12 +5,18 @@ return [
     "confirm" => "Confirm",
     "member" => [
     	"delete"=>[
-        	"title" => "Delete Member",
-        	"body" => "Are you sure to delete this member? This operation is irreversible."
+        	"title" => "Xóa người dùng",
+        	"body" => "Bạn có chắc muốn xóa người dùng này?"
     	],
     	"block"=>[
-        	"title" => "Block Member",
-        	"body" => "Are you sure to block this member? This operation is irreversible."
+        	"title" => "Khóa người dùng",
+        	"body" => "Bạn có chắc muốn xóa người dùng này?"
     	]
+    ],
+    "group" => [
+        "delete"=>[
+            "title" => "Xóa nhóm người dùng",
+            "body" => "Bạn có chắc muốn xóa nhóm người dùng này?"
+        ],
     ],
 ];

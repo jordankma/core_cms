@@ -3,10 +3,15 @@
 return [
     "titles" => [
         "member" => [
-            "manage" => "Quản lý member",
-            "create" => "Tạo member",
-            "update" => "Cập nhật member",
-            "excel" => "Tải member bằng file excel"
+            "manage" => "Quản lý người dùng",
+            "create" => "Tạo người dùng",
+            "update" => "Cập nhật người dùng",
+            "excel" => "Tải người dùng bằng file excel"
+        ],
+        "group" => [
+            "manage" => "Quản lý nhóm người dùng",
+            "create" => "Thêm người dùng",
+            "update" => "Cập nhật người dùng",
         ],
     ],
     "table" => [
@@ -20,6 +25,10 @@ return [
             "u_name"=> "Username",
             "position"=> "Chức vụ",
             "address"=> "Địa chỉ",
+        ],
+        "group" => [
+            "name" => "Tên",
+            "count" => "Số người dùng trong nhóm"
         ]
     ],
     "form" => [
@@ -42,9 +51,12 @@ return [
             "ton_giao" => "Tôn giáo",
             "ngay_vao_dang" => "Ngày vào đảng",
         ],
+        "title_group" => [
+            "name" => "Tên nhóm"
+        ]
     ],
     "buttons" => [
-        "create" => "Tạo",
+        "create" => "Thêm",
         "discard" => "Hủy",
         "update" => "Cập nhật",
         "upload" => "Tải lên"
@@ -70,21 +82,24 @@ return [
             "ton_giao" => "Tôn giáo...",
             "ngay_vao_dang" => "Ngày vào đảng...",
             "don_vi" => "Đơn vị...",
+        ],
+        "group" => [
+            "name" => "Nhập tên nhóm"
         ]
     ],
     "messages" => [
         "success" => [
-            "create" => "Create successfully",
-            "update" => "Update successfully",
-            "delete" => "Delete successfully",
-            "block" => "Block successfully",
+            "create" => "Thêm thành công",
+            "update" => "Cập nhật thành công",
+            "delete" => "Xóa thành công",
+            "block" => "Khóa thành công",
         ],
         "error" => [
             "permission" => "Permission lock",
-            "create" => "Create failed",
-            "update" => "Update failed",
-            "delete" => "Delete failed",
-            "block" => "Block failed",
+            "create" => "Thêm thất bại",
+            "update" => "Cập nhật thất bại",
+            "delete" => "Xóa thất bại",
+            "block" => "Khóa thất bại",
         ]
     ]
 ];

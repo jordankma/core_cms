@@ -44,19 +44,8 @@
                         </div>
                         <label>{{trans('dhcd-notification::language.label.content')}}</label>
                         <div class="form-group">
-                            <textarea id="content" name="content" class="form-control" placeholder=""></textarea>
+                            <textarea id="content" name="content" rows="5" class="form-control" placeholder="{{trans('dhcd-notification::language.placeholder.notification.content_here')}}"></textarea>
                         </div>
-                        <label>{{trans('dhcd-notification::language.label.time_sent')}}</label>
-                         <div class="form-group">
-                            <div class='input-group date' id='time_sent'>
-                                <input type='text' class="form-control" name="time_sent"/>
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
-                            <p style="color: red">Mặc định không chọn là gửi luôn</p>
-                        </div>
-                        
                         <div class="form-group col-xs-12">
                             <label for="blog_category" class="">Actions</label>
                             <div class="form-group">
@@ -68,19 +57,7 @@
                     </div>
                     <!-- /.col-sm-8 -->
                     <div class="col-sm-4">
-                        <label>{{trans('dhcd-notification::language.label.type_sent')}}</label>
-                        <div class="form-group">
-                            <input type="radio" id="sent-all" name="type_sent" value="1" checked="checked">
-                            <label for="sent-all">{{trans('dhcd-notification::language.placeholder.notification.sent_all')}}    </label> <br>
-                            <input type="radio" id="sent-single" name="type_sent" value="2">
-                            <label for="sent-single">{{trans('dhcd-notification::language.placeholder.notification.sent_single')}}</label>
-                            <div id="area-sent-single">
-                                <input type="text" id="searchProduct" name="keyword" class="typeahead form-control" placeholder="Nhập tên người cần thêm">
-                                <ul class="list-group" id="list_member_sent" style="height: 200px;overflow: auto;">
-
-                                </ul>
-                            </div>
-                        </div>    
+                           
                     </div>
                     <!-- /.col-sm-4 -->
                 </div>
@@ -103,32 +80,7 @@
     <!--end of page js-->
     <script>
         $(document).ready(function() {
-            $('#time_sent').datetimepicker({
-                format: 'DD-MM-YYYY',
-                minDate: new Date()
-            });
-        });
-        $("input.typeahead").keyup(function(){
-            // delay(function(){
-                var keyword = $('.typeahead').val();
-                var url = '/admin/dhcd/notification/notification/search/member/?keyword='+keyword;
-                $.get(url, function(data){
-                    var i,text = '';
-                    var obj_data = JSON.parse(data);
-                    if(obj_data.length>0){
-                        for (i in obj_data) {
-                            text += '<li class="list-group-item"><input type="checkbox" name="list_member_sent[]" value="'+obj_data[i].member_id+'">'+obj_data[i].name+'</li>';
-                        }
-                        $('#list_member_sent').html('');
-                        $('#list_member_sent').append(text);
-                    }
-                    else{
-                        $('#list_member_sent').html('<span class="red"> Không tìm thấy người dùng thỏa mãn </span>');        
-                    }
-                });
-            // }, 500 );
-        });
-        $('#form-add-notification').bootstrapValidator({
+            $('#form-add-notification').bootstrapValidator({
                 feedbackIcons: {
                     // validating: 'glyphicon glyphicon-refresh'
                 },
@@ -144,7 +96,19 @@
                             }
                         }
                     },
+                    content: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Bạn chưa nhập tên'
+                            },
+                            stringLength: {
+                                max: 250,
+                                message: 'Tên không được quá dài'
+                            }
+                        }
+                    },
                 }
             });
+        });
     </script>
 @stop

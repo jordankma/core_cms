@@ -49,7 +49,6 @@
                                 <th class="fit-content">#</th>
                                 <th>{{ trans('dhcd-notification::language.table.notification.name') }}</th>
                                 <th>{{ trans('dhcd-notification::language.table.notification.content') }}</th>
-                                <th style="width: 120px">{{ trans('dhcd-notification::language.table.notification.time_sent') }}</th>
                                 <th style="width: 120px">{{ trans('dhcd-notification::language.table.created_at') }}</th>
                                 <th>{{ trans('dhcd-notification::language.table.action') }}</th>
                             </tr>
@@ -77,7 +76,6 @@
                     { data: 'rownum', name: 'rownum' },
                     { data: 'name', name: 'name' },
                     { data: 'content', name: 'content' },
-                    { data: 'time_sent', name: 'time_sent'},
                     { data: 'created_at', name: 'created_at'},
                     { data: 'actions', name: 'actions', orderable: false, searchable: false, className: 'fit-content'}
                 ],

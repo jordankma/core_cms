@@ -56,7 +56,7 @@
                                     <table class="table table-bordered" id="table">
                                         <thead>
                                         <tr class="filters">
-                                            <th class="fit-content">{{ trans('dhcd-topic::language.table.id') }}</th>
+                                            <th class="fit-content">#</th>
                                             <th>{{ trans('dhcd-topic::language.table.add_member.name') }}</th>
                                             <th>{{ trans('dhcd-topic::language.table.add_member.email') }}</th>
                                             <th class="fit-content" style="width: 100px">{{ trans('dhcd-topic::language.table.delete') }}</th>
