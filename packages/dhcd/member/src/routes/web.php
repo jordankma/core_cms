@@ -10,17 +10,7 @@ Route::group(array('prefix' => null), function () {
     Route::group(['middleware' => ['dhcd.auth']], function () {
         // Route::get('', '\Adtech\Core\App\Http\Controllers\FrontendController@index')->name('frontend.homepage');
 
-        Route::get('logout', 'Auth\LoginController@logout')->name('dhcd.member.auth.logout')->where('as','Đăng xuất');
-
-        Route::get('test1', function (){
-            echo 'test1';
-        })->name('test1');
-        Route::get('test2', function (){
-            echo 'test2';
-        })->name('test2');
-        Route::get('test3', function (){
-            echo 'test3';
-        })->name('test3');
+        Route::get('logout', 'Auth\LoginController@logout')->name('dhcd.member.auth.logout');
     });
 });
 
@@ -42,9 +32,27 @@ Route::group(array('prefix' => $adminPrefix), function() {
         Route::post('dhcd/member/member/check-username-exist', 'MemberController@checkUserNameExist')->name('dhcd.member.member.check-username-exist');
         Route::post('dhcd/member/member/check-email-exist', 'MemberController@checkEmailExist')->name('dhcd.member.member.check-email-exist');
         Route::post('dhcd/member/member/check-phone-exist', 'MemberController@checkPhoneExist')->name('dhcd.member.member.check-phone-exist');
-
+        //import export member excel
         Route::get('dhcd/member/member/excel/get/import', 'MemberController@getImport')->name('dhcd.member.member.excel.get.import')->where('as','Upload excel');
         Route::post('dhcd/member/member/excel/post/import', 'MemberController@postImport')->name('dhcd.member.member.excel.post.import');
+        //group member 
+        Route::get('dhcd/member/group/log', 'GroupController@log')->name('dhcd.member.group.log');
+        Route::get('dhcd/member/group/data', 'GroupController@data')->name('dhcd.member.group.data');
+        Route::get('dhcd/member/group/manage', 'GroupController@manage')->name('dhcd.member.group.manage')->where('as','Quản lý nhóm người dùng');
+        Route::get('dhcd/member/group/create', 'GroupController@create')->name('dhcd.member.group.create');
+        Route::post('dhcd/member/group/add', 'GroupController@add')->name('dhcd.member.group.add');
+        Route::get('dhcd/member/group/show', 'GroupController@show')->name('dhcd.member.group.show');
+        Route::post('dhcd/member/group/update', 'GroupController@update')->name('dhcd.member.group.update');
+        Route::get('dhcd/member/group/delete', 'GroupController@delete')->name('dhcd.member.group.delete');
+        Route::get('dhcd/member/group/confirm-delete', 'GroupController@getModalDelete')->name('dhcd.member.group.confirm-delete');
+
+        //add member to group
+        Route::get('dhcd/member/group/manage/add/member', 'GroupController@manageAddGroup')->name('dhcd.member.group.manage.add.member');
+        Route::post('dhcd/member/group/add/member', 'GroupController@addMember')->name('dhcd.member.group.add.member');
+        Route::get('dhcd/member/group/data/member', 'GroupController@dataMember')->name('dhcd.member.group.data.member');
+        Route::get('dhcd/member/group/delete/member', 'GroupController@deleteMember')->name('dhcd.member.group.delete.member');
+        Route::get('dhcd/member/group/confirm-delete/member', 'GroupController@getModalDeleteMember')->name('dhcd.member.group.confirm-delete.member');
+        Route::get('dhcd/member/group/search/member', 'GroupController@searchMember')->name('dhcd.member.group.search.member');
     });
 });
 

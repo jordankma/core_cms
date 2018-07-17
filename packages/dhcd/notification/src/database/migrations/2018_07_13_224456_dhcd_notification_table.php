@@ -16,10 +16,8 @@ class DhcdNotificationTable extends Migration
         Schema::connection('mysql_dhcd')->create('dhcd_notification', function (Blueprint $table) {
             $table->increments('notification_id');
             $table->string('name');
-            $table->string('content')->nullable();
-            $table->string('member_sent')->nullable();
-            $table->datetime('time_sent')->nullable();
-            $table->tinyInteger('type_sent', false, true)->comment('1 send all, 2 send theo lua chon')->default(1);
+            $table->string('alias');
+            $table->longText('content');
             $table->tinyInteger('status', false, true)->comment('trang thai')->default(1);
             $table->timestamps();
             $table->softDeletes();

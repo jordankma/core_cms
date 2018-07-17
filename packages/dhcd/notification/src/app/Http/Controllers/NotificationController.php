@@ -37,37 +37,14 @@ class NotificationController extends Controller
     public function add(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
+            'name' => 'required|min:1|max:200',
+            'content' => 'required|min:1|max:400'
         ], $this->messages);
         if (!$validator->fails()) {
-            // dd(gettype($request->type_sent));
-            $time_sent = '';
-            if(isset($request->time_sent) && $request->input('time_sent') != ''){
-                $date = new DateTime($request->input('time_sent'));
-                $time_sent = $date->format('Y-m-d H:i:s');
-            }
-
-            $type_sent = $request->input('type_sent');
-            $member_sent = array();
-            if($type_sent == 2){
-                $member_sent = $request->input('list_member_sent');
-            }
-            // if($time_sent !=''){
-
-            // }
-            // else{
-            //     if($type_sent==1){
-            //         $this->sentNotification();
-                    
-            //     }
-            // }
             $notifications = new Notification();
             $notifications->name = $request->input('name');
-            $notifications->name = self::stripUnicode($request->input('name'));
+            $notifications->alias = self::stripUnicode($request->input('name'));
             $notifications->content = $request->input('content');
-            $notifications->type_sent = $type_sent;
-            $notifications->time_sent = $time_sent;
-            $notifications->member_sent = json_encode($member_sent);
             $notifications->created_at = new DateTime();
             $notifications->updated_at = new DateTime();
             if ($notifications->save()) {
@@ -75,7 +52,7 @@ class NotificationController extends Controller
                 activity('notification')
                     ->performedOn($notifications)
                     ->withProperties($request->all())
-                    ->log('User: :causer.email - Add notification - name: :properties.name, notification_id: ' . $notifications->notification_id);
+                    ->log('User: :causer.email - Add template notification - name: :properties.name, notification_id: ' . $notifications->notification_id);
 
                 return redirect()->route('dhcd.notification.notification.manage')->with('success', trans('dhcd-notification::language.messages.success.create'));
             } else {
@@ -88,33 +65,51 @@ class NotificationController extends Controller
     }
 
     public function show(Request $request)
-    {
-        $demo_id = $request->input('demo_id');
-        $demo = $this->demo->find($demo_id);
-        $data = [
-            'demo' => $demo
-        ];
-
-        return view('DHCD-NOTIFICATION::modules.notification.demo.edit', $data);
+    {   
+        $validator = Validator::make($request->all(), [
+            'notification_id' => 'required|numeric',
+        ], $this->messages);
+        if (!$validator->fails()) {
+            $notification_id = $request->input('notification_id');
+            $notification = $this->notification->find($notification_id);
+            if(null==$notification){
+                return redirect()->route('dhcd.notification.notification.manage')->with('error', trans('dhcd-notification::language.messages.error.update'));    
+            }
+            $data = [
+                'notification' => $notification
+            ];
+            return view('DHCD-NOTIFICATION::modules.notification.notification.edit', $data);
+        } else {
+            return $validator->messages();
+        }
     }
 
     public function update(Request $request)
     {
-        $demo_id = $request->input('demo_id');
+        $validator = Validator::make($request->all(), [
+            'notification_id' => 'required|numeric',
+            'name' => 'required|min:1|max:200',
+            'content' => 'required|min:1|max:400'
+        ], $this->messages);
+        if (!$validator->fails()) {
+            $notification_id = $request->input('notification_id');
+            $notification = $this->notification->find($notification_id);
+            $notification->name = $request->input('name');
+            $notification->content = $request->input('content');
 
-        $demo = $this->demo->find($demo_id);
-        $demo->name = $request->input('name');
+            if ($notification->save()) {
 
-        if ($demo->save()) {
+                activity('notification')
+                    ->performedOn($notification)
+                    ->withProperties($request->all())
+                    ->log('User: :causer.email - Update notification - notification_id: :properties.notification_id, name: :properties.name');
 
-            activity('demo')
-                ->performedOn($demo)
-                ->withProperties($request->all())
-                ->log('User: :causer.email - Update Demo - demo_id: :properties.demo_id, name: :properties.name');
-
-            return redirect()->route('dhcd.notification.demo.manage')->with('success', trans('dhcd-notification::language.messages.success.update'));
+                return redirect()->route('dhcd.notification.notification.manage')->with('success', trans('dhcd-notification::language.messages.success.update'));
+            } else {
+                return redirect()->route('dhcd.notification.notification.show', ['notification_id' => $request->input('notification_id')])->with('error', trans('dhcd-notification::language.messages.error.update'));
+            }
         } else {
-            return redirect()->route('dhcd.notification.demo.show', ['demo_id' => $request->input('demo_id')])->with('error', trans('dhcd-notification::language.messages.error.update'));
+            return $validator->messages();
         }
     }
 
@@ -189,50 +184,22 @@ class NotificationController extends Controller
                 if ($this->user->canAccess('dhcd.notification.notification.log')) {
                     $actions .= '<a href=' . route('dhcd.notification.notification.log', ['type' => 'notification', 'id' => $notifications->notification_id]) . ' data-toggle="modal" data-target="#log"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#F99928" data-hc="#F99928" title="log notification"></i></a>';
                 }
-                // if ($this->user->canAccess('dhcd.notification.notification.show')) {
-                //     $actions .= '<a href=' . route('dhcd.notification.notification.show', ['notification_id' => $notifications->notification_id]) . '><i class="livicon" data-name="edit" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="update notification"></i></a>';
-                // }
+                if ($this->user->canAccess('dhcd.notification.notification.show')) {
+                    $actions .= '<a href=' . route('dhcd.notification.notification.show', ['notification_id' => $notifications->notification_id]) . '><i class="livicon" data-name="edit" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="update notification"></i></a>';
+                }
                 if ($this->user->canAccess('dhcd.notification.notification.confirm-delete')) {        
                     $actions .= '<a href=' . route('dhcd.notification.notification.confirm-delete', ['notification_id' => $notifications->notification_id]) . ' data-toggle="modal" data-target="#delete_confirm"><i class="livicon" data-name="trash" data-size="18" data-loop="true" data-c="#f56954" data-hc="#f56954" title="delete notification"></i></a>';
                 }
                 return $actions;
             })
-            ->addColumn('time_sent', function ($notifications) {
-                $time_sent = $notifications->time_sent;
-                if($time_sent == '' || $time_sent == null){
-                    $time_sent = "Đã gửi";    
-                }
-                else{
-                    $date = new DateTime();
-                    $time_sent = date_format($date, 'h:i:s d-m-Y');
-                }
-                return $time_sent;   
+            ->addColumn('created_at', function ($banners) {
+                $date = new DateTime($banners->created_at);
+                $created_at = date_format($date, 'd-m-Y');
+                return $created_at;   
             })
             ->addIndexColumn()
-            ->rawColumns(['actions','time_sent'])
+            ->rawColumns(['actions'])
             ->make();
     }
 
-    public function searchMember(Request $request) {
-        $data = [];
-        if ($request->ajax()) {
-            $keyword = $request->input('keyword');
-            if(!empty($keyword)){
-                $list_members = Member::where('name', 'like', '%' . $keyword . '%')->get();
-                if(!empty($list_members)){
-                    foreach($list_members as $member){
-                        $data[] = [
-                            'name' => $member->name,
-                            'member_id' => $member->member_id
-                        ];
-                    }
-                }
-            }
-        }
-        echo json_encode($data);
-    }
-
-    public function sentNotification(){
-
-    }
 }

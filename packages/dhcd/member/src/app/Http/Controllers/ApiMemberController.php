@@ -60,7 +60,7 @@ class ApiMemberController extends BaseController
 					 	"email" => $member->email,
 					 	"ten_hien_thi" => $member->name,
 					 	"token" => [
-					 		"token" => '123123'
+					 		"token" => 'token'.$member->member_id
 					 	]
 					],
 					"success" => true,
@@ -154,7 +154,8 @@ class ApiMemberController extends BaseController
                 'u_name' => 'member'.$x,
                 'phone' => $x,
                 'email' => 'member'.$x.'@gmail.com',
-                'password' => bcrypt('123456')
+                'password' => bcrypt('123456'),
+                'token' => 'token'.$x
             ];
        		$x++;   
 		}
