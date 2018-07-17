@@ -192,14 +192,30 @@ class NotificationController extends Controller
                 }
                 return $actions;
             })
-            ->addColumn('created_at', function ($banners) {
-                $date = new DateTime($banners->created_at);
+            ->addColumn('created_at', function ($notifications) {
+                $date = new DateTime($notifications->created_at);
                 $created_at = date_format($date, 'd-m-Y');
                 return $created_at;   
             })
+            ->addColumn('sent', function ($notifications) {
+                $sent = '';
+                // if ($this->user->canAccess('dhcd.notification.notification.confirm-sent')) {
+                    $sent .= '<a href=' . route('dhcd.notification.notification.confirm-sent', ['notification_id' => $notifications->notification_id]) . ' data-toggle="modal" data-target="#sent_notification"><i class="livicon" data-name="send" data-size="18" data-loop="true" data-c="#f56954" data-hc="#f56954" title="sent notification"></i></a>';
+                // }
+                return $sent;   
+            })
             ->addIndexColumn()
-            ->rawColumns(['actions'])
+            ->rawColumns(['actions','sent','created_at'])
             ->make();
+    }
+
+    //sent notification
+
+    public function getModalSent() {
+        return view('DHCD-NOTIFICATION::modules.notification.modal.modal_sent_notification');    
+    }
+    public function sent() {
+
     }
 
 }

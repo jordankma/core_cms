@@ -12,6 +12,7 @@ return [
             "manage" => "Quản lý nhóm người dùng",
             "create" => "Thêm người dùng",
             "update" => "Cập nhật người dùng",
+            "add_member" => "Thêm người dùng vào nhóm"
         ],
     ],
     "table" => [

@@ -13,7 +13,8 @@ Route::group(array('prefix' => $adminPrefix), function() {
         Route::get('dhcd/notification/notification/delete', 'NotificationController@delete')->name('dhcd.notification.notification.delete');
         Route::get('dhcd/notification/notification/confirm-delete', 'NotificationController@getModalDelete')->name('dhcd.notification.notification.confirm-delete');
         //get modal sent notificatio
-
+        Route::get('dhcd/notification/notification/sent', 'NotificationController@sent')->name('dhcd.notification.notification.sent');
+        Route::get('dhcd/notification/notification/confirm-sent', 'NotificationController@getModalSent')->name('dhcd.notification.notification.confirm-sent');
 
     });
 });

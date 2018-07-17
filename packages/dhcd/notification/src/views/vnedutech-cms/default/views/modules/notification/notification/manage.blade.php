@@ -49,6 +49,7 @@
                                 <th class="fit-content">#</th>
                                 <th>{{ trans('dhcd-notification::language.table.notification.name') }}</th>
                                 <th>{{ trans('dhcd-notification::language.table.notification.content') }}</th>
+                                <th class="fit-content">{{ trans('dhcd-notification::language.table.notification.sent') }}</th>
                                 <th style="width: 120px">{{ trans('dhcd-notification::language.table.created_at') }}</th>
                                 <th>{{ trans('dhcd-notification::language.table.action') }}</th>
                             </tr>
@@ -76,6 +77,7 @@
                     { data: 'rownum', name: 'rownum' },
                     { data: 'name', name: 'name' },
                     { data: 'content', name: 'content' },
+                    { data: 'sent', name: 'sent' },
                     { data: 'created_at', name: 'created_at'},
                     { data: 'actions', name: 'actions', orderable: false, searchable: false, className: 'fit-content'}
                 ],
@@ -91,6 +93,12 @@
     </script>
 
     <div class="modal fade" id="delete_confirm" tabindex="-1" role="dialog" aria-labelledby="user_delete_confirm_title"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content"></div>
+        </div>
+    </div>
+    <div class="modal fade" id="sent_notification" tabindex="-1" role="dialog" aria-labelledby="sent_notification_title"
          aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content"></div>

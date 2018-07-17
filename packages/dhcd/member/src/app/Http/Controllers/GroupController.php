@@ -4,13 +4,17 @@ namespace Dhcd\Member\App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Adtech\Application\Cms\Controllers\Controller as Controller;
+
 use Dhcd\Member\App\Repositories\GroupRepository;
+
 use Dhcd\Member\App\Models\Group;
 use Dhcd\Member\App\Models\GroupHasMember;
+use Dhcd\Member\App\Models\Member;
+
 use Spatie\Activitylog\Models\Activity;
 use Yajra\Datatables\Datatables;
-use Validator,DateTime;
-use Dhcd\Member\App\Models\Member;
+
+use Validator,DateTime,DB;
 class GroupController extends Controller
 {
     private $messages = array(
@@ -226,43 +230,41 @@ class GroupController extends Controller
 
     public function addMember(Request $request){
         $validator = Validator::make($request->all(), [
-            'topic_id' => 'required|numeric',
+            'group_id' => 'required|numeric',
         ], $this->messages);
         if (!$validator->fails()) {
 
-            $topic_id = $request->input('topic_id');
+            $group_id = $request->input('group_id');
             $members = $request->list_members;
-            $topic = $this->topic->find($topic_id);
-            if (null != $topic && !empty($members)) {
+            $group = $this->group->find($group_id);
+            if (null != $group && !empty($members)) {
                 $data_insert = array();
                 if(!empty($members)){
                     foreach ($members as $key => $member) {
-                        if (!TopicHasMember::where([
-                            'topic_id' => $topic_id,
+                        if (!GroupHasMember::where([
+                            'group_id' => $group_id,
                             'member_id' => $member,
                         ])->exists()
                         )
                         {
                             $data_insert[] = [
-                                'topic_id' => $topic_id,
+                                'group_id' => $group_id,
                                 'member_id' => $member
                             ];
                         }
                     }
                 }
                 if(!empty($data_insert)){
-                    DB::table('dhcd_topic_has_member')->insert($data_insert);
+                    DB::table('dhcd_group_has_member')->insert($data_insert);
                 }
-                Cache::forget('cache_api_topic');
-                Cache::forget('cache_topic');
-                activity('topic')
-                    ->performedOn($topic)
+                activity('group')
+                    ->performedOn($group)
                     ->withProperties($request->all())
-                    ->log('User: :causer.email - Add single member topic - topic_id: :properties.topic_id, name: ' . $topic->name);
-                return redirect()->route('dhcd.topic.topic.create.member',['topic_id' => $topic_id])->with('success', trans('dhcd-topic::language.messages.success.status'));
+                    ->log('User: :causer.email - Add single member group - group_id: :properties.group_id, name: ' . $group->name);
+                return redirect()->route('dhcd.member.group.manage.add.member',['group_id' => $group_id])->with('success', trans('dhcd-member::language.messages.success.status'));
             }
             else{
-                return redirect()->route('dhcd.topic.topic.create.member',['topic_id' => $topic_id])->with('error', trans('dhcd-topic::language.messages.error.status'));
+                return redirect()->route('dhcd.member.group.manage.add.member',['group_id' => $group_id])->with('error', trans('dhcd-member::language.messages.error.status'));
             }
         } else {
             return $validator->messages();
@@ -271,19 +273,19 @@ class GroupController extends Controller
 
     public function getModalDeleteMember(Request $request)
     {
-        $model = 'topic';
-        $type = 'delete_member';
+        $model = 'group';
+        $type = 'delete';
         $confirm_route = $error = null;
         $validator = Validator::make($request->all(), [
-            'topic_id' => 'required|numeric',
+            'group_id' => 'required|numeric',
             'member' => 'required',
         ], $this->messages);
         if (!$validator->fails()) {
             try {
-                $confirm_route = route('dhcd.topic.topic.delete.member', ['topic_id' => $request->input('topic_id'),'member' => $request->input('member')]);
-                return view('DHCD-TOPIC::modules.topic.modal.modal_confirmation', compact('error', 'type' , 'model', 'confirm_route'));
+                $confirm_route = route('dhcd.member.group.delete.member', ['group_id' => $request->input('group_id'),'member' => $request->input('member')]);
+                return view('DHCD-MEMBER::modules.member.modal.modal_confirmation', compact('error', 'type' , 'model', 'confirm_route'));
             } catch (GroupNotFoundException $e) {
-                return view('DHCD-TOPIC::modules.topic.modal.modal_confirmation', compact('error', 'type' , 'model', 'confirm_route'));
+                return view('DHCD-MEMBER::modules.member.modal.modal_confirmation', compact('error', 'type' , 'model', 'confirm_route'));
             }
         } else {
             return $validator->messages();
@@ -293,26 +295,26 @@ class GroupController extends Controller
     public function deleteMember(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'topic_id' => 'required|numeric',
+            'group_id' => 'required|numeric',
             'member' => 'required',
         ], $this->messages);
         if (!$validator->fails()) {
             
-            $topic_id = $request->input('topic_id');
-            $topic = $this->topic->find($topic_id);
+            $group_id = $request->input('group_id');
+            $group = $this->group->find($group_id);
             $members = explode(",",$request->input('member'));
             if (!empty($members)) {
                 foreach ($members as $key => $member) {
-                    DB::table('dhcd_topic_has_member')->where(['topic_id' => $topic_id,'member_id' => $member])->delete();
+                    DB::table('dhcd_group_has_member')->where(['group_id' => $group_id,'member_id' => $member])->delete();
                 }
-                activity('topic')
-                    ->performedOn($topic)
+                activity('group')
+                    ->performedOn($group)
                     ->withProperties($request->all())
-                    ->log('User: :causer.email - Delete member topic - topic_id: :properties.topic_id, name: ' . $topic->name);
+                    ->log('User: :causer.email - Delete member group - group_id: :properties.group_id, name: ' . $group->name);
 
-                return redirect()->route('dhcd.topic.topic.create.member',['topic_id' => $topic_id])->with('success', trans('dhcd-topic::language.messages.success.delete'));
+                return redirect()->route('dhcd.member.group.manage.add.member',['group_id' => $group_id])->with('success', trans('dhcd-member::language.messages.success.delete'));
             } else {
-                return redirect()->route('dhcd.topic.topic.create.member',['topic_id' => $topic_id])->with('error', trans('dhcd-topic::language.messages.error.delete'));
+                return redirect()->route('dhcd.member.group.manage.add.member',['group_id' => $group_id])->with('error', trans('dhcd-member::language.messages.error.delete'));
             }
 
         } else {
@@ -333,6 +335,7 @@ class GroupController extends Controller
             ->addColumn('DT_RowId', function ($members) {
                 return $members->member_id;
             })
+            ->addIndexColumn()
             ->rawColumns(['actions'])
             ->make();
     }

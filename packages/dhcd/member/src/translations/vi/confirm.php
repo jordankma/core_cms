@@ -18,5 +18,6 @@ return [
             "title" => "Xóa nhóm người dùng",
             "body" => "Bạn có chắc muốn xóa nhóm người dùng này?"
         ],
+        
     ],
 ];
