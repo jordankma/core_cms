@@ -39,6 +39,46 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Quản lý nhóm người dùng",
+      "groups": [
+        {
+          "name": "View list",
+          "routes": [
+            "dhcd.member.member.manager",
+            "dhcd.member.member.data",
+            "dhcd.member.group.log",
+            "dhcd.member.group.manage.add.member",
+            "dhcd.member.group.add.member",
+            "dhcd.member.group.data.member",
+            "dhcd.member.group.delete.member",
+            "dhcd.member.group.confirm-delete.member",
+            "dhcd.member.group.search.member"
+          ]
+        },
+        {
+          "name": "Create",
+          "routes": [
+            "dhcd.member.group.create",
+            "dhcd.member.group.add",
+          ]
+        },
+        {
+          "name": "Update",
+          "routes": [
+            "dhcd.member.group.show",
+            "dhcd.member.group.update"
+          ]
+        },
+        {
+          "name": "Delete",
+          "routes": [
+            "dhcd.member.group.delete",
+            "dhcd.member.group.confirm-delete"
+          ]
+        }
+      ]
     }
   ]
 }

@@ -211,8 +211,23 @@ class NotificationController extends Controller
 
     //sent notification
 
-    public function getModalSent() {
-        return view('DHCD-NOTIFICATION::modules.notification.modal.modal_sent_notification');    
+    public function getModalSent(Request $request) {
+        $model = 'notification';
+        $type = "sent";
+        $confirm_route = $error = null;
+        $validator = Validator::make($request->all(), [
+            'notification_id' => 'required|numeric',
+        ], $this->messages);
+        if (!$validator->fails()) {
+            try {
+                $confirm_route = route('dhcd.notification.notification.sent', ['notification_id' => $request->input('notification_id')]);
+                return view('DHCD-NOTIFICATION::modules.notification.modal.modal_sent_notification', compact('type','error', 'model', 'confirm_route'));
+            } catch (GroupNotFoundException $e) {
+                return view('DHCD-NOTIFICATION::modules.notification.modal.modal_sent_notification', compact('type','error', 'model', 'confirm_route'));
+            }
+        } else {
+            return $validator->messages();
+        }    
     }
     public function sent() {
 

@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 {{-- Page title --}}
-@section('title'){{ $title = trans('dhcd-member::language.titles.group.add_member') }}@stop
+@section('title'){{ $title = trans('dhcd-topic::language.titles.topic.add_member') }}@stop
 
 {{-- page styles --}}
 @section('header_styles')
@@ -27,7 +27,7 @@
             <li>
                 <a href="{{ route('backend.homepage') }}">
                     <i class="livicon" data-name="home" data-size="16" data-color="#000"></i>
-                    {{ trans('dhcd-member::language.labels.home') }}
+                    {{ trans('dhcd-topic::language.labels.home') }}
                 </a>
             </li>
             <li class="active"><a href="#">{{ $title }}</a></li>
@@ -110,7 +110,7 @@
             serverSide: true,
             ajax: '{{ route('dhcd.member.group.data.member',['group_id' => $group_id]) }}',
             columns: [
-                { data: 'DT_Row_Index', name: 'DT_Row_Index' },
+                { data: 'member_id', name: 'member_id' },
                 { data: 'name', name: 'name' },
                 { data: 'email', name: 'email' },
                 { data: 'actions', name: 'actions', orderable: false, searchable: false, className: 'fit-content'}
@@ -124,7 +124,7 @@
         // delete member
         var selected = 0;
         var selectedArr = [];
-        var routeDelete = '{{ route('dhcd.member.group.confirm-delete.member') }}';
+        var routeDelete = '{{ route('dhcd.topic.topic.confirm-delete.member') }}';
         var group_id = '{{$group_id}}';
         var htmlBtnToolbar = document.getElementById('btnToolbarMember').innerHTML;
         $('#table tbody').on('click', 'td.details-control', function () {
