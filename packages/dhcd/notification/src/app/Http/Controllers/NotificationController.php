@@ -4,12 +4,19 @@ namespace Dhcd\Notification\App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Adtech\Application\Cms\Controllers\Controller as Controller;
+
 use Dhcd\Notification\App\Repositories\NotificationRepository;
+use Dhcd\Member\App\Repositories\GroupRepository;
+
 use Dhcd\Notification\App\Models\Notification;
+use Dhcd\Notification\App\Models\LogSent;
+
 use Spatie\Activitylog\Models\Activity;
 use Yajra\Datatables\Datatables;
 use Validator,DateTime;
+
 use Dhcd\Member\App\Models\Member;
+use Dhcd\Member\App\Models\Group;
 class NotificationController extends Controller
 {
     private $messages = array(
@@ -18,10 +25,11 @@ class NotificationController extends Controller
         'numeric'  => "Phải là số"
     );
 
-    public function __construct(NotificationRepository $notificationRepository)
+    public function __construct(NotificationRepository $notificationRepository,GroupRepository $groupRepository)
     {
         parent::__construct();
         $this->notification = $notificationRepository;
+        $this->group = $groupRepository;
     }
 
     public function manage()
@@ -220,17 +228,50 @@ class NotificationController extends Controller
         ], $this->messages);
         if (!$validator->fails()) {
             try {
+                $groups = $this->group->all();
                 $confirm_route = route('dhcd.notification.notification.sent', ['notification_id' => $request->input('notification_id')]);
-                return view('DHCD-NOTIFICATION::modules.notification.modal.modal_sent_notification', compact('type','error', 'model', 'confirm_route'));
+                return view('DHCD-NOTIFICATION::modules.notification.modal.modal_sent_notification', compact('type','error', 'model', 'confirm_route','groups'));
             } catch (GroupNotFoundException $e) {
-                return view('DHCD-NOTIFICATION::modules.notification.modal.modal_sent_notification', compact('type','error', 'model', 'confirm_route'));
+                return view('DHCD-NOTIFICATION::modules.notification.modal.modal_sent_notification', compact('type','error', 'model', 'confirm_route','groups'));
             }
         } else {
             return $validator->messages();
         }    
     }
-    public function sent() {
+    public function sent(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'notification_id' => 'required|numeric',
+        ], $this->messages);
+        if (!$validator->fails()) {
+            $notification_id = $request->input('notification_id');
+            $notification = $this->notification->find($notification_id);
+            $time_sent = $request->input('time_sent');
+            if($time_sent != null || $time_sent != ''){
+                $date = new DateTime($request->input('time_sent'));
+                $time_sent = $date->format('Y-m-d H:i:s');
+            }
+            
+            $log_sent = new LogSent();
+            $log_sent->notification_id = $request->input('notification_id');
+            $log_sent->group_id = $request->input('group_id');
+            $log_sent->create_by = $this->user->email;
+            $log_sent->time_sent = $time_sent;
+            $log_sent->created_at = new DateTime();
+            $log_sent->updated_at = new DateTime();
+            if ($log_sent->save()) {
 
+                activity('notification')
+                    ->performedOn($notification)
+                    ->withProperties($request->all())
+                    ->log('User: :causer.email - Sent notification - notification_id: :properties.notification_id, name: :properties.name');
+
+                return redirect()->route('dhcd.notification.notification.manage')->with('success', trans('dhcd-notification::language.messages.success.sent'));
+            } else {
+                return redirect()->route('dhcd.notification.notification.manage')->with('error', trans('dhcd-notification::language.messages.error.sent'));
+            }
+        } else {
+            return $validator->messages();
+        }
     }
 
 }

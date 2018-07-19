@@ -14,4 +14,10 @@ return [
         	"body" => "Bạn có chắc muốn xóa thông báo này?"
     	]
     ],
+    "log_sent" => [
+        "delete" => [
+            "title" => "Xóa thông báo đã gửi",
+            "body" => "Bạn có chắc muốn xóa thông báo đã gửi này?"
+        ]
+    ]
 ];

@@ -73,7 +73,7 @@
                          <div class="form-group">
                             {{-- <input type="button" class="form-control" name="close_at" id="close_at" placeholder="{{trans('dhcd-banner::language.placeholder.banner.close_at') }}"> --}}
                             <div class='input-group date'>
-                                <input type='button' class="form-control" name="close_at" id="close_at" placeholder="{{trans('dhcd-banner::language.placeholder.banner.close_at') }}"/>
+                                <input type='text' class="form-control" name="close_at" id="close_at" placeholder="{{trans('dhcd-banner::language.placeholder.banner.close_at') }}"/>
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>

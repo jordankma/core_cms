@@ -6,6 +6,11 @@ return [
             "manage" => "Quản lý thông báo",
             "create" => "Thêm thông báo",
             "update" => "Cập nhật thông báo"
+        ],
+        "log_sent" => [
+            "manage" => "Quản lý thông báo đã gửi",
+            "create" => "Thêm thông báo",
+            "update" => "Cập nhật thông báo"
         ]
     ],
     "table" => [
@@ -18,6 +23,12 @@ return [
             "name" => "Tên",
             "content" => "Nội dung",
             "sent" => "Gửi thông báo"
+        ],
+        "log_sent" => [
+            "time_sent" => "Thời gian gửi",
+            "create_by" => "Tên người gửi",
+            "group" => "Nhóm được gửi",
+            "notification" => "Thông báo gửi"
         ]
     ],
     "buttons" => [
@@ -29,7 +40,8 @@ return [
         "name" => "Tên",
         "content" => "Nội dung",
         "time_sent" => "Thời gian gửi",
-        "type_sent" => "Kiểu gửi"
+        "type_sent" => "Kiểu gửi",
+        "group_sent" => "Chọn nhóm gửi"
     ],
     "placeholder" => [
         "notification" => [
@@ -44,13 +56,15 @@ return [
         "success" => [
             "create" => "Thêm thành công",
             "update" => "Cập nhật thành công",
-            "delete" => "Xóa thành công"
+            "delete" => "Xóa thành công",
+            "sent" => "Gửi thông báo thành công"
         ],
         "error" => [
             "permission" => "Permission lock",
             "create" => "Thêm thất bại",
             "update" => "Cập nhật thất bại",
-            "delete" => "Xóa thất bại"
+            "delete" => "Xóa thất bại",
+            "sent" => "Gửi thông báo thất bại"
         ]
     ]
 ];

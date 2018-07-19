@@ -33,140 +33,166 @@
     <section class="content paddingleft_right15">
         <!--main content-->
         <div class="row">
+            <form role="form" action="{{route("dhcd.member.member.add")}}" method="post" enctype="multipart/form-data" id="form-add-member">
+            <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
             <div class="the-box no-border">
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class=" nav-item active">
+                            <a href="#info-required" data-toggle="tab" class="nav-link">Thông tin bắt buộc</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#info" data-toggle="tab" class="nav-link">Thông tin thêm</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="slim1">
+                        <div class="tab-pane active" id="info-required">
+                            <div class="row">
+                                <!-- /.col-sm-8 -->
+                                <div class="col-sm-6">  
+                                    <div class="form-group">
+                                        <label>{{trans('dhcd-member::language.form.title.name') }} <span style="color: red">(*)</span></label>
+                                        <input type="text" name="name" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.name')}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>{{trans('dhcd-member::language.form.title.u_name') }} <span style="color: red">(*)</span></label>
+                                        <input type="text" name="u_name" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.u_name')}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>{{trans('dhcd-member::language.form.title.password') }} <span style="color: red">(*)</span></label>
+                                        <input type="password" name="password" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.password')}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>{{trans('dhcd-member::language.form.title.conf_password') }} <span style="color: red">(*)</span></label>
+                                        <input type="password" name="conf_password" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.conf_password')}}">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>{{trans('dhcd-member::language.form.title.email') }} <span style="color: red">(*)</span></label>
+                                        <input type="text" name="email" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.email')}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>{{trans('dhcd-member::language.form.title.phone') }} <span style="color: red">(*)</span></label>
+                                        <input type="text" name="phone" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.phone')}}">
+                                    </div>
+                                </div>
+                            </div>  
+                        </div>
+                        <!-- /.tab-pane -->
+                        <div class="tab-pane" id="info">
+                            <div class="row">
+                                <!-- /.col-sm-8 -->
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>{{trans('dhcd-member::language.form.title.address') }}</label>
+                                        <textarea class="form-control" name="address" placeholder="{{trans('dhcd-member::language.placeholder.member.address')}}"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>{{trans('dhcd-member::language.form.title.don_vi') }}</label>
+                                        <textarea class="form-control" name="don_vi" placeholder="{{trans('dhcd-member::language.placeholder.member.don_vi')}}"></textarea>
+                                    </div>
+                                    <label>{{trans('dhcd-member::language.form.title.gender') }}</label>
+                                    <div class="form-group">
+                                        <label class="radio-inline" for="female">
+                                        <input type="radio" id="female" name="gender" value="female" checked="checked">
+                                        Female</label>
+                                        <label class="radio-inline" for="male"> 
+                                        <input type="radio" id="male" name="gender" value="male" >
+                                        Male</label>
+                                    </div>
+                                    <label>{{trans('dhcd-member::language.form.title.position') }}</label>
+                                    <div class="form-group input-group">
+                                        <input type="text" name="position" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.position_text')}}" id="position_text" style="display: none" disabled>
+                                        <select class="form-control select2" id="position_select" name="position" placeholder="{{trans('dhcd-member::language.placeholder.member.position_select')}}">
+                                            @if(!empty($list_position))
+                                                @foreach($list_position as $position)
+                                                    <option value="{{$position->position}}">{{$position->position}}</option>     
+                                                @endforeach
+                                            @endif                
+                                        </select>
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" type="button" id="change-type-position">
+                                                <i class="fa fa-random"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <label>{{trans('dhcd-member::language.form.title.trinh_do_ly_luan') }}</label>
+                                    <div class="form-group input-group">
+                                        <input type="text" name="trinh_do_ly_luan" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.trinh_do_ly_luan_text')}}" id="trinh_do_ly_luan_text" style="display: none" disabled>
+                                        <select class="form-control select2" id="trinh_do_ly_luan_select" name="trinh_do_ly_luan" placeholder="{{trans('dhcd-member::language.placeholder.member.trinh_do_ly_luan_select')}}">
+                                            @if(!empty($list_trinh_do_ly_luan))
+                                                @foreach($list_trinh_do_ly_luan as $trinh_do_ly_luan)
+                                                    <option value="{{$trinh_do_ly_luan->trinh_do_ly_luan}}">{{$trinh_do_ly_luan->trinh_do_ly_luan}}</option>     
+                                                @endforeach
+                                            @endif                 
+                                        </select>
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" type="button" id="change-type-trinh-do-ly-luan">
+                                                <i class="fa fa-random"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <label>{{trans('dhcd-member::language.form.title.trinh_do_chuyen_mon') }}</label>
+                                    <div class="form-group input-group">
+                                        <input type="text" name="trinh_do_chuyen_mon" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.trinh_do_chuyen_mon_text')}}" id="trinh_do_chuyen_mon_text" style="display: none" disabled>
+                                        <select class="form-control select2" id="trinh_do_chuyen_mon_select" name="trinh_do_chuyen_mon" placeholder="{{trans('dhcd-member::language.placeholder.member.trinh_do_chuyen_mon_select')}}">
+                                            @if(!empty($list_trinh_do_chuyen_mon))
+                                                @foreach($list_trinh_do_chuyen_mon as $trinh_do_chuyen_mon)
+                                                    <option value="{{$trinh_do_chuyen_mon->trinh_do_chuyen_mon}}">{{$trinh_do_chuyen_mon->trinh_do_chuyen_mon}}</option>     
+                                                @endforeach
+                                            @endif                 
+                                        </select>
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" type="button" id="change-type-trinh-do-chuyen-mon">
+                                                <i class="fa fa-random"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>{{trans('dhcd-member::language.form.title.dan_toc') }}</label>
+                                        <input type="text" name="dan_toc" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.dan_toc')}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>{{trans('dhcd-member::language.form.title.ton_giao') }}</label>
+                                        <input type="text" name="ton_giao" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.ton_giao')}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>{{trans('dhcd-member::language.form.title.ngay_vao_dang') }}</label>
+                                        <input type="text" name="ngay_vao_dang" class="form-control" id="ngay_vao_dang" placeholder="{{trans('dhcd-member::language.placeholder.member.ngay_vao_dang')}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>{{trans('dhcd-member::language.form.title.birthday') }}</label>
+                                        <input type="text" name="birthday" class="form-control" id="birthday" placeholder="{{trans('dhcd-member::language.placeholder.member.birthday')}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>{{trans('dhcd-member::language.form.title.avatar') }}</label>
+                                        <span class="input-group-btn">
+                                            <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
+                                                <i class="fa fa-picture-o"></i> Choose
+                                            </a>
+                                        </span>
+                                        <input id="thumbnail" class="form-control" type="text" value="{{asset('/vendor/' . $group_name . '/' . $skin . '/dhcd/member/uploads/media/images/Avatar.jpg')}}" name="avatar">
+                                        <img src="{{asset('/vendor/' . $group_name . '/' . $skin . '/dhcd/member/uploads/media/images/Avatar.jpg')}}" id="holder" style="margin-top:15px;max-height:100px;">
+                                    </div>
+                                </div>
+                                <!-- /.col-sm-8 -->
+                            </div>    
+                        </div>
+                        <!-- /.tab-pane -->
+                    </div>
+                    <!-- /.tab-content -->
+                </div>
                 <!-- errors -->
-                <form role="form" action="{{route("dhcd.member.member.add")}}" method="post" enctype="multipart/form-data" id="form-add-member">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
-                <div class="row">
-                    <!-- /.col-sm-8 -->
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>{{trans('dhcd-member::language.form.title.name') }} <span style="color: red">(*)</span></label>
-                            <input type="text" name="name" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.name')}}">
-                        </div>
-                        <div class="form-group">
-                            <label>{{trans('dhcd-member::language.form.title.u_name') }} <span style="color: red">(*)</span></label>
-                            <input type="text" name="u_name" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.u_name')}}">
-                        </div>
-                        <div class="form-group">
-                            <label>{{trans('dhcd-member::language.form.title.password') }} <span style="color: red">(*)</span></label>
-                            <input type="password" name="password" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.password')}}">
-                        </div>
-                        <div class="form-group">
-                            <label>{{trans('dhcd-member::language.form.title.conf_password') }} <span style="color: red">(*)</span></label>
-                            <input type="password" name="conf_password" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.conf_password')}}">
-                        </div>
-                        <div class="form-group">
-                            <label>{{trans('dhcd-member::language.form.title.email') }} <span style="color: red">(*)</span></label>
-                            <input type="text" name="email" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.email')}}">
-                        </div>
-                        <div class="form-group">
-                            <label>{{trans('dhcd-member::language.form.title.phone') }} <span style="color: red">(*)</span></label>
-                            <input type="text" name="phone" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.phone')}}">
-                        </div>
-                        <label>{{trans('dhcd-member::language.form.title.position') }}</label>
-                        <div class="form-group input-group">
-                            <input type="text" name="position" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.position_text')}}" id="position_text" style="display: none" disabled>
-                            <select class="form-control select2" id="position_select" name="position" placeholder="{{trans('dhcd-member::language.placeholder.member.position_select')}}">
-                                @if(!empty($list_position))
-                                    @foreach($list_position as $position)
-                                        <option value="{{$position->position}}">{{$position->position}}</option>     
-                                    @endforeach
-                                @endif                
-                            </select>
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" type="button" id="change-type-position">
-                                    <i class="fa fa-random"></i>
-                                </button>
-                            </span>
-                        </div>
-                        <label>{{trans('dhcd-member::language.form.title.trinh_do_ly_luan') }}</label>
-                        <div class="form-group input-group">
-                            <input type="text" name="trinh_do_ly_luan" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.trinh_do_ly_luan_text')}}" id="trinh_do_ly_luan_text" style="display: none" disabled>
-                            <select class="form-control select2" id="trinh_do_ly_luan_select" name="trinh_do_ly_luan" placeholder="{{trans('dhcd-member::language.placeholder.member.trinh_do_ly_luan_select')}}">
-                                @if(!empty($list_trinh_do_ly_luan))
-                                    @foreach($list_trinh_do_ly_luan as $trinh_do_ly_luan)
-                                        <option value="{{$trinh_do_ly_luan->trinh_do_ly_luan}}">{{$trinh_do_ly_luan->trinh_do_ly_luan}}</option>     
-                                    @endforeach
-                                @endif                 
-                            </select>
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" type="button" id="change-type-trinh-do-ly-luan">
-                                    <i class="fa fa-random"></i>
-                                </button>
-                            </span>
-                        </div>
-                        <label>{{trans('dhcd-member::language.form.title.trinh_do_chuyen_mon') }}</label>
-                        <div class="form-group input-group">
-                            <input type="text" name="trinh_do_chuyen_mon" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.trinh_do_chuyen_mon_text')}}" id="trinh_do_chuyen_mon_text" style="display: none" disabled>
-                            <select class="form-control select2" id="trinh_do_chuyen_mon_select" name="trinh_do_chuyen_mon" placeholder="{{trans('dhcd-member::language.placeholder.member.trinh_do_chuyen_mon_select')}}">
-                                @if(!empty($list_trinh_do_chuyen_mon))
-                                    @foreach($list_trinh_do_chuyen_mon as $trinh_do_chuyen_mon)
-                                        <option value="{{$trinh_do_chuyen_mon->trinh_do_chuyen_mon}}">{{$trinh_do_chuyen_mon->trinh_do_chuyen_mon}}</option>     
-                                    @endforeach
-                                @endif                 
-                            </select>
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" type="button" id="change-type-trinh-do-chuyen-mon">
-                                    <i class="fa fa-random"></i>
-                                </button>
-                            </span>
-                        </div>
+                <div class="form-group">
+                    <label for="blog_category" class="">Actions</label>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">{{ trans('dhcd-member::language.buttons.create') }}</button>
+                        <a href="{!! route('dhcd.member.member.manage') !!}"
+                           class="btn btn-danger">{{ trans('dhcd-member::language.buttons.discard') }}</a>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>{{trans('dhcd-member::language.form.title.address') }}</label>
-                            <textarea class="form-control" name="address" placeholder="{{trans('dhcd-member::language.placeholder.member.address')}}"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>{{trans('dhcd-member::language.form.title.don_vi') }}</label>
-                            <textarea class="form-control" name="don_vi" placeholder="{{trans('dhcd-member::language.placeholder.member.don_vi')}}"></textarea>
-                        </div>
-                        <label>{{trans('dhcd-member::language.form.title.gender') }}</label>
-                        <div class="form-group">
-                            <label class="radio-inline" for="female">
-                            <input type="radio" id="female" name="gender" value="female" checked="checked">
-                            Female</label>
-                            <label class="radio-inline" for="male"> 
-                            <input type="radio" id="male" name="gender" value="male" >
-                            Male</label>
-                        </div>
-                        <div class="form-group">
-                            <label>{{trans('dhcd-member::language.form.title.dan_toc') }}</label>
-                            <input type="text" name="dan_toc" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.dan_toc')}}">
-                        </div>
-                        <div class="form-group">
-                            <label>{{trans('dhcd-member::language.form.title.ton_giao') }}</label>
-                            <input type="text" name="ton_giao" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.ton_giao')}}">
-                        </div>
-                        <div class="form-group">
-                            <label>{{trans('dhcd-member::language.form.title.ngay_vao_dang') }}</label>
-                            <input type="text" name="ngay_vao_dang" class="form-control" id="ngay_vao_dang" placeholder="{{trans('dhcd-member::language.placeholder.member.ngay_vao_dang')}}">
-                        </div>
-                        <div class="form-group">
-                            <label>{{trans('dhcd-member::language.form.title.birthday') }}</label>
-                            <input type="text" name="birthday" class="form-control" id="birthday" placeholder="{{trans('dhcd-member::language.placeholder.member.birthday')}}">
-                        </div>
-                        <div class="form-group">
-                            <label>{{trans('dhcd-member::language.form.title.avatar') }}</label>
-                            <span class="input-group-btn">
-                                <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
-                                    <i class="fa fa-picture-o"></i> Choose
-                                </a>
-                            </span>
-                            <input id="thumbnail" class="form-control" type="text" value="{{asset('/vendor/' . $group_name . '/' . $skin . '/dhcd/member/uploads/media/images/Avatar.jpg')}}" name="avatar">
-                            <img src="{{asset('/vendor/' . $group_name . '/' . $skin . '/dhcd/member/uploads/media/images/Avatar.jpg')}}" id="holder" style="margin-top:15px;max-height:100px;">
-                        </div>
-                        <div class="form-group">
-                            <label for="blog_category" class="">Actions</label>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-success">{{ trans('dhcd-member::language.buttons.create') }}</button>
-                                <a href="{!! route('dhcd.member.member.manage') !!}"
-                                   class="btn btn-danger">{{ trans('dhcd-member::language.buttons.discard') }}</a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.col-sm-8 -->
                 </div>
                 </form>
             </div>

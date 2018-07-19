@@ -46,7 +46,7 @@
         {
           "name": "View list",
           "routes": [
-            "dhcd.member.member.manager",
+            "dhcd.member.member.manage",
             "dhcd.member.member.data",
             "dhcd.member.group.log",
             "dhcd.member.group.manage.add.member",

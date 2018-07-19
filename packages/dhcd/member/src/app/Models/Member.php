@@ -9,9 +9,9 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Tymon\JWTAuth\Contracts\JWTSubject;
+// use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Member extends Model implements AuthenticatableContract, JWTSubject, CanResetPasswordContract{
+class Member extends Model implements AuthenticatableContract, CanResetPasswordContract{
     use Authenticatable, CanResetPassword, Notifiable, SoftDeletes;
     /**
      * The database table used by the model.
@@ -39,18 +39,18 @@ class Member extends Model implements AuthenticatableContract, JWTSubject, CanRe
      *
      * @return mixed
      */
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
+    // public function getJWTIdentifier()
+    // {
+    //     return $this->getKey();
+    // }
 
     /**
      * Return a key value array, containing any custom claims to be added to the JWT.
      *
      * @return array
      */
-    public function getJWTCustomClaims()
-    {
-        return [];
-    }
+    // public function getJWTCustomClaims()
+    // {
+    //     return [];
+    // }
 }

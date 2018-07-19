@@ -42,7 +42,7 @@ class BannerController extends Controller
     }
 
     public function add(BannerRequest $request)
-    {
+    {   
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'image' => 'required',
