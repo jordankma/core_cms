@@ -9,8 +9,7 @@
 <!--end of page css-->
 <style type="text/css">
     #index .img-display-news{
-        height: 125px;
-        width: 120px;
+        width: 100%;
     }
     #index .time{
         margin-top: 5px;
@@ -53,7 +52,7 @@
         <h1>TRANG CHỦ</h1>
     </section>
     <!--section ends-->
-    <section class="content paddingleft_right15">
+    <section class="content paddingleft_right15 container">
         <!--main content-->
         <div class="row">
             <div class="the-box no-border" id="index">
@@ -84,12 +83,12 @@
                             	@endphp
                                 <li class="list-group-item">
                                     <div class="row">
-                                        <div class="col-md-1">
+                                        <div class="col-md-2">
                                             <a href="{{route('news.frontend.detail',['news_id'=>$news->news_id])}}">
                                                 <img src="{{$url_storage.$news->image}}" class="img-display-news img-reponsive">
                                             </a>
                                         </div>
-                                        <div class="col-md-11">
+                                        <div class="col-md-10">
                                             <p class="time">{{ $cate_name.' - '.$date_created }}</p>
                                             <a href="{{route('news.frontend.detail',['news_id'=>$news->news_id])}}" class="title">{{$news->title}}</a>
                                             <p class="desc">

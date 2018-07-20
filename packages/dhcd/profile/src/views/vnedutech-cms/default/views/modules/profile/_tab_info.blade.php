@@ -17,55 +17,8 @@
                         <tr>
                             <td>{{ trans('dhcd-profile::language.table.field.name') }}</td>
                             <td>
-                                <p class="user_name_max">{{$member->name}}</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>{{ trans('dhcd-profile::language.table.field.email') }}</td>
-                            <td>
-                                <p class="user_name_max">{{$member->email}}</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>{{ trans('dhcd-profile::language.table.field.phone') }}</td>
-                            <td>
-                                <p class="user_name_max">{{$member->phone}}</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>{{ trans('dhcd-profile::language.table.field.dan_toc') }}</td>
-                            <td>
-                                <p class="user_name_max">{{$member->dan_toc}}</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>{{ trans('dhcd-profile::language.table.field.position') }}</td>
-                            <td>
-                                <p class="user_name_max">{{$member->position}}</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>{{ trans('dhcd-profile::language.table.field.ton_giao') }}</td>
-                            <td>
-                                <p class="user_name_max">{{$member->ton_giao}}</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>{{ trans('dhcd-profile::language.table.field.trinh_do_ly_luan') }}</td>
-                            <td>
-                                <p class="user_name_max">{{$member->trinh_do_ly_luan}}</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>{{ trans('dhcd-profile::language.table.field.trinh_do_chuyen_mon') }}</td>
-                            <td>
-                                <p class="user_name_max">{{$member->trinh_do_chuyen_mon}}</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>{{ trans('dhcd-profile::language.table.field.address') }}</td>
-                            <td>
-                                <p class="user_name_max">{{$member->address}}</p>
+                                {{-- <p class="user_name_max">{{$member->name}}</p> --}}
+                                <a href="#" id="name" data-type="text" data-pk="1" data-title="Enter name" class="editable editable-click" data-original-title="" title="">{{$member->name}}</a>
                             </td>
                         </tr>
                     </table>

@@ -9,8 +9,7 @@
 <!--end of page css-->
 <style type="text/css">
     #list-topic .img-display-topics{
-        height : 125px;
-        width: 125px;
+        width: 100%;
     }
     #list-topic .time{
         margin-top: 5px;
@@ -33,9 +32,6 @@
         background: white;
 
     }
-    .content-right{
-        margin-left: 20px;
-    }
 </style>
 
 {{-- Page content --}}
@@ -44,7 +40,7 @@
         <h1>THẢO LUẬN</h1>
     </section>
     <!--section ends-->
-    <section class="content paddingleft_right15">
+    <section class="content paddingleft_right15 container">
         <!--main content-->
         <div class="row">
             <div class="the-box no-border" id="list-topic">
@@ -61,7 +57,7 @@
                     @endphp
                     <li class="list-group-item">
                         <div class="row">
-                            <div class="col-md-1">
+                            <div class="col-md-2">
                                 <a href="{{route('topic.frontend.detail',['topics_id'=>$topics->topics_id])}}" data-lock="{{$lock}}" class="check-lock">
                                     <img src="{{$topics->image}}" class="img-display-topics img-reponsive">
                                 </a>

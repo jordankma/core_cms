@@ -25,7 +25,6 @@ class ProfileController extends Controller
         $this->member = $memberRepository;
         $this->_member = Auth::user();
     }
-    
     public function profile(){
         $member_id = $this->user->member_id;
         $url_storage = config('site.url_storage');
@@ -59,5 +58,24 @@ class ProfileController extends Controller
             }
         }   
         return redirect()->route('profile.member')->with('error', trans('dhcd-profile::language.messages.error.change_pass'));
+    }
+
+    public function xedit(){
+        return view('DHCD-PROFILE::modules.profile.xedit');
+    }
+
+    public function changeName(Request $request){
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:1|max:50',
+        ], $this->messages);
+        if (!$validator->fails()) {
+            $name = $request->input('name');
+            $member_id = $this->user->member_id;
+            $member = Member::find($member_id);
+            if($member != null){
+                $member->name = $name;
+                $member->save();    
+            }
+        } 
     }
 }

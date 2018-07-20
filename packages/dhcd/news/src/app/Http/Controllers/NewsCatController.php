@@ -253,4 +253,21 @@ class NewsCatController extends Controller
             }
         }
     }
+
+    function getCateApi() {
+        $this->_newsCatList = new Collection();
+        $news_cats = NewsCat::orderBy('parent')->get();
+        if (count($news_cats) > 0) {
+            foreach ($news_cats as $news_cat) {
+
+                $parent_id = $news_cat->parent;
+                $news_cat_id = $news_cat->news_cat_id;
+
+                $newsCatData['items'][$news_cat_id] = $news_cat;
+                $newsCatData['parents'][$parent_id][] = $news_cat_id;
+            }
+            self::buildMenu(0, $newsCatData);
+        }
+        return $this->_newsCatList;
+    }
 }
