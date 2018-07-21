@@ -69,13 +69,45 @@ class ProfileController extends Controller
             'name' => 'required|min:1|max:50',
         ], $this->messages);
         if (!$validator->fails()) {
-            $name = $request->input('name');
             $member_id = $this->user->member_id;
             $member = Member::find($member_id);
+            $name = $request->get('value');
             if($member != null){
                 $member->name = $name;
-                $member->save();    
+                $member->save();   
             }
-        } 
+        } else {
+            return $validator->messages();
+        }
+    }
+
+    public function changeDanToc(Request $request){
+        $member_id = $this->user->member_id;
+        $member = Member::find($member_id);
+        $dan_toc = $request->get('value');
+        if($member != null){
+            $member->dan_toc = $dan_toc;
+            $member->save();   
+        }
+    }
+
+    public function changeAddress(Request $request){
+        $member_id = $this->user->member_id;
+        $member = Member::find($member_id);
+        $address = $request->get('value');
+        if($member != null){
+            $member->address = $address;
+            $member->save();   
+        }
+    }
+
+    public function changeTonGiao(Request $request){
+        $member_id = $this->user->member_id;
+        $member = Member::find($member_id);
+        $ton_giao = $request->get('value');
+        if($member != null){
+            $member->ton_giao = $ton_giao;
+            $member->save();   
+        }
     }
 }

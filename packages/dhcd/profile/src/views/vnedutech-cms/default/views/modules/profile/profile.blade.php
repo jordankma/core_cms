@@ -107,20 +107,42 @@
     <!--end of page js-->
     <script>
         $(document).ready(function() {
-            var route_change_name = '{{ route('changename.frontend.member') }}';
-            var name = $(this).text();
-            alert(name);
+            var route_change_name = '{{ route('change.name.frontend.member') }}';
             $('#name').editable({
                 url: route_change_name,
                 type: 'text',
-                pk: 1,
-                name: name,
-                title: 'Enter name',
+                title: 'Nhập tên',
                 validate: function(value) {
                    if($.trim(value) == '') return 'Tên là bắt buộc';
                 }
             });
-
+            var route_change_dantoc = '{{ route('change.dantoc.frontend.member') }}';
+            $('#dan_toc').editable({
+                url: route_change_dantoc,
+                type: 'text',
+                title: 'Nhập dân tộc',
+                validate: function(value) {
+                   if($.trim(value) == '') return 'Dân tộc là bắt buộc';
+                }
+            });
+            var route_change_address = '{{ route('change.address.frontend.member') }}';
+            $('#address').editable({
+                url: route_change_address,
+                type: 'text',
+                title: 'Nhập địa chỉ',
+                validate: function(value) {
+                   if($.trim(value) == '') return 'Địa chỉ là bắt buộc';
+                }
+            });
+            var route_change_tongiao = '{{ route('change.tongiao.frontend.member') }}';
+            $('#ton_giao').editable({
+                url: route_change_tongiao,
+                type: 'text',
+                title: 'Nhập tôn giáo',
+                validate: function(value) {
+                   if($.trim(value) == '') return 'Tôn giáo là bắt buộc';
+                }
+            });
 
             $('#form-change-pass').bootstrapValidator({
                 feedbackIcons: {
