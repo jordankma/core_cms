@@ -31,6 +31,6 @@ class DhcdNewsTagTable extends Migration
      */
     public function down()
     {
-        Schema::connection('mysql_dhcd')->dropIfExists('dhcd_news_tag');
+        // Schema::connection('mysql_dhcd')->dropIfExists('dhcd_news_tag');
     }
 }

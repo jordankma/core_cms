@@ -80,7 +80,7 @@ class PositionController extends Controller
         if (!$validator->fails()) {
             $banner_position_id = $request->input('banner_position_id');
             $position = $this->position->find($banner_position_id);
-            if(null==$positions){   
+            if(null==$position){   
                 return redirect()->route('dhcd.banner.position.manage')->with('error', trans('dhcd-banner::language.messages.error.create'));    
             } else{
                 $data = [

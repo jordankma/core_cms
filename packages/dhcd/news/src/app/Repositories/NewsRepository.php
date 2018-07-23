@@ -51,4 +51,25 @@ class NewsRepository extends Repository
         $data = $q->select('dhcd_news.*', DB::raw('@rownum  := @rownum  + 1 AS rownum'))->get(); 
         return $data;
     }
+
+    public static function getListNewsApi($params) {
+        $q = News::orderBy('news_id', 'desc');
+        if (!empty($params['keyword']) && $params['keyword'] != null) {
+            $q->where('title', 'like', '%' . $params['keyword'] . '%');
+        }
+        if (!empty($params['news_cat_id']) && $params['news_cat_id'] != null) {
+            $q->with('getCats')
+            ->whereHas('getCats', function ($query) use ($params) {
+                $query->whereIn('dhcd_news_cat.news_cat_id', $params['news_cat_id']);
+            });
+        }
+        if (!empty($params['news_tag_id']) && $params['news_tag_id'] != null) {
+            $q->with('getTags')
+            ->whereHas('getTags', function ($query) use ($params) {
+                $query->whereIn('dhcd_news_tag.news_tag_id', $params['news_tag_id']);
+            });
+        }
+        $data = $q->paginate(10); 
+        return $data;
+    }
 }

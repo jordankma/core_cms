@@ -19,7 +19,7 @@ Route::group(array('prefix' => $adminPrefix), function() {
         //member
         Route::get('dhcd/member/member/log', 'MemberController@log')->name('dhcd.member.member.log');
         Route::get('dhcd/member/member/data', 'MemberController@data')->name('dhcd.member.member.data');
-        Route::get('dhcd/member/member/manage', 'MemberController@manage')->name('dhcd.member.member.manage')->where('as','Quản lý người dùng');
+        Route::get('dhcd/member/member/manage', 'MemberController@manage')->name('dhcd.member.member.manage')->where('as','Người dùng - danh sách');
         Route::get('dhcd/member/member/create', 'MemberController@create')->name('dhcd.member.member.create');
         Route::post('dhcd/member/member/add', 'MemberController@add')->name('dhcd.member.member.add');
         Route::get('dhcd/member/member/show', 'MemberController@show')->name('dhcd.member.member.show');
@@ -38,7 +38,7 @@ Route::group(array('prefix' => $adminPrefix), function() {
         //group member 
         Route::get('dhcd/member/group/log', 'GroupController@log')->name('dhcd.member.group.log');
         Route::get('dhcd/member/group/data', 'GroupController@data')->name('dhcd.member.group.data');
-        Route::get('dhcd/member/group/manage', 'GroupController@manage')->name('dhcd.member.group.manage')->where('as','Quản lý nhóm người dùng');
+        Route::get('dhcd/member/group/manage', 'GroupController@manage')->name('dhcd.member.group.manage')->where('as','Nhóm người dùng - Danh sách');
         Route::get('dhcd/member/group/create', 'GroupController@create')->name('dhcd.member.group.create');
         Route::post('dhcd/member/group/add', 'GroupController@add')->name('dhcd.member.group.add');
         Route::get('dhcd/member/group/show', 'GroupController@show')->name('dhcd.member.group.show');

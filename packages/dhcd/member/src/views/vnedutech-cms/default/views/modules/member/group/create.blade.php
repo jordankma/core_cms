@@ -37,7 +37,7 @@
                         <div class="col-sm-4">
                             <label>{{trans('dhcd-member::language.form.title_group.name') }} <span style="color: red">(*)</span></label>
                             <div class="form-group {{ $errors->first('name', 'has-error') }}">
-                                {!! Form::text('name', null, array('class' => 'form-control', 'autofocus'=>'autofocus','placeholder'=> trans('dhcd-art::language.placeholder.demo.name_here'))) !!}
+                                {!! Form::text('name', null, array('class' => 'form-control', 'autofocus'=>'autofocus','placeholder'=> trans('dhcd-member::language.placeholder.group.name'))) !!}
                                 <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                             </div>
                         </div>

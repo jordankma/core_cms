@@ -16,12 +16,7 @@
             "dhcd.topic.topic.confirm-status",
             "dhcd.topic.topic.add_all_member",
             "dhcd.topic.topic.confirm_add_all_member",
-            "dhcd.topic.topic.create.member",
-            "dhcd.topic.topic.add.member",
-            "dhcd.topic.topic.data.member",
-            "dhcd.topic.topic.delete.member",
-            "dhcd.topic.topic.confirm-delete.member",
-            "dhcd.topic.topic.search.member"
+            "dhcd.topic.topic.create.member"
           ]
         },
         {

@@ -9,7 +9,7 @@
         {
           "name": "View list",
           "routes": [
-            "dhcd.member.member.manager",
+            "dhcd.member.member.manage",
             "dhcd.member.member.data"
           ]
         },
@@ -46,8 +46,8 @@
         {
           "name": "View list",
           "routes": [
-            "dhcd.member.member.manage",
-            "dhcd.member.member.data",
+            "dhcd.member.group.manage",
+            "dhcd.member.group.data",
             "dhcd.member.group.log",
             "dhcd.member.group.manage.add.member",
             "dhcd.member.group.add.member",
@@ -61,7 +61,7 @@
           "name": "Create",
           "routes": [
             "dhcd.member.group.create",
-            "dhcd.member.group.add",
+            "dhcd.member.group.add"
           ]
         },
         {

@@ -5,7 +5,7 @@ Route::group(array('prefix' => $adminPrefix), function() {
 
         Route::get('dhcd/banner/banner/log', 'BannerController@log')->name('dhcd.banner.banner.log');
         Route::get('dhcd/banner/banner/data', 'BannerController@data')->name('dhcd.banner.banner.data');
-        Route::get('dhcd/banner/banner/manage', 'BannerController@manage')->name('dhcd.banner.banner.manage')->where('as','Quản lý banner');
+        Route::get('dhcd/banner/banner/manage', 'BannerController@manage')->name('dhcd.banner.banner.manage')->where('as','Banner - Danh sách');
         Route::get('dhcd/banner/banner/create', 'BannerController@create')->name('dhcd.banner.banner.create');
         Route::post('dhcd/banner/banner/add', 'BannerController@add')->name('dhcd.banner.banner.add');
         Route::get('dhcd/banner/banner/show', 'BannerController@show')->name('dhcd.banner.banner.show');
@@ -15,7 +15,7 @@ Route::group(array('prefix' => $adminPrefix), function() {
 
         Route::get('dhcd/banner/position/log', 'PositionController@log')->name('dhcd.banner.position.log');
         Route::get('dhcd/banner/position/data', 'PositionController@data')->name('dhcd.banner.position.data');
-        Route::get('dhcd/banner/position/manage', 'PositionController@manage')->name('dhcd.banner.position.manage')->where('as','Quản lý vị trí banner');
+        Route::get('dhcd/banner/position/manage', 'PositionController@manage')->name('dhcd.banner.position.manage')->where('as','Banner - Vị trí');
         Route::get('dhcd/banner/position/create', 'PositionController@create')->name('dhcd.banner.position.create');
         Route::post('dhcd/banner/position/add', 'PositionController@add')->name('dhcd.banner.position.add');
         Route::get('dhcd/banner/position/show', 'PositionController@show')->name('dhcd.banner.position.show');

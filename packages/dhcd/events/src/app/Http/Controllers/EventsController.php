@@ -34,17 +34,17 @@ class EventsController extends Controller
     {   
         // validate field name and content
         $validate = Validator::make(
-                $request->all(),
-                    [
-                    'name' => 'required|min:5|max:255',
-                    'content' => 'required|min:5'
-                    ],
-                    [
-                    'required' => 'Vui lòng nhập thông tin',
-                    'min' => 'Giá trị không được nhỏ hơn :5',
-                    'max' => 'Không được lớn hơn :255'
-                    ]
-               );
+        $request->all(),
+            [
+            'name' => 'required|min:5|max:255',
+            'content' => 'required|min:5'
+            ],
+            [
+            'required' => 'Vui lòng nhập thông tin',
+            'min' => 'Giá trị không được nhỏ hơn :5',
+            'max' => 'Không được lớn hơn :255'
+            ]
+       );
         if ($validate->fails()) {
            return redirect()->route('dhcd.events.events.create')->withErrors($validate);
         }

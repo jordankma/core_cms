@@ -24,4 +24,8 @@ class News extends Model
     public function getCats() {
         return $this->belongsToMany('Dhcd\News\App\Models\NewsCat', 'dhcd_news_has_cat', 'news_id', 'news_cat_id');
     }
+
+    public function getTags() {
+        return $this->belongsToMany('Dhcd\News\App\Models\NewsTag', 'dhcd_news_has_tag', 'news_id', 'news_tag_id');
+    }
 }
