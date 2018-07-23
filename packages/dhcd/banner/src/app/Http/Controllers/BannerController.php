@@ -47,7 +47,6 @@ class BannerController extends Controller
             'name' => 'required',
             'image' => 'required',
             'position' => 'numeric',
-            'priority' => 'numeric'
         ], $this->messages);
         if (!$validator->fails()) {
             if(isset($request->close_at) && $request->close_at != ''){
@@ -118,7 +117,6 @@ class BannerController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'close_at' => 'required',
             'image' => 'required',
         ], $this->messages);
         if (!$validator->fails()) {

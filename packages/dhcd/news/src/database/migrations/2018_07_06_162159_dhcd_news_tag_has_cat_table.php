@@ -33,6 +33,6 @@ class DhcdNewsTagHasCatTable extends Migration
      */
     public function down()
     {
-        Schema::connection('mysql_dhcd')->dropIfExists('dhcd_news_tag_has_cat');
+        // Schema::connection('mysql_dhcd')->dropIfExists('dhcd_news_tag_has_cat');
     }
 }

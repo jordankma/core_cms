@@ -64,21 +64,21 @@ return [
     ],
     "placeholder" => [
         "member" => [
-            "name" => "Name here...",
-            "u_name" => "Username here...",
-            "password" => "Password here...",
-            "conf_password" => "Comfirm Password here...",
-            "avatar" => "Avatar here...",
-            "address" => "Address here...",
-            "birthday" => "Birthday here...",
-            "phone" => "Phone here...",
-            "position_text" => "Position here...",
-            "position_select" => "Select position here...",
+            "name" => "Nhập tên",
+            "u_name" => "Nhập tên tài khoản",
+            "password" => "Nhập mật khẩu",
+            "conf_password" => "Xác nhận mật khẩu",
+            "avatar" => "Chọn ảnh đại diện",
+            "address" => "Nhập địa chỉ",
+            "birthday" => "Chọn ngày sinh",
+            "phone" => "Nhập số điện thoại",
+            "position_text" => "Nhập chức vụ",
+            "position_select" => "Chọn chức vụ",
             "trinh_do_ly_luan_text" => "Trình độ lý luận...",
             "trinh_do_ly_luan_select" => "Chọn trình độ lý luận...",
             "trinh_do_chuyen_mon_text" => "Trình độ chuyên môn...",
             "trinh_do_chuyen_mon_select" => "Chọn trình độ chuyên môn...",
-            "email" => "Email here...",
+            "email" => "Nhập địa chỉ mail",
             "dan_toc" => "Dân tộc...",
             "ton_giao" => "Tôn giáo...",
             "ngay_vao_dang" => "Ngày vào đảng...",
@@ -94,6 +94,7 @@ return [
             "update" => "Cập nhật thành công",
             "delete" => "Xóa thành công",
             "block" => "Khóa thành công",
+            "add_member" => "Thêm người dùng thành công"
         ],
         "error" => [
             "permission" => "Permission lock",
@@ -101,6 +102,7 @@ return [
             "update" => "Cập nhật thất bại",
             "delete" => "Xóa thất bại",
             "block" => "Khóa thất bại",
+            "add_member" => "Thêm người dùng thất bại"
         ]
     ]
 ];

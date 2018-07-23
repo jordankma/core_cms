@@ -9,7 +9,10 @@ Route::group(array('prefix' => $adminPrefix), function() {
 	    Route::post('change-pass', 'ProfileController@changePass')->name('changepass.frontend.member');
 
 	    Route::group(array('prefix' => 'xedit'), function() {
-	    	Route::post('change-name', 'ProfileController@changeName')->name('changename.frontend.member');			
+	    	Route::post('change-name', 'ProfileController@changeName')->name('change.name.frontend.member');			
+	    	Route::post('change-dan-toc', 'ProfileController@changeDanToc')->name('change.dantoc.frontend.member');			
+	    	Route::post('change-address', 'ProfileController@changeAddress')->name('change.address.frontend.member');			
+	    	Route::post('change-ton-giao', 'ProfileController@changeTonGiao')->name('change.tongiao.frontend.member');			
 	    });
 	});
 });

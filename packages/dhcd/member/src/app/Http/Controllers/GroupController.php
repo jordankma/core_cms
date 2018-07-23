@@ -261,10 +261,10 @@ class GroupController extends Controller
                     ->performedOn($group)
                     ->withProperties($request->all())
                     ->log('User: :causer.email - Add single member group - group_id: :properties.group_id, name: ' . $group->name);
-                return redirect()->route('dhcd.member.group.manage.add.member',['group_id' => $group_id])->with('success', trans('dhcd-member::language.messages.success.status'));
+                return redirect()->route('dhcd.member.group.manage.add.member',['group_id' => $group_id])->with('success', trans('dhcd-member::language.messages.success.add_member'));
             }
             else{
-                return redirect()->route('dhcd.member.group.manage.add.member',['group_id' => $group_id])->with('error', trans('dhcd-member::language.messages.error.status'));
+                return redirect()->route('dhcd.member.group.manage.add.member',['group_id' => $group_id])->with('error', trans('dhcd-member::language.messages.error.add_member'));
             }
         } else {
             return $validator->messages();

@@ -50,8 +50,8 @@
                                 <th class="fit-content">#</th>
                                 <th>{{ trans('dhcd-member::language.table.group.name') }}</th>
                                 <th>{{ trans('dhcd-member::language.table.group.count') }}</th>
-                                <th style="width: 120px">{{ trans('dhcd-art::language.table.created_at') }}</th>
-                                <th>{{ trans('dhcd-art::language.table.action') }}</th>
+                                <th style="width: 120px">{{ trans('dhcd-member::language.table.created_at') }}</th>
+                                <th>{{ trans('dhcd-member::language.table.action') }}</th>
                             </tr>
                             </thead>
                         </table>

@@ -13,7 +13,7 @@ class DhcdGroupHasMemberTable extends Migration
      */
     public function up()
     {
-        Schema::create('dhcd_group_has_member', function (Blueprint $table) {
+        Schema::connection('mysql_dhcd')->create('dhcd_group_has_member', function (Blueprint $table) {
             $table->increments('group_has_member_id');
             $table->integer('group_id',false,true);
             $table->integer('member_id',false,true);
@@ -31,6 +31,6 @@ class DhcdGroupHasMemberTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dhcd_group_has_member');
+        Schema::connection('mysql_dhcd')->dropIfExists('dhcd_group_has_member');
     }
 }

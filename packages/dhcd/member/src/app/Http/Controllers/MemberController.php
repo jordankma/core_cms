@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Adtech\Application\Cms\Controllers\Controller as Controller;
 use Dhcd\Member\App\Repositories\MemberRepository;
 use Dhcd\Member\App\Models\Member;
-use Dhcd\Member\App\http\Requests\MemberRequest;
+use Dhcd\Member\App\Http\Requests\MemberRequest;
 use Spatie\Activitylog\Models\Activity;
 use Yajra\Datatables\Datatables;
 use Validator;
@@ -305,7 +305,7 @@ class MemberController extends Controller
             ->rawColumns(['actions','status'])
             ->make();
     }
-    public function checkUserNameExist(MemberRequest $request){
+    public function checkUserNameExist(Request $request){
         $data['valid'] = true;
         if ($request->ajax()) {
             $member =  Member::where(['u_name' => $request->u_name])->first();
@@ -316,7 +316,7 @@ class MemberController extends Controller
         echo json_encode($data);
     }
 
-    public function checkEmailExist(MemberRequest $request){
+    public function checkEmailExist(Request $request){
         $data['valid'] = true;
         if ($request->ajax()) {
             $member =  Member::where(['email' => $request->email])->first();
@@ -327,7 +327,7 @@ class MemberController extends Controller
         echo json_encode($data);
     }
 
-    public function checkPhoneExist(MemberRequest $request){
+    public function checkPhoneExist(Request $request){
         $data['valid'] = true;
         if ($request->ajax()) {
             $member =  Member::where(['phone' => $request->phone])->first();
@@ -339,6 +339,24 @@ class MemberController extends Controller
     }
 
     public function getImport(){
+        // $group_name = config('site.group_name');
+        // $skin = config('site.desktop.skin');
+        // $url = public_path('/vendor/' . $group_name . '/' . $skin .'/dhcd/news/uploads/tnxh.xlsx');
+        // $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($url);
+        // $worksheet = $spreadsheet->getActiveSheet();
+        // $rows = [];
+        // foreach ($worksheet->getRowIterator() AS $row) {
+        //     $cellIterator = $row->getCellIterator();
+        //     $cellIterator->setIterateOnlyExistingCells(FALSE); // This loops through all cells,
+        //     $cells = [];
+        //     foreach ($cellIterator as $cell) {
+        //         $cells[] = $cell->getValue();
+        //     }
+        //     $rows[] = $cells;
+        // }
+        // echo '<pre>';
+        // print_r($rows);
+        // echo '</pre>'; die;
         return view('DHCD-MEMBER::modules.member.member.import');    
     }
 

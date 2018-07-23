@@ -38,7 +38,7 @@
                 <input type="hidden" name="banner_id" value="{{ $banner->banner_id }}"/>
                 <div class="row">
                     <div class="col-sm-6">
-                        <label>{{trans('dhcd-banner::language.label.name') }}</label>
+                        <label>{{trans('dhcd-banner::language.label.name') }} <span style="color: red">(*)</span></label>
                         <div class="form-group">
                             <input type="text" name="name" class="form-control" value="{{$banner->name}}" placeholder="{{trans('dhcd-banner::language.placeholder.banner.name') }}">
                         </div>
@@ -51,7 +51,7 @@
                             <select class="form-control" id="position" name="position">
                             @if(!empty($positions))
                             @foreach($positions as $position)
-                                <option value="{{$position->banner_position_id }}" @if($position->banner_position_id ==$banner->position) selected="" @endif>{{$position->name}}</option>
+                                <option value="{{$position->banner_position_id }}" @if($position->banner_position_id ==$banner->position) selected="" @endif>{{$position->name}} {{'  ( '.$position->width.'px  x '.$position->height.'px )' }}</option>
                             @endforeach
                             @endif
                             </select>
@@ -78,7 +78,7 @@
                         <div class="form-group">
                             <input type="text" name="link" value="{{$banner->link}}" class="form-control" placeholder="{{trans('dhcd-banner::language.placeholder.banner.link') }}">
                         </div>
-                        <label>{{trans('dhcd-banner::language.label.image') }}</label>
+                        <label>{{trans('dhcd-banner::language.label.image') }} <span style="color: red">(*)</span></label>
                         <div class="form-group">
                             <span class="input-group-btn">
                                 <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
@@ -131,20 +131,6 @@
                     stringLength: {
                         max: 250,
                         message: 'Tên không được quá dài'
-                    },
-                    close_at: {
-                        validators: {
-                            notEmpty: {
-                                message: 'Bạn chưa chọn ngày hết hạn'
-                            }
-                        }
-                    },
-                    image: {
-                        validators: {
-                            notEmpty: {
-                                message: 'Bạn chưa chọn ảnh banner'
-                            }
-                        }
                     }
                 }
             }); 

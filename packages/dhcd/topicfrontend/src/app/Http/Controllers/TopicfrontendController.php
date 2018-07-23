@@ -46,7 +46,10 @@ class TopicfrontendController extends Controller
     }
 
     public function detail(){
-        return view('DHCD-TOPICFRONTEND::modules.topicfrontend.detail');
+        $data = [
+            'name' => $this->user->email
+        ];
+        return view('DHCD-TOPICFRONTEND::modules.topicfrontend.detail',$data);
     }
 
 }

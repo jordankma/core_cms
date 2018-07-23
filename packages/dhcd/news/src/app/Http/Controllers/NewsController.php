@@ -423,4 +423,14 @@ class NewsController extends Controller
         }
     }
 
+    public function listNewsApi(Request $request) {
+        $params = [
+            'keyword' => $request->input('keyword'),
+            'news_cat_id' => $request->input('news_cat_id'),
+            'news_tag_id' => $request->input('news_tag_id')
+        ];
+        $list_news = $this->news->getListNewsApi($params);
+        return $list_news;
+    }
+
 }

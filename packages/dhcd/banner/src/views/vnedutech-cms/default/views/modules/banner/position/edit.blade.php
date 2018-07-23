@@ -38,11 +38,11 @@
                 <input type="hidden" name="banner_position_id" value="{{ $position->banner_position_id }}"/>
                 <div class="row">
                     <div class="col-sm-4">
-                        <label>{{trans('dhcd-banner::language.label.name') }}</label>
+                        <label>{{trans('dhcd-banner::language.label.name') }} <span style="color: red">(*)</span></label>
                         <div class="form-group">
                             <input type="text" name="name" value="{{$position->name}}" class="form-control" placeholder="{{trans('dhcd-banner::language.placeholder.position.name') }}">
                         </div>
-                        <label>{{trans('dhcd-banner::language.label.width') }} x {{trans('dhcd-banner::language.label.height') }}</label>
+                        <label>{{trans('dhcd-banner::language.label.width') }} x {{trans('dhcd-banner::language.label.height') }} <span style="color: red">(*)</span></label>
                         <div class="form-group row">
                             <div class="col-md-5">
                                 <input type="nember" min="0" name="width" value="{{$position->width}}"  class="form-control" placeholder="{{trans('dhcd-banner::language.placeholder.position.width') }}">

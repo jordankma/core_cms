@@ -13,7 +13,7 @@ class DhcdGroupTable extends Migration
      */
     public function up()
     {
-        Schema::create('dhcd_group', function (Blueprint $table) {
+        Schema::connection('mysql_dhcd')->create('dhcd_group', function (Blueprint $table) {
             $table->increments('group_id');
             $table->string('name');
             $table->string('alias');        
@@ -32,6 +32,6 @@ class DhcdGroupTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dhcd_group');
+        Schema::connection('mysql_dhcd')->dropIfExists('dhcd_group');
     }
 }
