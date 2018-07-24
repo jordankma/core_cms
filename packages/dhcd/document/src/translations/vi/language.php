@@ -8,17 +8,17 @@ return [
         'document_type' => [
             "manage" => "Quản lý kiểu tài liệu",
             "create" => "Thêm kiểu tài liệu",
-            "edit" => "Sửa kiểu tài liệu",
+            "edit" => "Cấu hình kiểu tài liệu",
         ],
         'doucment_cate' => [
             "manage" => "Quản lý danh mục tài liệu",
             "create" => "Thêm danh mục tài liệu",
-            "edit" => "Sửa kiểu tài liệu",
+            "edit" => "Sửa danh mục tài liệu",
         ],
-        'doucment' => [
+        'document' => [
             "manage" => "Quản lý tài liệu",
             "create" => "Thêm tài liệu mới",
-            "edit" => "Sửa tài liệu mới",
+            "edit" => "Sửa tài liệu",
         ]
     ],
     "table" => [
@@ -46,7 +46,11 @@ return [
             'name' => 'Nhập tên kiểu file...',            
         ],
         'document' => [
-            'name' => 'Nhập tên tài liệu...',            
+            'name' => 'Nhập tên tài liệu...',
+            'type' => '-- Chọn kiểu --',
+            'cate' => '-- Chọn danh mục --', 
+            'sort_desc' => 'Mới nhất',
+            'sort_asc' => 'Cũ nhất',
         ]
     ],
     "messages" => [
@@ -76,6 +80,9 @@ return [
            'name' => 'Tên danh mục',
            'parent_id' => 'Chọn danh mục cha',
            'icon' => 'Icon',
+            'icon_current' => 'Icon hiện tại',
+           'icon_new' => 'Icon mới',
+           'icon_empty' => 'Chưa có icon',
         ]        
     ],
     'document_type' => [
@@ -90,6 +97,10 @@ return [
         'form' => [
            'name' => 'Tên kiểu tài liệu',           
            'icon' => 'Icon',
+           'icon_current' => 'Icon hiện tại',
+           'icon_new' => 'Icon mới',
+           'icon_empty' => 'Chưa có icon',
+           'type' => 'Định dạng file'
         ]        
     ],
     'document' => [
@@ -103,13 +114,18 @@ return [
             "action" => "Hành động",
             "delete" => 'Xóa kiểu tài liệu',
             "edit" => 'Sửa kiểu tài liệu',
+            "down" => 'Tải về'
         ],
         'form' => [                      
             'name' => 'Tên tài liệu',
             'document_type_id' => 'Kiểu',
             'document_cate_id' => 'Danh mục',
             'file' => 'File đính kèm',
+            'list_file' => 'Danh sách file',
             'desc' => 'Mô tả',
+            'icon_current' => 'Icon hiện tại',
+            'icon_new' => 'Icon mới',
+            'icon_empty' => 'Chưa có icon',
         ]        
     ]
 ];

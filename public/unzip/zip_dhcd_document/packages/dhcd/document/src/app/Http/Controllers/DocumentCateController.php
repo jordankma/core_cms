@@ -5,34 +5,38 @@ namespace Dhcd\Document\App\Http\Controllers;
 use Illuminate\Http\Request;
 use Adtech\Application\Cms\Controllers\Controller as Controller;
 use Dhcd\Document\App\Models\DocumentCate;
+use Dhcd\Document\App\Repositories\DocumentCateRepository;
 use Spatie\Activitylog\Models\Activity;
 use Yajra\Datatables\Datatables;
 use Validator,Cache,Auth;
 
 class DocumentCateController extends Controller
 {
-    
+     
     private $messages = array(
         'name.regex' => "Sai định dạng",
         'required' => "Bắt buộc",
         'numeric'  => "Phải là số"
     );
     
-    public function __construct() {
+    public function __construct(DocumentCateRepository $documentCateRepository) {
         parent::__construct();
-        
+        $this->documentCate = $documentCateRepository;
     }
     
-    public function manage(Request $request){                
+    public function manage(Request $request){
+        
         $objCate = new DocumentCate();
-        $cates = $this->_buildCate($objCate->getCates());        
-        return view('DHCD-DOCUMENT::modules.document.cate.manage',compact('cates'));
+        $cates = $this->documentCate->getCates();
+        $parents = $this->_buildCate($this->documentCate->getCates()); 
+        
+        return view('DHCD-DOCUMENT::modules.document.cate.manage',compact('cates','objCate','parents'));
     }
     
     public function add(Request $request){
         
         $objCate = new DocumentCate();
-        $cates = $objCate->getCates();
+        $cates = $this->documentCate->getCates();
        
         return view('DHCD-DOCUMENT::modules.document.cate.add',compact('cates','objCate'));
     }
@@ -40,10 +44,16 @@ class DocumentCateController extends Controller
     public function create(Request $request){
                        
         $validator = Validator::make($request->all(), [
-            'name' => 'required'            
+            'name' => 'required',
+            'icon' => 'required'            
         ], $this->messages);
         if (!$validator->fails()) {
-             $cate = DocumentCate::create($request->all());
+             $cate = DocumentCate::create([
+                 'name' => $request->name,
+                 'alias' => $this->to_slug($request->name),
+                 'icon' => $request->icon,
+                 'parent_id' => $request->parent_id
+             ]);
              if($cate->document_cate_id){
                   $this->resetCache();
                   activity('document_cates')->performedOn($cate)->withProperties($request->all())->log('User: :'.Auth::user()->email.' - Add document cate - document_cate: '.$cate->document_cate_id.', name: '.$cate->name);
@@ -63,8 +73,8 @@ class DocumentCateController extends Controller
             return redirect()->route('dhcd.document.cate.manage')->withErrors(['Không tìm thấy danh mục cần sửa']);
         }
         $objCate = new DocumentCate();
-        $cates = $objCate->getCates();
-        $cate = DocumentCate::findOrFail($request->document_cate_id);
+        $cates = $this->documentCate->getCates();
+        $cate = $this->documentCate->find($request->document_cate_id);
         return view('DHCD-DOCUMENT::modules.document.cate.edit',compact('cate','cates','objCate'));
     }
     
@@ -75,10 +85,11 @@ class DocumentCateController extends Controller
             'document_cate_id' => 'required'
         ], $this->messages);
         if (!$validator->fails()) {
-             $cate = DocumentCate::findOrFail($request->document_cate_id);
+             $cate = $this->documentCate->find($request->document_cate_id);
              $cate->name = $request->name;
-             if($cate->parent_id != $request->parent_id)
-             {  
+             $cate->alias = $this->to_slug($request->name);
+             if($cate->document_cate_id != (int)$request->parent_id)
+             {                   
                  $cate->parent_id = $request->parent_id;             
              }
              if(!empty($request->icon)){
@@ -100,7 +111,7 @@ class DocumentCateController extends Controller
         if(empty($request->only('document_cate_id'))){
             return redirect()->route('dhcd.document.cate.manage')->withErrors(['Không tìm thấy danh mục cần xóa']);
         }
-        $cate = DocumentCate::findOrFail($request->document_cate_id);
+        $cate = $this->documentCate->find($request->document_cate_id);
         $cate->status = 0;
         $cate->deleted_at = date('Y-m-d H:s:i');
         $cate->save();
@@ -110,10 +121,32 @@ class DocumentCateController extends Controller
         return redirect()->route('dhcd.document.cate.manage')->with('success','Xóa danh mục thành công');
     }
     
-    
+    public function log(Request $request)
+    {
+        
+        $model = 'document_cates';
+        $confirm_route = $error = null;
+        $validator = Validator::make($request->all(), [
+            
+        ], $this->messages);
+        if (!$validator->fails()) {
+            try {
+                $logs = Activity::where([
+                    ['log_name', $model],
+                    ['subject_id', $request->subject_id]
+                ])->get();
+                
+                return view('includes.modal_table', compact('error', 'model', 'confirm_route', 'logs'));
+            } catch (GroupNotFoundException $e) {
+                return view('includes.modal_table', compact('error', 'model', 'confirm_route'));
+            }
+        } else {            
+            return $validator->messages();
+        }
+    }
     
     public function resetCache(){
-        Cache::forget('list_cate');
+        Cache::forget('document_cates_list');
     }
     
     protected function _buildCate($cates){
@@ -128,5 +161,18 @@ class DocumentCateController extends Controller
         return $datas;
     }
     
+    protected function to_slug($str) {
+        $str = trim(mb_strtolower($str));
+        $str = preg_replace('/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/', 'a', $str);
+        $str = preg_replace('/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/', 'e', $str);
+        $str = preg_replace('/(ì|í|ị|ỉ|ĩ)/', 'i', $str);
+        $str = preg_replace('/(ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ)/', 'o', $str);
+        $str = preg_replace('/(ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ)/', 'u', $str);
+        $str = preg_replace('/(ỳ|ý|ỵ|ỷ|ỹ)/', 'y', $str);
+        $str = preg_replace('/(đ)/', 'd', $str);
+        $str = preg_replace('/[^a-z0-9-\s]/', '', $str);
+        $str = preg_replace('/([\s]+)/', '-', $str);
+        return $str;
+    }
     
 }

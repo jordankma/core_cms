@@ -50,6 +50,7 @@ class MemberController extends Controller
             'password' => 'required|min:8|regex:"^(?=.*[a-z])(?=.*[A-Z])(?=.*)(?=.*[#$^+=!*()@%&]).{8,}$"',
             'conf_password' => 'required|min:8|regex:"^(?=.*[a-z])(?=.*[A-Z])(?=.*)(?=.*[#$^+=!*()@%&]).{8,}$"',
             'email' => 'required|unique:dhcd_member,email',
+            'phone' => 'required|unique:dhcd_member,phone',
         ], $this->messages);
         if (!$validator->fails()) {
             $members = new Member();

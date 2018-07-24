@@ -12,7 +12,7 @@ return [
 
     // Middlewares which should be applied to all package routes.
     // For laravel 5.1 and before, remove 'web' from the array.
-    'middlewares' => ['web', 'adtech.auth'],
+    'middlewares' => ['web', 'auth'],
 
     // The url to this package. Change it if necessary.
     'url_prefix' => 'admin/laravel-filemanager',
@@ -93,7 +93,7 @@ return [
         'image/pjpeg',
         'image/png',
         'image/gif',
-        'image/svg+xml',
+        'image/svg+xml',               
     ],
 
     // If true, image thumbnails would be created during upload
@@ -122,7 +122,10 @@ return [
         'image/gif',
         'image/svg+xml',
         'application/pdf',
-        'text/plain',
+        'application/docx',
+        'audio/mp3',
+        'video/mp4',
+        'application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.wordprocessingml.document','application/docx','application/pdf','audio/mp3', 'video/mp4'
     ],
 
     /*
@@ -141,11 +144,11 @@ return [
     */
 
     'file_type_array' => [
-        'pdf'  => 'Adobe Acrobat',
-        'doc'  => 'Microsoft Word',
-        'docx' => 'Microsoft Word',
-        'xls'  => 'Microsoft Excel',
-        'xlsx' => 'Microsoft Excel',
+        'pdf'  => 'pdf',
+        'doc'  => 'doc',
+        'docx' => 'docx',
+        'xls'  => 'xls',
+        'xlsx' => 'xlsx',
         'zip'  => 'Archive',
         'gif'  => 'GIF Image',
         'jpg'  => 'JPEG Image',
@@ -153,6 +156,8 @@ return [
         'png'  => 'PNG Image',
         'ppt'  => 'Microsoft PowerPoint',
         'pptx' => 'Microsoft PowerPoint',
+        'mp3' => 'mp3',
+        'mp4' => 'mp4',
     ],
 
     'file_icon_array' => [

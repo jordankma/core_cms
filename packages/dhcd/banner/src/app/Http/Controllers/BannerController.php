@@ -248,7 +248,7 @@ class BannerController extends Controller
                 return $image;   
             })
             ->addColumn('link', function ($banners) {
-                $link = '<a href="'.$banners->link.'" target="_blank" rel="nofollow" >'.$banners->link.'</a>'; 
+                $link = '<a href="'.$banners->link.'" target="_blank">'.$banners->link.'</a>'; 
                 return $link;   
             })
             ->addColumn('close_at', function ($banners) {

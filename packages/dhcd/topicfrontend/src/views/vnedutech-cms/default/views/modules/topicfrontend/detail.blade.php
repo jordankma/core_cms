@@ -27,7 +27,6 @@
 	{
 	    margin-bottom: 10px;
 	    padding-bottom: 5px;
-	    border-bottom: 1px dotted #B3A9A9;
 	}
 
 	.chat li.left .chat-body
@@ -39,7 +38,14 @@
 	{
 	    margin-right: 60px;
 	}
-
+	.chat li.right .chat-body .header
+	{
+	   	float: right;
+	}
+	.chat li.right .chat-body .header p
+	{
+   	    text-align: right;
+	}
 
 	.chat li .chat-body p
 	{
@@ -100,10 +106,23 @@
 	                            <div class="chat-body clearfix">
 	                                <div class="header">
 	                                    <strong class="primary-font">Jack Sparrow</strong>
+		                                <p>
+		                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
+		                                </p>
 	                                </div>
-	                                <p>
-	                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
-	                                </p>
+	                            </div>
+	                        </li>
+	                        <li class="right clearfix">
+	                            <span class="chat-img pull-right">
+	              					<img src="http://placehold.it/50/55C1E7/fff&text=JS" alt="User Avatar" class="img-circle" />
+	            				</span>
+	                            <div class="chat-body clearfix">
+	                                <div class="header">
+	                                    <strong class="primary-font">Jack Sparrow</strong>
+		                                <p>
+		                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
+		                                </p>
+	                                </div>
 	                            </div>
 	                        </li> --}}
 	                    </ul>
@@ -128,27 +147,35 @@
 @section('footer_scripts')
 	<script type="text/javascript">
 		var name = '{{$name}}';
+		var count = 0;
 		$(document).ready(function() {
 			$('body').on('click', '#btn-chat', function(event) {
 				event.preventDefault();
+				count++;
 				var input = $('#btn-input').val();
-				var str = '<li class="left clearfix">'
-	                    +        '<span class="chat-img pull-left">'
-	              		+			'<img src="http://placehold.it/50/55C1E7/fff&text=JS" alt="User Avatar" class="img-circle" />'
-	            		+		'</span>'
-	                    +       '<div class="chat-body clearfix">'
-	                    +            '<div class="header">'
-	                    +                '<strong class="primary-font">'
-	                    + name
-	                    +'</strong>'
-	                   	+            '</div>'
-	                    +            '<p>'
-	                    +               input
-	                    +            '</p>'
-	                    +        '</div>'
-	                    +    '</li>';
-	            $('.chat').append(str);
-	            $('#btn-input').val('');
+				if(input!='') {
+					var lr = 'right';
+					if(count%2 != 0){
+						lr = 'left';
+					}
+					var str = '<li class="'+lr+' clearfix">'
+		                    +        '<span class="chat-img pull-'+lr+'">'
+		              		+			'<img src="http://placehold.it/50/55C1E7/fff&text=JS" alt="User Avatar" class="img-circle" />'
+		            		+		'</span>'
+		                    +       '<div class="chat-body clearfix">'
+		                    +            '<div class="header">'
+		                    +                '<strong class="primary-font">'
+		                    + name
+		                    +'</strong>'
+		                    +            '<p>'
+		                    +               input
+		                    +            '</p>'
+		                   	+            '</div>'
+		                    +        '</div>'
+		                    +    '</li>';
+		            $('.chat').append(str);
+		            $('#btn-input').val('');
+				}
 			});
 		});
 	</script>	

@@ -4,6 +4,7 @@ namespace Dhcd\Document\App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Adtech\Application\Cms\Controllers\Controller as Controller;
+use Dhcd\Document\App\Repositories\DocumentTypeRepository;
 use Dhcd\Document\App\Models\DocumentType;
 use Spatie\Activitylog\Models\Activity;
 use Yajra\Datatables\Datatables;
@@ -18,93 +19,45 @@ class DocumentTypeController extends Controller
         'numeric'  => "Phải là số"
     );
     
-    public function __construct() {
+    public function __construct(DocumentTypeRepository $documentTypeRepository) {
         parent::__construct();
-        
+        $this->documentType = $documentTypeRepository;
     }
-    
-    public function manage(Request $request){                
-        $objType = new DocumentType();
-        $types = $objType->getTypes();        
-        return view('DHCD-DOCUMENT::modules.document.type.manage',compact('types'));
-    }
-    
-    public function add(Request $request){                      
-        return view('DHCD-DOCUMENT::modules.document.type.add');
-    }
-    
-    public function create(Request $request){
-                       
-        $validator = Validator::make($request->all(), [
-            'name' => 'required'            
-        ], $this->messages);
-        if (!$validator->fails()) {
-             $type = DocumentType::create($request->all());
-             if($type->document_type_id){
-                  $this->resetCache();
-                  activity('document_types')->performedOn($type)->withProperties($request->all())->log('User: :'.Auth::user()->email.' - Add document type - document_type: '.$type->document_type_id.', name: '.$type->name);
-                  return redirect()->route('dhcd.document.type.add')->with('success','Thêm kiểu tài liệu thành công');
-             }            
-             return redirect()->route('dhcd.document.type.add')->withErrors(['Thêm kiểu tài liệu không thành công']);
-             
-        } else {
-            
-             return redirect()->route('dhcd.document.type.add')->withErrors(['Vui lòng kiểm tra lại dữ liệu nhập vào']);
-        }
-        
-    }
-    
-    public function edit(Request $request){
-        if(empty($request->only('document_type_id'))){
-            return redirect()->route('dhcd.document.type.manage')->withErrors(['Không tìm thấy kiểu tài liệu nào cần sửa']);
-        }        
-        $type = DocumentType::findOrFail($request->document_type_id);
-        return view('DHCD-DOCUMENT::modules.document.type.edit',compact('type'));
+                    
+    public function edit(Request $request){              
+        $types = $this->documentType->getTypes();        
+        return view('DHCD-DOCUMENT::modules.document.type.edit',compact('types'));
     }
     
     public function update(Request $request){
-                
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'document_type_id' => 'required'
-        ]);
-        if (!$validator->fails()) {
-             $type = DocumentType::findOrFail($request->document_type_id);
-             $type->name = $request->name;
-             
-             if(!empty($request->icon)){
-                 $type->icon = $request->icon;
-             }
-             $type->save();
-            
-             $this->resetCache();
-             activity('document_types')->performedOn($type)->withProperties($request->all())->log('User: :'.Auth::user()->email.' - Edit document type - document_type: '.$type->document_type_id.', name: '.$type->name);
-             return redirect()->route('dhcd.document.type.manage')->with('success','Cập nhật kiểu tài liệu thành công');                                                
-        } else {            
-             return redirect()->route('dhcd.document.type.edit',['document_type_id' => $request->document_type_id])->withErrors(['Vui lòng kiểm tra lại dữ liệu nhập vào']);
+                        
+        if(empty($request->image) || empty($request->text) || empty($request->video) || empty($request->audio)){
+            return redirect()->back()->withInput()->withErrors(['Cập nhật không thành công']);
         }
+        $image_extentions = json_encode($request->image);
+        $text_extentions = json_encode($request->text);
+        $video_extentions = json_encode($request->video);
+        $audio_extentions = json_encode($request->audio);
         
-    }
-    
-    public function delete(Request $request){
-        
-        if(empty($request->only('document_type_id'))){
-            return redirect()->route('dhcd.document.type.manage')->withErrors(['Không tìm thấy danh mục cần xóa']);
+        if(!empty($image_extentions)){
+            DocumentType::where('type','image')->update(['extentions' => $image_extentions]);
         }
-        $type = DocumentType::findOrFail($request->document_type_id);
-        $type->status = 0;
-        
-        $type->save();
-        
-        activity('document_type')->performedOn($type)->withProperties($request->all())->log('User: :'.Auth::user()->email.' - Delete document type - document_type: '.$type->document_type_id.', name: '.$type->name);
+        if(!empty($text_extentions)){
+            DocumentType::where('type','text')->update(['extentions' => $text_extentions]);
+        }
+        if(!empty($video_extentions)){
+            DocumentType::where('type','video')->update(['extentions' => $video_extentions]);
+        }
+        if(!empty($audio_extentions)){
+            DocumentType::where('type','audio')->update(['extentions' => $audio_extentions]);
+        }
         $this->resetCache();
-        return redirect()->route('dhcd.document.type.manage')->with('success','Xóa kiểu tài liệu thành công');
+        return redirect()->back()->withInput()->with('success','Cập nhật thông tin cấu hình kiểu tài liệu thành công');        
     }
-    
-    
-    
+                    
     public function resetCache(){
-        Cache::forget('list_type');
+        Cache::forget('document_type_list');
     }
-                
+    
+    
 }
