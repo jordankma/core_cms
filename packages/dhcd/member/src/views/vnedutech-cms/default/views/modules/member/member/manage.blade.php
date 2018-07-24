@@ -42,7 +42,7 @@
                     </div>
                 </div>
                 <br/>
-                <div style="margin-left:20px">
+                {{-- <div style="margin-left:20px">
                     <div style="display: inline-block;">
                         <a href="{{route('dhcd.member.member.excel.get.import')}}" class="btn btn-success">
                             <i class="fa fa-picture-o"></i> Import Excel
@@ -53,7 +53,7 @@
                             <i class="fa fa-picture-o"></i> Export Excel
                         </a>
                     </div>
-                </div>
+                </div> --}}
                 @if (count($errors)>0) 
                     <div class="alert alert-danger">
                         @foreach ($errors->all() as $loi)
