@@ -4,6 +4,7 @@ $adminPrefix = config('site.admin_prefix');
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Illuminate\Support\Facades\DB;
 Route::group(array('prefix' => $adminPrefix), function() {
     Route::group(['middleware' => ['adtech.auth', 'adtech.acl']], function () {
 
@@ -31,7 +32,33 @@ Route::group(array('prefix' => $adminPrefix), function() {
         Route::get('dhcd/art/document/van-kien', 'ArtController@vanKienDetail');
 
         Route::get('dhcd/art/member/profile', 'ArtController@memberProfile');
-        
 
+
+        Route::get('dhcd/art/seed/document',function(){
+            DB::table('package_document_types')->insert([[
+            'document_type_id' => 1,
+            'name' => 'Hình ảnh',
+            'type' => 'image',
+            'extentions' => json_encode(['image/jpeg','image/jpg','image/png','image/gif'])
+        ],[
+            'document_type_id' => 2,
+            'name' => 'Văn bản',
+            'type' => 'text',
+            'extentions' => json_encode(['docx','doc','xls','xlsx','pdf'])
+        ],[
+            'document_type_id' => 3,
+            'name' => 'Video',
+            'type' => 'video',
+            'extentions' => json_encode(['mp4'])
+        ],[
+            'document_type_id' => 4,
+            'name' => 'Audio',
+            'type' => 'audio',
+            'extentions' => json_encode(['mp3'])
+        ]]);
+            echo 'done';
+        });
+        
+        
     });
 });

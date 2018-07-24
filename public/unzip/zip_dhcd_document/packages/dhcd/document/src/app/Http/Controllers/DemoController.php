@@ -127,8 +127,7 @@ class DemoController extends Controller
         $model = 'demo';
         $confirm_route = $error = null;
         $validator = Validator::make($request->all(), [
-            'type' => 'required',
-            'id' => 'required|numeric',
+            
         ], $this->messages);
         if (!$validator->fails()) {
             try {

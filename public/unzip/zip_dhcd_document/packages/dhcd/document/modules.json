@@ -9,7 +9,8 @@
         {
           "name": "View list",
           "routes": [
-            "dhcd.document.cate.manage"            
+            "dhcd.document.cate.manage",
+             "dhcd.document.doc.log" 
           ]
         },
         {
@@ -35,20 +36,15 @@
       ]
     },
     {
-      "name": "Quản lý kiểu tài liệu",
+      "name": "Cấu hình kiểu tài liệu",
       "groups": [
         {
           "name": "View list",
-          "routes": [
-            "dhcd.document.type.manage"            
-          ]
+          "routes": []
         },
         {
           "name": "Create",
-          "routes": [
-            "dhcd.document.type.add", 
-            "dhcd.document.type.create" 
-          ]
+          "routes": []
         },
         {
           "name": "Update",
@@ -59,8 +55,38 @@
         },
         {
           "name": "Delete",
+          "routes": []
+        }
+      ]
+    },
+    {
+      "name": "Quản lý tài liệu",
+      "groups": [
+        {
+          "name": "View list",
           "routes": [
-            "dhcd.document.type.delete"             
+            "dhcd.document.doc.manage",
+            "dhcd.document.doc.log"
+          ]
+        },
+        {
+          "name": "Create",
+          "routes": [
+            "dhcd.document.doc.add", 
+            "dhcd.document.doc.create" 
+          ]
+        },
+        {
+          "name": "Update",
+          "routes": [
+            "dhcd.document.doc.edit", 
+            "dhcd.document.doc.update" 
+          ]
+        },
+        {
+          "name": "Delete",
+          "routes": [
+            "dhcd.document.doc.delete"             
           ]
         }
       ]

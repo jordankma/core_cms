@@ -22,7 +22,7 @@ class DemoRepository extends Repository
 
     public function findAll() {
 
-        $result = $this->model::query();
-        return $result;
+        $result = $this->model::all();
+        dd($result);die;
     }
 }

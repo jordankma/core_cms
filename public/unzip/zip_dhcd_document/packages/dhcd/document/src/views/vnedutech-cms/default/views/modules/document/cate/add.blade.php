@@ -22,15 +22,15 @@
 {{-- Page content --}}
 @section('content')
     <section class="content-header">
-        <h1>{{ $title }}</h1>
+        <h1>{{ trans('dhcd-document::language.titles.doucment_cate.create') }}</h1>
         <ol class="breadcrumb">
             <li>
-                <a href="{{ route('backend.homepage') }}">
+                <a href="{{route('dhcd.document.cate.manage')}}">
                     <i class="livicon" data-name="home" data-size="16" data-color="#000"></i>
                     {{ trans('adtech-core::labels.home') }}
                 </a>
             </li>
-            <li class="active"><a href="#">{{ $title }}</a></li>
+            <li class="active"><a href="#">{{ trans('dhcd-document::language.titles.doucment_cate.create') }}</a></li>
         </ol>
     </section>
     <!--section ends-->
@@ -39,38 +39,21 @@
         <div class="row">
            
             <div class="the-box no-border">
-                <!-- errors --> 
-                 @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                    </div>
-                @endif
-
-                @if(session('success'))
-                    <div class="alert alert-success">                   
-                        <ul>                       
-                            <li> {{session('success')}}</li>                       
-                        </ul>
-                    </div>
-                @endif
-                <form class="form-horizontal" action="{{route('dhcd.document.cate.create')}}" method="post" enctype="multipart/form-data">
+               
+                <form class="form-horizontal" action="{{route('dhcd.document.cate.create')}}" method="post" enctype="multipart/form-data" id='form-add'>
                     {{ csrf_field() }}
                     <fieldset>
                         <!-- Name input-->
                         <div class="form-group">
-                            <label class="col-md-2 control-label" for="name">Tên danh mục</label>
+                            <label class="col-md-2 control-label" for="name">{{ trans('dhcd-document::language.document_cate.form.name') }}</label>
                             <div class=" col-md-6 ">
-                                <input id="name" name="name" type="text" placeholder="Nhập tên danh mục..." class="form-control">
+                                <input id="name" name="name" type="text" placeholder="{{ trans('dhcd-document::language.placeholder.document_cate.name') }}" class="form-control">
                                 
                             </div>
                         </div>                                               
                         <!-- Message body -->
                         <div class="form-group">
-                            <label class="col-md-2 control-label" for="parent_id">Chọn danh mục</label>
+                            <label class="col-md-2 control-label" for="parent_id">{{ trans('dhcd-document::language.document_cate.form.parent_id') }}</label>
                             <div class="col-md-6"> 
                                 <select name="parent_id" class="form-control" >
                                     <option value="0">Root</option>
@@ -82,7 +65,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-2 control-label" for="name">Icon</label>
+                            <label class="col-md-2 control-label" for="name">{{ trans('dhcd-document::language.document_cate.form.icon') }}</label>
                             <div class="col-md-6">
                                  <div class="input-group">
                                     <span class="input-group-btn">
@@ -97,8 +80,10 @@
                         </div>
                         <!-- Form actions -->
                         <div class="form-group">
-                            <div class="col-md-12 text-center">
-                                <button type="submit" class="btn btn-responsive btn-primary btn-sm">Thêm</button>
+                            <div class="col-md-8 text-center">
+                                 @if ($USER_LOGGED->canAccess('dhcd.document.cate.add'))                                    
+                                    <button type="submit" class="btn btn-responsive btn-primary btn-sm text-button">{{ trans('dhcd-document::language.buttons.create') }}</button>
+                                 @endif
                             </div>
                         </div>
                     </fieldset>
@@ -122,5 +107,29 @@
         });
         var domain = "/admin/laravel-filemanager/";
         $('#lfm').filemanager('image', {prefix: domain});
+        
+        $("#form-add").bootstrapValidator({
+                excluded: ':disabled',
+                fields: {
+
+                    name: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Bạn chưa nhập tên danh mục'
+                            }
+                        }                       
+                    },
+                    icon: {
+                        trigger: 'change keyup',
+                        validators: {                            
+                            notEmpty: {
+                                message: 'Bạn chưa chọn icon'
+                            }
+                        }
+                        
+                    } 
+                }
+            });
+        
     </script>
 @stop

@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 {{-- Page title --}}
-@section('title'){{ $title = trans('dhcd-managefile::language.titles.demo.create') }}@stop
+@section('title'){{ $title = trans('dhcd-document::language.titles.doucment_cate.edit') }}@stop
 
 {{-- page styles --}}
 @section('header_styles')
@@ -25,7 +25,7 @@
         <h1>{{ $title }}</h1>
         <ol class="breadcrumb">
             <li>
-                <a href="{{ route('backend.homepage') }}">
+                <a href="{{route('dhcd.document.cate.manage')}}">
                     <i class="livicon" data-name="home" data-size="16" data-color="#000"></i>
                     {{ trans('adtech-core::labels.home') }}
                 </a>
@@ -39,25 +39,8 @@
         <div class="row">
            
             <div class="the-box no-border">
-                <!-- errors --> 
-                 @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                    </div>
-                @endif
-
-                @if(session('success'))
-                    <div class="alert alert-success">                   
-                        <ul>                       
-                            <li> {{session('success')}}</li>                       
-                        </ul>
-                    </div>
-                @endif
-                <form class="form-horizontal" action="{{route('dhcd.document.cate.update',['document_cate_id' => $cate->document_cate_id])}}" method="post" enctype="multipart/form-data">
+                
+                <form class="form-horizontal" action="{{route('dhcd.document.cate.update',['document_cate_id' => $cate->document_cate_id])}}" method="post" enctype="multipart/form-data" id='form-edit'>
                     {{ csrf_field() }}
                     <fieldset>
                         <!-- Name input-->
@@ -82,17 +65,17 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-2 control-label" for="name">Icon hiện tại</label>
+                            <label class="col-md-2 control-label" for="name">{{ trans('dhcd-document::language.document_cate.form.icon_current') }}</label>
                             <div class="col-md-6">
                                 @if($cate->icon)
                                     <img src="{{$cate->icon}}" width="75px">
                                 @else
-                                    <label class="control-label" for="name">Chưa có icon</label>
+                                    <label class="control-label" for="name">{{ trans('dhcd-document::language.document_cate.form.icon_empty') }}</label>
                                 @endif
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-2 control-label" for="name">Icon mới</label>
+                            <label class="col-md-2 control-label" for="name">{{ trans('dhcd-document::language.document_cate.form.icon_new') }}</label>
                             <div class="col-md-6">
                                  <div class="input-group">
                                     <span class="input-group-btn">
@@ -108,7 +91,10 @@
                         <!-- Form actions -->
                         <div class="form-group">
                             <div class="col-md-12 text-center">
-                                <button type="submit" class="btn btn-responsive btn-primary btn-sm">{{ trans('dhcd-document::language.buttons.save') }}</button>
+                                @if ($USER_LOGGED->canAccess('dhcd.document.cate.edit'))                                    
+                                    <button type="submit" class="btn btn-responsive btn-primary btn-sm">{{ trans('dhcd-document::language.buttons.save') }}</button>
+                                @endif
+                                
                             </div>
                         </div>
                     </fieldset>
@@ -132,5 +118,21 @@
         });
         var domain = "/admin/laravel-filemanager/";
         $('#lfm').filemanager('image', {prefix: domain});
+        
+        $("#form-edit").bootstrapValidator({
+                excluded: ':disabled',
+                fields: {
+
+                    name: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Bạn chưa nhập tên danh mục'
+                            }
+                        }
+                        
+                    }                                                                           
+                }
+            });
+        
     </script>
 @stop

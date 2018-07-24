@@ -13,12 +13,13 @@ class DhcdDocumentTypesTable extends Migration
      */
     public function up()
     {
-        Schema::connection('mysql')->create('document_types', function (Blueprint $table) {
+        Schema::connection('mysql_dhcd')->create('package_document_types', function (Blueprint $table) {
             $table->increments('document_type_id');            
             $table->string('name');
-            $table->string('icon');
-            $table->tinyInteger('status', false, true)->comment('trang thai')->default(1);            
+            $table->string('type');
+            $table->string('extentions')->nullable();                       
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -29,6 +30,6 @@ class DhcdDocumentTypesTable extends Migration
      */
     public function down()
     {
-        Schema::connection('mysql')->dropIfExists('document_types');
+        Schema::connection('mysql_dhcd')->dropIfExists('package_document_types');
     }
 }

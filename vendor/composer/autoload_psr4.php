@@ -75,6 +75,7 @@ return array(
     'Dhcd\\News\\' => array($baseDir . '/packages/dhcd/news/src', $vendorDir . '/dhcd/news/src'),
     'Dhcd\\Member\\' => array($baseDir . '/packages/dhcd/member/src', $vendorDir . '/dhcd/member/src'),
     'Dhcd\\Index\\' => array($baseDir . '/packages/dhcd/index/src', $vendorDir . '/dhcd/index/src'),
+    'Dhcd\\Filedoc\\' => array($baseDir . '/packages/dhcd/filedoc/src'),
     'Dhcd\\Eventsfrontend\\' => array($baseDir . '/packages/dhcd/eventsfrontend/src', $vendorDir . '/dhcd/eventsfrontend/src'),
     'Dhcd\\Events\\' => array($baseDir . '/packages/dhcd/events/src', $vendorDir . '/dhcd/events/src'),
     'Dhcd\\Document\\' => array($baseDir . '/packages/dhcd/document/src'),
