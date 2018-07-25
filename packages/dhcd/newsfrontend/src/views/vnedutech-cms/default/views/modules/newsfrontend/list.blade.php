@@ -5,8 +5,6 @@
 
 {{-- page styles --}}
 @section('header_styles')
-@stop
-<!--end of page css-->
 <style type="text/css">
     #content-news .img-display-news{
         width: 100%;
@@ -36,6 +34,8 @@
 
     }
 </style>
+@stop
+<!--end of page css-->
 
 {{-- Page content --}}
 @section('content')

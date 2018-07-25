@@ -16,7 +16,11 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/css/frontend/login.css') }}">
     <link rel="stylesheet" href=" {{ asset('/vendor/' . $group_name . '/' . $skin . '/css/font-awesome.min.css') }}">
     <!--end of page level css-->
-
+    <style type="text/css">
+        body{
+            background: url('../images/background_fr.jpg') center center fixed !important;
+        }
+    </style>
 </head>
 <body>
 <div class="container">

@@ -52,6 +52,6 @@ class DhcdMemberTable extends Migration
      */
     public function down()
     {
-        Schema::connection('mysql_dhcd')->dropIfExists('dhcd_member');
+        // Schema::connection('mysql_dhcd')->dropIfExists('dhcd_member');
     }
 }

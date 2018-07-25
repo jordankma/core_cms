@@ -5,24 +5,31 @@
 
 {{-- page styles --}}
 @section('header_styles')
+    <style type="text/css">
+        #detail-news .time{
+            margin-top: 5px;
+            font-size: 12px;
+            color: gray;
+        }
+        #detail-news .title{
+            font-size: 25px;
+            font-weight: bold;
+            color: #3498db;
+        }
+        .author {
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .the-box{
+            padding: 15px;
+            margin-bottom: 30px;
+            border: 1px solid #D5DAE0;
+            position: relative;
+            background: white;
+        }
+    </style>
 @stop
 <!--end of page css-->
-<style type="text/css">
-    #detail-news .time{
-        margin-top: 5px;
-        font-size: 12px;
-        color: gray;
-    }
-    #detail-news .title{
-        font-size: 25px;
-        font-weight: bold;
-        color: #3498db;
-    }
-    .author {
-        font-weight: bold;
-        font-size: 16px;
-    }
-</style>
 @php
     $date = date_create($news['created_at']);
     $date_created = date_format($date,"d/m/Y");

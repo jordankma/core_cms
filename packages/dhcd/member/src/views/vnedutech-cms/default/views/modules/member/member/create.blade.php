@@ -265,20 +265,20 @@
             $('#birthday,#ngay_vao_dang').datetimepicker({
                 format: 'YYYY-MM-DD',
             });
-            $('#provine_city').select2({
-                theme:"bootstrap",
-                placeholder:"select a provine city"
-            });
-            $('#provine_city').change(function(event) {
-                var provine_city_code= $(this).val();
-                $.get("{{ route('dhcd.administration.country-district.member') }}" + "?provine_city_code=" + provine_city_code, function(data) { 
-                    $("#country_district").html(data);
-                }); 
-            });
-            $('#country_district').select2({
-                theme:"bootstrap",
-                placeholder:"select a country district"
-            });
+            // $('#provine_city').select2({
+            //     theme:"bootstrap",
+            //     placeholder:"select a provine city"
+            // });
+            // $('#provine_city').change(function(event) {
+            //     var provine_city_code= $(this).val();
+            //     $.get("{{ route('dhcd.administration.country-district.member') }}" + "?provine_city_code=" + provine_city_code, function(data) { 
+            //         $("#country_district").html(data);
+            //     }); 
+            // });
+            // $('#country_district').select2({
+            //     theme:"bootstrap",
+            //     placeholder:"select a country district"
+            // });
             $('#form-add-member').bootstrapValidator({
                 feedbackIcons: {
                     // validating: 'glyphicon glyphicon-refresh'

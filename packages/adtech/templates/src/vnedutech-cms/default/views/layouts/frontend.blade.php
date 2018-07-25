@@ -29,7 +29,21 @@
     <!--page css-->
     @yield('header_styles')
     <!--end of page css-->
-
+    <style type="text/css">
+        .skin-josh .navbar,.skin-josh .logo{
+            background-color: #2389F5 !important;
+        }
+        .skin-josh .left-side,.menu_more{
+            background-color: #fff;
+            color: black !important;
+        }
+        .menu_more{
+            border-bottom: 1px solid blue;
+        }
+        .skin-josh .sidebar li ul{
+            background-color: #2389F5 !important;
+        }
+    </style>
 <body class="skin-josh">
 <header class="header">
     <a href="{{ (empty($SETTING['logo_link']) || $SETTING['logo_link'] == '') ? route('frontend.homepage') : $SETTING['logo_link'] }}" class="logo">

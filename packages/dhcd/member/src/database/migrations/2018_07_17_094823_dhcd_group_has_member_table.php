@@ -31,6 +31,6 @@ class DhcdGroupHasMemberTable extends Migration
      */
     public function down()
     {
-        Schema::connection('mysql_dhcd')->dropIfExists('dhcd_group_has_member');
+        // Schema::connection('mysql_dhcd')->dropIfExists('dhcd_group_has_member');
     }
 }

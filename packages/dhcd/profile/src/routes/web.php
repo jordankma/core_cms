@@ -7,7 +7,7 @@ Route::group(array('prefix' => $adminPrefix), function() {
 	    Route::get('xedit', 'ProfileController@xedit')->name('xedit.frontend.member');
 
 	    Route::post('change-pass', 'ProfileController@changePass')->name('changepass.frontend.member');
-
+	    Route::post('change-avatar', 'ProfileController@changeAvatar')->name('changeavatar.frontend.member');
 	    Route::group(array('prefix' => 'xedit'), function() {
 	    	Route::post('change-name', 'ProfileController@changeName')->name('change.name.frontend.member');			
 	    	Route::post('change-dan-toc', 'ProfileController@changeDanToc')->name('change.dantoc.frontend.member');			
