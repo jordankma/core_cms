@@ -17,6 +17,7 @@
     <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/css/pages/inlinedit.css')}}" rel="stylesheet" />
     <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-switch/css/bootstrap-switch.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/css/pages/blog.css') }}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/jasny-bootstrap/css/jasny-bootstrap.css') }}">
 @stop
 <!--end of page css-->
 <style type="text/css">
@@ -37,6 +38,10 @@
         font-size: 20px;
         font-weight: bold;
         margin-left: 30px;
+    }
+    .fileinput-preview img{
+        width: 460px !important;
+        height: 450px !important;
     }
 </style>
 {{-- Page content --}}
@@ -93,6 +98,7 @@
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/x-editable/js/typeaheadjs.js')}}" type="text/javascript"></script>
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/x-editable/js/address.js')}}" type="text/javascript"></script>
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/iCheck/js/icheck.js')}}"></script>
+    <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/jasny-bootstrap/js/jasny-bootstrap.js') }}"></script>
     <script>
     var c = window.location.href.match(/c=inline/i) ? 'inline' : 'popup';
     $.fn.editable.defaults.mode = c === 'inline' ? 'inline' : 'popup';

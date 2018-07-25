@@ -42,7 +42,11 @@ return [
     "buttons" => [
         "create" => "Create",
         "discard" => "Discard",
-        "confirm" => "Xác nhận "
+        "confirm" => "Xác nhận ",
+        "select_image" => "Chọn ảnh",
+        "change" => "Thay đổi",
+        "remove" => "Xóa",
+        "confirm" => "Đổi"
     ],
     "placeholder" => [
         "demo" => [
@@ -61,14 +65,16 @@ return [
             "create" => "Create successfully",
             "update" => "Update successfully",
             "delete" => "Delete successfully",
-            "change_pass" => "Đổi mật khẩu thành công"
+            "change_pass" => "Đổi mật khẩu thành công",
+            "change_avatar" => "Đổi ảnh đại diện thành công"
         ],
         "error" => [
             "permission" => "Permission lock",
             "create" => "Create failed",
             "update" => "Update failed",
             "delete" => "Delete failed",
-            "change_pass" => "Đổi mật khẩu thất bại"
+            "change_pass" => "Đổi mật khẩu thất bại",
+            "change_avatar" => "Đổi ảnh đại diện thất bại"
         ]
     ]
 ];

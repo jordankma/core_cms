@@ -10,6 +10,7 @@ use Dhcd\Member\App\Repositories\MemberRepository;
 use Dhcd\Member\App\Models\Member;
 
 use Validator,Auth,Hash;
+use Illuminate\Support\Facades\Input;
 
 class ProfileController extends Controller
 {
@@ -53,11 +54,11 @@ class ProfileController extends Controller
                 $password = $member->password;
                 if (Hash::check($old_password , $password) && $old_password != $new_password){
                     Member::where('member_id',$member_id)->update(['password' => bcrypt($new_password)]);
-                    return redirect()->route('profile.member')->with('success', trans('dhcd-profile::language.messages.success.change_pass'));
+                    return redirect()->route('profile.frontend.member')->with('success', trans('dhcd-profile::language.messages.success.change_pass'));
                 }
             }
         }   
-        return redirect()->route('profile.member')->with('error', trans('dhcd-profile::language.messages.error.change_pass'));
+        return redirect()->route('profile.frontend.member')->with('error', trans('dhcd-profile::language.messages.error.change_pass'));
     }
 
     public function xedit(){
@@ -108,6 +109,40 @@ class ProfileController extends Controller
         if($member != null){
             $member->ton_giao = $ton_giao;
             $member->save();   
+        }
+    }
+
+    public function changeAvatar(Request $request){
+
+        if (Input::hasFile('avatar')) {
+            $file = Input::file('avatar');
+            if ($file->isValid()) {
+
+                $group_name = config('site.group_name');
+                $skin = config('site.desktop.skin');
+                $y = date('Y');
+                $m = date('m');
+                $path ='public/vendor/' . $group_name . '/' . $skin .'/dhcd/profile/uploads/media/images/'.$y.'/'.$m.'/';
+                $path_media = '/vendor/' . $group_name . '/' . $skin .'/dhcd/profile/uploads/media/images/'.$y.'/'.$m.'/';
+                $file_extension = $file->extension();
+                if( $file_extension != 'png' && $file_extension != 'jpg'){
+                    return redirect()->route('profile.frontend.member')->with('error', trans('dhcd-profile::language.messages.error.change_avatar')); 
+                }
+                $originalName = $file->getClientOriginalName();
+                $tmp = explode('.', $originalName);
+                $file_extension = end($tmp);
+                $filename = self::stripUnicode('Image') . '-' . time() . "." . $file_extension;
+                $file->move($path, $filename);
+                //save dbs
+                $member_id = $this->user->member_id;
+                $member = Member::find($member_id);
+                if($member != null){
+                    $member->avatar = $path_media;
+                    if($member->save()){
+                        return redirect()->route('profile.frontend.member')->with('success', trans('dhcd-profile::language.messages.error.change_avatar'));
+                    }   
+                }
+            }
         }
     }
 }
