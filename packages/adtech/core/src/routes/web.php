@@ -34,7 +34,7 @@ Route::group(array('prefix' => $adminPrefix), function () {
 
     //
     Route::group(['middleware' => ['adtech.auth', 'adtech.acl']], function () {
-
+        \UniSharp\LaravelFilemanager\Lfm::routes();
         Route::get('', 'DashboardController@index')->name('backend.homepage');
         Route::get('adtech/core/setting/manage', 'SettingController@manage')->name('adtech.core.setting.manage');
         Route::put('adtech/core/setting/update', 'SettingController@update')->name('adtech.core.setting.update');

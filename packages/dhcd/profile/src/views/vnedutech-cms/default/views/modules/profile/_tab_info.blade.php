@@ -15,7 +15,7 @@
                                     <img src=" @if($member->avatar==null) {{'vendor/vnedutech-cms/default/dhcd/profile/uploads/media/images/avatar_default.png'}} @else {{$member->avatar}} @endif" alt="..."
                                          class="img-responsive"/ style="width: 460px;height: 450px;">
                                 </div>
-                                {{-- <div class="fileinput-preview fileinput-exists thumbnail" style="width: 460px;height: 450px;border: none">
+                                <div class="fileinput-preview fileinput-exists thumbnail" style="width: 460px;height: 450px;border: none">
                                 </div>
                                 <div>
                                     <span class="btn btn-primary btn-file">
@@ -25,7 +25,7 @@
                                     </span>
                                     <span class="btn btn-danger fileinput-exists" data-dismiss="fileinput">{{ trans('dhcd-profile::language.buttons.remove') }}</span>
                                     <button class="btn btn-success fileinput-exists">{{ trans('dhcd-profile::language.buttons.confirm') }}</button>
-                                </div> --}}
+                                </div>
                             </div>
                         </div>
                     </form> 

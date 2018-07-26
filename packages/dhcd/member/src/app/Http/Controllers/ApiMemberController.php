@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 
 use Dhcd\Member\App\Http\Requests\ApiMemberRequest;
-
+use Illuminate\Support\Collection;
 use Dhcd\Member\App\Models\Member;
+use Dhcd\Member\App\Models\Group;
+
 use Dhcd\Member\App\Repositories\MemberRepository;
 use Validator,Auth,DB,Hash;
 
@@ -162,5 +164,28 @@ class ApiMemberController extends BaseController
 		if(DB::table('dhcd_member')->insert($data_insert)){
 			echo 'done';
 		}	
+	}
+
+	public function getListGroup(Request $request){
+		$groups = Group::all();
+		return $groups;
+	}
+	public function getListMemberGroup(Request $request) {
+		$validator = Validator::make($request->all(), [
+            'group_id' => 'required|numeric',
+        ], $this->messages);
+        if (!$validator->fails()) {
+        	$group_id = $request->input('group_id');
+        	$groups = Group::where('group_id',$group_id)->with('getMember')->first();
+        	if(!empty($groups)){
+        		$list_member = $groups->getMember;
+        		$collection = new Collection();
+        		$list_member_collection = $collection->push($list_member);
+        		return $list_member;
+        	}	
+        }	
+        else {
+        	$validator->messages();
+        }
 	}
 }

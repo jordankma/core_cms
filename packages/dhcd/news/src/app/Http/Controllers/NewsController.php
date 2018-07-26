@@ -89,7 +89,7 @@ class NewsController extends Controller
 		$is_hot = $request->is_hot;
 		$priority = $request->priority;
 		$desc_seo = !empty($request->desc_seo) ? $request->desc_seo : '';
-		$filepath = $request->filepath !='' ? $request->filepath : asset('test.png');
+		$image = $request->image !='' ? $request->image : asset('test.png');
 		$key_word_seo = explode(",",$request->key_word_seo[0]);
 
 		$news = new News();
@@ -99,7 +99,7 @@ class NewsController extends Controller
 		$news->news_tag = json_encode($news_tag);
 		$news->title_alias = self::stripUnicode($title);
 		$news->desc = $desc;
-		$news->image = $filepath;
+		$news->image = $image;
 		$news->content = $content;
 		$news->is_hot = $is_hot;
 		$news->priority = $priority;
@@ -200,8 +200,7 @@ class NewsController extends Controller
 		$title_alias = $request->title_alias;
 		$desc = $request->desc;
 		$content = $request->input('content');
-		$image = $request->image;
-		$filepath = $request->filepath !='' ? $request->filepath : asset('test.png');
+		$image = $request->image !='' ? $request->image : asset('test.png');
 		$is_hot = $request->is_hot;
 		$priority = $request->priority;
 		$desc_seo = !empty($request->desc_seo) ? $request->desc_seo : '';
@@ -214,7 +213,7 @@ class NewsController extends Controller
 		$news->title_alias = self::stripUnicode($title);
 		$news->desc = $desc;
 		$news->content = $content;
-		$news->image = $filepath;
+		$news->image = $image;
 		$news->is_hot = $is_hot;
 		$news->priority = $priority;
 		$news->is_hot = $is_hot;
@@ -432,5 +431,6 @@ class NewsController extends Controller
         $list_news = $this->news->getListNewsApi($params);
         return $list_news;
     }
+
 
 }

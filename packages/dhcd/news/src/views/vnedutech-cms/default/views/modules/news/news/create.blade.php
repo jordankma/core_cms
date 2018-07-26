@@ -12,9 +12,6 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('/vendor/' . $group_name . '/' . $skin .'/vendors/bootstrap-multiselect/css/bootstrap-multiselect.css') }}">
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin .'/vendors/ckeditor/js/ckeditor.js') }}" type="text/javascript"></script>
     {{-- <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/dhcd/news/css/news/add.css') }}" rel="stylesheet" type="text/css"/> --}}
-@stop
-<!--end of page css-->
-
     <style type="text/css">
         .multiselect-container .active a{
             background-color: lightblue !important;
@@ -26,6 +23,9 @@
             width: 100% !important;
         }
     </style>
+@stop
+<!--end of page css-->
+
 {{-- Page content --}}
 @section('content')
     <section class="content-header">
@@ -56,17 +56,45 @@
                             @endif
                             <div class="form-group">
                                 <label>{{trans('dhcd-news::language.form.text.title')}} <span style="color: red">(*)</span></label>
-                                <input type="text" required id="title" name="title" class="form-control" placeholder="{{trans('dhcd-news::language.form.title_placeholder')}}">
+                                <input type="text" id="title" name="title" class="form-control" placeholder="{{trans('dhcd-news::language.form.title_placeholder')}}">
                                 <p id="alias" style="color: red"></p>
                             </div>
                             <div class="form-group">
                                 <label>{{trans('dhcd-news::language.form.text.desc')}}</label><br>
                                 <textarea rows="5" cols="101" name="desc" class="form-control" placeholder="{{trans('dhcd-news::language.form.desc_placeholder')}}"></textarea>
                             </div>
-                            <div class="form-group" >
-                                <label>{{trans('dhcd-news::language.form.text.content')}} <span style="color: red">(*)</span></label><br>
-                                <div class='box-body pad form-group'>
-                                    <textarea name="content" id="ckeditor" placeholder="{{trans('dhcd-news::language.form.content_placeholder')}}"></textarea>
+                            <div class="form-group">
+                                <label for="news-text">
+                                    <input type="radio" id="news-text" name="type" value="1" checked="checked" class="type_news">
+                                    {{trans('dhcd-news::language.form.text.news_text')}}
+                                </label> 
+                                <label for="news-image">
+                                    <input type="radio" id="news-image" name="type" value="2" class="type_news">
+                                    {{trans('dhcd-news::language.form.text.news_image')}}
+                                </label>
+                            </div>
+                            <div class="area-new-text" style="display: block;">
+                                <div class="form-group" >
+                                    <label>{{trans('dhcd-news::language.form.text.content')}} </label><br>
+                                    <div class='box-body pad form-group'>
+                                        <textarea name="content" id="ckeditor" placeholder="{{trans('dhcd-news::language.form.content_placeholder')}}"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="area-new-image" style="display: none;">
+                                <div class="form-group" >
+                                    <a id="lfm1" data-input="thumbnail1" data-preview="holder1" class="btn btn-primary">
+                                        <i class="fa fa-picture-o"></i> {{trans('dhcd-news::language.label.choise_image')}}
+                                    </a>
+                                    <table class="table table-striped table-bordered table-list" style='font-size: 12px;'>
+                                        <thead>
+                                        <th>{{trans('dhcd-news::language.table.news.image')}}</th>
+                                        <th>{{trans('dhcd-news::language.table.news.url')}}</th>
+                                        </thead>
+                                        <tbody id="list-image">
+
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -74,7 +102,7 @@
                         <!-- /.col-sm-4 -->
                         <div class="col-md-4 col-sm-4">
                             <div class="form-group">
-                                <label>{{trans('dhcd-news::language.form.text.cat')}}</label><br>
+                                <label>{{trans('dhcd-news::language.form.text.cat')}} <span style="color: red">(*)</span></label><br>
                                 <select id="cate" class="form-control" name="news_cat[]" required="" multiple="multiple">
                                     @if(!empty($list_news_cat))
                                     @foreach($list_news_cat as $news_cat)
@@ -101,16 +129,18 @@
                                     @endif
                                 </select>
                             </div>
-                            <label>{{trans('dhcd-news::language.form.text.image')}}</label>
-                            <div class="input-group">
-                               <span class="input-group-btn">
-                                 <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
-                                   <i class="fa fa-picture-o"></i> Choose
-                                 </a>
-                               </span>
-                               <input id="thumbnail" class="form-control" type="text" name="filepath">
-                             </div>
-                             <img id="holder" style="margin-top:15px;max-height:100px;">
+                            <label>{{trans('dhcd-news::language.form.text.image')}} <span style="color: red">(*)</span></label>
+                            <div class="form-group">
+                                <div class="input-group">
+                                   <span class="input-group-btn">
+                                     <a id="lfm2" data-input="thumbnail2" data-preview="holder2" class="btn btn-primary">
+                                       <i class="fa fa-picture-o"></i> {{trans('dhcd-news::language.label.choise_image_display')}}
+                                     </a>
+                                   </span>
+                                   <input type="text" name="image" id="thumbnail2" class="form-control">
+                                 </div>
+                                 <img id="holder2" style="margin-top:15px;max-height:100px;">
+                            </div>
                             <div class="form-group">
                                 <input type="radio" id="hot" name="is_hot" value="1">
                                 <label for="hot">{{trans('dhcd-news::language.form.text.news_hot')}}    </label> <br>
@@ -119,7 +149,7 @@
                             </div>
                             <div class="form-group">
                                 <label>{{trans('dhcd-news::language.form.text.priority')}}</label>
-                                <input class="form-control" type="number" name="priority" value="" placeholder="{{trans('dhcd-news::language.form.priority_placeholder')}}">
+                                <input class="form-control" min="0" type="number" name="priority" value="" placeholder="{{trans('dhcd-news::language.form.priority_placeholder')}}">
                             </div>
                             <div class="form-group">
                                 <label>{{trans('dhcd-news::language.form.text.key_seo')}}</label> <br>
@@ -157,73 +187,100 @@
     <script src="{{ asset('/vendor/laravel-filemanager/js/lfm.js') }}" type="text/javascript" ></script>
     <!--end of page js-->
     <script>
-      var options = {
-        filebrowserImageBrowseUrl: '/admin/laravel-filemanager?type=Images',
-        filebrowserImageUploadUrl: '/admin/laravel-filemanager/upload?type=Images&_token=',
-        filebrowserBrowseUrl: '/admin/laravel-filemanager?type=Files',
-        filebrowserUploadUrl: '/admin/laravel-filemanager/upload?type=Files&_token=',
-      };
-        CKEDITOR.replace('ckeditor',options);
-        var domain = "/admin/laravel-filemanager/";
-        $('#lfm').filemanager('image', {prefix: domain});
     </script>
     <script type="text/javascript">
-        $('#form-add-news').bootstrapValidator({
-            feedbackIcons: {
-                // validating: 'glyphicon glyphicon-refresh'
-            },
-            fields: {
-                title: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Bạn chưa nhập tiêu đề'
-                        },
-                        stringLength: {
-                            max: 250,
-                            message: 'Tiêu đề không được quá dài'
-                        }
-                    }
+        $(document).ready(function() {
+            var options = {
+                filebrowserImageBrowseUrl: '/admin/laravel-filemanager?type=Images',
+                filebrowserImageUploadUrl: '/admin/laravel-filemanager/upload?type=Images&_token=',
+                filebrowserBrowseUrl: '/admin/laravel-filemanager?type=Files',
+                filebrowserUploadUrl: '/admin/laravel-filemanager/upload?type=Files&_token=',
+            };
+            CKEDITOR.replace('ckeditor',options);
+            var domain = "/admin/laravel-filemanager/";
+            // $('#lfm').filemanager('image', {prefix: domain});
+            // $('#select_image').filemanager('image', {prefix: domain});
+            $("#lfm1").filemanager('image', {prefix: domain});
+            $("#lfm2").filemanager('image', {prefix: domain});
+
+            $('#cate').multiselect({
+                buttonWidth: '100%',
+                nonSelectedText: 'Chọn danh mục',
+                enableFiltering: true,
+            });
+            $('#tag').multiselect({
+                buttonWidth: '100%',
+                nonSelectedText: 'Chọn tag',
+                enableFiltering: true,
+            });
+            $('#form-add-news').bootstrapValidator({
+                feedbackIcons: {
+                    // validating: 'glyphicon glyphicon-refresh'
                 },
-                desc_seo: {
-                    validators: {
-                        stringLength: {
-                            max: 500,
-                            message: 'Mô tả không được quá dài'
+                fields: {
+                    title: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Bạn chưa nhập tiêu đề'
+                            },
+                            stringLength: {
+                                max: 250,
+                                message: 'Tiêu đề không được quá dài'
+                            }
+                        }
+                    },
+                    desc_seo: {
+                        validators: {
+                            stringLength: {
+                                max: 500,
+                                message: 'Mô tả không được quá dài'
+                            }
                         }
                     }
                 }
-            }
-        });    
-        $('body').on('click','#add-tag',function(e){
-            e.preventDefault();
-            var list_tag = $('#text-tag').val();
-            var i;
-            if(list_tag!=''){
-                $.ajax({
-                    url: "{{route('dhcd.news.tag.ajax.add')}}",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name=csrf-token]').prop('content')
-                    },
-                    type: 'POST',
-                    cache: false,
-                    data: {
-                        'list_tag': list_tag
-                    },
-                    success: function (response) {
-                        var text = '';
-                        var data = JSON.parse(response);
-                        for( i in data){
-                            text += '<option value="'+data[i].news_tag_id+'" selected="">'+data[i].name+'</option>';
+            });    
+            $('body').on('click','.type_news',function(e){
+                var type = $(this).val();
+                if(type==1) {
+                    $(".area-new-image").css("display", "none");
+                    $(".area-new-text").css("display", "block");
+                }
+                else if(type==2) {
+                    $(".area-new-image").css("display", "block");
+                    $(".area-new-text").css("display", "none");
+                }
+            });
+            $('body').on('click','#add-tag',function(e){
+                e.preventDefault();
+                var list_tag = $('#text-tag').val();
+                var i;
+                if(list_tag!=''){
+                    $.ajax({
+                        url: "{{route('dhcd.news.tag.ajax.add')}}",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name=csrf-token]').prop('content')
+                        },
+                        type: 'POST',
+                        cache: false,
+                        data: {
+                            'list_tag': list_tag
+                        },
+                        success: function (response) {
+                            var text = '';
+                            var data = JSON.parse(response);
+                            for( i in data){
+                                text += '<option value="'+data[i].news_tag_id+'" selected="">'+data[i].name+'</option>';
+                            }
+                            $('#tag').prepend(text);
+                            $('#tag').multiselect('rebuild');
                         }
-                        $('#tag').prepend(text);
-                        $('#tag').multiselect('rebuild');
-                    }
-                }, 'json');
-            }
-        });
-        $("#title").keyup(function(){
-            text = $(this).val();
-            $("#alias").text(text);
+                    }, 'json');
+                }
+            });
+            $("#title").keyup(function(){
+                text = $(this).val();
+                $("#alias").text(text);
+            });    
         });
     </script>
 @stop

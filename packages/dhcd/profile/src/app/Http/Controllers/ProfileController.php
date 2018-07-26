@@ -122,8 +122,8 @@ class ProfileController extends Controller
                 $skin = config('site.desktop.skin');
                 $y = date('Y');
                 $m = date('m');
-                $path ='public/vendor/' . $group_name . '/' . $skin .'/dhcd/profile/uploads/media/images/'.$y.'/'.$m.'/';
-                $path_media = '/vendor/' . $group_name . '/' . $skin .'/dhcd/profile/uploads/media/images/'.$y.'/'.$m.'/';
+                $path = 'public/vendor/' . $group_name . '/' . $skin .'/dhcd/profile/uploads/media/images/'.$y.'/'.$m.'/';
+                // $path_media = '/vendor/' . $group_name . '/' . $skin .'/dhcd/profile/uploads/media/images/'.$y.'/'.$m.'/';
                 $file_extension = $file->extension();
                 if( $file_extension != 'png' && $file_extension != 'jpg'){
                     return redirect()->route('profile.frontend.member')->with('error', trans('dhcd-profile::language.messages.error.change_avatar')); 
@@ -137,9 +137,9 @@ class ProfileController extends Controller
                 $member_id = $this->user->member_id;
                 $member = Member::find($member_id);
                 if($member != null){
-                    $member->avatar = $path_media;
+                    $member->avatar = $path.$filename;
                     if($member->save()){
-                        return redirect()->route('profile.frontend.member')->with('success', trans('dhcd-profile::language.messages.error.change_avatar'));
+                        return redirect()->route('profile.frontend.member')->with('success', trans('dhcd-profile::language.messages.success.change_avatar'));
                     }   
                 }
             }

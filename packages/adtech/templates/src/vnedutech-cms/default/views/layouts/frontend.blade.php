@@ -30,6 +30,9 @@
     @yield('header_styles')
     <!--end of page css-->
     <style type="text/css">
+        a{
+            color: black !important;
+        }
         .skin-josh .navbar,.skin-josh .logo{
             background-color: #2389F5 !important;
         }
@@ -41,9 +44,22 @@
             border-bottom: 1px solid blue;
         }
         .skin-josh .sidebar li ul{
-            background-color: #2389F5 !important;
+            background-color: #E6E9EE !important;
         }
+        .navbar-right .nav .open > a, .navbar-right .nav .open > a:hover, .navbar-right .nav .open > a:focus, .navbar-right .nav > li > a:hover, .navbar-right .nav > li > a:focus {
+            background-color: #1F7BDE;
+        }
+        .page-sidebar-menu .menu_more:hover{
+            background-color: #1F7BDE !important;
+        }
+        .page-sidebar-menu .menu_more:hover .title{
+            /*color: #fff !important;*/
+        }
+       /* .sidebar-nav ul a{
+            
+        }*/
     </style>
+</head>
 <body class="skin-josh">
 <header class="header">
     <a href="{{ (empty($SETTING['logo_link']) || $SETTING['logo_link'] == '') ? route('frontend.homepage') : $SETTING['logo_link'] }}" class="logo">
