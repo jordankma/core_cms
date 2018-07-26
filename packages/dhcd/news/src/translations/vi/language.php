@@ -23,6 +23,10 @@ return [
         "created_at" => "Ngày tạo",
         "updated_at" => "Ngày sửa",
         "action" => "Thao tác",
+        "news" => [
+            "image" => "Ảnh",
+            "url" => "Đường dẫn"
+        ],
         "list_news" => [
             "title"=>"Tiêu đề",
             "author"=>"Người tạo",
@@ -56,6 +60,8 @@ return [
             "priority" => "Sắp xếp",
             "key_seo" => "Danh sách từ khóa seo",
             "desc_seo" => "Mô tả seo",
+            "news_text" => "Tin văn bản",
+            "news_image" => "Tin ảnh",
         ],
     ],
     "label_cat"=>[
@@ -63,7 +69,9 @@ return [
         "checkbox" => "Chuyên mục con",   
     ],
     "label"=>[
-        "name" => "Tên",  
+        "name" => "Tên",
+        "choise_image_display" => "Chọn ảnh đại diện",   
+        "choise_image" => "Chọn ảnh",   
     ],
     "form_cat"=>[
         "category_placeholder" => "Nhập chuyên mục",   

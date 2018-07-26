@@ -115,13 +115,13 @@
                                    <i class="fa fa-picture-o"></i> Choose 
                                  </a>
                                </span>
-                               <input id="thumbnail" class="form-control" type="text" value="{{$news->image}}" name="filepath">
+                               <input id="thumbnail" class="form-control" type="text" value="{{$news->image}}" name="image">
                              </div>
                              <img id="holder" src="{{$news->image}}" style="margin-top:15px;max-height:100px;">
                             <div class="form-group">
                                 <input type="radio" id="hot" @if($news->is_hot==1) checked @endif name="is_hot" value="1">
                                 <label for="hot">{{trans('dhcd-news::language.form.text.news_hot')}}    </label> <br>
-                                <input type="radio" @if($news->is_hot==2) checked @endif id="normal" name="is_hot" value="0">
+                                <input type="radio" @if($news->is_hot==2) checked @endif id="normal" name="is_hot" value="2">
                                 <label for="normal">    {{trans('dhcd-news::language.form.text.news_normal')}}</label>
                             </div>
                             <div class="form-group">
@@ -138,7 +138,7 @@
                             </div>
                         </div>
                         <div class="form-group text-center">
-                            <button type="submit" class="btn btn-success">{{trans('dhcd-news::language.buttons.create')}}</button>
+                            <button type="submit" class="btn btn-success">{{trans('dhcd-news::language.buttons.update')}}</button>
                             <a href="" class="btn btn-danger">{{trans('dhcd-news::language.buttons.discard')}}</a>
                         </div>
                         <!-- /.col-sm-8 -->
@@ -175,60 +175,79 @@
         $('#lfm').filemanager('image', {prefix: domain});
     </script>
     <script type="text/javascript">
-        $('#form-edit-news').bootstrapValidator({
-            feedbackIcons: {
-                // validating: 'glyphicon glyphicon-refresh'
-            },
-            fields: {
-                title: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Bạn chưa nhập tiêu đề'
-                        },
-                        stringLength: {
-                            max: 250,
-                            message: 'Tiêu đề không được quá dài'
-                        }
-                    }
+        $(document).ready(function() {
+            $('#cate').multiselect({
+                buttonWidth: '100%',
+                nonSelectedText: 'Chọn danh mục',
+                enableFiltering: true,
+            });
+            $('#tag').multiselect({
+                buttonWidth: '100%',
+                nonSelectedText: 'Chọn tag',
+                enableFiltering: true,
+            });
+            $('#form-edit-news').bootstrapValidator({
+                feedbackIcons: {
+                    // validating: 'glyphicon glyphicon-refresh'
                 },
-                desc_seo: {
-                    validators: {
-                        stringLength: {
-                            max: 500,
-                            message: 'Mô tả không được quá dài'
+                fields: {
+                    title: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Bạn chưa nhập tiêu đề'
+                            },
+                            stringLength: {
+                                max: 250,
+                                message: 'Tiêu đề không được quá dài'
+                            }
+                        }
+                    },
+                    desc_seo: {
+                        validators: {
+                            stringLength: {
+                                max: 500,
+                                message: 'Mô tả không được quá dài'
+                            }
+                        }
+                    },
+                    image: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Bạn chưa chọn ảnh'
+                            }
                         }
                     }
                 }
-            }
-        });  
-        $('body').on('click','#add-tag',function(e){
-            e.preventDefault();
-            var list_tag = $('#text-tag').val();
-            var i;
-            if(list_tag!=''){
-                $.ajax({
-                    url: "{{route('dhcd.news.tag.ajax.add')}}",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name=csrf-token]').prop('content')
-                    },
-                    type: 'POST',
-                    cache: false,
-                    data: {
-                        'list_tag': list_tag
-                    },
-                    success: function (response) {
-                        var text = '';
-                        var data = JSON.parse(response);
-                        for( i in data){
-                            // text += '<li><a tabindex="0"><label class="checkbox" title="'+data[i].name+'"><input type="checkbox" value="'+data[i].news_tag_id+'"> '+data[i].name+'</label></a></li>'
-                            text += '<option value="'+data[i].news_tag_id+'" selected="">'+data[i].name+'</option>';
+            });  
+            $('body').on('click','#add-tag',function(e){
+                e.preventDefault();
+                var list_tag = $('#text-tag').val();
+                var i;
+                if(list_tag!=''){
+                    $.ajax({
+                        url: "{{route('dhcd.news.tag.ajax.add')}}",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name=csrf-token]').prop('content')
+                        },
+                        type: 'POST',
+                        cache: false,
+                        data: {
+                            'list_tag': list_tag
+                        },
+                        success: function (response) {
+                            var text = '';
+                            var data = JSON.parse(response);
+                            for( i in data){
+                                // text += '<li><a tabindex="0"><label class="checkbox" title="'+data[i].name+'"><input type="checkbox" value="'+data[i].news_tag_id+'"> '+data[i].name+'</label></a></li>'
+                                text += '<option value="'+data[i].news_tag_id+'" selected="">'+data[i].name+'</option>';
+                            }
+                            $('#tag').prepend(text);
+                            $('#tag').multiselect('rebuild');
                         }
-                        $('#tag').prepend(text);
-                        $('#tag').multiselect('rebuild');
-                    }
-                }, 'json');
-            }
-            // $('.area-tag .multiselect-container').append('<li><a tabindex="0"><label class="checkbox" title="Hà nội"><input type="checkbox" value="3"> Hà nội</label></a></li>');
-        });  
+                    }, 'json');
+                }
+                // $('.area-tag .multiselect-container').append('<li><a tabindex="0"><label class="checkbox" title="Hà nội"><input type="checkbox" value="3"> Hà nội</label></a></li>');
+            });  
+        });
     </script>
 @stop

@@ -12,7 +12,7 @@ class Activity extends Model
     protected $table;
 
     public $guarded = [];
-    protected $connection = 'mysql_core';
+
     protected $casts = [
         'properties' => 'collection',
     ];

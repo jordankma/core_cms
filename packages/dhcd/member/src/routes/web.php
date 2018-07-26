@@ -61,4 +61,7 @@ Route::group(array('prefix' => 'resource/dev'), function() {
     Route::get('get/register', 'ApiMemberController@getRegister');
     Route::get('get/getuserinfo', 'ApiMemberController@getUserInfo');
     Route::put('put/user/change-password', 'ApiMemberController@putChangePass');
+
+    Route::get('get/list/group', 'ApiMemberController@getListGroup');
+    Route::get('get/list/member/group', 'ApiMemberController@getListMemberGroup');
 });
