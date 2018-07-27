@@ -428,77 +428,62 @@ class ComposerStaticInitdc9850d770de88aec98785f608228e20
         'Dhcd\\Topicfrontend\\' => 
         array (
             0 => __DIR__ . '/../..' . '/packages/dhcd/topicfrontend/src',
-            1 => __DIR__ . '/..' . '/dhcd/topicfrontend/src',
         ),
         'Dhcd\\Topic\\' => 
         array (
             0 => __DIR__ . '/../..' . '/packages/dhcd/topic/src',
-            1 => __DIR__ . '/..' . '/dhcd/topic/src',
         ),
         'Dhcd\\Profile\\' => 
         array (
             0 => __DIR__ . '/../..' . '/packages/dhcd/profile/src',
-            1 => __DIR__ . '/..' . '/dhcd/profile/src',
         ),
         'Dhcd\\Notification\\' => 
         array (
             0 => __DIR__ . '/../..' . '/packages/dhcd/notification/src',
-            1 => __DIR__ . '/..' . '/dhcd/notification/src',
         ),
         'Dhcd\\Newsfrontend\\' => 
         array (
             0 => __DIR__ . '/../..' . '/packages/dhcd/newsfrontend/src',
-            1 => __DIR__ . '/..' . '/dhcd/newsfrontend/src',
         ),
         'Dhcd\\News\\' => 
         array (
             0 => __DIR__ . '/../..' . '/packages/dhcd/news/src',
-            1 => __DIR__ . '/..' . '/dhcd/news/src',
         ),
         'Dhcd\\Member\\' => 
         array (
             0 => __DIR__ . '/../..' . '/packages/dhcd/member/src',
-            1 => __DIR__ . '/..' . '/dhcd/member/src',
         ),
         'Dhcd\\Index\\' => 
         array (
             0 => __DIR__ . '/../..' . '/packages/dhcd/index/src',
-            1 => __DIR__ . '/..' . '/dhcd/index/src',
         ),
         'Dhcd\\Filedoc\\' => 
         array (
             0 => __DIR__ . '/../..' . '/packages/dhcd/filedoc/src',
-            1 => __DIR__ . '/..' . '/dhcd/filedoc/src',
         ),
         'Dhcd\\Eventsfrontend\\' => 
         array (
             0 => __DIR__ . '/../..' . '/packages/dhcd/eventsfrontend/src',
-            1 => __DIR__ . '/..' . '/dhcd/eventsfrontend/src',
         ),
         'Dhcd\\Events\\' => 
         array (
             0 => __DIR__ . '/../..' . '/packages/dhcd/events/src',
-            1 => __DIR__ . '/..' . '/dhcd/events/src',
         ),
         'Dhcd\\Document\\' => 
         array (
             0 => __DIR__ . '/../..' . '/packages/dhcd/document/src',
-            1 => __DIR__ . '/..' . '/dhcd/document/src',
         ),
         'Dhcd\\Banner\\' => 
         array (
             0 => __DIR__ . '/../..' . '/packages/dhcd/banner/src',
-            1 => __DIR__ . '/..' . '/dhcd/banner/src',
         ),
         'Dhcd\\Art\\' => 
         array (
             0 => __DIR__ . '/../..' . '/packages/dhcd/art/src',
-            1 => __DIR__ . '/..' . '/dhcd/art/src',
         ),
         'Dhcd\\Administration\\' => 
         array (
             0 => __DIR__ . '/../..' . '/packages/dhcd/administration/src',
-            1 => __DIR__ . '/..' . '/dhcd/administration/src',
         ),
         'DeepCopy\\' => 
         array (
@@ -969,7 +954,6 @@ class ComposerStaticInitdc9850d770de88aec98785f608228e20
         'Dhcd\\Member\\App\\Models\\Group' => __DIR__ . '/../..' . '/packages/dhcd/member/src/app/Models/Group.php',
         'Dhcd\\Member\\App\\Models\\GroupHasMember' => __DIR__ . '/../..' . '/packages/dhcd/member/src/app/Models/GroupHasMember.php',
         'Dhcd\\Member\\App\\Models\\Member' => __DIR__ . '/../..' . '/packages/dhcd/member/src/app/Models/Member.php',
-        'Dhcd\\Member\\App\\Repositories\\DemoRepository' => __DIR__ . '/..' . '/dhcd/member/src/app/Repositories/DemoRepository.php',
         'Dhcd\\Member\\App\\Repositories\\GroupRepository' => __DIR__ . '/../..' . '/packages/dhcd/member/src/app/Repositories/GroupRepository.php',
         'Dhcd\\Member\\App\\Repositories\\MemberRepository' => __DIR__ . '/../..' . '/packages/dhcd/member/src/app/Repositories/MemberRepository.php',
         'Dhcd\\Member\\MemberServiceProvider' => __DIR__ . '/../..' . '/packages/dhcd/member/src/MemberServiceProvider.php',
@@ -12348,11 +12332,7 @@ class ComposerStaticInitdc9850d770de88aec98785f608228e20
         'UniSharp\\LaravelFilemanager\\Controllers\\RenameController' => __DIR__ . '/..' . '/unisharp/laravel-filemanager/src/Controllers/RenameController.php',
         'UniSharp\\LaravelFilemanager\\Controllers\\ResizeController' => __DIR__ . '/..' . '/unisharp/laravel-filemanager/src/Controllers/ResizeController.php',
         'UniSharp\\LaravelFilemanager\\Controllers\\UploadController' => __DIR__ . '/..' . '/unisharp/laravel-filemanager/src/Controllers/UploadController.php',
-        'UniSharp\\LaravelFilemanager\\Events\\FileIsMoving' => __DIR__ . '/..' . '/unisharp/laravel-filemanager/src/Events/FileIsMoving.php',
-        'UniSharp\\LaravelFilemanager\\Events\\FileWasMoving' => __DIR__ . '/..' . '/unisharp/laravel-filemanager/src/Events/FileWasMoving.php',
-        'UniSharp\\LaravelFilemanager\\Events\\FolderIsMoving' => __DIR__ . '/..' . '/unisharp/laravel-filemanager/src/Events/FolderIsMoving.php',
         'UniSharp\\LaravelFilemanager\\Events\\FolderIsRenaming' => __DIR__ . '/..' . '/unisharp/laravel-filemanager/src/Events/FolderIsRenaming.php',
-        'UniSharp\\LaravelFilemanager\\Events\\FolderWasMoving' => __DIR__ . '/..' . '/unisharp/laravel-filemanager/src/Events/FolderWasMoving.php',
         'UniSharp\\LaravelFilemanager\\Events\\FolderWasRenamed' => __DIR__ . '/..' . '/unisharp/laravel-filemanager/src/Events/FolderWasRenamed.php',
         'UniSharp\\LaravelFilemanager\\Events\\ImageIsCropping' => __DIR__ . '/..' . '/unisharp/laravel-filemanager/src/Events/ImageIsCropping.php',
         'UniSharp\\LaravelFilemanager\\Events\\ImageIsDeleting' => __DIR__ . '/..' . '/unisharp/laravel-filemanager/src/Events/ImageIsDeleting.php',
@@ -12367,12 +12347,9 @@ class ComposerStaticInitdc9850d770de88aec98785f608228e20
         'UniSharp\\LaravelFilemanager\\Handlers\\ConfigHandler' => __DIR__ . '/..' . '/unisharp/laravel-filemanager/src/Handlers/ConfigHandler.php',
         'UniSharp\\LaravelFilemanager\\LaravelFilemanagerServiceProvider' => __DIR__ . '/..' . '/unisharp/laravel-filemanager/src/LaravelFilemanagerServiceProvider.php',
         'UniSharp\\LaravelFilemanager\\Lfm' => __DIR__ . '/..' . '/unisharp/laravel-filemanager/src/Lfm.php',
-        'UniSharp\\LaravelFilemanager\\LfmItem' => __DIR__ . '/..' . '/unisharp/laravel-filemanager/src/LfmItem.php',
-        'UniSharp\\LaravelFilemanager\\LfmPath' => __DIR__ . '/..' . '/unisharp/laravel-filemanager/src/LfmPath.php',
-        'UniSharp\\LaravelFilemanager\\LfmStorageRepository' => __DIR__ . '/..' . '/unisharp/laravel-filemanager/src/LfmStorageRepository.php',
         'UniSharp\\LaravelFilemanager\\Middlewares\\CreateDefaultFolder' => __DIR__ . '/..' . '/unisharp/laravel-filemanager/src/Middlewares/CreateDefaultFolder.php',
         'UniSharp\\LaravelFilemanager\\Middlewares\\MultiUser' => __DIR__ . '/..' . '/unisharp/laravel-filemanager/src/Middlewares/MultiUser.php',
-        'UniSharp\\LaravelFilemanager\\RepositoryContract' => __DIR__ . '/..' . '/unisharp/laravel-filemanager/src/RepositoryContract.php',
+        'UniSharp\\LaravelFilemanager\\Traits\\LfmHelpers' => __DIR__ . '/..' . '/unisharp/laravel-filemanager/src/Traits/LfmHelpers.php',
         'Webmozart\\Assert\\Assert' => __DIR__ . '/..' . '/webmozart/assert/src/Assert.php',
         'Whoops\\Exception\\ErrorException' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Exception/ErrorException.php',
         'Whoops\\Exception\\Formatter' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Exception/Formatter.php',

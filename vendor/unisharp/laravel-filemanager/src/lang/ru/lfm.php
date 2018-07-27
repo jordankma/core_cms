@@ -6,9 +6,6 @@ return [
     'nav-upload'        => 'Загрузить',
     'nav-thumbnails'    => 'Миниатюры',
     'nav-list'          => 'Список',
-    'nav-sort'          => 'Сортировать',
-    'nav-sort-alphabetic'=> 'Сортировать по алфавиту',
-    'nav-sort-time'     => 'Сортировать по времени',
 
     'menu-rename'       => 'Переименовать',
     'menu-delete'       => 'Удалить',
@@ -21,8 +18,8 @@ return [
     'title-panel'       => 'Laravel FileManager',
     'title-upload'      => 'Загрузка файла',
     'title-view'        => 'Просмотр файла',
-    'title-user'        => 'Файлы',
-    'title-share'       => 'Общие файлы',
+    'title-root'        => 'Файлы',
+    'title-shares'      => 'Общие файлы',
     'title-item'        => 'Номер',
     'title-size'        => 'Размер',
     'title-type'        => 'Тип',
@@ -33,11 +30,10 @@ return [
 
     'message-empty'     => 'Папка пуста.',
     'message-choose'    => 'Выберите файл',
-    'message-delete'    => 'Вы уверены что хотите это удалить?',
+    'message-delete'    => 'Вы уверен что хотите данный пункт?',
     'message-name'      => 'Название папки:',
     'message-rename'    => 'Переименовать в:',
-    'message-extension_not_found' => 'Требуется установка GD или Imagick расширения для обрезания, масштабирования и создания миниатюр изображений.',
-    
+
     'error-rename'      => 'Имя файла уже используется!',
     'error-file-empty'  => 'Вы должны выбрать файл!',
     'error-file-exist'  => 'Файл с этим именем уже существует!',
@@ -49,8 +45,6 @@ return [
     'error-mime'        => 'Неподдерживаемый MimeType: ',
     'error-instance'    => 'Загруженный файл должен быть экземпляром UploadedFile',
     'error-invalid'     => 'Неверный запрос загрузки',
-    'error-other'       => 'Произошла ошибка: ',
-    'error-too-large'   => 'Размер загружаемого файла слишком велик!',
 
     'btn-upload'        => 'Загрузить файл',
     'btn-uploading'     => 'Загрузка...',
@@ -60,7 +54,7 @@ return [
     'btn-resize'        => 'Изменить размер',
 
     'resize-ratio'      => 'Соотношение:',
-    'resize-scaled'     => 'Масштабировать изображение:',
+    'resize-scaled'     => 'Масштабировать зображение:',
     'resize-true'       => 'Да',
     'resize-old-height' => 'Оригинальная высота:',
     'resize-old-width'  => 'Оригинальная ширина:',

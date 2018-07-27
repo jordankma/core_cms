@@ -280,7 +280,7 @@
             $("#title").keyup(function(){
                 text = $(this).val();
                 $("#alias").text(text);
-            });    
+            });   
         });
     </script>
 @stop
