@@ -11,6 +11,8 @@ class Activity extends Model
 {
     protected $table;
 
+    protected $connection = 'mysql_core';
+
     public $guarded = [];
 
     protected $casts = [
