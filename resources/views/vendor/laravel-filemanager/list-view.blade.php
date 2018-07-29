@@ -95,7 +95,7 @@
   var title = $(this).attr('title');
     var alerted = localStorage.getItem('alerted') || '';
   
-  if($.inArray(type,obj) != -1){
+  // if($.inArray(type,obj) != -1){
     if(type === "image/jpeg" || type === "image/jpg" || type === "image/png" || type === "image/gif"){
       var type_file = 'img';  
     }
@@ -117,14 +117,14 @@
         }
     return false; 
       
-  }
-  else{         
-    if(alerted != title){
-            alert("File chọn không phù hợp với kiểu file bạn chọn");
-            localStorage.setItem('alerted',title);
-        }
-    return false;
-  }
+  // }
+  // else{         
+  //   if(alerted != title){
+  //           alert("File chọn không phù hợp với kiểu file bạn chọn");
+  //           localStorage.setItem('alerted',title);
+  //       }
+  //   return false;
+  // }
     return true;          
 });
 </script>

@@ -82,7 +82,7 @@
                                 </div>
                             </div>
                             <div class="area-new-image" style="display: none;">
-                                <div class="form-group" >
+                                {{-- <div class="form-group" >
                                     <a id="lfm1" data-input="thumbnail1" data-preview="holder1" class="btn btn-primary">
                                         <i class="fa fa-picture-o"></i> {{trans('dhcd-news::language.label.choise_image')}}
                                     </a>
@@ -95,6 +95,26 @@
 
                                         </tbody>
                                     </table>
+                                </div> --}}
+                                <div class="form-group " id="list-item" >
+                                    <a id="lfm1" data-input="thumbnail1" data-preview="holder1" class="btn btn-primary">
+                                        <i class="fa fa-picture-o"></i> Choose
+                                    </a>
+                                    <label class="col-md-2 control-label">{{trans('dhcd-document::language.document.form.file')}}</label>
+                                    <div class="col-md-10" >
+                                        <table class="table table-striped table-bordered table-list" style='font-size: 12px;'>
+                                            <thead>
+                                            <th>File</th>
+                                            <th>Tên</th>
+                                            <th>Ảnh đại diện</th>
+                                            <th>Action</th>
+                                            </thead>
+                                            <tbody id="list-file">
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -280,7 +300,54 @@
             $("#title").keyup(function(){
                 text = $(this).val();
                 $("#alias").text(text);
-            });   
+            });  
+
         });
+            function setData(data) {
+                $("#list-item").css('display', 'block');
+                $("#type_control").val(data.type_file);
+                var html = '';
+                html += '<tr class="/files/' + data.title + '">';    
+                html += '<td>';
+                if(data.type_file ==='img')
+                {
+                    html += '<img src="' + data.src + '" width="75px">'
+                }else{
+                    html += '<i class="fa fa-file fa-5x"></i>';
+                }
+                html +='</td>';
+                html += '<td>' + data.title + '</td>';
+                
+                if(data.type_file ==='img')
+                {
+                     html += '<td><input type="radio" name="setAvatar"  value="/files/'+data.title+'"></td>';
+                }
+                else{
+                    html += '<td></td>';
+                }
+                html += '<td><a href="javascrip::void(0,0)"  class="btn btn-danger del-media" >';
+                html += '<span style="margin:0px;" class="glyphicon glyphicon-trash" aria-hidden="true"></span>';
+                html += '</a></td>'
+                html += '<input type="hidden" name="file_names[]"  value="/files/' + data.title + '">';
+                html += '<input type="hidden" name="file_types[]"  value="' + data.type + '">';
+                html += '</tr>';
+                if ($("tr").hasClass('/files/'+data.title)) {
+                    
+                } else
+                {         
+                     $("#list-file").append(html);
+                }       
+            }
+            function reSetData() {
+                $("#icon_file").html('<i class="fa fa-file fa-5x"></i>');
+                $("#list-item").css('display', 'none');   
+                $("#icon_file").append('');
+            }
+            $('body').on('click', '.del-media', function () {
+                    $(this).parent().parent().remove();
+            });
+            $('body').on('change','.choice-type',function(){
+                $("#list-file").html('');
+            }); 
     </script>
 @stop

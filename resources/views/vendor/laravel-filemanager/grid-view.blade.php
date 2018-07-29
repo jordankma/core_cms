@@ -59,11 +59,15 @@
         
         $('body').on('click', 'div.clickable', function () {
             var type = $(this).attr('data-type');
-            var typeParent = $("input[name='document_type_id']:checked", opener.window.document).attr("data-types");                      
-            var obj = $.parseJSON(typeParent);
+            if(type!='Thư mục'){
+
+            var typeParent = $("input[name='document_type_id']:checked", opener.window.document).attr("data-types");      
+            if(typeParent!=null){
+                var obj = $.parseJSON(typeParent);
+            }                
             var title = $(this).attr('title');
             var alerted = localStorage.getItem('alerted') || '';
-            if ($.inArray(type, obj) != -1) {
+            // if ($.inArray(type, obj) != -1) {
                 if (type === "image/jpeg" || type === "image/jpg" || type === "image/png" || type === "image/gif") {
                     var type_file = 'img';
                 } else {
@@ -84,14 +88,15 @@
                     alert('Đã chọn');
                     localStorage.setItem('alerted',title);
                 }
-            } else {
-                if(alerted != title){
-                    alert("File chọn không phù hợp với kiểu file bạn chọn");
-                    localStorage.setItem('alerted',title);
-                }
+            // } else {
+            //     if(alerted != title){
+            //         alert("File chọn không phù hợp với kiểu file bạn chọn");
+            //         localStorage.setItem('alerted',title);
+            //     }
                                 
-            }
+            // }
             return false;
+            }
         });
         
     });
