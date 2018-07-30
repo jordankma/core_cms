@@ -205,7 +205,7 @@ class NewsController extends Controller
 		return view('DHCD-NEWS::modules.news.news.edit',$data);
 	}	
 	public function update($news_id,NewsRequest $request){
-
+        
 		DB::table('dhcd_news_has_tag')->where('news_id',$news_id)->delete();
 		DB::table('dhcd_news_has_cat')->where('news_id',$news_id)->delete();
 
@@ -234,7 +234,7 @@ class NewsController extends Controller
                 ];
             }
         }
-
+        
 		$news = $this->news->find($news_id);
 		$news->title = $title;
 		$news->news_cat = json_encode($news_cat);

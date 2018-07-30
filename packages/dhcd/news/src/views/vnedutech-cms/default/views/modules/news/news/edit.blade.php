@@ -12,10 +12,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('/vendor/' . $group_name . '/' . $skin .'/vendors/bootstrap-multiselect/css/bootstrap-multiselect.css') }}">
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin .'/vendors/ckeditor/js/ckeditor.js') }}" type="text/javascript"></script>
     <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/dhcd/news/css/news/add.css') }}" rel="stylesheet" type="text/css"/>
-@stop
-<!--end of page css-->
-
-<style type="text/css">
+    <style type="text/css">
         .multiselect-container .active a{
             background-color: lightblue !important;
         }
@@ -26,6 +23,9 @@
             width: 100% !important;
         }
     </style>
+@stop
+<!--end of page css-->
+
 {{-- Page content --}}
 @section('content')
     <section class="content-header">
@@ -84,7 +84,7 @@
                                 </div>
                             </div>
                             <div class="area-new-image" @if($news->type==2) style="display: block;" @else style="display: none;" @endif>
-                                <div class="form-group " id="list-item" >
+                                <div class="form-group" id="list-item" >
                                     <a id="lfm1" data-input="thumbnail1" data-preview="holder1" class="btn btn-primary">
                                         <i class="fa fa-picture-o"></i> {{trans('dhcd-news::language.label.choise_image')}}
                                     </a>

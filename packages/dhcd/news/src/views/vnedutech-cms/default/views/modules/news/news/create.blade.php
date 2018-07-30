@@ -77,7 +77,7 @@
                                 </label>
                             </div>
                             <div class="area-new-text" style="display: block;">
-                                <div class="form-group" >
+                                <div class="form-group">
                                     <label>{{trans('dhcd-news::language.form.text.content')}} </label><br>
                                     <div class='box-body pad form-group'>
                                         <textarea name="content" id="ckeditor" placeholder="{{trans('dhcd-news::language.form.content_placeholder')}}"></textarea>
