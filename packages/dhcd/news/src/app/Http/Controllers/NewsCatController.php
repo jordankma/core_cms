@@ -125,7 +125,7 @@ class NewsCatController extends Controller
 	}
     public function delete(Request $request)
     {
-        $news_cat_id = $request->news_cat_id;
+        $news_cat_id = $request->input('news_cat_id');
         $news_cat = $this->news_cat->find($news_cat_id);
         if (null != $news_cat) {
             // if($news_cat->news_cat_id==0){
@@ -133,7 +133,7 @@ class NewsCatController extends Controller
             //         'parent_news_cat_id'=>0,
             //     ));
             // }
-            $news_cat->delete();
+            $news_cat->delete($news_cat_id);
             activity('news_cat')
                 ->performedOn($news_cat)
                 ->withProperties($request->all())
@@ -152,8 +152,14 @@ class NewsCatController extends Controller
             'news_cat_id' => 'required|numeric',
         ], $this->messages);
         if (!$validator->fails()) {
+            $new_cat_id = $request->input('news_cat_id');
+            $count = NewsHasCat::where('news_cat_id','=',$new_cat_id)->count();
+            if($count>0){
+                $error = "Chuyên đề này đang có tin tức không thể xóa!";
+                return view('DHCD-NEWS::modules.news.modal.modal_confirmation', compact('type','error', 'model', 'confirm_route')); 
+            }
             try {
-                $confirm_route = route('dhcd.news.cat.delete', ['news_cat_id' => $request->news_cat_id]);
+                $confirm_route = route('dhcd.news.cat.delete', ['news_cat_id' => $new_cat_id]);
                 return view('DHCD-NEWS::modules.news.modal.modal_confirmation', compact('type','error', 'model', 'confirm_route'));
             } catch (GroupNotFoundException $e) {
                 return view('DHCD-NEWS::modules.news.modal.modal_confirmation', compact('type','error', 'model', 'confirm_route'));

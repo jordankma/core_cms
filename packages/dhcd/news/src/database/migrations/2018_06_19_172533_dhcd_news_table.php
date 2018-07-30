@@ -22,9 +22,12 @@ class DhcdNewsTable extends Migration
             $table->string('title_alias')->comment('alias cua tieu de');
             $table->longText('desc')->comment('doan mo ta ngan tin')->nullable();
             $table->longText('content')->comment('noi dung tin')->nullable();
-            $table->longText('image')->comment('url anh tin tuc')->nullable();
+            $table->longText('image')->comment('anh dai dien tin tuc')->nullable();
             $table->tinyInteger('is_hot')->comment('1: tin hot 2: tin thuong')->default(2);
+
             $table->tinyInteger('type')->comment('1: tin text 2: tin anh');
+            $table->longText('gallery')->comment('bo suu tap tin anh')->nullable();
+            
             $table->integer('priority')->comment('thu tu uu tien cua tin de hien thi')->nullable();
             $table->string('key_word_seo')->comment('json cac tu khoa seo');
             $table->string('desc_seo')->comment('mo ta cua seo');

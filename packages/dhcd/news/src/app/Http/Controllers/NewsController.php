@@ -77,21 +77,31 @@ class NewsController extends Controller
 		return view('DHCD-NEWS::modules.news.news.create',$data);
 	}
 	public function add(NewsRequest $request){
-        
 		$create_by = $this->user->email;
-		$title = $request->title;
-		$news_cat = $request->news_cat;
-		$news_tag = $request->news_tag;
-		$title = $request->title;
-		$title_alias = $request->title_alias;
-		$desc = $request->desc;
+		$title = $request->input('title');
+		$news_cat = $request->input('news_cat');
+		$news_tag = $request->input('news_tag');
+		$desc = $request->input('desc');
 		$content = $request->input('content');
-		$is_hot = $request->is_hot;
-		$priority = $request->priority;
-		$desc_seo = !empty($request->desc_seo) ? $request->desc_seo : '';
-		$image = $request->image !='' ? $request->image : asset('test.png');
-		$key_word_seo = explode(",",$request->key_word_seo[0]);
-
+        $is_hot = $request->input('is_hot');
+		$type = $request->input('type');
+		$priority = $request->input('priority');
+		$desc_seo = !empty($request->input('desc_seo')) ? $request->input('desc_seo') : '';
+		$image = $request->input('image') !='' ? $request->input('image') : asset('test.png');
+		$key_word_seo = explode(",",$request->input('key_word_seo')[0]);
+        $gallery = [];
+        if($type == 2){  
+            $file_names = $request->input('file_names');
+            $file_types = $request->input('file_types');
+            $file_links = $request->input('file_links');
+            foreach($file_names as $i => $name){
+                $gallery[] = [
+                    'name' => $name,
+                    'type' => $file_types[$i],
+                    'link' => $file_links[$i]
+                ];
+            }
+        }
 		$news = new News();
 		$news->create_by = $create_by;
 		$news->title = $title;
@@ -101,9 +111,12 @@ class NewsController extends Controller
 		$news->desc = $desc;
 		$news->image = $image;
 		$news->content = $content;
-		$news->is_hot = $is_hot;
-		$news->priority = $priority;
-		$news->is_hot = $is_hot;
+        $news->is_hot = $is_hot;
+
+		$news->type = $type;
+		$news->gallery = json_encode($gallery);  
+
+        $news->priority = $priority;
 		$news->key_word_seo = json_encode($key_word_seo);
 		$news->desc_seo = $desc_seo;
 		$news->created_at = new DateTime();
@@ -152,6 +165,7 @@ class NewsController extends Controller
             return redirect()->route('dhcd.news.news.manager')->with('error', trans('DHCD-NEWS::language.messages.error.create'));
         }
 	}
+
 	public function show($news_id){
 
 		self::getCate();
@@ -178,6 +192,7 @@ class NewsController extends Controller
             }	
 		}
 		$list_key_word_seo_string = implode(',', json_decode($news->key_word_seo,true));
+        $list_gallery = json_decode($news->gallery,true);
 		$data = [
 			'news' => $news,
 			'list_news_cat' => $list_news_cat,
@@ -185,7 +200,8 @@ class NewsController extends Controller
 			'list_id_cat' => $list_id_cat,
 			'list_id_tag' => $list_id_tag,
 			'list_key_word_seo_string' => $list_key_word_seo_string,
-		];
+		    'list_gallery' => $list_gallery        
+        ];
 		return view('DHCD-NEWS::modules.news.news.edit',$data);
 	}	
 	public function update($news_id,NewsRequest $request){
@@ -193,18 +209,31 @@ class NewsController extends Controller
 		DB::table('dhcd_news_has_tag')->where('news_id',$news_id)->delete();
 		DB::table('dhcd_news_has_cat')->where('news_id',$news_id)->delete();
 
-		$title = $request->title;
-		$news_cat = $request->news_cat;
-		$news_tag = $request->news_tag;
-		$title = $request->title;
-		$title_alias = $request->title_alias;
-		$desc = $request->desc;
+		$title = $request->input('title');
+		$news_cat = $request->input('news_cat');
+		$news_tag = $request->input('news_tag');
+		$desc = $request->input('desc');
 		$content = $request->input('content');
-		$image = $request->image !='' ? $request->image : asset('test.png');
-		$is_hot = $request->is_hot;
-		$priority = $request->priority;
-		$desc_seo = !empty($request->desc_seo) ? $request->desc_seo : '';
-		$key_word_seo = explode(",",$request->key_word_seo[0]);
+		$image = $request->input('image') !='' ? $request->input('image') : asset('test.png');
+		$is_hot = $request->input('is_hot');
+        $type = $request->input('type');
+		$priority = $request->input('priority');
+		$desc_seo = !empty($request->input('desc_seo')) ? $request->input('desc_seo') : '';
+		$key_word_seo = explode(",",$request->input('key_word_seo')[0]);
+        
+        $gallery = [];
+        if($type == 2){ 
+            $file_names = $request->input('file_names');
+            $file_types = $request->input('file_types');
+            $file_links = $request->input('file_links');
+            foreach($file_names as $i => $name){
+                $gallery[] = [
+                    'name' => $name,
+                    'type' => $file_types[$i],
+                    'link' => $file_links[$i]
+                ];
+            }
+        }
 
 		$news = $this->news->find($news_id);
 		$news->title = $title;
@@ -215,6 +244,10 @@ class NewsController extends Controller
 		$news->content = $content;
 		$news->image = $image;
 		$news->is_hot = $is_hot;
+
+        $news->type = $type;
+        $news->gallery = json_encode($gallery);
+
 		$news->priority = $priority;
 		$news->is_hot = $is_hot;
 		$news->key_word_seo = json_encode($key_word_seo);
@@ -259,9 +292,9 @@ class NewsController extends Controller
                 ->performedOn($news)
                 ->withProperties($request->all())
                 ->log('User: :causer.email - Edit news - name: :properties.name, news_id: ' . $news->news_id);
-            return redirect()->route('dhcd.news.news.manager')->with('success', trans('DHCD-NEWS::language.messages.success.create'));
+            return redirect()->route('dhcd.news.news.manager')->with('success', trans('DHCD-NEWS::language.messages.success.update'));
         } else {
-            return redirect()->route('dhcd.news.news.manager')->with('error', trans('DHCD-NEWS::language.messages.error.create'));
+            return redirect()->route('dhcd.news.news.manager')->with('error', trans('DHCD-NEWS::language.messages.error.update'));
         }		
 	}
 

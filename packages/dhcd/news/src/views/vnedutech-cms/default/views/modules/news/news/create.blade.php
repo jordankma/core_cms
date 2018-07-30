@@ -47,6 +47,9 @@
             <div class="the-box no-border">
                 <form role="form" action="{{route("dhcd.news.news.add")}}" method="post" enctype="multipart/form-data" id="form-add-news">
                     {{csrf_field()}}
+                    <input type='hidden' id='control_upload' name='type_upload' value="add_news">
+                    <input type='hidden' id='type_control' name='type_control' value="">
+                    <input type='hidden' id='mutil' name='mutil' value="remove">
                     <div class="row">
                         <div class="col-md-8 col-sm-8">
                             @if(count($errors))
@@ -82,32 +85,16 @@
                                 </div>
                             </div>
                             <div class="area-new-image" style="display: none;">
-                                {{-- <div class="form-group" >
+                                <div class="form-group " id="list-item" >
                                     <a id="lfm1" data-input="thumbnail1" data-preview="holder1" class="btn btn-primary">
                                         <i class="fa fa-picture-o"></i> {{trans('dhcd-news::language.label.choise_image')}}
                                     </a>
-                                    <table class="table table-striped table-bordered table-list" style='font-size: 12px;'>
-                                        <thead>
-                                        <th>{{trans('dhcd-news::language.table.news.image')}}</th>
-                                        <th>{{trans('dhcd-news::language.table.news.url')}}</th>
-                                        </thead>
-                                        <tbody id="list-image">
-
-                                        </tbody>
-                                    </table>
-                                </div> --}}
-                                <div class="form-group " id="list-item" >
-                                    <a id="lfm1" data-input="thumbnail1" data-preview="holder1" class="btn btn-primary">
-                                        <i class="fa fa-picture-o"></i> Choose
-                                    </a>
-                                    <label class="col-md-2 control-label">{{trans('dhcd-document::language.document.form.file')}}</label>
-                                    <div class="col-md-10" >
-                                        <table class="table table-striped table-bordered table-list" style='font-size: 12px;'>
+                                    <div class="table-responsive col-md-10" >
+                                        <table class="grid table table-bordered table-sortable" style='font-size: 12px;'>
                                             <thead>
-                                            <th>File</th>
-                                            <th>Tên</th>
-                                            <th>Ảnh đại diện</th>
-                                            <th>Action</th>
+                                            <th>{{trans('dhcd-news::language.table.news.image')}}</th>
+                                            <th>{{trans('dhcd-news::language.table.news.url')}}</th>
+                                            <th>{{trans('dhcd-news::language.table.news.actions')}}</th>
                                             </thead>
                                             <tbody id="list-file">
 
@@ -205,6 +192,7 @@
     <script type="text/javascript" src="{{ asset('/vendor/' . $group_name . '/' . $skin .'/vendors/bootstrap-multiselect/js/bootstrap-multiselect.js') }}"></script>
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin .'/dhcd/news/js/news/add.js') }}" type="text/javascript" ></script>
     <script src="{{ asset('/vendor/laravel-filemanager/js/lfm.js') }}" type="text/javascript" ></script>
+    <script src="{{ asset('/vendor/laravel-filemanager/js/lfm2.js') }}" type="text/javascript" ></script>
     <!--end of page js-->
     <script>
     </script>
@@ -217,10 +205,9 @@
                 filebrowserUploadUrl: '/admin/laravel-filemanager/upload?type=Files&_token=',
             };
             CKEDITOR.replace('ckeditor',options);
+
             var domain = "/admin/laravel-filemanager/";
-            // $('#lfm').filemanager('image', {prefix: domain});
-            // $('#select_image').filemanager('image', {prefix: domain});
-            $("#lfm1").filemanager('image', {prefix: domain});
+            $("#lfm1").filemanager2('image', {prefix: domain});
             $("#lfm2").filemanager('image', {prefix: domain});
 
             $('#cate').multiselect({
@@ -317,18 +304,11 @@
                 }
                 html +='</td>';
                 html += '<td>' + data.title + '</td>';
-                
-                if(data.type_file ==='img')
-                {
-                     html += '<td><input type="radio" name="setAvatar"  value="/files/'+data.title+'"></td>';
-                }
-                else{
-                    html += '<td></td>';
-                }
                 html += '<td><a href="javascrip::void(0,0)"  class="btn btn-danger del-media" >';
                 html += '<span style="margin:0px;" class="glyphicon glyphicon-trash" aria-hidden="true"></span>';
                 html += '</a></td>'
-                html += '<input type="hidden" name="file_names[]"  value="/files/' + data.title + '">';
+                html += '<input type="hidden" name="file_names[]"  value="' + data.title + '">';
+                html += '<input type="hidden" name="file_links[]"  value="' + data.src + '">';
                 html += '<input type="hidden" name="file_types[]"  value="' + data.type + '">';
                 html += '</tr>';
                 if ($("tr").hasClass('/files/'+data.title)) {
@@ -349,5 +329,29 @@
             $('body').on('change','.choice-type',function(){
                 $("#list-file").html('');
             }); 
+            //sort table
+            var fixHelperModified = function (e, tr) {
+            var $originals = tr.children();
+            var $helper = tr.clone();
+            $helper.children().each(function (index) {
+                $(this).width($originals.eq(index).width());
+            });
+                return $helper;
+            };
+
+            $("tbody.sortable").sortable({
+                stop: function (event, ui) {
+                    $(this).find('tr').each(function (i) {
+                        $(this).find('td:first').text(i + 1);
+                    });
+                }
+            });
+
+
+            $(".table-sortable tbody").sortable({
+                helper: fixHelperModified
+            }).disableSelection();
+
+            $(".table-sortable thead").disableSelection();
     </script>
 @stop

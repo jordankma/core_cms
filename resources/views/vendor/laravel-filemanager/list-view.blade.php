@@ -87,44 +87,91 @@
 @else
 <p>{{ trans('laravel-filemanager::lfm.message-empty') }}</p>
 @endif
-<script> 
-    $('body').on('click','td a.clickable',function(){
-    var type = $(this).attr('data-type');
-  var typeParent = $("input[name='document_type_id']:checked", opener.window.document).attr("data-types");
-  var obj =  $.parseJSON(typeParent);
-  var title = $(this).attr('title');
-    var alerted = localStorage.getItem('alerted') || '';
-  
-  // if($.inArray(type,obj) != -1){
-    if(type === "image/jpeg" || type === "image/jpg" || type === "image/png" || type === "image/gif"){
-      var type_file = 'img';  
+<script>
+    $(document).ready(function () {
+        
+        $('body').on('click', 'div.clickable', function () {
+            var type = $(this).attr('data-type');
+            var typeParent = $("input[name='document_type_id']:checked", opener.window.document).attr("data-types"); 
+            var type_upload = $("input[name='type_upload']", opener.window.document).val();
+            if(typeParent!=null){
+                var obj = $.parseJSON(typeParent);
+            }                     
+            var title = $(this).attr('title');
+            var alerted = localStorage.getItem('alerted') || '';
+            if(type === "Thư mục"){
+                return true;
+            }
+            if(type_upload=="add_news"){
+                if (type === "image/jpeg" || type === "image/jpg" || type === "image/png" || type === "image/gif") {
+                    var type_file = 'img';
+                } else {
+                    var type_file = 'file'
+                }
+                var src = $(this).attr('data-id');
+                
+                var data = {
+                    src: src,
+                    type: type,
+                    title: title,
+                    type_file: type_file
+                };              
+                window.opener.setData(data);
+                if(alerted != title){
+                    localStorage.setItem('alerted',title);
+                }
+            } else{
+                if ($.inArray(type, obj) != -1) {
+                    if (type === "image/jpeg" || type === "image/jpg" || type === "image/png" || type === "image/gif") {
+                        var type_file = 'img';
+                    } else {
+                        var type_file = 'file'
+                    }
+                    var src = $(this).attr('data-id');
+                    
+                    var data = {
+                        src: src,
+                        type: type,
+                        title: title,
+                        type_file: type_file
+                    };              
+                    window.opener.setData(data);
+                    if(alerted != title){
+                        swal({
+                            title: "Đã chọn",
+                            text: '',
+                            html: true,
+                            confirmButtonColor: "#DD6B55"
+                        });
+                        localStorage.setItem('alerted',title);
+                    }
+                } else {
+                    if(alerted != title){
+                        swal({
+                            title: "File chọn không phù hợp với kiểu file bạn chọn",
+                            text: '',
+                            html: true,
+                            confirmButtonColor: "#DD6B55"
+                        });
+                        localStorage.setItem('alerted',title);
+                    }
+                                    
+                }
+            }
+            return false;
+        });
+        
+    });
+    function getParameterByName(name, url) {
+        if (!url)
+            url = window.location.href;
+        name = name.replace(/[\[\]]/g, '\\$&');
+        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+        if (!results)
+            return null;
+        if (!results[2])
+            return '';
+        return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
-    else{
-      var type_file = 'file'
-    }
-    var src = $(this).attr('data-id');              
-    var data = {
-      src : src,
-      type : type,
-      title : title,
-      type_file : type_file
-    };
-              
-    window.opener.setData(data);            
-    if(alerted != title){
-            alert("Đã chọn");
-            localStorage.setItem('alerted',title);
-        }
-    return false; 
-      
-  // }
-  // else{         
-  //   if(alerted != title){
-  //           alert("File chọn không phù hợp với kiểu file bạn chọn");
-  //           localStorage.setItem('alerted',title);
-  //       }
-  //   return false;
-  // }
-    return true;          
-});
 </script>

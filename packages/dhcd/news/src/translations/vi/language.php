@@ -25,7 +25,8 @@ return [
         "action" => "Thao tác",
         "news" => [
             "image" => "Ảnh",
-            "url" => "Đường dẫn"
+            "url" => "Đường dẫn",
+            "actions" => "Thao tác"
         ],
         "list_news" => [
             "title"=>"Tiêu đề",
@@ -34,7 +35,7 @@ return [
             "status"=>"Trạng thái",
             'is_hot'=>"Tin hot",
             'priority'=> "Sắp xếp",
-            'image'=> "Ảnh",
+            'image'=> "Ảnh"
         ],
         "list_news_cat"=>[
             "title_cat_paren"=>"Chuyên mục cha"
@@ -61,7 +62,7 @@ return [
             "key_seo" => "Danh sách từ khóa seo",
             "desc_seo" => "Mô tả seo",
             "news_text" => "Tin văn bản",
-            "news_image" => "Tin ảnh",
+            "news_image" => "Tin ảnh"
         ],
     ],
     "label_cat"=>[
