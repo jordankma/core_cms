@@ -87,6 +87,7 @@
 @else
 <p>{{ trans('laravel-filemanager::lfm.message-empty') }}</p>
 @endif
+<<<<<<< HEAD
 <script>
     $(document).ready(function () {
         
@@ -174,4 +175,46 @@
             return '';
         return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
+=======
+<script> 
+    $('body').on('click','td a.clickable',function(){
+    var type = $(this).attr('data-type');
+	var typeParent = $("input[name='document_type_id']:checked", opener.window.document).attr("data-types");
+	var obj =  $.parseJSON(typeParent);
+	var title = $(this).attr('title');
+    var alerted = localStorage.getItem('alerted') || '';
+	
+	if($.inArray(type,obj) != -1){
+		if(type === "image/jpeg" || type === "image/jpg" || type === "image/png" || type === "image/gif"){
+			var	type_file = 'img';	
+		}
+		else{
+			var	type_file = 'file'
+		}
+		var src = $(this).attr('data-id'); 							
+		var data = {
+			src : src,
+			type : type,
+			title : title,
+            type_file : type_file
+		};
+							
+		window.opener.setData(data);						
+		if(alerted != title){
+            alert("Đã chọn");
+            localStorage.setItem('alerted',title);
+        }
+		return false;	
+			
+	}
+	else{					
+		if(alerted != title){
+            alert("File chọn không phù hợp với kiểu file bạn chọn");
+            localStorage.setItem('alerted',title);
+        }
+		return false;
+	}
+		return true;		      
+});
+>>>>>>> 8efd8b036d1adab1f13497380ebd09463b80fc81
 </script>

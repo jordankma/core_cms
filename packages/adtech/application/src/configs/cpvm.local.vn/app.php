@@ -12,7 +12,7 @@ return [
     | any other location as required by the application or its packages.
     */
 
-    'name' => 'VNEduTech CMS',
+    'name' => 'VNEDUTECH CMS',
 
     /*
     |--------------------------------------------------------------------------
@@ -51,7 +51,7 @@ return [
     |
     */
 
-    'url' => 'http://dhcd.local.vn',
+    'url' => 'http://default.local.vn',
 
     /*
     |--------------------------------------------------------------------------
@@ -180,11 +180,7 @@ return [
         Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
 
-        Spatie\Activitylog\ActivitylogServiceProvider::class,
-        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class, // Laravel IDE helper
-
-        Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
-        Tymon\JWTAuth\Providers\LaravelServiceProvider::class
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class
     ],
 
     /*
@@ -233,11 +229,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
-        'Image' => Intervention\Image\Facades\Image::class,
-        
-        'JWTAuth'   => Tymon\JWTAuth\Facades\JWTAuth::class,
-        'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class
+        'Image' => Intervention\Image\Facades\Image::class
     ],
 
 ];

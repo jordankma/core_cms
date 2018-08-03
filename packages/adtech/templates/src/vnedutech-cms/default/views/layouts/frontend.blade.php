@@ -62,8 +62,8 @@
 </head>
 <body class="skin-josh">
 <header class="header">
-    <a href="{{ (empty($SETTING['logo_link']) || $SETTING['logo_link'] == '') ? route('frontend.homepage') : $SETTING['logo_link'] }}" class="logo">
-        <img src="{{ (empty($SETTING['logo_mini'])) ? '' : asset($SETTING['logo_mini']) }}" alt="logo" style="height: 35px; max-width: 200px">
+    <a href="/" class="logo">
+        <img src="{{ (empty($SETTING['logo_mini'])) ? '' : asset($SETTING['logo_mini']) }}" alt="logo" style="height: 35px; max-width: 200px; margin-top: 10px">
     </a>
     <nav class="navbar navbar-static-top" role="navigation">
         <!-- Sidebar toggle button-->
@@ -83,7 +83,7 @@
                                  class="img-circle img-responsive pull-left"/>
                         <div class="riot">
                             <div>
-                                <p class="user_name_max">{{ $USER_LOGGED->name }}</p>
+                                <p class="user_name_max">{{ ($USER_LOGGED) ? $USER_LOGGED->name : 'Guest' }}</p>
                                 <span>
                                     <i class="caret"></i>
                                 </span>

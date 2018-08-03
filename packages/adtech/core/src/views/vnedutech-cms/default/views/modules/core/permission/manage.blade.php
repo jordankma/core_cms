@@ -64,14 +64,14 @@
                             <tr class="filters">
                                 {{--<th>{{ trans('adtech-core::common.route.package') }}</th>--}}
                                 {{--<th>{{ trans('adtech-core::common.route.module') }}</th>--}}
-                                <th>{{ trans('adtech-core::common.route.controller') }}</th>
+                                <th>Chức năng</th>
                                 <th class="col-md-9">
                                     <table>
                                         <tr>
-                                            <th class="col-md-3">View list</th>
-                                            <th class="col-md-3">Create</th>
-                                            <th class="col-md-3">Update</th>
-                                            <th class="col-md-3">Delete</th>
+                                            <th class="col-md-3">Xem danh sách</th>
+                                            <th class="col-md-3">Thêm mới</th>
+                                            <th class="col-md-3">Cập nhật</th>
+                                            <th class="col-md-3">Xoá</th>
                                         </tr>
                                     </table>
                                 </th>

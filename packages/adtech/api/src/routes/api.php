@@ -11,10 +11,14 @@
 |
 */
 
-Route::group(array('prefix' => 'auth'), function () {
-    Route::post('login', 'Auth\LoginController@login');
+Route::group([
+    'prefix' => 'auth'
+], function () {
+    Route::get('login', 'Auth\LoginController@login');
+
     Route::group(['middleware' => ['jwt.auth']], function () {
-        Route::get('get-info', 'Auth\LoginController@getUserInfo');
-        Route::get('verify', 'Auth\LoginController@verify');
+        Route::get('logout', 'Auth\LoginController@logout');
+        Route::get('refresh', 'Auth\LoginController@refresh');
+        Route::get('me', 'Auth\LoginController@me');
     });
 });

@@ -45,7 +45,7 @@ return [
     // You should create routes to serve images if it is not set to public.
     'base_directory' => 'public',
 
-    'images_folder_name' => 'photos',
+    'images_folder_name' => 'files/photos',
     'files_folder_name'  => 'files',
 
     'shared_folder_name' => 'shares',
@@ -123,7 +123,10 @@ return [
         'image/gif',
         'image/svg+xml',
         'application/pdf',
-        'text/plain',
+        'application/docx',
+        'audio/mp3',
+        'video/mp4',
+        'application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.wordprocessingml.document','application/docx','application/pdf','audio/mp3', 'video/mp4'
     ],
 
     /*
@@ -154,6 +157,8 @@ return [
         'png'  => 'PNG Image',
         'ppt'  => 'Microsoft PowerPoint',
         'pptx' => 'Microsoft PowerPoint',
+        'mp3' => 'mp3',
+        'mp4' => 'mp4',
     ],
 
     'file_icon_array' => [
