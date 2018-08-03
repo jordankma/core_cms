@@ -32,7 +32,7 @@
 
 <body class="skin-josh">
 <header class="header">
-    <a href="{{ (empty($SETTING['logo_link']) || $SETTING['logo_link'] == '') ? route('backend.homepage') : $SETTING['logo_link'] }}" class="logo">
+    <a href="{{ route('adtech.core.menu.tab', ['tab' => (count($MENU_TOP) > 0) ? $MENU_TOP[0]->group : '']) }}" class="logo">
         <img src="{{ (empty($SETTING['logo_mini'])) ? '' : asset($SETTING['logo_mini']) }}" alt="logo" style="height: 35px; max-width: 200px">
     </a>
     <nav class="navbar navbar-static-top" role="navigation">
@@ -45,58 +45,10 @@
 
         <div class="navbar-right">
             <ul class="nav navbar-nav">
-                {{--@include('includes._messages')--}}
+                @include('includes._locales')
+                @include('includes._users')
                 {{--@include('includes._notifications')--}}
-                <li class="dropdown user user-menu">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="{!! asset('/vendor/' . $group_name . '/' . $skin . '/images/authors/no_avatar.jpg') !!}" alt="img" height="35px" width="35px"
-                                 class="img-circle img-responsive pull-left"/>
-                        <div class="riot">
-                            <div>
-                                <p class="user_name_max">{{ $USER_LOGGED->contact_name }}</p>
-                                <span>
-                                    <i class="caret"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <!-- User image -->
-                        <li class="user-header bg-light-blue">
-                            <img src="{!! asset('/vendor/' . $group_name . '/' . $skin . '/images/authors/no_avatar.jpg') !!}" alt="img" height="35px" width="35px"
-                                 class="img-circle img-responsive pull-left"/>
-                        </li>
-                        <!-- Menu Body -->
-                        {{--<li>--}}
-                            {{--<a href="#">--}}
-                                {{--<i class="livicon" data-name="user" data-s="18"></i>--}}
-                                {{--My Profile--}}
-                            {{--</a>--}}
-                        {{--</li>--}}
-                        {{--<li role="presentation"></li>--}}
-                        {{--<li>--}}
-                            {{--<a href="#">--}}
-                                {{--<i class="livicon" data-name="gears" data-s="18"></i>--}}
-                                {{--Account Settings--}}
-                            {{--</a>--}}
-                        {{--</li>--}}
-                        <!-- Menu Footer-->
-                        <li class="user-footer">
-                            {{--<div class="pull-left">--}}
-                                {{--<a href="{{ URL::route('adtech.core.auth.logout',$USER_LOGGED_ID) }}">--}}
-                                    {{--<i class="livicon" data-name="lock" data-size="16" data-c="#555555" data-hc="#555555" data-loop="true"></i>--}}
-                                    {{--Lock--}}
-                                {{--</a>--}}
-                            {{--</div>--}}
-                            <div class="pull-right">
-                                <a href="{{ URL::route('adtech.core.auth.logout') }}">
-                                    <i class="livicon" data-name="sign-out" data-s="15"></i>
-                                    Logout
-                                </a>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
+
             </ul>
         </div>
 
@@ -144,6 +96,14 @@
                         @endif
                     </ul>
                 </div>
+                {{--<div class="clearfix"></div>--}}
+                {{--@if (count($LOCALES) > 0)--}}
+                {{--<select id="selectFlag" class="form-control select2">--}}
+                    {{--@foreach($LOCALES as $locale)--}}
+                        {{--<option value="{{ $locale->alias }}" {{ ($locale->alias == config('app.locale')) ? ' selected="selected"' : '' }} data-flag="{{ config('site.url_storage') . '/' . $locale->icon }}">{{ $locale->name }}</option>--}}
+                    {{--@endforeach--}}
+                {{--</select><br>--}}
+                {{--@endif--}}
                 <div class="clearfix"></div>
                 <!-- BEGIN SIDEBAR MENU -->
                 @include('includes._left_menu')
@@ -169,7 +129,15 @@
     <i class="livicon" data-name="plane-up" data-size="18" data-loop="true" data-c="#fff" data-hc="white"></i>
 </a>
 <!-- global js -->
-<script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/js/app.js?t=').time() }}"></script>
+<script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/js/jquery-1.11.1.min.js?t=').time() }}"></script>
+<script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/js/jquery-ui.min.js?t=').time() }}"></script>
+<script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/js/bootstrap.min.js?t=').time() }}"></script>
+<script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/js/raphael-min.js?t=').time() }}"></script>
+<script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/js/livicons-1.4.min.js?t=').time() }}"></script>
+<script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/js/metisMenu.js?t=').time() }}"></script>
+<script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/js/josh.js?t=').time() }}"></script>
+<script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/js/holder.min.js?t=').time() }}"></script>
+
 <!-- end of global js -->
 <!-- begin page level js -->
 @yield('footer_scripts')

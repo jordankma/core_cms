@@ -1,6 +1,6 @@
 <?php
 
-namespace Adtech\Core\App\Middleware;
+namespace Adtech\Api\App\Middleware;
 
 use Closure;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -20,7 +20,8 @@ class VerifyJWTToken
     {
         try {
             $user = JWTAuth::toUser($request->input('token'));
-        }catch (JWTException $e) {
+            $refreshed = JWTAuth::refresh(JWTAuth::getToken());dd($refreshed);
+        } catch (JWTException $e) {
             if($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
                 return response()->json(['token_expired'], $e->getStatusCode());
             }else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {

@@ -49,25 +49,6 @@ class MController extends BaseController
         self::getMenu($this->domainDefault);
         $arrColor = ['#4089C7', '#00BB8D', '#58BEDC', '#F99928', '#F06E6B', '#A7B4BA'];
 
-        if (null != $this->_menuList) {
-            if (count($this->_menuList) > 0) {
-                $tab = (session()->has('tab')) ? session('tab') : '';
-                $checkGroup = 1;
-                foreach ($this->_menuList as $key => $item) {
-                    if ($item->parent == 0 && $tab != '') {
-                        if ($item->group != $tab) {
-                            $checkGroup = 0;
-                            $this->_menuList->forget($key);
-                        } else {
-                            $checkGroup = 1;
-                        }
-                    } elseif ($tab != '' && $checkGroup == 0) {
-                        $this->_menuList->forget($key);
-                    }
-                }
-            }
-        }
-
         //get setting value
         $settings = Setting::where('domain_id', $this->domainDefault)->get();
         $settingView = array('logo' => '', 'logo_mini' => '', 'title' => '', 'favicon' => '', 'logo_link' => '');
