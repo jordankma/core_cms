@@ -94,12 +94,14 @@ class NewsController extends Controller
             $file_names = $request->input('file_names');
             $file_types = $request->input('file_types');
             $file_links = $request->input('file_links');
-            foreach($file_names as $i => $name){
-                $gallery[] = [
-                    'name' => $name,
-                    'type' => $file_types[$i],
-                    'link' => $file_links[$i]
-                ];
+            if(!empty($file_names)){
+                foreach($file_names as $i => $name){
+                    $gallery[] = [
+                        'name' => $name,
+                        'type' => $file_types[$i],
+                        'link' => $file_links[$i]
+                    ];
+                }
             }
         }
 		$news = new News();
@@ -226,12 +228,14 @@ class NewsController extends Controller
             $file_names = $request->input('file_names');
             $file_types = $request->input('file_types');
             $file_links = $request->input('file_links');
-            foreach($file_names as $i => $name){
-                $gallery[] = [
-                    'name' => $name,
-                    'type' => $file_types[$i],
-                    'link' => $file_links[$i]
-                ];
+            if(!empty($file_names)){
+                foreach($file_names as $i => $name){
+                    $gallery[] = [
+                        'name' => $name,
+                        'type' => $file_types[$i],
+                        'link' => $file_links[$i]
+                    ];
+                }
             }
         }
         

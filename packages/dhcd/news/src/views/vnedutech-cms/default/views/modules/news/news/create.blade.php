@@ -174,7 +174,6 @@
                         <!-- /.col-sm-4 -->
                     </div>
                     <!-- /.row -->
-                </form>
             </div>
         </div>
         <!--main content ends-->            
