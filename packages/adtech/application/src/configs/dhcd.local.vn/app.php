@@ -183,8 +183,8 @@ return [
         Spatie\Activitylog\ActivitylogServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class, // Laravel IDE helper
 
-        Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
-        Tymon\JWTAuth\Providers\LaravelServiceProvider::class
+        // Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
+        // Tymon\JWTAuth\Providers\LaravelServiceProvider::class
     ],
 
     /*
@@ -236,8 +236,8 @@ return [
 
         'Image' => Intervention\Image\Facades\Image::class,
         
-        'JWTAuth'   => Tymon\JWTAuth\Facades\JWTAuth::class,
-        'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class
+        // 'JWTAuth'   => Tymon\JWTAuth\Facades\JWTAuth::class,
+        // 'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class
     ],
 
 ];

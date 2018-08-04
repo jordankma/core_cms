@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/core_cms.iml" filepath="$PROJECT_DIR$/.idea/core_cms.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../core_cpvm/.idea/core_cpvm.iml" filepath="$PROJECT_DIR$/../core_cpvm/.idea/core_cpvm.iml" />
     </modules>
   </component>
 </project>

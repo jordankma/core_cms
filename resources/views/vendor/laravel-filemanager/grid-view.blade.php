@@ -59,7 +59,6 @@
         
         $('body').on('click', 'div.clickable', function () {
             var type = $(this).attr('data-type');
-<<<<<<< HEAD
             var typeParent = $("input[name='document_type_id']:checked", opener.window.document).attr("data-types"); 
             var type_upload = $("input[name='type_upload']", opener.window.document).val();
             if(typeParent!=null){
@@ -71,13 +70,11 @@
                 return true;
             }
             if(type_upload=="add_news"){
-=======
             var typeParent = $("input[name='document_type_id']:checked", opener.window.document).attr("data-types");                      
             var obj = $.parseJSON(typeParent);
             var title = $(this).attr('title');
             var alerted = localStorage.getItem('alerted') || '';
             if ($.inArray(type, obj) != -1) {
->>>>>>> 8efd8b036d1adab1f13497380ebd09463b80fc81
                 if (type === "image/jpeg" || type === "image/jpg" || type === "image/png" || type === "image/gif") {
                     var type_file = 'img';
                 } else {
@@ -92,7 +89,6 @@
                     type_file: type_file
                 };              
                 window.opener.setData(data);
-<<<<<<< HEAD
                 if(alerted != title){
                     localStorage.setItem('alerted',title);
                 }
@@ -133,8 +129,7 @@
                     }
                                     
                 }
-=======
-               
+
                 
                 if(alerted != title){
                     alert('Đã chọn');
@@ -145,8 +140,6 @@
                     alert("File chọn không phù hợp với kiểu file bạn chọn");
                     localStorage.setItem('alerted',title);
                 }
-                                
->>>>>>> 8efd8b036d1adab1f13497380ebd09463b80fc81
             }
             return false;
         });

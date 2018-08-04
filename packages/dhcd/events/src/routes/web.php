@@ -7,7 +7,7 @@ Route::group(array('prefix' => $adminPrefix), function() {
 
         Route::get('dhcd/events/events/log', 'EventsController@log')->name('dhcd.events.events.log');
 
-        Route::get('dhcd/events/events/manage', 'EventsController@manage')->name('dhcd.events.events.manage');
+        Route::get('dhcd/events/events/manage', 'EventsController@manage')->name('dhcd.events.events.manage')->where('as','Sự kiện - Danh sách');
 
         Route::get('dhcd/events/events/data', 'EventsController@data')->name('dhcd.events.events.data');
 

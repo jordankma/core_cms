@@ -241,7 +241,7 @@ class PackageController extends Controller
                             $pathDatabase = 'packages/' . $package->package_alias . '/' . $package->module_alias . '/src/database/migrations';
                             if ($this->files->isDirectory('../' . $pathDatabase)) {
 //                            shell_exec('cd ../ && /egserver/php/bin/php artisan migrate:refresh --path="' . $pathDatabase . '" --database="' . $db_connection . '"');
-                                shell_exec('cd ../ && php artisan migrate:refresh --path="' . $pathDatabase . '" --database="' . $db_connection . '"');
+                                dd(shell_exec('cd ../ && php artisan migrate:refresh --path="' . $pathDatabase . '" --database="' . $db_connection . '"'));
                             }
                         }
                     }
@@ -787,14 +787,7 @@ class PackageController extends Controller
             ->editColumn('status', function ($packages) use ($domain_id) {
                 $status = '';
                 if (count($packages->domains) > 0) {
-//                    $package = $packages->domains[count($packages->domains) - 1];
-                    $package = null;
-                    foreach ($packages->domains as $item) {
-                        if ($item->domain_id == $domain_id) {
-                            $package = $item;
-                            break;
-                        }
-                    }
+                    $package = $packages->domains[count($packages->domains) - 1];
                     if (null != $package) {
                         if ($package->pivot->status == 1) {
                             if ($this->user->canAccess('adtech.core.package.confirm-status')) {
