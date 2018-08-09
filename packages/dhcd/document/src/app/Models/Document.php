@@ -17,11 +17,11 @@ class Document extends Model {
      *
      * @var string
      */
-    protected $table = 'package_documents';
+    protected $table = 'dhcd_documents';
 
     protected $primaryKey = 'document_id';
 
-    protected $fillable = ['name','file','status','descript','document_type_id','avatar','alias'];
+    protected $fillable = ['name','file','status','descript','document_type_id','avatar','alias','is_offical','is_reserve'];
     
     protected $dates = ['deleted_at'];
     
@@ -33,7 +33,7 @@ class Document extends Model {
     }
     
     public function getDocumentCate(){
-        return $this->belongsToMany(DocumentCate::class, 'package_document_has_cate','document_id','document_cate_id');
+        return $this->belongsToMany(DocumentCate::class, 'dhcd_document_has_cate','document_id','document_cate_id');
     }
         
 }

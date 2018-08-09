@@ -14,7 +14,7 @@ class DocumentType extends Model {
      *
      * @var string
      */
-    protected $table = 'package_document_types';
+    protected $table = 'dhcd_document_types';
 
     protected $primaryKey = 'document_type_id';
 

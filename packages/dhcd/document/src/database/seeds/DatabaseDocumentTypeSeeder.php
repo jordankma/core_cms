@@ -12,7 +12,7 @@ class DatabaseDocumentTypeSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('package_document_types')->insert([
+        DB::table('dhcd_document_types')->insert([[
             'document_type_id' => 1,
             'name' => 'Hình ảnh',
             'type' => 'image',
@@ -32,6 +32,6 @@ class DatabaseDocumentTypeSeeder extends Seeder
             'name' => 'Audio',
             'type' => 'audio',
             'extentions' => json_encode(['mp3'])
-        ]);
+        ]]);
     }
 }

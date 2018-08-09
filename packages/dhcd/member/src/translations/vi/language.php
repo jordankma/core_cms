@@ -10,9 +10,14 @@ return [
         ],
         "group" => [
             "manage" => "Quản lý nhóm người dùng",
-            "create" => "Thêm người dùng",
-            "update" => "Cập nhật người dùng",
+            "create" => "Thêm nhóm người dùng",
+            "update" => "Cập nhật nhóm người dùng",
             "add_member" => "Thêm người dùng vào nhóm"
+        ],
+        "position" => [
+            "manage" => "Quản lý chức vụ",
+            "create" => "Thêm chức vụ",
+            "update" => "Cập nhật chức vụ"
         ],
     ],
     "table" => [
@@ -30,6 +35,9 @@ return [
         "group" => [
             "name" => "Tên",
             "count" => "Số người dùng trong nhóm"
+        ],
+        "position" => [
+            "name" => "Tên",
         ]
     ],
     "form" => [
@@ -51,9 +59,13 @@ return [
             "dan_toc" => "Dân tộc",
             "ton_giao" => "Tôn giáo",
             "ngay_vao_dang" => "Ngày vào đảng",
+            "ngay_vao_doan" => "Ngày vào đoàn"
         ],
         "title_group" => [
             "name" => "Tên nhóm"
+        ],
+        "title_position" => [
+            "name" => "Tên chức vụ"
         ]
     ],
     "buttons" => [
@@ -82,10 +94,14 @@ return [
             "dan_toc" => "Dân tộc...",
             "ton_giao" => "Tôn giáo...",
             "ngay_vao_dang" => "Ngày vào đảng...",
+            "ngay_vao_doan" => "Ngày vào đoàn...",
             "don_vi" => "Đơn vị...",
         ],
         "group" => [
             "name" => "Nhập tên nhóm"
+        ],
+        "position" => [
+            "name" => "Nhập tên chức vụ"
         ]
     ],
     "messages" => [

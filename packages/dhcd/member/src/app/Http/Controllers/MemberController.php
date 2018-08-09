@@ -7,13 +7,14 @@ use Adtech\Application\Cms\Controllers\Controller as Controller;
 use Dhcd\Member\App\Repositories\MemberRepository;
 use Dhcd\Member\App\Models\Member;
 use Dhcd\Member\App\Http\Requests\MemberRequest;
+
+use Dhcd\Member\App\Models\Position;
+
 use Spatie\Activitylog\Models\Activity;
 use Yajra\Datatables\Datatables;
 use Validator;
 use Auth;
 use DateTime;
-use Dhcd\Administration\App\Models\ProvineCity;
-use Dhcd\Administration\App\Models\CountryDistrict;
 class MemberController extends Controller
 {
     private $messages = array(
@@ -36,7 +37,7 @@ class MemberController extends Controller
 
     public function create()
     {
-        $list_position = Member::select('position')->groupBy('position')->get();
+        $list_position = Position::all();
         $list_trinh_do_ly_luan = Member::select('trinh_do_ly_luan')->groupBy('trinh_do_ly_luan')->get();
         $list_trinh_do_chuyen_mon = Member::select('trinh_do_chuyen_mon')->groupBy('trinh_do_chuyen_mon')->get();
         return view('DHCD-MEMBER::modules.member.member.create',compact('list_position','list_trinh_do_ly_luan','list_trinh_do_chuyen_mon'));
@@ -45,57 +46,49 @@ class MemberController extends Controller
     public function add(MemberRequest $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|min:4|max:50',
-            'u_name' => 'required|unique:dhcd_member,u_name|min:3|max:50',
-            'password' => 'required|min:8|regex:"^(?=.*[a-z])(?=.*[A-Z])(?=.*)(?=.*[#$^+=!*()@%&]).{8,}$"',
-            'conf_password' => 'required|min:8|regex:"^(?=.*[a-z])(?=.*[A-Z])(?=.*)(?=.*[#$^+=!*()@%&]).{8,}$"',
-            'email' => 'required|unique:dhcd_member,email',
-            'phone' => 'required|unique:dhcd_member,phone'
+            'name' => 'required|min:4|max:50'
         ], $this->messages);
         if (!$validator->fails()) {
             $members = new Member();
-            $name = $request->name; 
-            $u_name = $request->u_name; 
-            $email = $request->email; 
-            $phone = $request->phone;
-            $position = $request->position;
-            $trinh_do_ly_luan = $request->trinh_do_ly_luan;
-            $trinh_do_chuyen_mon = $request->trinh_do_chuyen_mon;
-            $password = bcrypt($request->password);
-            $address = $request->address; 
-            $don_vi = $request->don_vi; 
-            $gender = $request->gender; 
-            $dan_toc = $request->dan_toc; 
-            $ton_giao = $request->ton_giao; 
-            $token = $request->_token;
-            $birthday = $request->birthday; 
-            $ngay_vao_dang = $request->ngay_vao_dang; 
-            $avatar = !empty($request->avatar) ? $request->avatar :'';
+            $name = $request->input('name');
+            $email = $request->input('email');
+            $phone = $request->input('phone');
+            $position_id = $request->input('position_id');
+            $trinh_do_ly_luan = $request->input('trinh_do_ly_luan');
+            $trinh_do_chuyen_mon = $request->input('trinh_do_chuyen_mon');
+            $address = $request->input('address'); 
+            $don_vi = $request->input('don_vi'); 
+            $gender = $request->input('gender'); 
+            $dan_toc = $request->input('dan_toc'); 
+            $ton_giao = $request->input('ton_giao'); 
+            $token = $request->input('_token');
+            $birthday = $request->input('birthday'); 
+            $ngay_vao_dang = $request->input('ngay_vao_dang'); 
+            $ngay_vao_doan = $request->input('ngay_vao_doan'); 
+            $avatar = !empty($request->input('avatar')) ? $request->input('avatar') :'';
 
             $members->name = $name;
-            $members->u_name = $u_name;
             $members->email = $email;
             $members->phone = $phone;
-            $members->position = $position;
+            $members->position_id = $position_id;
             $members->trinh_do_ly_luan = $trinh_do_ly_luan;
             $members->trinh_do_chuyen_mon = $trinh_do_chuyen_mon;
-            $members->password = $password;
             $members->address = $address;
             $members->don_vi = $don_vi;
             $members->gender = $gender;
             $members->dan_toc = $dan_toc;
             $members->ton_giao = $ton_giao;
-            $members->token = $token;
+            $members->token = $token;   
             $members->birthday = $birthday;
             $members->ngay_vao_dang = $ngay_vao_dang;
+            $members->ngay_vao_doan = $ngay_vao_doan;
             $members->avatar = $avatar;
             $members->reg_ip = '8.8.8.8';
             $members->last_ip = '8.8.8.8';
             $members->last_login = new DateTime();
             $members->created_at = new DateTime();
             $members->updated_at = new DateTime();
-            $members->save();
-            if ($members->member_id) {
+            if ($members->save()) {
                 activity('member')
                     ->performedOn($members)
                     ->withProperties($request->all())
@@ -113,7 +106,7 @@ class MemberController extends Controller
 
     public function show(MemberRequest $request)
     {
-        $list_position = Member::select('position')->groupBy('position')->get();
+        $list_position = Position::all();
         $list_trinh_do_ly_luan = Member::select('trinh_do_ly_luan')->groupBy('trinh_do_ly_luan')->get();
         $list_trinh_do_chuyen_mon = Member::select('trinh_do_chuyen_mon')->groupBy('trinh_do_chuyen_mon')->get();
         $member_id = $request->input('member_id');
@@ -130,27 +123,33 @@ class MemberController extends Controller
 
     public function update(MemberRequest $request)
     {
-        $member_id = $request->member_id;
-        $member = $this->member->find($member_id);
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:4|max:50',
         ], $this->messages);
         if (!$validator->fails()) { 
-            $name = $request->name;
-            $position = $request->position;
-            $trinh_do_ly_luan = $request->trinh_do_ly_luan;
-            $trinh_do_chuyen_mon = $request->trinh_do_chuyen_mon;
-            $address = $request->address; 
-            $don_vi = $request->don_vi; 
-            $gender = $request->gender; 
-            $dan_toc = $request->dan_toc; 
-            $ton_giao = $request->ton_giao;
-            $birthday = $request->birthday; 
-            $ngay_vao_dang = $request->ngay_vao_dang; 
-            $avatar = !empty($request->avatar) ? $request->avatar :'';
+            $member_id = $request->input('member_id');
+            $member = $this->member->find($member_id);
+            $name = $request->input('name');
+            $email = $request->input('email');
+            $phone = $request->input('phone');
+            $position_id = $request->input('position_id');
+            $trinh_do_ly_luan = $request->input('trinh_do_ly_luan');
+            $trinh_do_chuyen_mon = $request->input('trinh_do_chuyen_mon');
+            $address = $request->input('address'); 
+            $don_vi = $request->input('don_vi'); 
+            $gender = $request->input('gender'); 
+            $dan_toc = $request->input('dan_toc'); 
+            $ton_giao = $request->input('ton_giao'); 
+            $token = $request->input('_token');
+            $birthday = $request->input('birthday'); 
+            $ngay_vao_dang = $request->input('ngay_vao_dang'); 
+            $ngay_vao_doan = $request->input('ngay_vao_doan'); 
+            $avatar = !empty($request->input('avatar')) ? $request->input('avatar') :'';
 
             $member->name = $name;
-            $member->position = $position;
+            $member->email = $email;
+            $member->phone = $phone;
+            $member->position_id = $position_id;
             $member->trinh_do_ly_luan = $trinh_do_ly_luan;
             $member->trinh_do_chuyen_mon = $trinh_do_chuyen_mon;
             $member->address = $address;
@@ -158,11 +157,12 @@ class MemberController extends Controller
             $member->gender = $gender;
             $member->dan_toc = $dan_toc;
             $member->ton_giao = $ton_giao;
+            $member->token = $token;
             $member->birthday = $birthday;
             $member->ngay_vao_dang = $ngay_vao_dang;
+            $member->ngay_vao_doan = $ngay_vao_doan;
             $member->avatar = $avatar;
             $member->updated_at = new DateTime();
-            $member->save();
             if ($member->save()) {
                 activity('member')
                     ->performedOn($member)
@@ -283,8 +283,9 @@ class MemberController extends Controller
         return Datatables::of($members)
             ->addIndexColumn()
             ->addColumn('actions', function ($members) {
+                $actions = '';
                 if ($this->user->canAccess('dhcd.member.member.log')) {
-                    $actions = '<a href=' . route('dhcd.member.member.log', ['type' => 'member', 'id' => $members->member_id]) . ' data-toggle="modal" data-target="#log"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#F99928" data-hc="#F99928" title="log member"></i></a>';
+                    $actions .= '<a href=' . route('dhcd.member.member.log', ['type' => 'member', 'id' => $members->member_id]) . ' data-toggle="modal" data-target="#log"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#F99928" data-hc="#F99928" title="log member"></i></a>';
                 }
                 if ($this->user->canAccess('dhcd.member.member.show')) {
                     $actions .='<a href=' . route('dhcd.member.member.show', ['member_id' => $members->member_id]) . '><i class="livicon" data-name="edit" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="update member"></i></a>';
@@ -303,18 +304,12 @@ class MemberController extends Controller
                 }
                 return $status;
             })
+            ->addColumn('position', function ($members) {
+                $position = $members->getPosition->name;
+                return $position;
+            })
             ->rawColumns(['actions','status'])
             ->make();
-    }
-    public function checkUserNameExist(Request $request){
-        $data['valid'] = true;
-        if ($request->ajax()) {
-            $member =  Member::where(['u_name' => $request->u_name])->first();
-            if ($member) {
-                $data['valid'] = false; // true là có user
-            }
-        }
-        echo json_encode($data);
     }
 
     public function checkEmailExist(Request $request){
@@ -362,6 +357,23 @@ class MemberController extends Controller
     }
 
     public function postImport(Request $request){
+        $url = asset($request->input('path'));
+        dd($url);
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($url);
+        $worksheet = $spreadsheet->getActiveSheet();
+        $rows = [];
+        foreach ($worksheet->getRowIterator() AS $row) {
+            $cellIterator = $row->getCellIterator();
+            $cellIterator->setIterateOnlyExistingCells(FALSE); // This loops through all cells,
+            $cells = [];
+            foreach ($cellIterator as $cell) {
+                $cells[] = $cell->getValue();
+            }
+            $rows[] = $cells;
+        }
+        echo '<pre>';
+        print_r($rows);
+        echo '</pre>'; die;
         dd($request->all());   
     }
 }

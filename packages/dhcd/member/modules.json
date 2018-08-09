@@ -79,6 +79,40 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Quản lý chức vụ",
+      "groups": [
+        {
+          "name": "View list",
+          "routes": [
+            "dhcd.member.position.manage",
+            "dhcd.member.position.data",
+            "dhcd.member.position.log"
+          ]
+        },
+        {
+          "name": "Create",
+          "routes": [
+            "dhcd.member.position.create",
+            "dhcd.member.position.add"
+          ]
+        },
+        {
+          "name": "Update",
+          "routes": [
+            "dhcd.member.position.show",
+            "dhcd.member.position.update"
+          ]
+        },
+        {
+          "name": "Delete",
+          "routes": [
+            "dhcd.member.position.delete",
+            "dhcd.member.position.confirm-delete"
+          ]
+        }
+      ]
     }
   ]
 }

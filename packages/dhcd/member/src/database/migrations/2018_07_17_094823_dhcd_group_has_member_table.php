@@ -19,8 +19,9 @@ class DhcdGroupHasMemberTable extends Migration
             $table->integer('member_id',false,true);
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('group_id')->references('group_id')->on('dhcd_group')->onDelete('cascade');
-            $table->foreign('member_id')->references('member_id')->on('dhcd_group_has_member')->onDelete('cascade');
+            
+            // $table->foreign('group_id')->references('group_id')->on('dhcd_group')->onDelete('cascade');
+            // $table->foreign('member_id')->references('member_id')->on('dhcd_group_has_member')->onDelete('cascade');
         });
     }
 
@@ -31,6 +32,6 @@ class DhcdGroupHasMemberTable extends Migration
      */
     public function down()
     {
-        // Schema::connection('mysql_dhcd')->dropIfExists('dhcd_group_has_member');
+        Schema::connection('mysql_dhcd')->dropIfExists('dhcd_group_has_member');
     }
 }

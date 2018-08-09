@@ -39,7 +39,7 @@
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
                         <li class=" nav-item active">
-                            <a href="#info-required" data-toggle="tab" class="nav-link">Thông tin bắt buộc</a>
+                            <a href="#info-required" data-toggle="tab" class="nav-link">Thông tin chính</a>
                         </li>
                         <li class="nav-item">
                             <a href="#info" data-toggle="tab" class="nav-link">Thông tin thêm</a>
@@ -55,25 +55,33 @@
                                         <input type="text" name="name" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.name')}}">
                                     </div>
                                     <div class="form-group">
-                                        <label>{{trans('dhcd-member::language.form.title.u_name') }} <span style="color: red">(*)</span></label>
-                                        <input type="text" name="u_name" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.u_name')}}">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>{{trans('dhcd-member::language.form.title.password') }} <span style="color: red">(*)</span></label>
-                                        <input type="password" name="password" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.password')}}">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>{{trans('dhcd-member::language.form.title.conf_password') }} <span style="color: red">(*)</span></label>
-                                        <input type="password" name="conf_password" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.conf_password')}}">
+                                        <label>{{trans('dhcd-member::language.form.title.avatar') }}</label>
+                                        <span class="input-group-btn">
+                                            <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
+                                                <i class="fa fa-picture-o"></i> Choose
+                                            </a>
+                                        </span>
+                                        <input id="thumbnail" class="form-control" type="text"  name="avatar">
+                                        <img src="" id="holder" style="margin-top:15px;max-height:100px;">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
+                                    <label>{{trans('dhcd-member::language.form.title.position') }}</label>
                                     <div class="form-group">
-                                        <label>{{trans('dhcd-member::language.form.title.email') }} <span style="color: red">(*)</span></label>
+                                        <select class="form-control select2" id="position_select" name="position_id" placeholder="{{trans('dhcd-member::language.placeholder.member.position_select')}}">
+                                            @if(!empty($list_position))
+                                                @foreach($list_position as $position)
+                                                    <option value="{{$position->position_id}}">{{$position->name}}</option>     
+                                                @endforeach
+                                            @endif                
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label> {{trans('dhcd-member::language.form.title.email') }} </label>
                                         <input type="text" name="email" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.email')}}">
                                     </div>
                                     <div class="form-group">
-                                        <label>{{trans('dhcd-member::language.form.title.phone') }} <span style="color: red">(*)</span></label>
+                                        <label> {{trans('dhcd-member::language.form.title.phone') }} </label>
                                         <input type="text" name="phone" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.phone')}}">
                                     </div>
                                 </div>
@@ -88,10 +96,6 @@
                                         <label>{{trans('dhcd-member::language.form.title.address') }}</label>
                                         <textarea class="form-control" name="address" placeholder="{{trans('dhcd-member::language.placeholder.member.address')}}"></textarea>
                                     </div>
-                                    <div class="form-group">
-                                        <label>{{trans('dhcd-member::language.form.title.don_vi') }}</label>
-                                        <textarea class="form-control" name="don_vi" placeholder="{{trans('dhcd-member::language.placeholder.member.don_vi')}}"></textarea>
-                                    </div>
                                     <label>{{trans('dhcd-member::language.form.title.gender') }}</label>
                                     <div class="form-group">
                                         <label class="radio-inline" for="female">
@@ -100,22 +104,6 @@
                                         <label class="radio-inline" for="male"> 
                                         <input type="radio" id="male" name="gender" value="male" >
                                         Male</label>
-                                    </div>
-                                    <label>{{trans('dhcd-member::language.form.title.position') }}</label>
-                                    <div class="form-group input-group">
-                                        <input type="text" name="position" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.position_text')}}" id="position_text" style="display: none" disabled>
-                                        <select class="form-control select2" id="position_select" name="position" placeholder="{{trans('dhcd-member::language.placeholder.member.position_select')}}">
-                                            @if(!empty($list_position))
-                                                @foreach($list_position as $position)
-                                                    <option value="{{$position->position}}">{{$position->position}}</option>     
-                                                @endforeach
-                                            @endif                
-                                        </select>
-                                        <span class="input-group-btn">
-                                            <button class="btn btn-default" type="button" id="change-type-position">
-                                                <i class="fa fa-random"></i>
-                                            </button>
-                                        </span>
                                     </div>
                                     <label>{{trans('dhcd-member::language.form.title.trinh_do_ly_luan') }}</label>
                                     <div class="form-group input-group">
@@ -149,8 +137,6 @@
                                             </button>
                                         </span>
                                     </div>
-                                </div>
-                                <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>{{trans('dhcd-member::language.form.title.dan_toc') }}</label>
                                         <input type="text" name="dan_toc" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.dan_toc')}}">
@@ -159,6 +145,16 @@
                                         <label>{{trans('dhcd-member::language.form.title.ton_giao') }}</label>
                                         <input type="text" name="ton_giao" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.ton_giao')}}">
                                     </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>{{trans('dhcd-member::language.form.title.don_vi') }}</label>
+                                        <textarea class="form-control" name="don_vi" placeholder="{{trans('dhcd-member::language.placeholder.member.don_vi')}}"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>{{trans('dhcd-member::language.form.title.ngay_vao_doan') }}</label>
+                                        <input type="text" name="ngay_vao_doan" class="form-control" id="ngay_vao_doan" placeholder="{{trans('dhcd-member::language.placeholder.member.ngay_vao_doan')}}">
+                                    </div>
                                     <div class="form-group">
                                         <label>{{trans('dhcd-member::language.form.title.ngay_vao_dang') }}</label>
                                         <input type="text" name="ngay_vao_dang" class="form-control" id="ngay_vao_dang" placeholder="{{trans('dhcd-member::language.placeholder.member.ngay_vao_dang')}}">
@@ -166,16 +162,6 @@
                                     <div class="form-group">
                                         <label>{{trans('dhcd-member::language.form.title.birthday') }}</label>
                                         <input type="text" name="birthday" class="form-control" id="birthday" placeholder="{{trans('dhcd-member::language.placeholder.member.birthday')}}">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>{{trans('dhcd-member::language.form.title.avatar') }}</label>
-                                        <span class="input-group-btn">
-                                            <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
-                                                <i class="fa fa-picture-o"></i> Choose
-                                            </a>
-                                        </span>
-                                        <input id="thumbnail" class="form-control" type="text" value="{{asset('/vendor/' . $group_name . '/' . $skin . '/dhcd/member/uploads/media/images/Avatar.jpg')}}" name="avatar">
-                                        <img src="{{asset('/vendor/' . $group_name . '/' . $skin . '/dhcd/member/uploads/media/images/Avatar.jpg')}}" id="holder" style="margin-top:15px;max-height:100px;">
                                     </div>
                                 </div>
                                 <!-- /.col-sm-8 -->
@@ -213,22 +199,6 @@
     <!--end of page js-->
     <script>
         $(function () {
-            $("[name='permission_locked']").bootstrapSwitch();
-            var check_position = 0;
-            $('body').on('click','#change-type-position',function(e){
-                if (check_position % 2 == 0) {
-                    $("#position_text").css('display', 'block');
-                    $('#position_text').prop('disabled', false);
-                    $('#position_select').prop('disabled', true);
-                    $("#position_select").css('display', 'none');
-                } else {
-                    $("#position_text").css('display', 'none');
-                    $('#position_text').prop('disabled', true);
-                    $('#position_select').prop('disabled', false);
-                    $("#position_select").css('display', 'block');
-                }
-                check_position++;
-            });
             var check_lyluan = 0;
             $('body').on('click','#change-type-trinh-do-ly-luan',function(e){
                 if (check_lyluan % 2 == 0) {
@@ -262,23 +232,9 @@
 
             var domain = "/admin/laravel-filemanager/";
             $('#lfm').filemanager('image', {prefix: domain});
-            $('#birthday,#ngay_vao_dang').datetimepicker({
+            $('#birthday,#ngay_vao_dang,#ngay_vao_doan').datetimepicker({
                 format: 'YYYY-MM-DD',
             });
-            // $('#provine_city').select2({
-            //     theme:"bootstrap",
-            //     placeholder:"select a provine city"
-            // });
-            // $('#provine_city').change(function(event) {
-            //     var provine_city_code= $(this).val();
-            //     $.get("{{ route('dhcd.administration.country-district.member') }}" + "?provine_city_code=" + provine_city_code, function(data) { 
-            //         $("#country_district").html(data);
-            //     }); 
-            // });
-            // $('#country_district').select2({
-            //     theme:"bootstrap",
-            //     placeholder:"select a country district"
-            // });
             $('#form-add-member').bootstrapValidator({
                 feedbackIcons: {
                     // validating: 'glyphicon glyphicon-refresh'
@@ -296,38 +252,8 @@
                             }
                         }
                     },
-                    u_name: {
-                        validators: {
-                            notEmpty: {
-                                message: 'Trường này không được bỏ trống'
-                            },
-                            regexp: {
-                                regexp: '^[a-zA-Z0-9_]+$',
-                                message: 'Username chỉ gồm số hoặc chữ'
-                            },
-                            stringLength: {
-                                min: 3,
-                                max: 100,
-                                message: 'Tên đăng nhập phải từ 3 đến 100 kí tự'
-                            },
-                            remote: {
-                                // headers: {
-                                //     'X-CSRF-TOKEN': $('input[name=_token]').val()//$('meta[name="csrf-token"]').attr('content')
-                                // },
-                                data: {
-                                    '_token': $('meta[name=csrf-token]').prop('content')
-                                },
-                                type: 'post',
-                                message: 'Tên đăng nhập đã tồn tại',
-                                url: '{{route('dhcd.member.member.check-username-exist')}}',
-                            }
-                        }
-                    },
                     phone: {
                         validators: {
-                            notEmpty: {
-                                message: 'Trường này không được bỏ trống'
-                            },
                             regexp: {
                                 regexp: "(09|01[2|6|8|9])+([0-9]{8})",
                                 message: 'Số điện thoại không đúng định dạng'
@@ -347,9 +273,6 @@
                     },
                     email: {
                         validators: {
-                            notEmpty: {
-                                message: 'Trường này không được bỏ trống'
-                            },
                             emailAddress: {
                                 message: 'Email không đúng định dạng'
                             },
@@ -366,25 +289,11 @@
                             }
                         }
                     },
-                    password: {
+                    avatar: {
+                        trigger: 'change keyup',
                         validators: {
                             notEmpty: {
                                 message: 'Trường này không được bỏ trống'
-                            },
-                            regexp: {
-                                regexp: "^(?=.*[a-z])(?=.*[A-Z])(?=.*)(?=.*[#$^+=!*()@%&]).{8,}$",
-                                message: 'Mật khẩu phải chứa 8 ký tự : chứa ít nhất 1 số, 1 chữ viết hoa, 1 chữ viết thường, 1 ký tự đặc biệt'
-                            }
-                        }
-                    },
-                    conf_password: {
-                        validators: {
-                            notEmpty: {
-                                message: 'Trường này không được bỏ trống'
-                            },
-                            identical: {
-                                field: 'password',
-                                message: 'Mật khẩu không khớp nhau'
                             }
                         }
                     }

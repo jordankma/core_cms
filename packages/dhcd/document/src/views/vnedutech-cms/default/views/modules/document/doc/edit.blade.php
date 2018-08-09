@@ -10,6 +10,7 @@
 <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-tagsinput/css/bootstrap-tagsinput.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-tagsinput/css/app.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/jasny-bootstrap/css/jasny-bootstrap.css') }}" rel="stylesheet" type="text/css"/>  
+<link rel="stylesheet" type="text/css" href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/sweetalert/css/sweetalert.css') }}" />
 <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/css/pages/blog.css') }}" rel="stylesheet" type="text/css">
 <style>
     .control-label{
@@ -59,7 +60,22 @@ $document_type = !empty($document->getType) ? $document->getType->type : '';
                         <div class=" col-md-6 ">
                             <input id="name" name="name" type="text" placeholder="{{trans('dhcd-document::language.placeholder.document.name')}}" value="{{old('name',isset($document) ? $document->name : '')}}" class="form-control">                                
                         </div>
-                    </div>                                               
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">{{trans('dhcd-document::language.document.form.type')}}</label>                       
+                        
+                        <div class="col-md-6">                                                        
+                            <label class="radio-inline radio radio-primary">
+                                <input checked id="is_reserve" @if($document->is_reserve == 1) checked @endif type="checkbox" name="is_reserve" value="1">
+                                <label style="padding: 0px 10px 0px 5px;" for="is_reserve">Đại biểu mời</label>
+                            </label>
+                            <label class="radio-inline radio radio-primary">
+                                <input id="is_offical" @if($document->is_offical == 1) checked @endif type="checkbox" name="is_offical" value="1">
+                                <label style="padding: 0px 10px 0px 5px;" for="is_offical">Đại biểu chính thức</label>
+                            </label>
+                        </div>
+
+                    </div>
                     <div class="form-group">
                         <label class="col-md-2 control-label" for="document_type_id">{{trans('dhcd-document::language.document.form.document_cate_id')}}</label>
                         <div class="col-md-6">
@@ -119,7 +135,7 @@ $document_type = !empty($document->getType) ? $document->getType->type : '';
                                     <tr class="{{$file['name']}}">
                                         <td>
                                             @if($document_type == 'image')
-                                            <img src="{{asset($file['name'])}}" width="75px">
+                                            <img src="{{$file['path']}}" width="75px">
                                             @else
                                             <i class="fa fa-file fa-5x"></i>
                                             @endif
@@ -127,7 +143,7 @@ $document_type = !empty($document->getType) ? $document->getType->type : '';
                                         <td>{{$file['name']}}</td>
                                         <td>
                                             @if($document_type == 'image')
-                                            <input type="radio"  name="setAvatar"  value="{{$file['name']}}" @if($document->avatar == $file['name']) checked @endif >
+                                            <input type="radio"  name="setAvatar"  value="{{$file['path']}}" @if($document->avatar == $file['path']) checked @endif >
                                             @endif       
                                         </td>
                                         <td>
@@ -135,6 +151,7 @@ $document_type = !empty($document->getType) ? $document->getType->type : '';
                                         </td>
                                         <input type="hidden" name="file_names[]" value="{{$file['name']}}">
                                         <input type="hidden" name="file_types[]" value="{{$file['type']}}">
+                                        <input type="hidden" name="path[]" value="{{$file['path']}}">
                                     </tr>
                                     @endforeach
 
@@ -192,6 +209,7 @@ $document_type = !empty($document->getType) ? $document->getType->type : '';
 <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-tagsinput/js/bootstrap-tagsinput.js') }}" type="text/javascript"></script>
 <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/jasny-bootstrap/js/jasny-bootstrap.js') }}" type="text/javascript"></script>                        
 <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-multiselect/js/bootstrap-multiselect.js') }}" type="text/javascript"></script>
+<script type="text/javascript" src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/sweetalert/js/sweetalert.min.js') }}"></script>
 <script src="{{ asset('/vendor/laravel-filemanager/js/lfm2.js') }}" type="text/javascript" ></script>
 <!--end of page js-->
 <script>
@@ -268,23 +286,23 @@ function setData(data) {
 
     if (data.type_file === 'img')
     {
-        html += '<td><input type="radio" name="setAvatar"  value="/files/' + data.title + '"></td>';
+        html += '<td><input type="radio" name="setAvatar"  value="' + data.src + '"></td>';
     } else {
         html += '<td></td>';
     }
     html += '<td><a href="javascrip::void(0,0)"  class="btn btn-danger del-media" >';
     html += '<span style="margin:0px;" class="glyphicon glyphicon-trash" aria-hidden="true"></span>';
     html += '</a></td>'
-    html += '<input type="hidden" name="file_names[]"  value="/files/' + data.title + '">';
+    html += '<input type="hidden" name="file_names[]"  value="' + data.title + '">';
     html += '<input type="hidden" name="file_types[]"  value="' + data.type + '">';
+    html += '<input type="hidden" name="path[]"  value="' + data.src + '">';
     html += '</tr>';
     if ($("tr").hasClass('/files/'+data.title)) {
         console.log("File này đã được chọn");
     } else
     {
         console.log("Đã chọn");
-        $("#list-file").append(html);
-        
+        $("#list-file").append(html);        
     }
     
 }
@@ -298,10 +316,9 @@ function reSetData() {
 $('body').on('click', '.del-media', function () {
     $(this).parent().parent().remove();
 });
-$('body').on('change', '.choice-type', function () {
-    if(confirm('Khi đổi kiểu tài liệu, những file bạn đã chọn sẽ bị mất! Click đồng ý để tiếp tục !')){
-        $("#list-file").html('');
-    }
+$('body').on('change', '.choice-type', function (e) {
+    swal("Khi đổi kiểu tài liệu, những file bạn đã chọn sẽ bị mất!");
+    $("#list-file").html('');    
 });
 
 </script>

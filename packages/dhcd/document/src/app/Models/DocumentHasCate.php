@@ -12,7 +12,7 @@ class DocumentHasCate extends Model {
      *
      * @var string
      */
-    protected $table = 'package_document_has_cate';
+    protected $table = 'dhcd_document_has_cate';
 
     protected $primaryKey = 'document_has_cate_id';
     

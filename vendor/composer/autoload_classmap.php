@@ -347,7 +347,6 @@ return array(
     'Dhcd\\Document\\App\\Models\\DocumentCate' => $baseDir . '/packages/dhcd/document/src/app/Models/DocumentCate.php',
     'Dhcd\\Document\\App\\Models\\DocumentHasCate' => $baseDir . '/packages/dhcd/document/src/app/Models/DocumentHasCate.php',
     'Dhcd\\Document\\App\\Models\\DocumentType' => $baseDir . '/packages/dhcd/document/src/app/Models/DocumentType.php',
-    'Dhcd\\Document\\App\\Repositories\\DemoRepository' => $baseDir . '/packages/dhcd/document/src/app/Repositories/DemoRepository.php',
     'Dhcd\\Document\\App\\Repositories\\DocumentCateRepository' => $baseDir . '/packages/dhcd/document/src/app/Repositories/DocumentCateRepository.php',
     'Dhcd\\Document\\App\\Repositories\\DocumentRepository' => $baseDir . '/packages/dhcd/document/src/app/Repositories/DocumentRepository.php',
     'Dhcd\\Document\\App\\Repositories\\DocumentTypeRepository' => $baseDir . '/packages/dhcd/document/src/app/Repositories/DocumentTypeRepository.php',

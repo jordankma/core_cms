@@ -20,4 +20,11 @@ return [
         ],
         
     ],
+    "position" => [
+        "delete"=>[
+            "title" => "Xóa chức vụ",
+            "body" => "Bạn có chắc muốn xóa chức vụ này?"
+        ],
+        
+    ]
 ];

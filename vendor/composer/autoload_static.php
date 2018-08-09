@@ -959,7 +959,6 @@ class ComposerStaticInitdc9850d770de88aec98785f608228e20
         'Dhcd\\Document\\App\\Models\\DocumentCate' => __DIR__ . '/../..' . '/packages/dhcd/document/src/app/Models/DocumentCate.php',
         'Dhcd\\Document\\App\\Models\\DocumentHasCate' => __DIR__ . '/../..' . '/packages/dhcd/document/src/app/Models/DocumentHasCate.php',
         'Dhcd\\Document\\App\\Models\\DocumentType' => __DIR__ . '/../..' . '/packages/dhcd/document/src/app/Models/DocumentType.php',
-        'Dhcd\\Document\\App\\Repositories\\DemoRepository' => __DIR__ . '/../..' . '/packages/dhcd/document/src/app/Repositories/DemoRepository.php',
         'Dhcd\\Document\\App\\Repositories\\DocumentCateRepository' => __DIR__ . '/../..' . '/packages/dhcd/document/src/app/Repositories/DocumentCateRepository.php',
         'Dhcd\\Document\\App\\Repositories\\DocumentRepository' => __DIR__ . '/../..' . '/packages/dhcd/document/src/app/Repositories/DocumentRepository.php',
         'Dhcd\\Document\\App\\Repositories\\DocumentTypeRepository' => __DIR__ . '/../..' . '/packages/dhcd/document/src/app/Repositories/DocumentTypeRepository.php',

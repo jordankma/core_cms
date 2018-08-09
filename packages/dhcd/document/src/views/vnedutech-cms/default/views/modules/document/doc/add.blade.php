@@ -59,7 +59,20 @@
                             <input id="name" name="name" value="{{old('name')}}" type="text" placeholder="{{trans('dhcd-document::language.placeholder.document.name')}}" class="form-control">                                
                         </div>
                     </div>                                               
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">{{trans('dhcd-document::language.document.form.type')}}</label>
+                        <div class="col-md-6">                                                        
+                            <label class="radio-inline radio radio-primary">
+                                <input checked id="is_reserve" type="checkbox" name="is_reserve" value="1">
+                                <label style="padding: 0px 10px 0px 5px;" for="is_reserve">Đại biểu mời</label>
+                            </label>
+                            <label class="radio-inline radio radio-primary">
+                                <input id="is_offical" type="checkbox" name="is_offical" value="1">
+                                <label style="padding: 0px 10px 0px 5px;" for="is_offical">Đại biểu chính thức</label>
+                            </label>
+                        </div>
 
+                    </div>
                     <div class="form-group">
                         <label class="col-md-2 control-label" for="document_cate_id">{{trans('dhcd-document::language.document.form.document_cate_id')}}</label>
                         <div class="col-md-6">
@@ -231,7 +244,7 @@ function setData(data) {
     
     if(data.type_file ==='img')
     {
-         html += '<td><input type="radio" name="setAvatar"  value="/files/'+data.title+'"></td>';
+         html += '<td><input type="radio" name="setAvatar"  value="'+data.src+'"></td>';
     }
     else{
         html += '<td></td>';
@@ -239,8 +252,9 @@ function setData(data) {
     html += '<td><a href="javascrip::void(0,0)"  class="btn btn-danger del-media" >';
     html += '<span style="margin:0px;" class="glyphicon glyphicon-trash" aria-hidden="true"></span>';
     html += '</a></td>'
-    html += '<input type="hidden" name="file_names[]"  value="/files/' + data.title + '">';
+    html += '<input type="hidden" name="file_names[]"  value="' + data.title + '">';
     html += '<input type="hidden" name="file_types[]"  value="' + data.type + '">';
+    html += '<input type="hidden" name="path[]"  value="' + data.src + '">';
     html += '</tr>';
     if ($("tr").hasClass('/files/'+data.title)) {
         

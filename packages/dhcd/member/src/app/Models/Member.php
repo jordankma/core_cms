@@ -53,4 +53,8 @@ class Member extends Model implements AuthenticatableContract, CanResetPasswordC
     // {
     //     return [];
     // }
+
+    public function getPosition(){
+        return $this->hasOne('Dhcd\Member\App\Models\Position', 'position_id', 'position_id');
+    }
 }

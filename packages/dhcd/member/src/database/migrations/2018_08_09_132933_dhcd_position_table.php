@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class DhcdDocumentCatesTable extends Migration
+class DhcdPositionTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class DhcdDocumentCatesTable extends Migration
      */
     public function up()
     {
-        Schema::connection('mysql_dhcd')->create('dhcd_document_cates', function (Blueprint $table) {
-            $table->increments('document_cate_id');
-            $table->string('parent_id');
+        Schema::connection('mysql_dhcd')->create('dhcd_position', function (Blueprint $table) {
+            $table->increments('position_id');
             $table->string('name');
             $table->string('alias');
-            $table->string('icon');
-            $table->tinyInteger('status', false, true)->comment('trang thai')->default(1);          
             $table->timestamps();
             $table->softDeletes();
         });
@@ -32,6 +29,6 @@ class DhcdDocumentCatesTable extends Migration
      */
     public function down()
     {
-        Schema::connection('mysql_dhcd')->dropIfExists('dhcd_document_cates');
+        Schema::connection('mysql_dhcd')->dropIfExists('dhcd_position');
     }
 }

@@ -14,7 +14,7 @@ class DocumentCate extends Model {
      *
      * @var string
      */
-    protected $table = 'package_document_cates';
+    protected $table = 'dhcd_document_cates';
 
     protected $primaryKey = 'document_cate_id';
 

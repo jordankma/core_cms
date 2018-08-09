@@ -13,7 +13,7 @@ class DhcdDocumentTypesTable extends Migration
      */
     public function up()
     {
-        Schema::connection('mysql_dhcd')->create('package_document_types', function (Blueprint $table) {
+        Schema::connection('mysql_dhcd')->create('dhcd_document_types', function (Blueprint $table) {
             $table->increments('document_type_id');            
             $table->string('name');
             $table->string('type');
@@ -21,6 +21,29 @@ class DhcdDocumentTypesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+        
+        DB::table('dhcd_document_types')->insert([[
+            'document_type_id' => 1,
+            'name' => 'Hình ảnh',
+            'type' => 'image',
+            'extentions' => json_encode(['image/jpeg','image/jpg','image/png','image/gif'])
+        ],[
+            'document_type_id' => 2,
+            'name' => 'Văn bản',
+            'type' => 'text',
+            'extentions' => json_encode(['docx','doc','xls','xlsx','pdf'])
+        ],[
+            'document_type_id' => 3,
+            'name' => 'Video',
+            'type' => 'video',
+            'extentions' => json_encode(['mp4'])
+        ],[
+            'document_type_id' => 4,
+            'name' => 'Audio',
+            'type' => 'audio',
+            'extentions' => json_encode(['mp3'])
+        ]]);
+        
     }
 
     /**
@@ -30,6 +53,6 @@ class DhcdDocumentTypesTable extends Migration
      */
     public function down()
     {
-        Schema::connection('mysql_dhcd')->dropIfExists('package_document_types');
+        Schema::connection('mysql_dhcd')->dropIfExists('dhcd_document_types');
     }
 }

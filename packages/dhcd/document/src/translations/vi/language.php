@@ -126,6 +126,7 @@ return [
             'icon_current' => 'Icon hiện tại',
             'icon_new' => 'Icon mới',
             'icon_empty' => 'Chưa có icon',
+            'type' => 'Đại biểu'
         ]        
     ]
 ];

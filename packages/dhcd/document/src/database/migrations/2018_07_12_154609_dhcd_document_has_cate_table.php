@@ -13,12 +13,12 @@ class DhcdDocumentHasCateTable extends Migration
      */
     public function up()
     {
-        Schema::connection('mysql_dhcd')->create('package_document_has_cate', function (Blueprint $table) {
+        Schema::connection('mysql_dhcd')->create('dhcd_document_has_cate', function (Blueprint $table) {
             $table->increments('document_has_cate_id');
             $table->integer('document_cate_id')->unsigned();
-            $table->foreign('document_cate_id')->references('document_cate_id')->on('package_document_cates');
+            $table->foreign('document_cate_id')->references('document_cate_id')->on('dhcd_document_cates');
             $table->integer('document_id')->unsigned();
-            $table->foreign('document_id')->references('document_id')->on('package_documents');
+            $table->foreign('document_id')->references('document_id')->on('dhcd_documents');
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class DhcdDocumentHasCateTable extends Migration
      */
     public function down()
     {
-        Schema::connection('mysql_dhcd')->dropIfExists('package_document_has_cate');
+        Schema::connection('mysql_dhcd')->dropIfExists('dhcd_document_has_cate');
     }
 }

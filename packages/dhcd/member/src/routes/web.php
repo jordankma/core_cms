@@ -29,7 +29,6 @@ Route::group(array('prefix' => $adminPrefix), function() {
         Route::get('dhcd/member/member/block', 'MemberController@block')->name('dhcd.member.member.block');
         Route::get('dhcd/member/member/confirm-block', 'MemberController@getModalBlock')->name('dhcd.member.member.confirm-block');
 
-        Route::post('dhcd/member/member/check-username-exist', 'MemberController@checkUserNameExist')->name('dhcd.member.member.check-username-exist');
         Route::post('dhcd/member/member/check-email-exist', 'MemberController@checkEmailExist')->name('dhcd.member.member.check-email-exist');
         Route::post('dhcd/member/member/check-phone-exist', 'MemberController@checkPhoneExist')->name('dhcd.member.member.check-phone-exist');
         //import export member excel
@@ -53,6 +52,17 @@ Route::group(array('prefix' => $adminPrefix), function() {
         Route::get('dhcd/member/group/delete/member', 'GroupController@deleteMember')->name('dhcd.member.group.delete.member');
         Route::get('dhcd/member/group/confirm-delete/member', 'GroupController@getModalDeleteMember')->name('dhcd.member.group.confirm-delete.member');
         Route::get('dhcd/member/group/search/member', 'GroupController@searchMember')->name('dhcd.member.group.search.member');
+
+        //position
+        Route::get('dhcd/member/position/log', 'PositionController@log')->name('dhcd.member.position.log');
+        Route::get('dhcd/member/position/data', 'PositionController@data')->name('dhcd.member.position.data');
+        Route::get('dhcd/member/position/manage', 'PositionController@manage')->name('dhcd.member.position.manage')->where('as','Chứ vụ - Danh sách');
+        Route::get('dhcd/member/position/create', 'PositionController@create')->name('dhcd.member.position.create');
+        Route::post('dhcd/member/position/add', 'PositionController@add')->name('dhcd.member.position.add');
+        Route::get('dhcd/member/position/show', 'PositionController@show')->name('dhcd.member.position.show');
+        Route::post('dhcd/member/position/update', 'PositionController@update')->name('dhcd.member.position.update');
+        Route::get('dhcd/member/position/delete', 'PositionController@delete')->name('dhcd.member.position.delete');
+        Route::get('dhcd/member/position/confirm-delete', 'PositionController@getModalDelete')->name('dhcd.member.position.confirm-delete');
     });
 });
 

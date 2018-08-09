@@ -17,22 +17,25 @@ class DhcdMemberTable extends Migration
             $table->increments('member_id');
             $table->string('token')->nullable();
             $table->string('name');
+            $table->string('u_name')->nullable();
+            $table->string('password')->nullable();
+            $table->string('email')->unique()->nullable();
+            $table->string('phone')->unique()->nullable();
             $table->tinyInteger('type')->default('1')->comment('1 dai bieu chinh thuc 2 dai bieu moi');
-            $table->string('u_name')->unique();
-            $table->string('password');
-            $table->string('position')->nullable();
-            $table->string('gender')->nullable();
-            $table->string('phone')->unique();
-            $table->string('email')->unique();
-            $table->string('avatar')->nullable();
-            $table->string('address')->nullable();
-            $table->string('don_vi')->nullable();
-            $table->datetime('birthday')->nullable();
+            $table->string('bang_cap')->nullable();
             $table->datetime('ngay_vao_dang')->nullable();
+            $table->datetime('ngay_vao_doan')->nullable();
             $table->string('dan_toc')->nullable();
+            $table->integer('position_id',false,true)->nullable();
             $table->string('ton_giao')->nullable();
             $table->string('trinh_do_ly_luan')->nullable();
             $table->string('trinh_do_chuyen_mon')->nullable();
+            $table->string('address')->nullable();
+            
+            $table->string('gender')->nullable();
+            $table->string('avatar')->nullable();
+            $table->string('don_vi')->nullable();
+            $table->datetime('birthday')->nullable();
             $table->string('reg_ip')->nullable();
             $table->datetime('last_login')->nullable();
             $table->string('last_ip')->nullable();
@@ -42,6 +45,8 @@ class DhcdMemberTable extends Migration
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
+
+            // $table->foreign('position_id')->references('position_id')->on('dhcd_position')->onDelete('cascade');
         });
     }
 
@@ -52,6 +57,6 @@ class DhcdMemberTable extends Migration
      */
     public function down()
     {
-        // Schema::connection('mysql_dhcd')->dropIfExists('dhcd_member');
+        Schema::connection('mysql_dhcd')->dropIfExists('dhcd_member');
     }
 }

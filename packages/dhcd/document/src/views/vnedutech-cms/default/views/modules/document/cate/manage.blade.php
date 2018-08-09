@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 {{-- Page title --}}
-@section('title'){{ $title = trans('dhcd-document::language.titles.doucment_cate.manage') }}@stop
+@section('title'){{ $title = trans('dhcd-taggroup::language.titles.tag_group.manage') }}@stop
 
 {{-- page level styles --}}
 @section('header_styles')
@@ -31,12 +31,12 @@
         <div class="panel panel-primary ">
             <div class="panel-heading clearfix">
                 <h4 class="panel-title pull-left" style="padding-top: 5px;">
-                    {{ trans('dhcd-document::language.document_cate.table.title') }}
+                    {{ trans('dhcd-taggroup::language.buttons.create') }}
                 </h4>
                 <div class="pull-right">                   
-                    @if ($USER_LOGGED->canAccess('dhcd.document.cate.add'))
-                      <a href="{{ route('dhcd.document.cate.add') }}" class="btn btn-sm btn-default"><span
-                            class="glyphicon glyphicon-plus"></span> {{ trans('dhcd-document::language.buttons.create') }}</a>
+                    @if ($USER_LOGGED->canAccess('toolquiz.taggroup.create'))
+                      <a href="{{ route('toolquiz.taggroup.create') }}" class="btn btn-sm btn-default"><span
+                            class="glyphicon glyphicon-plus"></span> {{ trans('dhcd-taggroup::language.buttons.create') }}</a>
                     @endif        
                 </div>
             </div>
@@ -50,17 +50,30 @@
                         <div class="table-scrollable">
                             <table class="table table-bordered table-hover">
                                 <thead>
-                                    <tr>
-                                        
-                                        <th>{{ trans('dhcd-document::language.document_cate.table.icon') }}</th>
+                                    <tr>                                                                            
                                         <th>{{ trans('dhcd-document::language.document_cate.table.name') }}</th>
-                                        <th>{{ trans('dhcd-document::language.document_cate.table.parent_id') }}</th>
+                                        <th>{{ trans('dhcd-document::language.document_cate.table.alias') }}</th>
                                         <th>{{ trans('dhcd-document::language.document_cate.table.action') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>                                   
-                                    @if(!empty($cates))
-                                        {{$objCate->showIsTableCategories($cates, $parents, $USER_LOGGED)}}
+                                    @if(!empty($tagGroup))
+                                        @foreach($tagGroup as $group)
+                                        <tr>
+                                            <td>{{ $group->name }}</td>
+                                            <td>{{ $group->alias }}</td>
+                                            <td>
+                                               
+                                                                                            
+                                                @if ($USER_LOGGED->canAccess('toolquiz.taggroup.edit'))
+                                                    <a href='{{route('toolquiz.taggroup.edit',['tag_group_id' => $group['tag_group_id']])}}'><i class="livicon" data-name="edit" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="{{ trans('dhcd-taggroup::language.buttons.edit') }}"></i></a>
+                                                @endif
+                                                @if ($USER_LOGGED->canAccess('toolquiz.taggroup.delete'))
+                                                    <a href='{{route('toolquiz.taggroup.delete',['document_id' => $doc['document_id']])}}' onclick="return confirm('Bạn có chắc chắn muốn xóa?')" ><i class="livicon" data-name="trash" data-size="18" data-loop="true" data-c="#f56954" data-hc="#f56954" title="{{ trans('dhcd-taggroup::language.buttons.delete') }}"></i></a>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        @endforeach
                                     @endif                                                                        
                                 </tbody>
                             </table>

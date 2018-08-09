@@ -62,25 +62,28 @@ class DocumentController extends Controller
     
     public function create(Request $request){
         
-        if(empty($request->file_types) || empty($request->file_names)){
+        if(empty($request->file_types) || empty($request->file_names) || empty($request->path)){
             return redirect()->back()->withInput()->withErrors(['Bạn chưa chọn file đính kèm']);
         }      
         $validator = Validator::make($request->all(), [
             'name' => 'required',            
-            'descript' => 'required',
+            'descript' => 'required',            
             'document_type_id' => 'required',            
         ]);
         if (!$validator->fails()) {            
              $files = [];
              $file_names = $request->file_names;
              $file_types = $request->file_types;
-             
+             $paths = $request->path;
              foreach($file_names as $i => $name){
                  $files[] = [
                      'type' => $file_types[$i],
-                     'name' => $name
+                     'name' => $name,
+                     'path' => $paths[$i]
                  ];
              }
+             $is_reserve = !empty($request->is_reserve) ? $request->is_reserve : 0;
+             $is_offical = !empty($request->is_offical) ? $request->is_offical : 0;
              $type_control = !empty($request->type_control) ? $request->type_control : 'file';
              $avatar = '';
              if($type_control != 'file'){
@@ -93,7 +96,9 @@ class DocumentController extends Controller
                  'alias' => $this->to_slug($request->name),
                  'document_type_id' => $request->document_type_id,
                  'file' => json_encode($files),
-                 'avatar' => $avatar
+                 'avatar' => $avatar,
+                 'is_reserve' => $is_reserve,
+                 'is_offical' => $is_offical                
              ]);
              if($document->document_id){
                   if (!empty($request->document_cate_id)) {    
@@ -138,9 +143,8 @@ class DocumentController extends Controller
         return view('DHCD-DOCUMENT::modules.document.doc.edit',compact('document','types','cates','cateIds','cateObj'));
     }
     
-    public function update(Request $request){
-        
-        if(empty($request->file_types) || empty($request->file_names)){
+    public function update(Request $request){        
+        if(empty($request->file_types) || empty($request->file_names) || empty($request->path)){
             return redirect()->back()->withInput()->withErrors(['Bạn chưa chọn file đính kèm']);
         }        
         
@@ -148,7 +152,7 @@ class DocumentController extends Controller
             'name' => 'required',
             'document_type_id' => 'required',
             'document_id' => 'required',
-            'descript' => 'required',
+            'descript' => 'required'            
         ]);
         
         if (!$validator->fails()) {
@@ -156,19 +160,24 @@ class DocumentController extends Controller
              $files = [];
              $file_names = $request->file_names;
              $file_types = $request->file_types;
-             
+             $paths = $request->path;
              foreach($file_names as $i => $name){
                  $files[] = [
                      'type' => $file_types[$i],
-                     'name' => $name
+                     'name' => $name,
+                     'path' => $paths[$i]
                  ];
              }
+                         
+             $is_reserve = !empty($request->is_reserve) ? $request->is_reserve : 0;
+             $is_offical = !empty($request->is_offical) ? $request->is_offical : 0;
+             
              $type_control = !empty($request->type_control) ? $request->type_control : 'file';
              $avatar = '';
              if($type_control == 'image'){
                 $avatar = !empty($request->setAvatar) ? $request->setAvatar : $files[0]['name'];                
              }
-            
+             
              $document = $this->documentRepository->find($request->document_id);
              if($document->document_id){
                   $document->update([
@@ -177,7 +186,9 @@ class DocumentController extends Controller
                         'descript' => $request->descript,
                         'document_type_id' => $request->document_type_id,
                         'file' => json_encode($files),
-                        'avatar' => $avatar
+                        'avatar' => $avatar,
+                        'is_reserve' => $is_reserve,
+                        'is_offical' => $is_offical
                   ]);
                   $document->save();
                   if (!empty($request->document_cate_id)) {    

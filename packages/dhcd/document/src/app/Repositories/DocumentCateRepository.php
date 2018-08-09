@@ -28,12 +28,12 @@ class DocumentCateRepository extends Repository
     }
     
     public function getCates(){
-        Cache::forget('document_cates_list');
+        
         if(Cache::has('document_cates_list')){            
             $cates = Cache::get('document_cates_list');            
             return $cates;            
         } else {
-            $cates = DocumentCate::orderBy('document_cate_id','desc')->get()->toArray();
+            $cates = DocumentCate::select('document_cate_id','name','alias','parent_id','icon')->orderBy('document_cate_id','desc')->get()->toArray();
             $data = [];
             if($cates){
                 Cache::forever('document_cates_list',$cates);
