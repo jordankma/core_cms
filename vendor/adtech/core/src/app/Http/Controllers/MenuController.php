@@ -8,6 +8,8 @@ use Adtech\Core\App\Repositories\MenuRepository;
 use Adtech\Core\App\Http\Requests\MenuRequest;
 use Adtech\Core\App\Models\Menu;
 use Adtech\Core\App\Models\Domain;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Collection;
 use Spatie\Activitylog\Models\Activity;
@@ -37,17 +39,37 @@ class MenuController extends Controller
             $parent = $request->input('parent', 0);
             $route_name = $request->input('route_name', '');
             $domain_id = $request->input('domain_id',  0);
+            $route_params = $request->input('route_params', 0);
+            $route_params_detail = $request->input('route_params_detail', 0);
+            $name = $request->input('name', '');
             $type = $request->input('type', 0);
             $group = $request->input('group', '');
+            $sort = $request->input('sort', 99);
+            $icon = $request->input('icon', 'question');
+            $typeData = $request->input('typeData', 'thuong');
+            $typeView = $request->input('typeView', 'thuong');
+            $alias = strtolower(preg_replace('([^a-zA-Z0-9])', '', self::stripUnicode($name)));
 
             if ($parent > 0) {
                 if (!Route::has($route_name))
                     return redirect()->route('adtech.core.menu.manage', ['domain_id' => $domain_id])->with('error', trans('adtech-core::messages.error.create'));
             }
 
+            if ($alias != '') {
+                if (null != Menu::where('alias', $alias)->where('domain_id', $domain_id)->first()) {
+                    return redirect()->route('adtech.core.menu.manage', ['domain_id' => $domain_id])->with('error', trans('adtech-core::messages.error.create'));
+                }
+            }
+
             $menu = new Menu($request->all());
             $menu->domain_id = $domain_id;
+            $menu->route_params = ($route_params == 0 && $route_params == '') ? $route_params_detail : $route_params;
+            $menu->typeData = $typeData;
+            $menu->typeView = $typeView;
             $menu->group = $group;
+            $menu->sort = (int) $sort;
+            $menu->icon = (string) $icon;
+            $menu->alias = $alias;
             $menu->save();
 
             if ($menu->menu_id) {
@@ -83,18 +105,43 @@ class MenuController extends Controller
 
         //get route name list
         $app = app();
-        $listRouteName = array();
+        $listRouteName = $listRouteType = $listRouteView = array();
         $routes = $app->routes->getRoutes();
+        $adminPrefix = config('site.admin_prefix');
+        foreach ($routes as $k => $route) {
 
-        foreach ($routes as $route) {
-            if (isset($route->action['as'])) {
-                $listRouteName[] = $route->action['as'];
+            if (isset($route->action['prefix'])) {
+                $arrPrefix = explode('/', $route->action['prefix']);
+                $arrPrefix = array_filter(array_values(array_filter($arrPrefix)));
+
+                if (count($arrPrefix) > 0) {
+                    if ($type == 0) {
+                        if ('/' . $arrPrefix[0] != $adminPrefix) {
+                            continue;
+                        }
+                    } else {
+                        if ('/' . $arrPrefix[0] == $adminPrefix) {
+                            continue;
+                        }
+                    }
+                }
+            }
+
+            if (isset($route->wheres['as']) && isset($route->action['as'])) {
+
+                $listRouteName[$route->action['as']] = $route->wheres['as'];
+                if (isset($route->wheres['type']))
+                    $listRouteType[$route->action['as']] = $route->wheres['type'];
+                if (isset($route->wheres['view']))
+                    $listRouteView[$route->action['as']] = $route->wheres['view'];
             }
         }
 
         $menusGroups =$this->_menuTop;
+        $listRouteType = json_encode($listRouteType);
+        $listRouteView = json_encode($listRouteView);
 
-        return view('ADTECH-CORE::modules.core.menu.create', compact('domain_id', 'menus', 'listRouteName', 'menusGroups', 'type'));
+        return view('ADTECH-CORE::modules.core.menu.create', compact('domain_id', 'menus', 'listRouteName', 'menusGroups', 'type', 'listRouteType', 'listRouteView'));
     }
 
     public function delete(MenuRequest $request)
@@ -112,7 +159,7 @@ class MenuController extends Controller
                 ->withProperties($request->all())
                 ->log('User: :causer.email - Delete menu - menu_id: :properties.menu_id, name: ' . $menu->name);
 
-            return redirect()->route('adtech.core.menu.manage', ['domain_id' => $menu->domain_id])->with('success', trans('adtech-core::messages.success.delete'));
+            return redirect()->route('adtech.core.menu.manage', ['domain_id' => $menu->domain_id, 'type' => $menu->type])->with('success', trans('adtech-core::messages.success.delete'));
         } else {
             return redirect()->route('adtech.core.menu.manage')->with('error', trans('adtech-core::messages.error.delete'));
         }
@@ -130,6 +177,11 @@ class MenuController extends Controller
             $type = $request->input('type');
         }
 
+        shell_exec('cd ../ && /egserver/php/bin/php artisan view:clear');
+        shell_exec('cd ../ && /egserver/php/bin/php artisan route:clear');
+        shell_exec('cd ../ && /egserver/php/bin/php artisan config:clear');
+//        shell_exec('cd ../ && /egserver/php/bin/composer dump-autoload');
+
         return view('ADTECH-CORE::modules.core.menu.manage', compact('domains', 'domain_id', 'type'));
     }
 
@@ -138,36 +190,93 @@ class MenuController extends Controller
         $menu_id = $request->input('menu_id');
         $menu = $this->menu->find($menu_id);
 
-        self::getMenu($menu->domain_id);
-        $menus = $this->_menuList;
+        if ($menu) {
+            self::getMenu($menu->domain_id);
+            $menus = $this->_menuList;
 
-        //get route name list
-        $app = app();
-        $listRouteName = array();
-        $routes = $app->routes->getRoutes();
+            //get route name list
+            $app = app();
+            $listRouteType = $listRouteView = array();
+            $type = $menu->type;
+            $typeData = $menu->typeData;
+            $typeView = $menu->typeView;
+            $route_params = null;
 
-        foreach ($routes as $route) {
-            if (isset($route->action['as'])) {
-                $listRouteName[] = $route->action['as'];
+
+            $checkDisplay = 'display: none';
+            $checkDisplayDetail = 'display: none';
+            $listCate = new Collection();
+            if ($typeData == 'tintuc' && $typeView == 'list') {
+                $listCate = app('Dhcd\News\App\Http\Controllers\NewsCatController')->getCateApi();
+                $checkDisplay = '';
             }
+            if ($typeData == 'tailieu' && $typeView == 'list') {
+                $listCate = app('Dhcd\Document\App\Http\Controllers\DocumentCateController')->getListCategory();
+                $checkDisplay = '';
+            }
+            if ($typeData == 'tintuc' && $typeView == 'detail') {
+//                $listCate = app('Dhcd\News\App\Http\Controllers\NewsCatController')->getCateApi();
+                $route_params = $menu->route_params;
+                $checkDisplayDetail = '';
+            }
+
+            $listRouteName = array();
+            $routes = $app->routes->getRoutes();
+            $adminPrefix = config('site.admin_prefix');
+            foreach ($routes as $k => $route) {
+
+                if (isset($route->action['prefix'])) {
+                    $arrPrefix = explode('/', $route->action['prefix']);
+                    $arrPrefix = array_filter(array_values(array_filter($arrPrefix)));
+
+                    if (count($arrPrefix) > 0) {
+                        if ($type == 0) {
+                            if ('/' . $arrPrefix[0] != $adminPrefix) {
+                                continue;
+                            }
+                        } else {
+                            if ('/' . $arrPrefix[0] == $adminPrefix) {
+                                continue;
+                            }
+                        }
+                    }
+                }
+
+                if (isset($route->wheres['as']) && isset($route->action['as'])) {
+                    $listRouteName[$route->action['as']] = $route->wheres['as'];
+                    if (isset($route->wheres['type']))
+                        $listRouteType[$route->action['as']] = $route->wheres['type'];
+                    if (isset($route->wheres['view']))
+                        $listRouteView[$route->action['as']] = $route->wheres['view'];
+                }
+            }
+        } else {
+            return redirect()->route('adtech.core.menu.manage')->with('error', trans('adtech-core::messages.error.create'));
         }
 
         $menusGroups = $this->_menuTop;
-
-        return view('ADTECH-CORE::modules.core.menu.edit', compact('menu', 'menus', 'listRouteName', 'menusGroups'));
+        $listRouteType = json_encode($listRouteType);
+        $listRouteView = json_encode($listRouteView);
+        return view('ADTECH-CORE::modules.core.menu.edit',
+            compact('menu', 'menus', 'listRouteName', 'menusGroups', 'listRouteType', 'listRouteView',
+                'listCate', 'checkDisplay', 'checkDisplayDetail', 'route_params', 'type'));
     }
 
     public function update(MenuRequest $request)
     {
         $menu_id = $request->input('menu_id');
         $parent = $request->input('parent');
-        $group = $request->input('group');
         $name = $request->input('name');
+        $alias = $request->input('alias');
+        $route_params = $request->input('route_params', 0);
+        $route_params_detail = $request->input('route_params_detail', 0);
         $route_name = $request->input('route_name');
         $domain_id = $request->input('domain_id');
         $type = $request->input('type');
         $sort = $request->input('sort');
         $icon = $request->input('icon');
+        $typeData = $request->input('typeData', 'thuong');
+        $typeView = $request->input('typeView', 'thuong');
 
         if ($parent > 0) {
             if (!Route::has($route_name))
@@ -180,9 +289,13 @@ class MenuController extends Controller
         $menu->parent = $parent;
         $menu->group = $group;
         $menu->name = $name;
+        $menu->alias = $alias;
+        $menu->typeData = $typeData;
+        $menu->typeView = $typeView;
         $menu->route_name = $route_name;
-        $menu->sort = $sort;
-        $menu->icon = $icon;
+        $menu->route_params = ($route_params == 0 && $route_params == '') ? $route_params_detail : $route_params;
+        $menu->sort = (int) $sort;
+        $menu->icon = (string) $icon;
 
         if ($menu->save()) {
 
@@ -264,15 +377,21 @@ class MenuController extends Controller
             return Datatables::of($menus)
                 ->addIndexColumn()
                 ->editColumn('name', function ($menus) {
-                    $name = str_repeat('---', $menus->level) . $menus->name;
+                    $name = '<span class="flagTxt">' . $menus->getTranslation()->locale .'</span>';
+                    $name .= str_repeat('---', $menus->level) . $menus->name;
                     return $name;
                 })
                 ->editColumn('icon', function ($menus) {
                     $iconName = ($menus->icon != '') ? $menus->icon : 'question';
-                    $arrColor = ['#4089C7', '#00BB8D', '#58BEDC', '#F99928', '#F06E6B', '#A7B4BA'];
-                    $colorItem = $arrColor[rand(0, 5)];
 
-                    $icon = '<i class="livicon" data-name="' . $iconName . '" data-size="18" data-loop="true" data-c="' . $colorItem . '" data-hc="' . $colorItem . '"></i>';
+                    if (strrpos($iconName, '/') > 0) {
+                        $icon = '<img id="holder2" src="'.$iconName.'" style="max-height:40px;">';
+                    } else {
+                        $arrColor = ['#4089C7', '#00BB8D', '#58BEDC', '#F99928', '#F06E6B', '#A7B4BA'];
+                        $colorItem = $arrColor[rand(0, 5)];
+                        $icon = '<i class="livicon" data-name="' . $iconName . '" data-size="18" data-loop="true" data-c="' . $colorItem . '" data-hc="' . $colorItem . '"></i>';
+                    }
+
                     return $icon;
                 })
                 ->addColumn('actions', function ($menus) {
@@ -296,7 +415,7 @@ class MenuController extends Controller
     }
 
     function getMenu($domain_id = 0, $type = 0) {
-        $menusGroups = Menu::select('group')->where('group', '!=', '')->distinct()->get();
+        $menusGroups = Menu::select('group')->where('domain_id', $domain_id)->where('type', $type)->where('group', '!=', '')->distinct()->get();
         $this->_menuTop = $menusGroups;
 
         $menus = Menu::where('domain_id', $domain_id)->where('type', $type)->orderBy('parent')->orderBy('sort')->get();

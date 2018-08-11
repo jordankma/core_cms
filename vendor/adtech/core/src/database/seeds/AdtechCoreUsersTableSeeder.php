@@ -14,10 +14,10 @@ class AdtechCoreUsersTableSeeder extends Seeder
     public function run()
     {
 
-        DB::table('adtech_core_users')->insert([
-            'email' => 'tuan@gmail.com',
+        DB::connection('mysql_core')->table('adtech_core_users')->insert([
+            'email' => 'electric@gmail.com',
             'password' => Hash::make('123456'),
-            'contact_name' => 'Tuan',
+            'contact_name' => 'Electric',
             'salt' => 'sal',
             'created_at' => new DateTime(),
             'updated_at' => new DateTime(),

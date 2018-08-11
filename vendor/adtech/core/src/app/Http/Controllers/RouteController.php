@@ -25,6 +25,8 @@ class RouteController extends Controller
             $wheres = '';
             if ($route->wheres) {
                 foreach ($route->wheres as $k => $v) {
+                    if ($k == 'as')
+                        continue;
                     $wheres .= '<div>' . $k . ': ' . $v . '</div>';
                 }
             }

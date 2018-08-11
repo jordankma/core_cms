@@ -235,10 +235,14 @@ class PackageController extends Controller
                             ]);
                         } elseif ($request->input('type') == 'db') {
                             //migrate + seed
-                            $db_connection = "mysql_" . $package->package_alias;
+
+                            self::setAppurl();
+                            $db_connection = ($package->package_alias == 'adtech') ? "mysql_core" : "mysql_" . $package->package_alias;
                             $pathDatabase = 'packages/' . $package->package_alias . '/' . $package->module_alias . '/src/database/migrations';
+                            if ($this->files->isDirectory('../' . $pathDatabase)) {
 //                            shell_exec('cd ../ && /egserver/php/bin/php artisan migrate:refresh --path="' . $pathDatabase . '" --database="' . $db_connection . '"');
-                            shell_exec('cd ../ && php artisan migrate:refresh --path="' . $pathDatabase . '" --database="' . $db_connection . '"');
+                                dd(shell_exec('cd ../ && php artisan migrate:refresh --path="' . $pathDatabase . '" --database="' . $db_connection . '"'));
+                            }
                         }
                     }
                     return redirect()->route('adtech.core.package.manage', ['id' => $domain_id])->with('success', trans('adtech-core::messages.success.update'));
@@ -250,13 +254,6 @@ class PackageController extends Controller
                         $package = $this->package->find($package_id);
 
                         //khai bao trong composer root
-//                        $path = base_path('composer.json');
-//                        $composerFile = file_get_contents($path);
-//                        $composerObject = json_decode($composerFile, true);
-//                        $repositories = $composerObject['repositories'];
-//                        $require = $composerObject['require'];
-//                        $autoload_dev_classmap = $composerObject['autoload-dev']['classmap'];
-//                        $autoload_psr4 = $composerObject['autoload']['psr-4'];
                         $urlRepositorie = "packages"."/".$package->package_alias."/".$package->module_alias;
 
                         $path = base_path('composer.json');
@@ -313,11 +310,13 @@ class PackageController extends Controller
                             ->log('User: :causer.email - Update Status Package - domain_id: :properties.domain_id, package_id: :properties.package_id, status: ' . $domainsPackage->status);
 
                         //migrate + seed
+                        self::setAppurl();
                         $db_connection = "mysql_" . $package->package_alias;
                         $pathDatabase = 'packages/' . $package->package_alias . '/' . $package->module_alias . '/src/database/migrations';
+                        if ($this->files->isDirectory('../' . $pathDatabase)) {
 //                        shell_exec('cd ../ && /egserver/php/bin/php artisan migrate --path="' . $pathDatabase . '" --database="' . $db_connection . '"');
-                        shell_exec('cd ../ && php artisan migrate --path="' . $pathDatabase . '" --database="' . $db_connection . '"');
-
+//                            shell_exec('cd ../ && php artisan migrate --path="' . $pathDatabase . '" --database="' . $db_connection . '"');
+                        }
                         // Dump autoload.
 //                        $this->composer->dumpAutoloads();
 //                        shell_exec('cd ../ && /egserver/php/bin/composer dump-autoload');
@@ -351,13 +350,6 @@ class PackageController extends Controller
 
                 $package = $this->package->find($package_id);
                 //khai bao trong composer root
-//                $path = base_path('composer.json');
-//                $composerFile = file_get_contents($path);
-//                $composerObject = json_decode($composerFile, true);
-//                $repositories = $repositoriesEmpty = $composerObject['repositories'];
-//                $require = $composerObject['require'];
-//                $autoload_dev_classmap = $composerObject['autoload-dev']['classmap'];
-//                $autoload_psr4 = $composerObject['autoload']['psr-4'];
                 $urlRepositorie = "packages"."/".$package->package_alias."/".$package->module_alias;
 
                 $path = base_path('composer.json');
@@ -408,11 +400,13 @@ class PackageController extends Controller
                 }
 
                 //delete migrate
+                self::setAppurl();
                 $db_connection = "mysql_" . $package->package_alias;
                 $pathDatabase = 'packages/' . $package->package_alias . '/' . $package->module_alias . '/src/database/migrations';
+                if ($this->files->isDirectory('../' . $pathDatabase)) {
 //                shell_exec('cd ../ && /egserver/php/bin/php artisan migrate:reset --path="' . $pathDatabase . '" --database="' . $db_connection . '"');
-                shell_exec('cd ../ && php artisan migrate:reset --path="' . $pathDatabase . '" --database="' . $db_connection . '"');
-
+//                    shell_exec('cd ../ && php artisan migrate:reset --path="' . $pathDatabase . '" --database="' . $db_connection . '"');
+                }
                 //Delete folder package
                 if ($package->package_alias != 'adtech')
                     shell_exec('cd ../ && rm -rf packages/' . $package->package_alias . '/' . $package->module_alias);
@@ -489,6 +483,7 @@ class PackageController extends Controller
         }
 
         $packages = Package::select('package')->distinct()->get();
+        shell_exec('cd ../ && rm -rf public/unzip/*');
 
         return view('ADTECH-CORE::modules.core.package.manage', compact('domains', 'domain_id', 'packages'));
     }
@@ -778,7 +773,7 @@ class PackageController extends Controller
                 $variable = 'APP_MODULES_' . strtoupper(str_replace('.', '_', $host));
                 if (strpos(file_get_contents($path), $variable . '=') > 0) {
                     file_put_contents($path, str_replace(
-                        $variable . '='.env($variable), $variable . '='.$newString,
+                        $variable . '=' . env($variable), $variable . '=' . $newString,
                         file_get_contents($path)
                     ));
                 } else {
@@ -793,7 +788,7 @@ class PackageController extends Controller
                 $status = '';
                 if (count($packages->domains) > 0) {
                     $package = $packages->domains[count($packages->domains) - 1];
-                    if ($package->domain_id == $domain_id) {
+                    if (null != $package) {
                         if ($package->pivot->status == 1) {
                             if ($this->user->canAccess('adtech.core.package.confirm-status')) {
                                 $status = '<a href=' . route('adtech.core.package.confirm-status', ['package_id' => $packages->package_id, 'domain_id' => $domain_id]) . ' data-toggle="modal" data-target="#status_confirm"><span class="label label-sm label-success">Enable</span></a>
@@ -854,5 +849,20 @@ class PackageController extends Controller
             })
             ->rawColumns(['actions', 'status', 'methods'])
             ->make();
+    }
+
+    function setAppurl() {
+        $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : null;
+        $path = base_path('.env');
+        if (file_exists($path) && $host) {
+            $variable = 'APP_URL';
+            if (strpos(file_get_contents($path), $variable . '=') > 0) {
+                file_put_contents($path, str_replace(
+                    $variable . '=' . env($variable), $variable . '=http://' . $host,
+                    file_get_contents($path)
+                ));
+            }
+        }
+        return false;
     }
 }

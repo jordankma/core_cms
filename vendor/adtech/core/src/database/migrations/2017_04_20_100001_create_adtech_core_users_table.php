@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -19,6 +20,7 @@ class CreateAdtechCoreUsersTable extends Migration
             $table->string('password');
             $table->string('contact_name', 255);
             $table->string('salt', 3)->default('sal');
+            $table->tinyInteger('role_id', false, true)->default(0);
             $table->tinyInteger('status', false, true)->default(1);
             $table->tinyInteger('activated', false, true)->default(0);
             $table->tinyInteger('permission_locked', false, true)->default(0);
@@ -28,6 +30,18 @@ class CreateAdtechCoreUsersTable extends Migration
             $table->softDeletes();
             $table->engine = 'InnoDB';
         });
+
+        DB::connection('mysql_core')->table('adtech_core_users')->insert([
+            'email' => 'diennh@vnedutech.com',
+            'password' => Hash::make('123456'),
+            'contact_name' => 'Electric',
+            'salt' => 'sal',
+            'created_at' => new DateTime(),
+            'updated_at' => new DateTime(),
+            'activated' => 1,
+            'status' => 1,
+            'permission_locked' => 1
+        ]);
     }
 
     /**

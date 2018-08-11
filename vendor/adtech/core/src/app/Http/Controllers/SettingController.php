@@ -4,21 +4,74 @@ namespace Adtech\Core\App\Http\Controllers;
 
 use Hamcrest\Core\Set;
 use Illuminate\Http\Request;
+use Illuminate\Filesystem\Filesystem;
 use Adtech\Application\Cms\Controllers\Controller as Controller;
 use Adtech\Core\App\Repositories\SettingRepository;
 use Adtech\Core\App\Models\Setting;
+use Adtech\Core\App\Models\Locale;
+use Validator;
 use Auth;
 
 class SettingController extends Controller
 {
-    public function __construct(SettingRepository $settingRepository)
+    /**
+     * @var Filesystem
+     */
+    protected $files;
+
+    private $messages = array(
+        'name.regex' => "Sai định dạng",
+        'required' => "Bắt buộc",
+        'numeric'  => "Phải là số"
+    );
+
+    public function __construct(SettingRepository $settingRepository, Filesystem $files)
     {
         parent::__construct();
+        $this->files = $files;
         $this->setting = $settingRepository;
     }
 
     public function manage(Request $request)
     {
+        $request->session()->put('website_language', 'en');
+        $arrTranslate = [];
+        $tab = $request->input('tab', 0);
+        $tab_tran = $request->input('tab_tran', '');
+
+        $language = config('app.fallback_locale');
+        $moduleList = config('site.modules');
+        if (count($moduleList) > 0) {
+            foreach ($moduleList as $package => $modules) {
+
+                if (count($modules) > 0) {
+                    foreach ($modules as $module) {
+
+                        $directory = 'packages/' . $package . '/' . $module . '/src/translations/' . $language;
+                        if ($this->files->isDirectory('../' . $directory)) {
+
+                            $packagesDir = base_path() . '/' . $directory;
+                            $ls = @scandir($packagesDir);
+                            if ($ls) {
+                                foreach ($ls as $index => $file) {
+                                    if ($file === '.' || $file === '..') {
+                                        continue;
+                                    }
+
+                                    //
+                                    $fileTranslate = $packagesDir . '/' . $file;
+                                    $arrTranslate[$package . '-' . $module][$file] = include $fileTranslate;
+                                    //
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+//        $languageArr = config('translatable.locales');
+        $languageArr = Locale::where('status', 1)->get();
         $settings = Setting::where('domain_id', $this->domainDefault)->get();
         $title = $logo = $logo_mini = $logo_link = $favicon = $company_name = $address = $email = $phone = $hotline = $ga_code = $chat_code = '';
 
@@ -66,12 +119,17 @@ class SettingController extends Controller
         }
 
         $data = [
+            'arrTranslate' => $arrTranslate,
+            'languageCurrent' => $language,
+            'languages' => $languageArr,
+            'tab_tran' => $tab_tran,
             'title' => $title,
+            'tab' => $tab,
             'logo' => $logo,
+            'company_name' => $company_name,
             'logo_mini' => $logo_mini,
             'logo_link' => $logo_link,
             'favicon' => $favicon,
-            'company_name' => $company_name,
             'address' => $address,
             'email' => $email,
             'phone' => $phone,
@@ -81,6 +139,37 @@ class SettingController extends Controller
         ];
 
         return view('ADTECH-CORE::modules.core.setting.manage', $data);
+    }
+
+    public function translate(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'package_module' => 'required',
+            'file' => 'required'
+        ], $this->messages);
+        if (!$validator->fails()) {
+
+            $package_module = $request->input('package_module');
+            $file = $request->input('file');
+            $language = config('app.locale');
+
+            $directory = 'packages/' . str_replace('-', '/', $package_module) . '/src/translations/' . $language;
+            if ($this->files->isDirectory('../' . $directory)) {
+                $packagesDir = base_path() . '/' . $directory . '/' . $file;
+//                $tranFile = file_get_contents($packagesDir);
+                $tranList = $request->input('tran');
+
+//                $stubFile = '../packages/adtech/application/src/resources/stubs/translation_default.stub';
+                $this->files->put($packagesDir, '<?php return ' . var_export($tranList, true) .';');
+                return redirect()->route('adtech.core.setting.manage', ['tab' => 1, 'tab_tran' => $package_module])->with('success', trans('adtech-core::messages.success.create'));
+            }
+
+        } else {
+            return $validator->messages();
+        }
+
+//        $composerFile = file_get_contents($path);
+//        file_put_contents($path, str_replace('__', '-', str_replace('\/', '/', json_encode($composerObject))));
     }
 
     public function update(Request $request)
@@ -100,7 +189,7 @@ class SettingController extends Controller
                             $setting->domain_id = $this->domainDefault;
                             $setting->name = $k;
                         }
-                        $setting->value = (empty($input)) ? '' : $input;
+                        $setting->value = (empty($input) && $input != 0) ? '' : $input;
                         $setting->domain_id = $this->domainDefault;
                         $setting->save();
                     }
@@ -109,5 +198,10 @@ class SettingController extends Controller
             }
             return redirect()->route('adtech.core.setting.manage')->with('success', trans('adtech-core::messages.success.create'));
         }
+    }
+
+    public function setLanguage(Request $request) {
+        $request->session()->put('website_language', $request->input('language'));
+        return back();
     }
 }

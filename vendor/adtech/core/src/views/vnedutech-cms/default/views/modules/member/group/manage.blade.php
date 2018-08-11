@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 {{-- Page title --}}
-@section('title'){{ $title = trans('adtech-core::titles.role.manage') }}@stop
+@section('title'){{ $title = trans('dhcd-member::language.titles.group.manage') }}@stop
 
 {{-- page level styles --}}
 @section('header_styles')
@@ -35,9 +35,9 @@
                         {{ $title }}
                     </h4>
                     <div class="pull-right">
-                        @if ($USER_LOGGED->canAccess('adtech.core.role.create'))
-                            <a href="{{ route('adtech.core.role.create') }}" class="btn btn-sm btn-default"><span
-                                    class="glyphicon glyphicon-plus"></span> {{ trans('adtech-core::buttons.create') }}</a>
+                         @if ($USER_LOGGED->canAccess('dhcd.member.group.create'))
+                        <a href="{{ route('dhcd.member.group.create') }}" class="btn btn-sm btn-default"><span
+                                    class="glyphicon glyphicon-plus"></span> {{ trans('dhcd-member::language.buttons.create') }}</a>
                         @endif
                     </div>
                 </div>
@@ -47,13 +47,11 @@
                         <table class="table table-bordered" id="table">
                             <thead>
                             <tr class="filters">
-                                <th class="fit-content">{{ trans('adtech-core::common.sequence') }}</th>
-                                <th>{{ trans('adtech-core::common.role.name') }}</th>
-                                {{--<th class="fit-content">{{ trans('adtech-core::common.role.sort') }}</th>--}}
-                                <th style="width: 120px">{{ trans('adtech-core::common.created_at') }}</th>
-                                <th style="width: 120px">{{ trans('adtech-core::common.update_at') }}</th>
-                                {{--<th class="fit-content">{{ trans('adtech-core::common.role.status') }}</th>--}}
-                                <th>{{ trans('adtech-core::common.action') }}</th>
+                                <th class="fit-content">#</th>
+                                <th>{{ trans('dhcd-member::language.table.group.name') }}</th>
+                                <th>{{ trans('dhcd-member::language.table.group.count') }}</th>
+                                <th style="width: 120px">{{ trans('dhcd-member::language.table.created_at') }}</th>
+                                <th>{{ trans('dhcd-member::language.table.action') }}</th>
                             </tr>
                             </thead>
                         </table>
@@ -74,23 +72,14 @@
             var table = $('#table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: {
-                    url: '{{ route('adtech.core.role.data') }}',
-                    type: 'get',
-                    error: function (jqXHR, exception) {
-                        window.location.href = '{{ route('backend.homepage') }}';
-                    }
-                },
+                ajax: '{{ route('dhcd.member.group.data') }}',
                 columns: [
-                    { data: 'DT_Row_Index', name: 'role_id' },
+                    { data: 'rownum', name: 'rownum' },
                     { data: 'name', name: 'name' },
-                    // { data: 'sort', name: 'sort' },
+                    { data: 'count', name: 'count'},
                     { data: 'created_at', name: 'created_at'},
-                    { data: 'updated_at', name: 'updated_at'},
-                    // { data: 'status', name: 'status' },
                     { data: 'actions', name: 'actions', orderable: false, searchable: false, className: 'fit-content'}
-                ],
-                language: $.parseJSON('{!! $DATATABLE_TRANS !!}')
+                ]
             });
             table.on('draw', function () {
                 $('.livicon').each(function () {

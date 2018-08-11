@@ -32,6 +32,7 @@ class LoginController extends Controller
             $request->session()->regenerateToken();
             \Session::flash('flash_messenger', trans('adtech-core::messages.login_success'));
             $routeName = $routePrefix == config('site.admin_prefix') ? 'backend.homepage' : 'frontend.homepage';
+            shell_exec('cd ../ && /egserver/php/bin/php artisan view:clear');
             return redirect()->intended(route($routeName));
         } else {
             $request->session()->regenerateToken();
@@ -49,6 +50,11 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
+        if ($this->user) {
+            $routeName = 'backend.homepage';
+            return redirect()->intended(route($routeName));
+        }
+
         if ($request->isMethod('post')) {
             return $this->_authenticate($request);
         }
