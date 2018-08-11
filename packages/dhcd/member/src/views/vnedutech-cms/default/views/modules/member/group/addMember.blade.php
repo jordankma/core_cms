@@ -51,21 +51,21 @@
                     </div>
                     <div class="panel-body"> 
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-md-6">
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="table">
                                         <thead>
                                         <tr class="filters">
                                             <th class="fit-content">#</th>
-                                            <th>{{ trans('dhcd-topic::language.table.add_member.name') }}</th>
-                                            <th>{{ trans('dhcd-topic::language.table.add_member.email') }}</th>
+                                            <th>{{ trans('dhcd-member::language.table.group.name') }}</th>
+                                            {{-- <th>{{ trans('dhcd-member::language.table.group.position') }}</th> --}}
                                             <th class="fit-content" style="width: 100px">{{ trans('dhcd-topic::language.table.delete') }}</th>
                                         </tr>
                                         </thead>
                                     </table>
                                 </div>
                             </div>
-                            <div class="col-md-4" id="content-right">
+                            <div class="col-md-6" id="content-right">
                                 <div id="typeaheadmulti">
                                     
                                 <input type="text" id="searchProduct" name="keyword" class="typeahead form-control" placeholder="Nhập tên người cần thêm" required="">
@@ -110,9 +110,9 @@
             serverSide: true,
             ajax: '{{ route('dhcd.member.group.data.member',['group_id' => $group_id]) }}',
             columns: [
-                { data: 'member_id', name: 'member_id' },
+                { data: 'DT_Row_Index', name: 'DT_Row_Index' },
                 { data: 'name', name: 'name' },
-                { data: 'email', name: 'email' },
+                // { data: 'position_id', name: 'position_id' },
                 { data: 'actions', name: 'actions', orderable: false, searchable: false, className: 'fit-content'}
             ]
         });
@@ -124,7 +124,7 @@
         // delete member
         var selected = 0;
         var selectedArr = [];
-        var routeDelete = '{{ route('dhcd.topic.topic.confirm-delete.member') }}';
+        var routeDelete = '{{ route('dhcd.member.group.confirm-delete.member') }}';
         var group_id = '{{$group_id}}';
         var htmlBtnToolbar = document.getElementById('btnToolbarMember').innerHTML;
         $('#table tbody').on('click', 'td.details-control', function () {
@@ -184,7 +184,7 @@
                     var obj_data = JSON.parse(data);
                     if(obj_data.length>0){
                         for (i in obj_data) {
-                            text += '<li class="list-group-item"><input id="m-del-'+obj_data[i].member_id+'" type="checkbox" name="list_members[]" value="'+obj_data[i].member_id+'"><label for="m-del-'+obj_data[i].member_id+'">'+'  '+obj_data[i].name+'</label></li>';
+                            text += '<li class="list-group-item"><input id="m-del-' + obj_data[i].member_id + '" type="checkbox" name="list_members[]" value="'+obj_data[i].member_id+'">  <label for="m-del-' + obj_data[i].member_id + '">' + '  ' + obj_data[i].name + ' - ' + obj_data[i].position_current + '</label></li>';
                         }
                         $('#list_members').html('');
                         $('#list_members').append(text);

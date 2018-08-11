@@ -128,8 +128,10 @@ return [
         'video/mp4',
         'application/vnd.ms-excel',
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         'application/docx',
         'application/pdf',
+        'application/xlsx',
         'audio/mp3', 
         'video/mp4'
     ],

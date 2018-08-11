@@ -66,9 +66,14 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
+                                    <label>{{trans('dhcd-member::language.form.title.position_current') }}</label>
+                                    <div class="form-group">
+                                        <input type="text" name="position_current" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.position_current')}}">
+                                    </div>
                                     <label>{{trans('dhcd-member::language.form.title.position') }}</label>
                                     <div class="form-group">
                                         <select class="form-control select2" id="position_select" name="position_id" placeholder="{{trans('dhcd-member::language.placeholder.member.position_select')}}">
+                                            <option value="0">Chọn chức vụ</option> 
                                             @if(!empty($list_position))
                                                 @foreach($list_position as $position)
                                                     <option value="{{$position->position_id}}">{{$position->name}}</option>     

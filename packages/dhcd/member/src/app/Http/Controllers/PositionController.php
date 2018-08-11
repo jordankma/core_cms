@@ -170,8 +170,9 @@ class PositionController extends Controller
     //Table Data to index page
     public function data()
     {   
-        $positions = $this->position->findAll();
+        $positions = $this->position->all();
         return Datatables::of($positions)
+            ->addIndexColumn()
             ->addColumn('actions', function ($positions) {
                 $actions = '';
                 if ($this->user->canAccess('dhcd.member.position.log')) {

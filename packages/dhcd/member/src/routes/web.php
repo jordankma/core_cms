@@ -53,6 +53,8 @@ Route::group(array('prefix' => $adminPrefix), function() {
         Route::get('dhcd/member/group/confirm-delete/member', 'GroupController@getModalDeleteMember')->name('dhcd.member.group.confirm-delete.member');
         Route::get('dhcd/member/group/search/member', 'GroupController@searchMember')->name('dhcd.member.group.search.member');
 
+        Route::get('dhcd/member/group/test', 'GroupController@test');
+
         //position
         Route::get('dhcd/member/position/log', 'PositionController@log')->name('dhcd.member.position.log');
         Route::get('dhcd/member/position/data', 'PositionController@data')->name('dhcd.member.position.data');

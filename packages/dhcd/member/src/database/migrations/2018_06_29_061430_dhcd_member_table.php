@@ -17,6 +17,7 @@ class DhcdMemberTable extends Migration
             $table->increments('member_id');
             $table->string('token')->nullable();
             $table->string('name');
+            $table->integer('sort',false,true)->nullable();
             $table->string('u_name')->nullable();
             $table->string('password')->nullable();
             $table->string('email')->unique()->nullable();
@@ -26,7 +27,8 @@ class DhcdMemberTable extends Migration
             $table->datetime('ngay_vao_dang')->nullable();
             $table->datetime('ngay_vao_doan')->nullable();
             $table->string('dan_toc')->nullable();
-            $table->integer('position_id',false,true)->nullable();
+            $table->integer('position_id',false,true)->default('0')->nullable();
+            $table->string('position_current',false,true)->nullable()->comment('tat ca chuc vu');
             $table->string('ton_giao')->nullable();
             $table->string('trinh_do_ly_luan')->nullable();
             $table->string('trinh_do_chuyen_mon')->nullable();

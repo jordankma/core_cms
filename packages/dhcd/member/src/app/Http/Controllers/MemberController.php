@@ -12,9 +12,7 @@ use Dhcd\Member\App\Models\Position;
 
 use Spatie\Activitylog\Models\Activity;
 use Yajra\Datatables\Datatables;
-use Validator;
-use Auth;
-use DateTime;
+use Validator,Auth,DateTime,DB;
 class MemberController extends Controller
 {
     private $messages = array(
@@ -54,6 +52,7 @@ class MemberController extends Controller
             $email = $request->input('email');
             $phone = $request->input('phone');
             $position_id = $request->input('position_id');
+            $position_current = $request->input('position_current');
             $trinh_do_ly_luan = $request->input('trinh_do_ly_luan');
             $trinh_do_chuyen_mon = $request->input('trinh_do_chuyen_mon');
             $address = $request->input('address'); 
@@ -71,6 +70,7 @@ class MemberController extends Controller
             $members->email = $email;
             $members->phone = $phone;
             $members->position_id = $position_id;
+            $members->position_current = $position_current;
             $members->trinh_do_ly_luan = $trinh_do_ly_luan;
             $members->trinh_do_chuyen_mon = $trinh_do_chuyen_mon;
             $members->address = $address;
@@ -133,6 +133,7 @@ class MemberController extends Controller
             $email = $request->input('email');
             $phone = $request->input('phone');
             $position_id = $request->input('position_id');
+            $position_current = $request->input('position_current');
             $trinh_do_ly_luan = $request->input('trinh_do_ly_luan');
             $trinh_do_chuyen_mon = $request->input('trinh_do_chuyen_mon');
             $address = $request->input('address'); 
@@ -150,6 +151,7 @@ class MemberController extends Controller
             $member->email = $email;
             $member->phone = $phone;
             $member->position_id = $position_id;
+            $member->position_current = $position_current;
             $member->trinh_do_ly_luan = $trinh_do_ly_luan;
             $member->trinh_do_chuyen_mon = $trinh_do_chuyen_mon;
             $member->address = $address;
@@ -279,7 +281,7 @@ class MemberController extends Controller
     //Table Data to index page
     public function data()
     {
-        $members = $this->member->findAll();
+        $members = $this->member->all();
         return Datatables::of($members)
             ->addIndexColumn()
             ->addColumn('actions', function ($members) {
@@ -305,7 +307,7 @@ class MemberController extends Controller
                 return $status;
             })
             ->addColumn('position', function ($members) {
-                $position = $members->getPosition->name;
+                $position = $members->position_current;
                 return $position;
             })
             ->rawColumns(['actions','status'])
@@ -356,24 +358,45 @@ class MemberController extends Controller
         return view('DHCD-MEMBER::modules.member.member.import');    
     }
 
-    public function postImport(Request $request){
-        $url = asset($request->input('path'));
-        dd($url);
-        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($url);
-        $worksheet = $spreadsheet->getActiveSheet();
-        $rows = [];
-        foreach ($worksheet->getRowIterator() AS $row) {
-            $cellIterator = $row->getCellIterator();
-            $cellIterator->setIterateOnlyExistingCells(FALSE); // This loops through all cells,
-            $cells = [];
-            foreach ($cellIterator as $cell) {
-                $cells[] = $cell->getValue();
+    public function postImport(Request $request){   
+        $validator = Validator::make($request->all(), [
+            'path' => 'required'
+        ], $this->messages);
+        if (!$validator->fails()) {
+            $term = $request->input('path');
+            $url = substr($term, 1, strlen($term));
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($url);
+            $worksheet = $spreadsheet->getActiveSheet();
+            $rows = [];
+            foreach ($worksheet->getRowIterator() AS $row) {
+                $cellIterator = $row->getCellIterator();
+                $cellIterator->setIterateOnlyExistingCells(FALSE); // This loops through all cells,
+                $cells = [];
+                foreach ($cellIterator as $cell) {
+                    $cells[] = $cell->getValue();
+                }
+                $rows[] = $cells;
             }
-            $rows[] = $cells;
+            if(!empty($rows)){
+                foreach ($rows as $key => $value) {
+                    $data_insert[] = [
+                        'name' => $value[0],
+                        'position_current' => $value[1]
+                    ];
+                }
+            } else {
+                return redirect()->route('dhcd.member.member.manage')->with('error', trans('dhcd-member::language.messages.error.import'));    
+            }
+            if(!empty($data_insert)){
+                if(DB::table('dhcd_member')->insert($data_insert)){
+                    return redirect()->route('dhcd.member.member.manage')->with('success', trans('dhcd-member::language.messages.success.import'));
+                }
+            } 
+            else {
+                return redirect()->route('dhcd.member.member.manage')->with('error', trans('dhcd-member::language.messages.error.import'));
+            }
+        } else {
+            return $validator->messages(); 
         }
-        echo '<pre>';
-        print_r($rows);
-        echo '</pre>'; die;
-        dd($request->all());   
     }
 }

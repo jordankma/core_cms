@@ -73,7 +73,7 @@
                 serverSide: true,
                 ajax: '{{ route('dhcd.member.position.data') }}',
                 columns: [
-                    { data: 'rownum', name: 'rownum' },
+                    { data: 'DT_Row_Index', name: 'DT_Row_Index' },
                     { data: 'name', name: 'name' },
                     { data: 'actions', name: 'actions', orderable: false, searchable: false, className: 'fit-content'}
                 ]

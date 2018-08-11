@@ -73,8 +73,7 @@
                             <tr class="filters">
                                 <th class="fit-content">#</th>
                                 <th>{{ trans('dhcd-member::language.table.member.name') }}</th>
-                                <th>{{ trans('dhcd-member::language.table.member.position') }}</th>
-                                <th>{{ trans('dhcd-member::language.table.member.address') }}</th>
+                                <th>{{ trans('dhcd-member::language.table.member.position_current') }}</th>
                                 <th>{{ trans('dhcd-member::language.table.status') }}</th>
                                 <th class="fit-content">{{ trans('dhcd-member::language.table.action') }}</th>
                             </tr>
@@ -99,10 +98,9 @@
                 serverSide: true,
                 ajax: '{{ route('dhcd.member.member.data') }}',
                 columns: [
-                    { data: 'rownum', name: 'rownum' },
+                    { data: 'DT_Row_Index', name: 'DT_Row_Index' },
                     { data: 'name', name: 'name' },
                     { data: 'position', name: 'position' },
-                    { data: 'address', name: 'address' },
                     { data: 'status', name: 'status', orderable: false, searchable: false, className: 'fit-content'},
                     { data: 'actions', name: 'actions', orderable: false, searchable: false, className: 'fit-content'}
                 ]

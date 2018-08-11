@@ -29,6 +29,7 @@ return [
         "member" => [
             "name"=> "Tên",
             "u_name"=> "Username",
+            "position_current"=> "Chức vụ hiện tại",
             "position"=> "Chức vụ",
             "address"=> "Địa chỉ",
         ],
@@ -37,7 +38,11 @@ return [
             "count" => "Số người dùng trong nhóm"
         ],
         "position" => [
+            "name" => "Tên"
+        ],
+        "group" => [
             "name" => "Tên",
+            "position"=> "Chức vụ"
         ]
     ],
     "form" => [
@@ -53,6 +58,7 @@ return [
             "birthday" => "Ngày sinh",
             "phone" => "Số điện thoại",
             "position" => "Chức vụ",
+            "position_current" => "Những chức vụ hiện tại",
             "trinh_do_ly_luan" => "Trình độ lý luận",
             "trinh_do_chuyen_mon" => "Trình độ chuyên môn",
             "email" => "Email",
@@ -85,6 +91,7 @@ return [
             "birthday" => "Chọn ngày sinh",
             "phone" => "Nhập số điện thoại",
             "position_text" => "Nhập chức vụ",
+            "position_current" => "Nhập những chức vụ hiện tại",
             "position_select" => "Chọn chức vụ",
             "trinh_do_ly_luan_text" => "Trình độ lý luận...",
             "trinh_do_ly_luan_select" => "Chọn trình độ lý luận...",
@@ -110,7 +117,8 @@ return [
             "update" => "Cập nhật thành công",
             "delete" => "Xóa thành công",
             "block" => "Khóa thành công",
-            "add_member" => "Thêm người dùng thành công"
+            "add_member" => "Thêm người dùng thành công",
+            "import" => "Thêm người dùng thành công"
         ],
         "error" => [
             "permission" => "Permission lock",
@@ -118,7 +126,8 @@ return [
             "update" => "Cập nhật thất bại",
             "delete" => "Xóa thất bại",
             "block" => "Khóa thất bại",
-            "add_member" => "Thêm người dùng thất bại"
+            "add_member" => "Thêm người dùng thất bại",
+            "import" => "Thêm người dùng thất bại"
         ]
     ]
 ];

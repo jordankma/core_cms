@@ -182,8 +182,9 @@ class GroupController extends Controller
     //Table Data to index page
     public function data()
     {
-        $groups = $this->group->findAll();
+        $groups = $this->group->all();
         return Datatables::of($groups)
+            ->addIndexColumn()
             ->addColumn('actions', function ($groups) {
                 $actions = '';
                 if ($this->user->canAccess('dhcd.member.group.log')) {
@@ -205,11 +206,7 @@ class GroupController extends Controller
                 $created_at = date_format($date, 'd-m-Y');
                 return $created_at;   
             })
-            ->addColumn('count', function ($groups) {
-                $count = 1;
-                return $count;   
-            })
-            ->rawColumns(['actions','created_at','count'])
+            ->rawColumns(['actions','created_at'])
             ->make();
     }
 
@@ -273,7 +270,7 @@ class GroupController extends Controller
 
     public function getModalDeleteMember(Request $request)
     {
-        $model = 'group';
+        $model = 'member';
         $type = 'delete';
         $confirm_route = $error = null;
         $validator = Validator::make($request->all(), [
@@ -328,12 +325,10 @@ class GroupController extends Controller
         $group = Group::where('group_id', $group_id)->with('getMember')->first();
         $members = $group->getMember;
         return Datatables::of($members)
+            ->addIndexColumn()
             ->addColumn('actions', function ($members) use ($group_id) {
                 $actions = '<input id="'.$members->member_id.'" type="checkbox" value="" class="select-member">';
                 return $actions;
-            })
-            ->addColumn('DT_RowId', function ($members) {
-                return $members->member_id;
             })
             ->addIndexColumn()
             ->rawColumns(['actions'])
@@ -352,12 +347,17 @@ class GroupController extends Controller
                     foreach($list_members as $member){
                         $data[] = [
                             'name' => $member->name,
-                            'member_id' => $member->member_id
+                            'member_id' => $member->member_id,
+                            'position_current' => $member->position_current
                         ];
                     }
                 }
             }
         }
         echo json_encode($data);
+    }
+
+    public function test(){
+        return view('DHCD-MEMBER::modules.member.group.xedit'); 
     }
 }

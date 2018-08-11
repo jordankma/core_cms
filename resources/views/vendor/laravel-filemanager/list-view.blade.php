@@ -90,7 +90,7 @@
 <script>
     $(document).ready(function () {
         
-        $('body').on('click', 'div.clickable', function () {
+        $('body').on('click', 'a.clickable', function () {
             var type = $(this).attr('data-type');
             var typeParent = $("input[name='document_type_id']:checked", opener.window.document).attr("data-types"); 
             var type_upload = $("input[name='type_upload']", opener.window.document).val();
