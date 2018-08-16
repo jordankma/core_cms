@@ -30,7 +30,7 @@ return [
             "name"=> "Tên",
             "u_name"=> "Username",
             "position_current"=> "Chức vụ hiện tại",
-            "position"=> "Chức vụ",
+            "position"=> "Chọn chức vụ được bầu",
             "address"=> "Địa chỉ",
         ],
         "group" => [
@@ -57,7 +57,8 @@ return [
             "don_vi" => "Đơn vị",
             "birthday" => "Ngày sinh",
             "phone" => "Số điện thoại",
-            "position" => "Chức vụ",
+            "position" => "Chọn chức vụ được bầu",
+            "doan" => "Đoàn",
             "position_current" => "Những chức vụ hiện tại",
             "trinh_do_ly_luan" => "Trình độ lý luận",
             "trinh_do_chuyen_mon" => "Trình độ chuyên môn",
@@ -68,7 +69,12 @@ return [
             "ngay_vao_doan" => "Ngày vào đoàn"
         ],
         "title_group" => [
-            "name" => "Tên nhóm"
+            "name" => "Tên nhóm",
+            "hot" => "Đoàn đại biểu bầu",
+            "normal" => "Đoàn đại biểu thường",
+            "desc" => "Mô tả",
+            "image" => "Ảnh đại diện",
+            "choise_image_display" => "Chọn đại diện",
         ],
         "title_position" => [
             "name" => "Tên chức vụ"
@@ -93,6 +99,7 @@ return [
             "position_text" => "Nhập chức vụ",
             "position_current" => "Nhập những chức vụ hiện tại",
             "position_select" => "Chọn chức vụ",
+            "doan_select" => "Chọn đoàn",
             "trinh_do_ly_luan_text" => "Trình độ lý luận...",
             "trinh_do_ly_luan_select" => "Chọn trình độ lý luận...",
             "trinh_do_chuyen_mon_text" => "Trình độ chuyên môn...",
@@ -105,7 +112,8 @@ return [
             "don_vi" => "Đơn vị...",
         ],
         "group" => [
-            "name" => "Nhập tên nhóm"
+            "name" => "Nhập tên nhóm",
+            "desc" => "Nhập mô tả"
         ],
         "position" => [
             "name" => "Nhập tên chức vụ"

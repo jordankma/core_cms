@@ -21,7 +21,9 @@
             "dhcd.member.member.country-district",
             "dhcd.member.member.check-username-exist",
             "dhcd.member.member.check-email-exist",
-            "dhcd.member.member.check-phone-exist"
+            "dhcd.member.member.check-phone-exist",
+            "dhcd.member.member.excel.get.import",
+            "dhcd.member.member.excel.post.import"
           ]
         },
         {

@@ -5,6 +5,8 @@ namespace Dhcd\Document\App\Http\Controllers;
 use Illuminate\Http\Request;
 use Adtech\Application\Cms\Controllers\Controller as Controller;
 use Dhcd\Document\App\Models\DocumentCate;
+use Dhcd\Document\App\Models\Tag;
+use Dhcd\Document\App\Models\TagItem;
 use Dhcd\Document\App\Repositories\DocumentCateRepository;
 use Spatie\Activitylog\Models\Activity;
 use Yajra\Datatables\Datatables;
@@ -35,27 +37,46 @@ class DocumentCateController extends Controller {
     }
 
     public function add(Request $request) {
-
+       
         $objCate = new DocumentCate();
         $cates = $this->documentCate->getCates();
-
-        return view('DHCD-DOCUMENT::modules.document.cate.add', compact('cates', 'objCate'));
+        $tags = Tag::orderBy('tag_id', 'desc')->get()->toArray();
+        return view('DHCD-DOCUMENT::modules.document.cate.add', compact('cates', 'objCate','tags'));
     }
 
     public function create(Request $request) {
-
+        
         $validator = Validator::make($request->all(), [
                     'name' => 'required',
                     'icon' => 'required'
                         ], $this->messages);
         if (!$validator->fails()) {
+            $cateExits = DocumentCate::where(['alias' => $this->to_slug($request->name)])->get()->toArray();
+            if($cateExits){                
+                return redirect()->back()->withInput()->withErrors(['Danh mục đã tồn tại']);
+            }
             $cate = DocumentCate::create([
                         'name' => $request->name,
                         'alias' => $this->to_slug($request->name),
                         'icon' => $request->icon,
+                        'sort' => $request->sort,
+                        'descript' => $request->descript,
                         'parent_id' => $request->parent_id
             ]);
+            //save tag
             if ($cate->document_cate_id) {
+                if(!empty($request->tag)){
+                    foreach($request->tag as $tag){
+                        $insertTag[] = [
+                            'document_cate_id' => $cate->document_cate_id,
+                            'tag_id' => $tag
+                        ]; 
+                    }
+                   
+                    if(!empty($insertTag)){
+                        TagItem::insert($insertTag);
+                    }
+                }
                 $this->resetCache();
                 activity('document_cates')->performedOn($cate)->withProperties($request->all())->log('User: :' . Auth::user()->email . ' - Add document cate - document_cate: ' . $cate->document_cate_id . ', name: ' . $cate->name);
                 return redirect()->route('dhcd.document.cate.add')->with('success', 'Thêm danh mục thành công');
@@ -74,7 +95,9 @@ class DocumentCateController extends Controller {
         $objCate = new DocumentCate();
         $cates = $this->documentCate->getCates();
         $cate = $this->documentCate->find($request->document_cate_id);
-        return view('DHCD-DOCUMENT::modules.document.cate.edit', compact('cate', 'cates', 'objCate'));
+        $tags = Tag::orderBy('tag_id', 'desc')->get()->toArray();
+        
+        return view('DHCD-DOCUMENT::modules.document.cate.edit', compact('cate', 'cates', 'objCate', 'tags'));
     }
 
     public function update(Request $request) {
@@ -84,9 +107,15 @@ class DocumentCateController extends Controller {
                     'document_cate_id' => 'required'
                         ], $this->messages);
         if (!$validator->fails()) {
+            $cateExits = DocumentCate::where('alias',$this->to_slug($request->name))->where('document_cate_id','<>',$request->document_cate_id)->get()->toArray();
+            if($cateExits){                
+                return redirect()->back()->withInput()->withErrors(['Danh mục đã tồn tại']);
+            }
             $cate = $this->documentCate->find($request->document_cate_id);
             $cate->name = $request->name;
             $cate->alias = $this->to_slug($request->name);
+            $cate->sort = $request->sort;
+            $cate->descript = $request->descript;
             if ($cate->document_cate_id != (int) $request->parent_id) {
                 $cate->parent_id = $request->parent_id;
             }
@@ -94,8 +123,25 @@ class DocumentCateController extends Controller {
                 $cate->icon = $request->icon;
             }
             $cate->save();
+            // save tag
+            if(!empty($request->tag)){
+                TagItem::where('document_cate_id',$cate->document_cate_id)->delete();
+                foreach($request->tag as $tag){
+                    $insertTag[] = [
+                        'document_cate_id' => $cate->document_cate_id,
+                        'tag_id' => $tag
+                    ]; 
+                }
+               
+                if(!empty($insertTag)){
+                    TagItem::insert($insertTag);
+                }
+            }
 
             $this->resetCache();
+
+
+
             activity('document_cates')->performedOn($cate)->withProperties($request->all())->log('User: :' . Auth::user()->email . ' - Edit document cate - document_cate: ' . $cate->document_cate_id . ', name: ' . $cate->name);
             return redirect()->route('dhcd.document.cate.manage')->with('success', 'Cập nhật danh mục thành công');
         } else {
@@ -166,7 +212,7 @@ class DocumentCateController extends Controller {
         $str = preg_replace('/(ỳ|ý|ỵ|ỷ|ỹ)/', 'y', $str);
         $str = preg_replace('/(đ)/', 'd', $str);
         $str = preg_replace('/[^a-z0-9-\s]/', '', $str);
-        $str = preg_replace('/([\s]+)/', '-', $str);
+        $str = preg_replace('/([\s]+)/', '', $str);
         return $str;
     }
 

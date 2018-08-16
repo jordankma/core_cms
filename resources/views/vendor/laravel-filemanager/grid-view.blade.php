@@ -8,7 +8,7 @@
         <?php $item_path = $item->is_file ? $item->url : $item->path; ?>
        
         <div class="square clickable {{ $item->is_file ? '' : 'folder-item' }}" data-type="{{$item->type}}" title="{{$item->name}}" data-id="{{ $item_path }}"
-             @if($item->is_file && $thumb_src) onclick="useFile('{{ $item_path }}', '{{ $item->updated }}')"
+             @if($item->is_file && $thumb_src && Request::input('type') != 'file') onclick="useFile('{{ $item_path }}', '{{ $item->updated }}')"
              @elseif($item->is_file) onclick="download('{{ $item_name }}')" @endif >
              @if($thumb_src)
              <img src="{{ $thumb_src }}">
@@ -21,7 +21,7 @@
             <div class="btn-group">
                 <button type="button"  data-id="{{ $item_path }}"
                         class="item_name btn btn-default btn-xs {{ $item->is_file ? '' : 'folder-item'}}"
-                        @if($item->is_file && $thumb_src) onclick="useFile('{{ $item_path }}', '{{ $item->updated }}')"
+                        @if($item->is_file && $thumb_src && Request::input('type') != 'file') onclick="useFile('{{ $item_path }}', '{{ $item->updated }}')"
                         @elseif($item->is_file) onclick="download('{{ $item_name }}')" @endif >
                         {{ $item_name }}
             </button>
@@ -56,39 +56,27 @@
 @endif
 <script>
     $(document).ready(function () {
-        
-        $('body').on('click', 'div.clickable', function () {
-            var type = $(this).attr('data-type');
-            var typeParent = $("input[name='document_type_id']:checked", opener.window.document).attr("data-types"); 
-            var type_upload = $("input[name='type_upload']", opener.window.document).val();
-            if(typeParent!=null){
-                var obj = $.parseJSON(typeParent);
-            }                     
-            var title = $(this).attr('title');
-            var alerted = localStorage.getItem('alerted') || '';
-            if(type === "Thư mục"){
-                return true;
-            }
-            if(type_upload=="add_news"){
-                if (type === "image/jpeg" || type === "image/jpg" || type === "image/png" || type === "image/gif") {
-                    var type_file = 'img';
-                } else {
-                    var type_file = 'file'
-                }
-                var src = $(this).attr('data-id');
+        var type_upload = $("input[name='type_upload']", opener.window.document).val();
+        if(type_upload != "import_member") {
+            $('body').on('click', 'div.clickable', function (e) {
                 
-                var data = {
-                    src: src,
-                    type: type,
-                    title: title,
-                    type_file: type_file
-                };              
-                window.opener.setData(data);
-                if(alerted != title){
-                    localStorage.setItem('alerted',title);
+                var type = $(this).attr('data-type');
+                var typeParent = $("input[name='document_type_id']:checked", opener.window.document).attr("data-types"); 
+                var type_upload = $("input[name='type_upload']", opener.window.document).val();                                   
+                var isIcon = $("input[name='isIcon']", opener.window.document).val();                       
+                if(isIcon == 2){               
+                  return true;
                 }
-            } else{
-                if ($.inArray(type, obj) != -1) {
+                
+                if(typeParent!=null){
+                    var obj = $.parseJSON(typeParent);
+                }                     
+                var title = $(this).attr('title');
+                var alerted = localStorage.getItem('alerted') || '';
+                if(type === "Thư mục"){
+                    return true;
+                }
+                if(type_upload=="add_news"){
                     if (type === "image/jpeg" || type === "image/jpg" || type === "image/png" || type === "image/gif") {
                         var type_file = 'img';
                     } else {
@@ -103,30 +91,52 @@
                         type_file: type_file
                     };              
                     window.opener.setData(data);
+                    
                     if(alerted != title){
-                        swal({
-                            title: "Đã chọn",
-                            text: '',
-                            html: true,
-                            confirmButtonColor: "#DD6B55"
-                        });
                         localStorage.setItem('alerted',title);
                     }
-                } else {
-                    if(alerted != title){
-                        swal({
-                            title: "File chọn không phù hợp với kiểu file bạn chọn",
-                            text: '',
-                            html: true,
-                            confirmButtonColor: "#DD6B55"
-                        });
-                        localStorage.setItem('alerted',title);
-                    }
-                                    
                 }
-            }
-            return false;
-        });
+                else{
+                    if ($.inArray(type, obj) != -1) {
+                        if (type === "image/jpeg" || type === "image/jpg" || type === "image/png" || type === "image/gif") {
+                            var type_file = 'img';
+                        } else {
+                            var type_file = 'file'
+                        }
+                        var src = $(this).attr('data-id');
+                        
+                        var data = {
+                            src: src,
+                            type: type,
+                            title: title,
+                            type_file: type_file
+                        };              
+                        window.opener.setData(data);
+                        if(alerted != title){
+                            swal({
+                                title: "Đã chọn",
+                                text: '',
+                                html: true,
+                                confirmButtonColor: "#DD6B55"
+                            });
+                            localStorage.setItem('alerted',title);
+                        }
+                    } else {
+                        if(alerted != title){
+                            swal({
+                                title: "File chọn không phù hợp với kiểu file bạn chọn",
+                                text: '',
+                                html: true,
+                                confirmButtonColor: "#DD6B55"
+                            });
+                            localStorage.setItem('alerted',title);
+                        }
+                                        
+                    }
+                }
+                return false;
+            });
+        }
         
     });
     function getParameterByName(name, url) {

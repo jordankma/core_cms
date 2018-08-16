@@ -6,6 +6,11 @@
 {{-- page styles --}}
 @section('header_styles')
     <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-switch/css/bootstrap-switch.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-tagsinput/css/bootstrap-tagsinput.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-tagsinput/css/app.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/jasny-bootstrap/css/jasny-bootstrap.css') }}" rel="stylesheet" type="text/css"/>  
     <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/css/pages/blog.css') }}" rel="stylesheet" type="text/css">
     <style>
         .control-label{
@@ -47,7 +52,7 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label" for="name">{{ trans('dhcd-document::language.document_cate.form.name') }}</label>
                             <div class=" col-md-6 ">
-                                <input id="name" name="name" type="text" placeholder="{{ trans('dhcd-document::language.placeholder.document_cate.name') }}" class="form-control">
+                                <input id="name" name="name" value="{{old('name')}}" type="text" placeholder="{{ trans('dhcd-document::language.placeholder.document_cate.name') }}" class="form-control">
                                 
                             </div>
                         </div>                                               
@@ -64,6 +69,19 @@
                                 
                             </div>
                         </div>
+                        <!-- tag input-->
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="name">Tag</label>
+                            <div class=" col-md-6 ">
+                            <select id="tag" name="tag[]" class="form-control select2" multiple>
+                                @if(!empty($tags))
+                                    @foreach($tags as $tag)
+                                    <option value="{{$tag['tag_id']}}">{{$tag['name']}}</option>
+                                    @endforeach
+                                @endif
+                            </select>                                
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="col-md-2 control-label" for="name">{{ trans('dhcd-document::language.document_cate.form.icon') }}</label>
                             <div class="col-md-6">
@@ -76,6 +94,19 @@
                                     <input id="thumbnail" class="form-control" type="text" name="icon">
                                  </div>
                                  <img id="holder" style="margin-top:15px;max-height:100px;">
+                            </div>
+                        </div>
+                        <!-- sort input-->
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="name">Sort</label>
+                            <div class=" col-md-3">
+                                <input id="sort" name="sort" type="number" value="{{old('sort')}}" placeholder="Thứ tự sắp xếp" class="form-control">                                
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="desc">{{trans('dhcd-document::language.document.form.desc')}}</label>
+                            <div class=" col-md-6 ">
+                                <textarea id="desc" name="descript" class="form-control" rows="5">{{old('descript')}} </textarea>                               
                             </div>
                         </div>
                         <!-- Form actions -->
@@ -99,6 +130,10 @@
     <!-- begining of page js -->
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-switch/js/bootstrap-switch.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrapvalidator/js/bootstrapValidator.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/select2/js/select2.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-tagsinput/js/bootstrap-tagsinput.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/jasny-bootstrap/js/jasny-bootstrap.js') }}" type="text/javascript"></script>                        
+    <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-multiselect/js/bootstrap-multiselect.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/vendor/laravel-filemanager/js/lfm.js') }}" type="text/javascript" ></script>
     <!--end of page js-->
     <script>
@@ -127,9 +162,12 @@
                             }
                         }
                         
-                    } 
+                    }
                 }
             });
-        
+            $("#tag").select2({
+                theme: "bootstrap",
+                placeholder: "Chọn tag"
+            });
     </script>
 @stop

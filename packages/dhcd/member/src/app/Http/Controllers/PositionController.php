@@ -8,7 +8,7 @@ use Dhcd\Member\App\Repositories\PositionRepository;
 use Dhcd\Member\App\Models\Position;
 use Spatie\Activitylog\Models\Activity;
 use Yajra\Datatables\Datatables;
-use Validator,DateTime;
+use Validator,DateTime,Cache;
 
 class PositionController extends Controller
 {
@@ -42,12 +42,12 @@ class PositionController extends Controller
         if (!$validator->fails()) {
             $positions = new Position();
             $positions->name = $request->input('name');
-            $positions->alias = self::stripUnicode($request->input('name'));
+            $groups->alias = strtolower(preg_replace('([^a-zA-Z0-9])', '', self::stripUnicode($name)));
             $positions->created_at = new DateTime();
             $positions->updated_at = new DateTime();
 
             if ($positions->save()) {
-
+                Cache::forget('member_position');
                 activity('position')
                     ->performedOn($positions)
                     ->withProperties($request->all())
@@ -87,10 +87,10 @@ class PositionController extends Controller
 
             $position = $this->position->find($position_id);
             $position->name = $request->input('name');
-            $position->alias = self::stripUnicode($request->input('name'));
+            $groups->alias = strtolower(preg_replace('([^a-zA-Z0-9])', '', self::stripUnicode($name)));
             $position->updated_at = new DateTime();
             if ($position->save()) {
-
+                Cache::forget('member_position');
                 activity('position')
                     ->performedOn($position)
                     ->withProperties($request->all())
@@ -132,7 +132,7 @@ class PositionController extends Controller
 
         if (null != $position) {
             $this->position->delete($position_id);
-
+            Cache::forget('member_position');
             activity('position')
                 ->performedOn($position)
                 ->withProperties($request->all())
@@ -170,7 +170,12 @@ class PositionController extends Controller
     //Table Data to index page
     public function data()
     {   
-        $positions = $this->position->all();
+        if (Cache::has('member_position')) {
+            $positions = Cache::get('member_position');
+        } else{
+            $positions = $this->position->all();   
+            Cache::put('member_position', $positions);
+        }
         return Datatables::of($positions)
             ->addIndexColumn()
             ->addColumn('actions', function ($positions) {

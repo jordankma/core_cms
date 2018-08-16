@@ -14,7 +14,7 @@ use Dhcd\Member\App\Models\Member;
 use Spatie\Activitylog\Models\Activity;
 use Yajra\Datatables\Datatables;
 
-use Validator,DateTime,DB;
+use Validator,DateTime,DB,Cache;
 class GroupController extends Controller
 {
     private $messages = array(
@@ -48,12 +48,15 @@ class GroupController extends Controller
             $name = $request->input('name');
             $groups = new Group();
             $groups->name = $name;
-            $groups->alias = self::stripUnicode($name);
+            $groups->type = $request->input('type');
+            $groups->image = $request->input('image');
+            $groups->desc = $request->input('desc');
+            $groups->alias = strtolower(preg_replace('([^a-zA-Z0-9])', '', self::stripUnicode($name)));
             $groups->created_at = new DateTime();
             $groups->updated_at = new DateTime();
 
             if ($groups->save()) {
-
+                Cache::forget('member_group');
                 activity('group')
                     ->performedOn($groups)
                     ->withProperties($request->all())
@@ -99,10 +102,13 @@ class GroupController extends Controller
             $name = $request->input('name');
             $group = $this->group->find($group_id);
             $group->name = $name;
-            $group->alias = self::stripUnicode($name);
+            $group->type = $request->input('type');
+            $group->image = $request->input('image');
+            $group->desc = $request->input('desc');
+            $group->alias = strtolower(preg_replace('([^a-zA-Z0-9])', '', self::stripUnicode($name)));
             $group->updated_at = new DateTime();
             if ($group->save()) {
-
+                Cache::forget('member_group');
                 activity('group')
                     ->performedOn($group)
                     ->withProperties($request->all())
@@ -144,7 +150,7 @@ class GroupController extends Controller
 
         if (null != $group) {
             $this->group->delete($group_id);
-
+            Cache::forget('member_group');
             activity('group')
                 ->performedOn($group)
                 ->withProperties($request->all())
@@ -182,7 +188,12 @@ class GroupController extends Controller
     //Table Data to index page
     public function data()
     {
-        $groups = $this->group->all();
+        if (Cache::has('member_group')) {
+            $groups = Cache::get('member_group');
+        } else{
+            $groups = $this->group->all();    
+            Cache::put('member_group', $groups);
+        }
         return Datatables::of($groups)
             ->addIndexColumn()
             ->addColumn('actions', function ($groups) {
@@ -359,5 +370,18 @@ class GroupController extends Controller
 
     public function test(){
         return view('DHCD-MEMBER::modules.member.group.xedit'); 
+    }
+
+    public function apiList(Request $request){
+        $groups =  $this->group->all();
+        $list_group = array();
+        foreach ($groups as $key => $value) {
+            $list_group[] = [
+                'group_id' => $value->group_id,
+                'name' => $value->name,
+                'type' => $value->type
+            ];   
+        } 
+        return json_encode($list_group);  
     }
 }

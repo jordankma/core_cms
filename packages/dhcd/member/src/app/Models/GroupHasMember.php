@@ -25,5 +25,4 @@ class GroupHasMember extends Model {
     protected $primaryKey = 'group_has_member_id';
 
     protected $guarded = ['group_has_member_id'];
-    protected $fillable = ['name'];
 }

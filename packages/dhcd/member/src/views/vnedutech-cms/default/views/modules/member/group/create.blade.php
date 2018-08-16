@@ -40,6 +40,28 @@
                                 {!! Form::text('name', null, array('class' => 'form-control', 'autofocus'=>'autofocus','placeholder'=> trans('dhcd-member::language.placeholder.group.name'))) !!}
                                 <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                             </div>
+                            <div class="form-group">
+                                <label>{{trans('dhcd-member::language.form.title_group.desc')}}</label> <span style="color: red">(*)</span><br>
+                                <textarea rows="5" cols="101" name="desc" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.group.desc')}}"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <input type="radio" id="hot" name="type" value="1">
+                                <label for="hot">{{trans('dhcd-member::language.form.title_group.hot')}}    </label> 
+                                <input type="radio" id="normal" name="type" value="2" checked="checked">
+                                <label for="normal">{{trans('dhcd-member::language.form.title_group.normal')}}</label>
+                            </div>
+                            <label>{{trans('dhcd-member::language.form.title_group.image')}} <span style="color: red">(*)</span></label>
+                            <div class="form-group">
+                                <div class="input-group">
+                                   <span class="input-group-btn">
+                                     <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
+                                       <i class="fa fa-picture-o"></i> {{trans('dhcd-member::language.form.title_group.choise_image_display')}}
+                                     </a>
+                                   </span>
+                                   <input type="text" name="image" id="thumbnail" class="form-control">
+                                 </div>
+                                 <img id="holder" style="margin-top:15px;max-height:100px;">
+                            </div>
                         </div>
                         <!-- /.col-sm-8 -->
                         <div class="col-sm-4">
@@ -66,9 +88,12 @@
     <!-- begining of page js -->
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-switch/js/bootstrap-switch.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrapvalidator/js/bootstrapValidator.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/vendor/laravel-filemanager/js/lfm.js') }}" type="text/javascript" ></script>
     <!--end of page js-->
     <script>
         $(document).ready(function() {
+            var domain = "/admin/laravel-filemanager/";
+            $("#lfm").filemanager('image', {prefix: domain});
             $('#form-add-group').bootstrapValidator({
                 feedbackIcons: {
                     // validating: 'glyphicon glyphicon-refresh'
@@ -85,7 +110,7 @@
                                 message: 'Tên không được quá dài'
                             },
                         }
-                    },
+                    }
                 }
             });
         });

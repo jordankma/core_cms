@@ -5,7 +5,12 @@
 
 {{-- page styles --}}
 @section('header_styles')
-    <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-switch/css/bootstrap-switch.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-switch/css/bootstrap-switch.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-tagsinput/css/bootstrap-tagsinput.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-tagsinput/css/app.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/jasny-bootstrap/css/jasny-bootstrap.css') }}" rel="stylesheet" type="text/css"/>  
     <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/css/pages/blog.css') }}" rel="stylesheet" type="text/css">
     <style>
         .control-label{
@@ -16,6 +21,12 @@
 <!--end of page css-->
 
 @php
+$arr_tag = [];
+if(!empty($cate->getTags->toArray())){
+    foreach($cate->getTags->toArray() as $tag){
+        $arr_tag[] = $tag['tag_id'];
+    }    
+}
 
 @endphp
 
@@ -64,6 +75,19 @@
                                 
                             </div>
                         </div>
+                        <!-- tag input-->
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="name">Tag</label>
+                            <div class=" col-md-6 ">
+                            <select id="tag" name="tag[]" class="form-control select2" multiple>
+                                @if(!empty($tags))
+                                    @foreach($tags as $tag)
+                                    <option @if(in_array($tag['tag_id'],$arr_tag)) selected @endif value="{{$tag['tag_id']}}">{{$tag['name']}}</option>
+                                    @endforeach
+                                @endif
+                            </select>                                
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="col-md-2 control-label" for="name">{{ trans('dhcd-document::language.document_cate.form.icon_current') }}</label>
                             <div class="col-md-6">
@@ -88,6 +112,19 @@
                                  <img id="holder" style="margin-top:15px;max-height:100px;">
                             </div>
                         </div>
+                        <!-- sort input-->
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="name">Sort</label>
+                            <div class=" col-md-3">
+                                <input id="sort" name="sort" type="number" value="{{old('sort', isset($cate) ? $cate->sort : '')}}" placeholder="Thứ tự sắp xếp" class="form-control">                                
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="desc">{{trans('dhcd-document::language.document.form.desc')}}</label>
+                            <div class=" col-md-6 ">
+                                <textarea id="desc" name="descript" class="form-control" rows="5">{{old('descript', isset($cate) ? $cate->descript : '')}} </textarea>                               
+                            </div>
+                        </div>
                         <!-- Form actions -->
                         <div class="form-group">
                             <div class="col-md-12 text-center">
@@ -110,6 +147,10 @@
     <!-- begining of page js -->
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-switch/js/bootstrap-switch.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrapvalidator/js/bootstrapValidator.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/select2/js/select2.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-tagsinput/js/bootstrap-tagsinput.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/jasny-bootstrap/js/jasny-bootstrap.js') }}" type="text/javascript"></script>                        
+    <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-multiselect/js/bootstrap-multiselect.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/vendor/laravel-filemanager/js/lfm.js') }}" type="text/javascript" ></script>
     <!--end of page js-->
     <script>
@@ -128,11 +169,14 @@
                             notEmpty: {
                                 message: 'Bạn chưa nhập tên danh mục'
                             }
-                        }
-                        
-                    }                                                                           
+                        }                        
+                    }                                                                          
                 }
             });
-        
+            $("#tag").select2({
+                theme: "bootstrap",
+                placeholder: "Chọn tag"
+            });
+            
     </script>
 @stop

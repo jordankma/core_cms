@@ -11,6 +11,8 @@ use Dhcd\Document\App\Models\Document;
 use Dhcd\Document\App\Models\DocumentHasCate;
 use Dhcd\Document\App\Models\DocumentType;
 use Dhcd\Document\App\Models\DocumentCate;
+use Dhcd\Document\App\Models\Tag;
+use Dhcd\Document\App\Models\TagItem;
 use Spatie\Activitylog\Models\Activity;
 use Yajra\Datatables\Datatables;
 use Validator,Cache,Auth;
@@ -56,8 +58,9 @@ class DocumentController extends Controller
     public function add(Request $request){
         $cateObj = new DocumentCate();        
         $cates = $this->documentCateRepository->getCates();
-        $types = $this->documentTypeRepository->getTypes();                
-        return view('DHCD-DOCUMENT::modules.document.doc.add',compact('cates','types','cateObj'));
+        $types = $this->documentTypeRepository->getTypes();
+        $tags = Tag::orderBy('tag_id', 'desc')->get()->toArray();                
+        return view('DHCD-DOCUMENT::modules.document.doc.add',compact('cates','types','cateObj', 'tags'));
     }
     
     public function create(Request $request){
@@ -66,8 +69,7 @@ class DocumentController extends Controller
             return redirect()->back()->withInput()->withErrors(['Bạn chưa chọn file đính kèm']);
         }      
         $validator = Validator::make($request->all(), [
-            'name' => 'required',            
-            'descript' => 'required',            
+            'name' => 'required',                                   
             'document_type_id' => 'required',            
         ]);
         if (!$validator->fails()) {            
@@ -87,7 +89,7 @@ class DocumentController extends Controller
              $type_control = !empty($request->type_control) ? $request->type_control : 'file';
              $avatar = '';
              if($type_control != 'file'){
-                $avatar = !empty($request->setAvatar) ? $request->setAvatar : $files[0]['name'];                
+                $avatar = !empty($request->setAvatar) ? $request->setAvatar : $files[0]['path'];                
              }
              
              $document = Document::create([
@@ -98,10 +100,25 @@ class DocumentController extends Controller
                  'file' => json_encode($files),
                  'avatar' => $avatar,
                  'is_reserve' => $is_reserve,
-                 'is_offical' => $is_offical                
+                 'is_offical' => $is_offical,
+                 'icon' => asset($request->icon)                
              ]);
              if($document->document_id){
-                  if (!empty($request->document_cate_id)) {    
+                if(!empty($request->tag)){
+                    foreach($request->tag as $tag){
+                        $insertTag[] = [
+                            'document_id' => $document->document_id,
+                            'tag_id' => $tag
+                        ]; 
+                    }
+                   
+                    if(!empty($insertTag)){
+                        TagItem::insert($insertTag);
+                    }
+                }
+
+
+                if (!empty($request->document_cate_id)) {    
                     $document_cate_id = $request->document_cate_id;
                     $dochascate = [];
                     foreach ($document_cate_id as $cate_id) {
@@ -139,8 +156,9 @@ class DocumentController extends Controller
         $types = $this->documentTypeRepository->getTypes();
         $document = $this->documentRepository->find($request->document_id);
         $cateIds = $this->_buildCateId($document->getDocumentCate->toArray());    
-                
-        return view('DHCD-DOCUMENT::modules.document.doc.edit',compact('document','types','cates','cateIds','cateObj'));
+        $tags = Tag::orderBy('tag_id', 'desc')->get()->toArray();
+
+        return view('DHCD-DOCUMENT::modules.document.doc.edit',compact('document','types','cates','cateIds','cateObj','tags'));
     }
     
     public function update(Request $request){        
@@ -151,8 +169,7 @@ class DocumentController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'document_type_id' => 'required',
-            'document_id' => 'required',
-            'descript' => 'required'            
+            'document_id' => 'required',                     
         ]);
         
         if (!$validator->fails()) {
@@ -188,10 +205,30 @@ class DocumentController extends Controller
                         'file' => json_encode($files),
                         'avatar' => $avatar,
                         'is_reserve' => $is_reserve,
-                        'is_offical' => $is_offical
+                        'is_offical' => $is_offical,
+                        'icon' => asset($request->icon)
                   ]);
                   $document->save();
+
+                     // save tag
+                     if(!empty($request->tag)){
+                        TagItem::where('document_id',$document->document_id)->delete();
+                        foreach($request->tag as $tag){
+                            $insertTag[] = [
+                                'document_id' => $document->document_id,
+                                'tag_id' => $tag
+                            ]; 
+                        }
+                    
+                        if(!empty($insertTag)){
+                            TagItem::insert($insertTag);
+                        }
+                    }                    
+
                   if (!empty($request->document_cate_id)) {    
+
+                   
+
                     $document_cate_id = $request->document_cate_id;
                     $dochascate = [];
                     foreach ($document_cate_id as $cate_id) {
@@ -278,7 +315,7 @@ class DocumentController extends Controller
         $str = preg_replace('/(ỳ|ý|ỵ|ỷ|ỹ)/', 'y', $str);
         $str = preg_replace('/(đ)/', 'd', $str);
         $str = preg_replace('/[^a-z0-9-\s]/', '', $str);
-        $str = preg_replace('/([\s]+)/', '-', $str);
+        $str = preg_replace('/([\s]+)/', '', $str);
         return $str;
     }
                 
