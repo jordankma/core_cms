@@ -22,7 +22,7 @@ class DhcdDocumentTypesTable extends Migration
             $table->softDeletes();
         });
         
-        DB::table('dhcd_document_types')->insert([[
+        DB::connection('mysql_dhcd')->table('dhcd_document_types')->insert([[
             'document_type_id' => 1,
             'name' => 'Hình ảnh',
             'type' => 'image',

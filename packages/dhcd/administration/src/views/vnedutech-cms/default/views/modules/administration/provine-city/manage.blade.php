@@ -47,7 +47,7 @@
                         <table class="table table-bordered" id="table">
                             <thead>
                             <tr class="filters">
-                                <th>#</th>
+                                <th class="fit-content">#</th>
                                 {{-- <th>{{ trans('dhcd-administration::language.table.provine_city.name') }}</th>   --}}
                                 <th>{{ trans('dhcd-administration::language.table.provine_city.name') }}</th>
                                 <th>{{ trans('dhcd-administration::language.table.provine_city.code') }}</th>
@@ -74,7 +74,7 @@
                 serverSide: true,
                 ajax: '{{ route('dhcd.administration.provine-city.data') }}',
                 columns: [
-                    { data: 'rownum', name: 'rownum' },
+                    { data: 'DT_Row_Index', name: 'DT_Row_Index' },
                     { data: 'name_with_type', name: 'name_with_type'},
                     { data: 'code', name: 'code'},
                     { data: 'actions', name: 'actions', orderable: false, searchable: false}

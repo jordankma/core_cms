@@ -22,6 +22,7 @@
   {{-- <link rel="stylesheet" href="{{ asset('/vendor/laravel-filemanager/css/lfm.css') }}"> --}}
   <link rel="stylesheet" href="{{ asset('vendor/laravel-filemanager/css/mfb.css') }}">
   <link rel="stylesheet" href="{{ asset('vendor/laravel-filemanager/css/dropzone.min.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{asset('vendor/vnedutech-cms/default/vendors/sweetalert/css/sweetalert.css')}}" />
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.css">
 </head>
 <body>
@@ -54,13 +55,13 @@
           <div class="collapse navbar-collapse" id="nav-buttons">
             <ul class="nav navbar-nav navbar-right">
               <li>
-                <a class="clickable" id="thumbnail-display">
+                <a class="clickable" id="thumbnail-display" data-type="Thư mục">
                   <i class="fa fa-th-large"></i>
                   <span>{{ trans('laravel-filemanager::lfm.nav-thumbnails') }}</span>
                 </a>
               </li>
               <li>
-                <a class="clickable" id="list-display">
+                <a class="clickable" id="list-display" data-type="Thư mục"> 
                   <i class="fa fa-list"></i>
                   <span>{{ trans('laravel-filemanager::lfm.nav-list') }}</span>
                 </a>
@@ -152,6 +153,7 @@
   <script src="{{ asset('vendor/laravel-filemanager/js/cropper.min.js') }}"></script>
   <script src="{{ asset('vendor/laravel-filemanager/js/jquery.form.min.js') }}"></script>
   <script src="{{ asset('vendor/laravel-filemanager/js/dropzone.min.js') }}"></script>
+  <script type="text/javascript" src="{{asset('vendor/vnedutech-cms/default/vendors/sweetalert/js/sweetalert.min.js')}}"></script>
   <script>
     var route_prefix = "{{ url('/') }}";
     var lfm_route = "{{ url(config('lfm.url_prefix', config('lfm.prefix'))) }}";

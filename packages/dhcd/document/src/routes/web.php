@@ -40,5 +40,29 @@ Route::group(array('prefix' => $adminPrefix), function() {
             Route::get('log', 'DocumentController@log')->name('dhcd.document.doc.log');
         });
         
+        Route::group(['prefix' => 'dhcd/document/tag'], function () {
+            Route::get('create', 'TagController@create')->name('dhcd.document.tag.create');
+            Route::post('add', 'TagController@add')->name('dhcd.document.tag.add');
+            Route::get('edit', 'TagController@edit')->name('dhcd.document.tag.edit');
+            Route::post('edit', 'TagController@update')->name('dhcd.document.tag.update');    
+            Route::get('manage', 'TagController@manage')->where('as', 'Quản lý tag')->name('dhcd.document.tag.manage');
+            Route::get('delete', 'TagController@delete')->name('dhcd.document.tag.delete');
+            Route::get('log', 'TagController@log')->name('dhcd.document.tag.log');
+        });
+
+    });
+});
+
+Route::group(array('prefix' => ''), function() {
+    Route::group(['middleware' => []], function () {
+        Route::get('frontend/document/category', function () { })->name('document.frontend.cate')
+            ->where('type','tailieu')
+            ->where('view','list')
+            ->where('as','Tài liệu - Danh mục');
+
+        Route::get('frontend/document/detail', function () { })->name('document.frontend.detail')
+            ->where('type','tailieu')
+            ->where('view','detail')
+            ->where('as','Tài liệu - Chi tiết');
     });
 });

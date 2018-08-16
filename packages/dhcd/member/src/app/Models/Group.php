@@ -25,6 +25,7 @@ class Group extends Model {
     protected $primaryKey = 'group_id';
 
     protected $guarded = ['group_id'];
+    
     protected $fillable = ['name'];
 
     public function getMember(){

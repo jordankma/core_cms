@@ -44,9 +44,11 @@
                 <br/>
                 <div style="margin-left:20px">
                     <div style="display: inline-block;">
+                        @if ($USER_LOGGED->canAccess('dhcd.member.member.excel.get.import'))
                         <a href="{{route('dhcd.member.member.excel.get.import')}}" class="btn btn-success">
                             <i class="fa fa-picture-o"></i> Import Excel
                         </a>
+                        @endif
                     </div>
                     {{-- <div style="display: inline-block;">
                         <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-success">
@@ -74,7 +76,6 @@
                                 <th class="fit-content">#</th>
                                 <th>{{ trans('dhcd-member::language.table.member.name') }}</th>
                                 <th>{{ trans('dhcd-member::language.table.member.position_current') }}</th>
-                                <th>{{ trans('dhcd-member::language.table.status') }}</th>
                                 <th class="fit-content">{{ trans('dhcd-member::language.table.action') }}</th>
                             </tr>
                             </thead>
@@ -101,7 +102,6 @@
                     { data: 'DT_Row_Index', name: 'DT_Row_Index' },
                     { data: 'name', name: 'name' },
                     { data: 'position', name: 'position' },
-                    { data: 'status', name: 'status', orderable: false, searchable: false, className: 'fit-content'},
                     { data: 'actions', name: 'actions', orderable: false, searchable: false, className: 'fit-content'}
                 ]
             });

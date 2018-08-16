@@ -41,13 +41,35 @@
                                 <input type="text" name="name" class="form-control" value="{{$group->name}}">
                                 <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                             </div>
+                            <div class="form-group">
+                                <label>{{trans('dhcd-member::language.form.title_group.desc')}} <span style="color: red">(*)</span></label><br>
+                                <textarea rows="5" cols="101" name="desc" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.group.desc')}}">{{ $group->desc }}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <input type="radio" id="hot" name="type" value="1" @if($group->type==1) checked @endif>
+                                <label for="hot">{{trans('dhcd-member::language.form.title_group.hot')}}    </label>
+                                <input type="radio" id="normal" name="type" value="2" @if($group->type==2) checked @endif>
+                                <label for="normal">{{trans('dhcd-member::language.form.title_group.normal')}}</label>
+                            </div>
+                            <label>{{trans('dhcd-member::language.form.title_group.image')}} <span style="color: red">(*)</span></label>
+                            <div class="form-group">
+                                <div class="input-group">
+                                   <span class="input-group-btn">
+                                     <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
+                                       <i class="fa fa-picture-o"></i> {{trans('dhcd-member::language.form.title_group.choise_image_display')}}
+                                     </a>
+                                   </span>
+                                   <input type="text" disabled="" value="{{ $group->image }}" name="image" id="thumbnail" class="form-control">
+                                 </div>
+                                 <img id="holder" src="{{ $group->image }}" style="margin-top:15px;max-height:100px;">
+                            </div>
                         </div>
                         <!-- /.col-sm-8 -->
                         <div class="col-sm-4">
                             <div class="form-group col-xs-12">
                                 <label for="blog_category" class="">Actions</label>
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-success">{{ trans('dhcd-member::language.buttons.create') }}</button>
+                                    <button type="submit" class="btn btn-success">{{ trans('dhcd-member::language.buttons.update') }}</button>
                                     <a href="{!! route('dhcd.member.group.manage') !!}"
                                        class="btn btn-danger">{{ trans('dhcd-member::language.buttons.discard') }}</a>
                                 </div>
@@ -67,9 +89,12 @@
     <!-- begining of page js -->
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-switch/js/bootstrap-switch.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrapvalidator/js/bootstrapValidator.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/vendor/laravel-filemanager/js/lfm.js') }}" type="text/javascript" ></script>
     <!--end of page js-->
     <script>
         $(document).ready(function() {
+            var domain = "/admin/laravel-filemanager/";
+            $("#lfm").filemanager('image', {prefix: domain});
             $('#form-edit-group').bootstrapValidator({
                 feedbackIcons: {
                     // validating: 'glyphicon glyphicon-refresh'
@@ -86,7 +111,7 @@
                                 message: 'Tên không được quá dài'
                             },
                         }
-                    },
+                    }
                 }
             });
         });

@@ -6,13 +6,15 @@ use Illuminate\Http\Request;
 use Adtech\Application\Cms\Controllers\Controller as Controller;
 use Dhcd\Member\App\Repositories\MemberRepository;
 use Dhcd\Member\App\Models\Member;
+use Dhcd\Member\App\Models\Group;
+use Dhcd\Member\App\Models\GroupHasMember;
 use Dhcd\Member\App\Http\Requests\MemberRequest;
 
 use Dhcd\Member\App\Models\Position;
 
 use Spatie\Activitylog\Models\Activity;
 use Yajra\Datatables\Datatables;
-use Validator,Auth,DateTime,DB;
+use Validator,Auth,DateTime,DB,Cache;
 class MemberController extends Controller
 {
     private $messages = array(
@@ -22,6 +24,7 @@ class MemberController extends Controller
         'phone.regex' =>'Sai định dạng'
     );
 
+    private $url_get_list_doan = "";
     public function __construct(MemberRepository $memberRepository)
     {
         parent::__construct();
@@ -36,9 +39,10 @@ class MemberController extends Controller
     public function create()
     {
         $list_position = Position::all();
+        $list_group = Group::all();
         $list_trinh_do_ly_luan = Member::select('trinh_do_ly_luan')->groupBy('trinh_do_ly_luan')->get();
         $list_trinh_do_chuyen_mon = Member::select('trinh_do_chuyen_mon')->groupBy('trinh_do_chuyen_mon')->get();
-        return view('DHCD-MEMBER::modules.member.member.create',compact('list_position','list_trinh_do_ly_luan','list_trinh_do_chuyen_mon'));
+        return view('DHCD-MEMBER::modules.member.member.create',compact('list_position','list_trinh_do_ly_luan','list_trinh_do_chuyen_mon','list_group'));
     }
 
     public function add(MemberRequest $request)
@@ -52,6 +56,7 @@ class MemberController extends Controller
             $email = $request->input('email');
             $phone = $request->input('phone');
             $position_id = $request->input('position_id');
+            $group_id = $request->input('group_id');
             $position_current = $request->input('position_current');
             $trinh_do_ly_luan = $request->input('trinh_do_ly_luan');
             $trinh_do_chuyen_mon = $request->input('trinh_do_chuyen_mon');
@@ -89,6 +94,27 @@ class MemberController extends Controller
             $members->created_at = new DateTime();
             $members->updated_at = new DateTime();
             if ($members->save()) {
+                $data_insert = array();
+                $member_id = $members->member_id;
+                if(!empty($group_id)){
+                    foreach ($group_id as $key => $g_i) {
+                        if (!GroupHasMember::where([
+                            'group_id' => $g_i,
+                            'member_id' => $member_id,
+                        ])->exists()
+                        )
+                        {
+                            $data_insert[] = [
+                                'group_id' => $g_i,
+                                'member_id' => $member_id
+                            ];
+                        }
+                    }
+                }
+                if(!empty($data_insert)){
+                    DB::table('dhcd_group_has_member')->insert($data_insert);
+                }
+                Cache::forget('member');
                 activity('member')
                     ->performedOn($members)
                     ->withProperties($request->all())
@@ -107,15 +133,25 @@ class MemberController extends Controller
     public function show(MemberRequest $request)
     {
         $list_position = Position::all();
+        $list_group = Group::all();
         $list_trinh_do_ly_luan = Member::select('trinh_do_ly_luan')->groupBy('trinh_do_ly_luan')->get();
         $list_trinh_do_chuyen_mon = Member::select('trinh_do_chuyen_mon')->groupBy('trinh_do_chuyen_mon')->get();
         $member_id = $request->input('member_id');
+        $list_group_id = array();
+        $group_has_member = GroupHasMember::where('member_id', $member_id)->get();
+        if(!empty($group_has_member)){
+            foreach ($group_has_member as $key => $value) {
+                $list_group_id[] = $value['group_id'];
+            } 
+        }
         $member = $this->member->find($member_id);
         $data = [
             'member' => $member,
             'list_position' => $list_position,
             'list_trinh_do_ly_luan' => $list_trinh_do_ly_luan,
             'list_trinh_do_chuyen_mon' => $list_trinh_do_chuyen_mon,
+            'list_group' => $list_group,
+            'list_group_id' => $list_group_id
         ];
 
         return view('DHCD-MEMBER::modules.member.member.edit', $data);
@@ -133,6 +169,7 @@ class MemberController extends Controller
             $email = $request->input('email');
             $phone = $request->input('phone');
             $position_id = $request->input('position_id');
+            $group_id = $request->input('group_id');
             $position_current = $request->input('position_current');
             $trinh_do_ly_luan = $request->input('trinh_do_ly_luan');
             $trinh_do_chuyen_mon = $request->input('trinh_do_chuyen_mon');
@@ -166,6 +203,27 @@ class MemberController extends Controller
             $member->avatar = $avatar;
             $member->updated_at = new DateTime();
             if ($member->save()) {
+                DB::table('dhcd_group_has_member')->where(['member_id' => $member_id])->delete();
+                if(!empty($group_id)){
+                    $data_insert = array();
+                    foreach ($group_id as $key => $g_i) {
+                        if (!GroupHasMember::where([
+                            'group_id' => $g_i,
+                            'member_id' => $member_id,
+                        ])->exists()
+                        )
+                        {
+                            $data_insert[] = [
+                                'group_id' => $g_i,
+                                'member_id' => $member_id
+                            ];
+                        }
+                    }
+                }
+                if(!empty($data_insert)){
+                    DB::table('dhcd_group_has_member')->insert($data_insert);
+                }
+                Cache::forget('member');
                 activity('member')
                     ->performedOn($member)
                     ->withProperties($request->all())
@@ -186,6 +244,8 @@ class MemberController extends Controller
         $member = $this->member->find($member_id);
         if (null != $member) {
             $this->member->delete($member_id);
+            DB::table('dhcd_group_has_member')->where(['member_id' => $member_id])->delete();
+            Cache::forget('member');
             activity('member')
                 ->performedOn($member)
                 ->withProperties($request->all())
@@ -224,6 +284,7 @@ class MemberController extends Controller
         if (null != $member) {
             $member->status = 2;
             $member->save();
+            Cache::forget('member');
             activity('member')
                 ->performedOn($member)
                 ->withProperties($request->all())
@@ -281,7 +342,13 @@ class MemberController extends Controller
     //Table Data to index page
     public function data()
     {
-        $members = $this->member->all();
+        
+        if (Cache::has('member')) {
+            $members = Cache::get('member');
+        } else{
+            $members = $this->member->all();    
+            Cache::put('member', $members);
+        }
         return Datatables::of($members)
             ->addIndexColumn()
             ->addColumn('actions', function ($members) {
@@ -297,14 +364,6 @@ class MemberController extends Controller
                         ';
                 }
                 return $actions;
-            })
-            ->addColumn('status', function ($members) {
-                if ($members->status == 1) {
-                    $status = '<span class="label label-sm label-success">Enable</span>';
-                } else {
-                    $status = '<span class="label label-sm label-danger">Disable</span>';
-                }
-                return $status;
             })
             ->addColumn('position', function ($members) {
                 $position = $members->position_current;

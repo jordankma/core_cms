@@ -7,7 +7,8 @@ Route::group(array('prefix' => $adminPrefix), function () {
     /*
      * auth - login
      */
-
+    Route::get('api/{module}/{link}', 'ApiController@showdata')->name('adtech.core.api.showdata');
+    
     Route::get('adtech/core/menu/tab', 'MenuController@tab')->name('adtech.core.menu.tab');
 
     Route::match(['get', 'post'], 'login', 'Auth\LoginController@login')->name('adtech.core.auth.login');
@@ -77,7 +78,7 @@ Route::group(array('prefix' => $adminPrefix), function () {
         Route::get('adtech/core/api/delete', 'ApiController@delete')->name('adtech.core.api.delete');
         Route::get('adtech/core/api/datademo', 'ApiController@getModalDatademo')->name('adtech.core.api.datademo');
         Route::get('adtech/core/api/confirm-delete', 'ApiController@getModalDelete')->name('adtech.core.api.confirm-delete');
-        Route::get('api/{module}/{link}', 'ApiController@showdata')->name('adtech.core.api.showdata');
+        
 
         Route::get('adtech/core/menu/manage', 'MenuController@manage')
             ->where('as', 'Quản lý menu')

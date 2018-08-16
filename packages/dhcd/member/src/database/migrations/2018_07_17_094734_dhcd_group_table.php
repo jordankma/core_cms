@@ -17,7 +17,10 @@ class DhcdGroupTable extends Migration
             $table->increments('group_id');
             $table->string('name');
             $table->string('alias');        
+            $table->string('desc');        
+            $table->string('image')->nullable();        
             $table->longText('members')->nullable();        
+            $table->tinyInteger('type', false, true)->comment('1 doan binh thuong 2 doan bau cu')->default(2);
             $table->tinyInteger('status', false, true)->comment('trang thai')->default(1);
             
             $table->timestamps();

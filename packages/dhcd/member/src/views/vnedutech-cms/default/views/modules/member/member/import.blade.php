@@ -28,6 +28,9 @@
             <div class="the-box no-border">
                 <div class="row">
                         <form action="{{route('dhcd.member.member.excel.post.import')}}" enctype="multipart/form-data" method="post" id="form-add-cat">
+                            <input type='hidden' id='control_upload' name='type_upload' value="import_member">
+                            <input type='hidden' id='type_control' name='type_control' value="">
+                            <input type='hidden' id='mutil' name='mutil' value="remove">
                             <div class="col-md-5" style="">
                                 <div class="form-group ui-draggable-handle" style="position: static;">
                                     <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
@@ -55,7 +58,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             var domain = "/admin/laravel-filemanager/";
-            $('#lfm').filemanager('application', {prefix: domain});
+            $('#lfm').filemanager('file', {prefix: domain});
         });
     </script>
 @stop

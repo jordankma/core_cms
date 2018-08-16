@@ -56,16 +56,17 @@ Route::group(array('prefix' => $adminPrefix), function() {
         Route::get('dhcd/member/group/test', 'GroupController@test');
 
         //position
-        Route::get('dhcd/member/position/log', 'PositionController@log')->name('dhcd.member.position.log');
-        Route::get('dhcd/member/position/data', 'PositionController@data')->name('dhcd.member.position.data');
-        Route::get('dhcd/member/position/manage', 'PositionController@manage')->name('dhcd.member.position.manage')->where('as','Chứ vụ - Danh sách');
-        Route::get('dhcd/member/position/create', 'PositionController@create')->name('dhcd.member.position.create');
-        Route::post('dhcd/member/position/add', 'PositionController@add')->name('dhcd.member.position.add');
-        Route::get('dhcd/member/position/show', 'PositionController@show')->name('dhcd.member.position.show');
-        Route::post('dhcd/member/position/update', 'PositionController@update')->name('dhcd.member.position.update');
-        Route::get('dhcd/member/position/delete', 'PositionController@delete')->name('dhcd.member.position.delete');
-        Route::get('dhcd/member/position/confirm-delete', 'PositionController@getModalDelete')->name('dhcd.member.position.confirm-delete');
+        Route::get('dhcd/member/position/log', 'PositionMemberController@log')->name('dhcd.member.position.log');
+        Route::get('dhcd/member/position/data', 'PositionMemberController@data')->name('dhcd.member.position.data');
+        Route::get('dhcd/member/position/manage', 'PositionMemberController@manage')->name('dhcd.member.position.manage')->where('as','Chức vụ - Danh sách');
+        Route::get('dhcd/member/position/create', 'PositionMemberController@create')->name('dhcd.member.position.create');
+        Route::post('dhcd/member/position/add', 'PositionMemberController@add')->name('dhcd.member.position.add');
+        Route::get('dhcd/member/position/show', 'PositionMemberController@show')->name('dhcd.member.position.show');
+        Route::post('dhcd/member/position/update', 'PositionMemberController@update')->name('dhcd.member.position.update');
+        Route::get('dhcd/member/position/delete', 'PositionMemberController@delete')->name('dhcd.member.position.delete');
+        Route::get('dhcd/member/position/confirm-delete', 'PositionMemberController@getModalDelete')->name('dhcd.member.position.confirm-delete');
     });
+    Route::get('api/member/group-list', 'GroupController@apiList');
 });
 
 Route::group(array('prefix' => 'resource/dev'), function() {

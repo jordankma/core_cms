@@ -47,7 +47,7 @@ Advanced Data Tables
             <!--section ends-->
             <section class="content">
                 <!-- row-->
-                <div class="row">
+                <div class="row" style="display: none;visibility: hidden;">
                     <div class="col-lg-12 my-3">
                         <div class="card panel-success filterable" style="overflow:auto;">
                             <div class="card-heading">
@@ -94,8 +94,7 @@ Advanced Data Tables
                                 <div class="tools pull-right"></div>
                             </div>
                             <div class="card-body table-responsive-lg table-responsive-sm table-responsive-md">
-                                 <table class="table table-striped table-bordered" id="table2"
-                                       width="100%">
+                                <table class="table table-striped table-bordered" id="inline_edit" width="100%">
                                     <thead>
                                     <tr>
                                         <th>First Name</th>

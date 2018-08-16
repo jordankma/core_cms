@@ -10,6 +10,7 @@
     <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/css/pages/blog.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('/vendor/' . $group_name . '/' . $skin .'/vendors/daterangepicker/css/daterangepicker.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/vendor/' . $group_name . '/' . $skin .'/vendors/bootstrap-multiselect/css/bootstrap-multiselect.css') }}">
     <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/datetimepicker/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" type="text/css"/>
 @stop
 <!--end of page css-->
@@ -45,7 +46,7 @@
                             <a href="#info" data-toggle="tab" class="nav-link">Thông tin thêm</a>
                         </li>
                     </ul>
-                    <div class="tab-content" id="slim1">
+                    <div class="tab-content" id="slim1" style="margin-top: 20px">
                         <div class="tab-pane active" id="info-required">
                             <div class="row">
                                 <!-- /.col-sm-8 -->
@@ -55,7 +56,17 @@
                                         <input type="text" name="name" class="form-control" placeholder="{{trans('dhcd-member::language.placeholder.member.name')}}">
                                     </div>
                                     <div class="form-group">
-                                        <label>{{trans('dhcd-member::language.form.title.avatar') }}</label>
+                                        <label>{{trans('dhcd-member::language.form.title.doan') }} <span style="color: red">(*)</span></label><br>
+                                        <select id="group" class="form-control" name="group_id[]" multiple="multiple" placeholder="{{trans('dhcd-member::language.placeholder.member.doan_select')}}">
+                                            @if(!empty($list_group))
+                                                @foreach($list_group as $group)
+                                                    <option value="{{$group->group_id}}" >{{$group->name}}</option>     
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
+                                    <label>{{trans('dhcd-member::language.form.title.avatar') }}</label>
+                                    <div class="form-group input-group">
                                         <span class="input-group-btn">
                                             <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
                                                 <i class="fa fa-picture-o"></i> Choose
@@ -200,10 +211,16 @@
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrap-switch/js/bootstrap-switch.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrapvalidator/js/bootstrapValidator.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin .'/vendors/select2/js/select2.js') }}" type="text/javascript"></script>
+    <script type="text/javascript" src="{{ asset('/vendor/' . $group_name . '/' . $skin .'/vendors/bootstrap-multiselect/js/bootstrap-multiselect.js') }}"></script>
     <script src="{{ asset('/vendor/laravel-filemanager/js/lfm.js') }}" type="text/javascript" ></script>
     <!--end of page js-->
     <script>
         $(function () {
+            $('#group').multiselect({
+                buttonWidth: '100%',
+                nonSelectedText: 'Chọn đoàn',
+                enableFiltering: true,
+            });
             var check_lyluan = 0;
             $('body').on('click','#change-type-trinh-do-ly-luan',function(e){
                 if (check_lyluan % 2 == 0) {

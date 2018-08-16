@@ -6,10 +6,7 @@ use Illuminate\Http\Request;
 use Dhcd\Administration\App\Http\Requests\ProvineCityRequest;
 use Adtech\Application\Cms\Controllers\Controller as Controller;
 
-use Dhcd\Administration\App\Repositories\CommuneGuildRepository;
-use Dhcd\Administration\App\Models\CommuneGuild;
-use Dhcd\Administration\App\Repositories\CountryDistrictRepository;
-use Dhcd\Administration\App\Models\CountryDistrict;
+
 use Dhcd\Administration\App\Repositories\ProvineCityRepository;
 use Dhcd\Administration\App\Models\ProvineCity;
 
@@ -37,11 +34,9 @@ class ProvineCityController extends Controller
         return view('DHCD-ADMINISTRATION::modules.administration.provine-city.manage');
     }
 
-    public function __construct(CommuneGuildRepository $communeGuildRepository,CountryDistrictRepository $countryDistrictRepository,ProvineCityRepository $provineCityRepository)
+    public function __construct(ProvineCityRepository $provineCityRepository)
     {
         parent::__construct();
-        $this->commune_guild = $communeGuildRepository;
-        $this->country_district = $countryDistrictRepository;
         $this->provine_city = $provineCityRepository;
     }
 
@@ -218,7 +213,7 @@ class ProvineCityController extends Controller
     //Table Data to index page
     public function data()
     {
-        $provine_city = $this->provine_city->findAll();
+        $provine_city = $this->provine_city->all();
         return Datatables::of($provine_city)
             ->addIndexColumn()
             ->addColumn('actions', function ($provine_city) {
@@ -241,11 +236,23 @@ class ProvineCityController extends Controller
     public function checkCode(Request $request){
         $data['valid'] = true;
         if ($request->ajax()) {
-            $provine_city =  ProvineCity::withTrashed()->where(['code' => $request->input('code')])->first();
+            $provine_city =  ProvineCity::where(['code' => $request->input('code')])->first();
             if ($provine_city) {
                 $data['valid'] = false; // true là có user
             }
         }
         echo json_encode($data);
+    }
+
+    public function apiList(Request $request){
+        $provine_citys =  $this->provine_city->all();
+        $list_provine_city = array();
+        foreach ($provine_citys as $key => $value) {
+            $list_provine_city[] = [
+                'provine_city_id' => $value->provine_city_id,
+                'name' => $value->name
+            ];   
+        } 
+        return json_encode($list_provine_city);  
     }
 }
