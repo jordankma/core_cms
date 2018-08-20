@@ -27,7 +27,7 @@ class DhcdMemberTable extends Migration
             $table->datetime('ngay_vao_dang')->nullable();
             $table->datetime('ngay_vao_doan')->nullable();
             $table->string('dan_toc')->nullable();
-            $table->integer('position_id',false,true)->default('0')->nullable();
+            $table->integer('position_id',false,true)->default('0');
             $table->string('position_current',false,true)->nullable()->comment('tat ca chuc vu');
             $table->string('ton_giao')->nullable();
             $table->string('trinh_do_ly_luan')->nullable();

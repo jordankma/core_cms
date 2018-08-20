@@ -28,7 +28,8 @@ class DocumentTypeRepository extends Repository
     }
     
     public static function getTypes(){
-        
+        $types = DocumentType::get()->toArray();
+        return $types;
         if(Cache::has('document_type_list')){            
             $types = Cache::get('document_type_list');            
             return $types;            

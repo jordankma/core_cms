@@ -23,6 +23,7 @@ class DhcdDocumentsTable extends Migration
             $table->longText('descript')->nullable();
             $table->string('icon')->nullable();
             $table->string('avatar')->nullable();
+            $table->datetime('updated_file_at')->nullable();
             $table->tinyInteger('is_reserve', false, true)->comment('dai bieu moi')->default(0);
             $table->tinyInteger('is_offical', false, true)->comment('dai bieu chinh thuc')->default(0);
             $table->tinyInteger('status', false, true)->comment('trang thai')->default(1);

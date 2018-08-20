@@ -92,6 +92,9 @@ $audio_extentions = !empty($types[3]) ? json_decode($types[3]['extentions'],true
                                             <label class="checkbox-inline">
                                                     &nbsp;<input @if(in_array('image/gif',$image_extentions)) checked @endif type="checkbox" name='image[]' value="image/gif" class="custom-checkbox" >&nbsp;image/gif
                                             </label>
+                                            <label class="checkbox-inline">
+                                                    &nbsp;<input @if(in_array('JPEG Image',$image_extentions)) checked @endif type="checkbox" name='image[]' value="JPEG Image" class="custom-checkbox" >&nbsp;JPEG Image
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -115,6 +118,12 @@ $audio_extentions = !empty($types[3]) ? json_decode($types[3]['extentions'],true
                                             </label>
                                             <label class="checkbox-inline">
                                                     &nbsp;<input @if(in_array('pdf',$text_extentions)) checked @endif type="checkbox" name='text[]' value="pdf" class="custom-checkbox" >&nbsp;pdf
+                                            </label>
+                                            <label class="checkbox-inline">
+                                                    &nbsp;<input @if(in_array('Microsoft Excel',$text_extentions)) checked @endif type="checkbox" name='text[]' value="Microsoft Excel" class="custom-checkbox" >&nbsp;Microsoft Excel
+                                            </label>
+                                            <label class="checkbox-inline">
+                                                    &nbsp;<input @if(in_array('Adobe Acrobat',$text_extentions)) checked @endif type="checkbox" name='text[]' value="Adobe Acrobat" class="custom-checkbox" >&nbsp;Adobe Acrobat
                                             </label>
                                         </div>
                                     </div>

@@ -39,13 +39,18 @@ Route::group(array('prefix' => $adminPrefix), function() {
 
         Route::post('dhcd/news/tag/ajax/add', 'NewsTagController@addAjax')->name('dhcd.news.tag.ajax.add');
 
+        //page
+
+        Route::get('dhcd/news/page/log', 'PageController@log')->name('dhcd.news.page.log');
+        Route::get('dhcd/news/page/data', 'PageController@data')->name('dhcd.news.page.data');
+        Route::get('dhcd/news/page/manager', 'PageController@manager')->name('dhcd.news.page.manager')->where('as','Trang tĩnh - Danh sách');
+        Route::get('dhcd/news/page/create', 'PageController@create')->name('dhcd.news.page.create');
+        Route::post('dhcd/news/page/add', 'PageController@add')->name('dhcd.news.page.add');
+        Route::get('dhcd/news/page/show', 'PageController@show')->where('news_id', '[0-9]+')->name('dhcd.news.page.show');
+        Route::post('dhcd/news/page/update', 'PageController@update')->where('news_id', '[0-9]+')->name('dhcd.news.page.update');
+        Route::get('dhcd/news/page/delete', 'PageController@delete')->name('dhcd.news.page.delete');
+        Route::get('dhcd/news/page/confirm-delete', 'PageController@getModalDelete')->name('dhcd.news.page.confirm-delete');
+
 
     });
 });
-        //api
-    Route::group(array('prefix' => 'dev'), function() {
-        Route::get('get/news', 'ApiNewsController@getNews');
-        Route::get('get/news-home', 'ApiNewsController@getNewsHome');
-        Route::get('get/detail-new', 'ApiNewsController@getNewsDetail');
-        Route::get('get/news-list', 'NewsController@listNewsApi');
-    });

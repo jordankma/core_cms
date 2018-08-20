@@ -106,10 +106,11 @@ class NewsController extends Controller
         }
 		$news = new News();
 		$news->create_by = $create_by;
-		$news->title = $title;
+        $news->title = $title;
+		$news->type_page = 'news';
 		$news->news_cat = json_encode($news_cat);
 		$news->news_tag = json_encode($news_tag);
-		$news->title_alias = self::stripUnicode($title);
+		$news->title_alias = strtolower(preg_replace('([^a-zA-Z0-9])', '', self::stripUnicode($title)));
 		$news->desc = $desc;
 		$news->image = $image;
 		$news->content = $content;
@@ -241,9 +242,10 @@ class NewsController extends Controller
         
 		$news = $this->news->find($news_id);
 		$news->title = $title;
+        $news->type_page = 'news';
 		$news->news_cat = json_encode($news_cat);
 		$news->news_tag = json_encode($news_tag);
-		$news->title_alias = self::stripUnicode($title);
+		$news->title_alias = strtolower(preg_replace('([^a-zA-Z0-9])', '', self::stripUnicode($title)));
 		$news->desc = $desc;
 		$news->content = $content;
 		$news->image = $image;
@@ -373,7 +375,7 @@ class NewsController extends Controller
     		$list_news = $this->news->getListNews($params);
     	}
     	else{
-    		$list_news = $this->news->findAll();	
+    		$list_news = News::where('type_page','news')->get();	
     	}
         return Datatables::of($list_news)
             ->addColumn('actions', function ($list_news) {

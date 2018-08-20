@@ -39,8 +39,8 @@
                     {{ $title}}
                     <div class="pull-right">
                         @if ($USER_LOGGED->canAccess('dhcd.news.news.create'))
-                            <a href="{{ route('dhcd.news.news.create') }}" class="btn btn-sm btn-default"><span
-                                    class="glyphicon glyphicon-plus"></span> {{ trans('adtech-core::buttons.create') }}</a>
+                            <a href="{{ route('dhcd.news.news.create') }}" class="btn btn-sm btn-default">
+                                <span class="glyphicon glyphicon-plus"></span> {{ trans('adtech-core::buttons.create') }}</a>
                         @endif
                     </div>
                 </div>

@@ -15,7 +15,7 @@ use Dhcd\Document\App\Models\Tag;
 use Dhcd\Document\App\Models\TagItem;
 use Spatie\Activitylog\Models\Activity;
 use Yajra\Datatables\Datatables;
-use Validator,Cache,Auth;
+use Validator,Cache,Auth,DateTime;
 
 class DocumentController extends Controller
 {
@@ -64,7 +64,6 @@ class DocumentController extends Controller
     }
     
     public function create(Request $request){
-        
         if(empty($request->file_types) || empty($request->file_names) || empty($request->path)){
             return redirect()->back()->withInput()->withErrors(['Bạn chưa chọn file đính kèm']);
         }      
@@ -78,10 +77,11 @@ class DocumentController extends Controller
              $file_types = $request->file_types;
              $paths = $request->path;
              foreach($file_names as $i => $name){
+                 $path_term = str_replace(' ', '%20', $paths[$i]);
                  $files[] = [
                      'type' => $file_types[$i],
                      'name' => $name,
-                     'path' => $paths[$i]
+                     'path' => $path_term 
                  ];
              }
              $is_reserve = !empty($request->is_reserve) ? $request->is_reserve : 0;
@@ -161,7 +161,7 @@ class DocumentController extends Controller
         return view('DHCD-DOCUMENT::modules.document.doc.edit',compact('document','types','cates','cateIds','cateObj','tags'));
     }
     
-    public function update(Request $request){        
+    public function update(Request $request){    
         if(empty($request->file_types) || empty($request->file_names) || empty($request->path)){
             return redirect()->back()->withInput()->withErrors(['Bạn chưa chọn file đính kèm']);
         }        
@@ -179,13 +179,13 @@ class DocumentController extends Controller
              $file_types = $request->file_types;
              $paths = $request->path;
              foreach($file_names as $i => $name){
+                 $path_term = str_replace(' ', '%20', $paths[$i]);
                  $files[] = [
                      'type' => $file_types[$i],
                      'name' => $name,
-                     'path' => $paths[$i]
+                     'path' => $path_term 
                  ];
-             }
-                         
+             }          
              $is_reserve = !empty($request->is_reserve) ? $request->is_reserve : 0;
              $is_offical = !empty($request->is_offical) ? $request->is_offical : 0;
              
@@ -196,6 +196,20 @@ class DocumentController extends Controller
              }
              
              $document = $this->documentRepository->find($request->document_id);
+             $file_term = json_decode($document->file,true);
+             $flag = false;
+             if(count($files) == count($file_term)){
+                 foreach ($files as $key1 => $value1) {
+                    if(!empty(array_diff($value1,$file_term[$key1])[0])){
+                        $flag = true;
+                    }
+                 }
+             } else {
+                $flag = true;   
+             }
+             if($flag == true){
+                $document->updated_file_at = new DateTime();
+             }     
              if($document->document_id){
                   $document->update([
                         'name' => $request->name,

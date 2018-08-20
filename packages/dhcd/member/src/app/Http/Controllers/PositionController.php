@@ -42,7 +42,7 @@ class PositionController extends Controller
         if (!$validator->fails()) {
             $positions = new Position();
             $positions->name = $request->input('name');
-            $groups->alias = strtolower(preg_replace('([^a-zA-Z0-9])', '', self::stripUnicode($name)));
+            $groups->alias = strtolower(preg_replace('([^a-zA-Z0-9])', '', self::stripUnicode($request->input('name'))));
             $positions->created_at = new DateTime();
             $positions->updated_at = new DateTime();
 
@@ -87,7 +87,7 @@ class PositionController extends Controller
 
             $position = $this->position->find($position_id);
             $position->name = $request->input('name');
-            $groups->alias = strtolower(preg_replace('([^a-zA-Z0-9])', '', self::stripUnicode($name)));
+            $groups->alias = strtolower(preg_replace('([^a-zA-Z0-9])', '', self::stripUnicode($request->input('name'))));
             $position->updated_at = new DateTime();
             if ($position->save()) {
                 Cache::forget('member_position');
@@ -111,7 +111,7 @@ class PositionController extends Controller
         $type = 'delete';
         $confirm_route = $error = null;
         $validator = Validator::make($request->all(), [
-            'position_id' => 'required|numeric',
+            'position_id' => 'required|numeric'
         ], $this->messages);
         if (!$validator->fails()) {
             try {

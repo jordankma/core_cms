@@ -16,6 +16,11 @@ return [
             "add" => "Thêm tag",
             "list"=> "Danh sách tag",
             "edit"=> "Cập nhật tag"
+        ],
+        "page"=>[
+            "add" => "Thêm trang tĩnh",
+            "list"=> "Danh sách trang tĩnh",
+            "edit"=> "Cập nhật trang tĩnh"
         ]
     ],
     "table" => [

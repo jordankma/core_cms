@@ -42,7 +42,7 @@ class PositionMemberController extends Controller
         if (!$validator->fails()) {
             $positions = new Position();
             $positions->name = $request->input('name');
-            $groups->alias = strtolower(preg_replace('([^a-zA-Z0-9])', '', self::stripUnicode($name)));
+            $positions->alias = strtolower(preg_replace('([^a-zA-Z0-9])', '', self::stripUnicode($request->input('name'))));
             $positions->created_at = new DateTime();
             $positions->updated_at = new DateTime();
 
@@ -87,7 +87,7 @@ class PositionMemberController extends Controller
 
             $position = $this->position->find($position_id);
             $position->name = $request->input('name');
-            $groups->alias = strtolower(preg_replace('([^a-zA-Z0-9])', '', self::stripUnicode($name)));
+            $position->alias = strtolower(preg_replace('([^a-zA-Z0-9])', '', self::stripUnicode($request->input('name'))));
             $position->updated_at = new DateTime();
             if ($position->save()) {
 

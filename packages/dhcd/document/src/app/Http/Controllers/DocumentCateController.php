@@ -236,5 +236,8 @@ class DocumentCateController extends Controller {
 
         return $branch;
     }
-
+    public function getAllCategory(){
+       $cates = $this->documentCate->getCates();
+       return $cates;
+   }
 }

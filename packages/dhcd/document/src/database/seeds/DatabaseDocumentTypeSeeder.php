@@ -16,12 +16,12 @@ class DatabaseDocumentTypeSeeder extends Seeder
             'document_type_id' => 1,
             'name' => 'Hình ảnh',
             'type' => 'image',
-            'extentions' => json_encode(['image/jpeg','image/jpg','image/png','image/gif'])
+            'extentions' => json_encode(['image/jpeg','image/jpg','image/png','image/gif','JPEG Image'])
         ],[
             'document_type_id' => 2,
             'name' => 'Văn bản',
             'type' => 'text',
-            'extentions' => json_encode(['docx','doc','xls','xlsx','pdf'])
+            'extentions' => json_encode(['docx','doc','xls','xlsx','pdf','Microsoft Excel','Adobe Acrobat'])
         ],[
             'document_type_id' => 3,
             'name' => 'Video',

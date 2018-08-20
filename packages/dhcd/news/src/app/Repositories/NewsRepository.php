@@ -30,7 +30,7 @@ class NewsRepository extends Repository
     }
     public static function getListNews($params) {
         DB::statement(DB::raw('set @rownum=0'));
-        $q = News::orderBy('news_id', 'desc');
+        $q = News::orderBy('news_id', 'desc')->where('type_page','news');
         if (!empty($params['name']) && $params['name'] != null) {
             $q->where('title', 'like', '%' . $params['name'] . '%');
         }
