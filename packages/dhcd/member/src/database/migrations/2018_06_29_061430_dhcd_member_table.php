@@ -24,8 +24,8 @@ class DhcdMemberTable extends Migration
             $table->string('phone')->unique()->nullable();
             $table->tinyInteger('type')->default('1')->comment('1 dai bieu chinh thuc 2 dai bieu moi');
             $table->string('bang_cap')->nullable();
-            $table->datetime('ngay_vao_dang')->nullable();
-            $table->datetime('ngay_vao_doan')->nullable();
+            $table->string('ngay_vao_dang')->nullable();
+            $table->string('ngay_vao_doan')->nullable();
             $table->string('dan_toc')->nullable();
             $table->integer('position_id',false,true)->default('0');
             $table->string('position_current',false,true)->nullable()->comment('tat ca chuc vu');
@@ -37,7 +37,7 @@ class DhcdMemberTable extends Migration
             $table->string('gender')->nullable();
             $table->string('avatar')->nullable();
             $table->string('don_vi')->nullable();
-            $table->datetime('birthday')->nullable();
+            $table->string('birthday')->nullable();
             $table->string('reg_ip')->nullable();
             $table->datetime('last_login')->nullable();
             $table->string('last_ip')->nullable();

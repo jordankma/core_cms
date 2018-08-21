@@ -32,6 +32,8 @@ return [
             "position_current"=> "Chức vụ hiện tại",
             "position"=> "Chọn chức vụ được bầu",
             "address"=> "Địa chỉ",
+            "trinh_do_chuyen_mon"=> "Học hàm học vị chuyên môn cao nhất",
+            "trinh_do_ly_luan"=> "Lý luận Chính trị"
         ],
         "group" => [
             "name" => "Tên",
@@ -42,7 +44,8 @@ return [
         ],
         "group" => [
             "name" => "Tên",
-            "position"=> "Chức vụ"
+            "position"=> "Chức vụ",
+            "id" => "ID"
         ]
     ],
     "form" => [
@@ -55,7 +58,7 @@ return [
             "avatar" => "Ảnh đại diện",
             "address" => "Địa chỉ",
             "don_vi" => "Đơn vị",
-            "birthday" => "Ngày sinh",
+            "birthday" => "Năm sinh",
             "phone" => "Số điện thoại",
             "position" => "Chọn chức vụ được bầu",
             "doan" => "Đoàn",

@@ -49,7 +49,7 @@
                             <tr class="filters">
                                 <th class="fit-content">#</th>
                                 <th>{{ trans('dhcd-member::language.table.group.name') }}</th>
-                                {{-- <th>{{ trans('dhcd-member::language.table.group.count') }}</th> --}}
+                                <th>{{ trans('dhcd-member::language.table.group.id') }}</th>
                                 <th style="width: 120px">{{ trans('dhcd-member::language.table.created_at') }}</th>
                                 <th>{{ trans('dhcd-member::language.table.action') }}</th>
                             </tr>
@@ -76,7 +76,7 @@
                 columns: [
                     { data: 'DT_Row_Index', name: 'DT_Row_Index' },
                     { data: 'name', name: 'name' },
-                    // { data: 'count', name: 'count'},
+                    { data: 'group_id', name: 'group_id'},
                     { data: 'created_at', name: 'created_at'},
                     { data: 'actions', name: 'actions', orderable: false, searchable: false, className: 'fit-content'}
                 ]

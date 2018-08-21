@@ -255,9 +255,6 @@
 
             var domain = "/admin/laravel-filemanager/";
             $('#lfm').filemanager('image', {prefix: domain});
-            $('#birthday,#ngay_vao_dang,#ngay_vao_doan').datetimepicker({
-                format: 'YYYY-MM-DD',
-            });
             $('#form-add-member').bootstrapValidator({
                 feedbackIcons: {
                     // validating: 'glyphicon glyphicon-refresh'

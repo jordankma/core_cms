@@ -436,25 +436,32 @@ class MemberController extends Controller
                 }
                 $rows[] = $cells;
             }
-            dd($rows);
             if(!empty($rows)){
                 foreach ($rows as $key => $value) {
-                    $data_insert[] = [
-                        'name' => $value[0],
-                        'position_current' => $value[1]
-                    ];
-                }
+                    $member = new Member();
+                    $member->name =  $value[0] .' '. $value[1];
+                    $member->position_current =  $value[7];
+                    $member->trinh_do_chuyen_mon =  $value[5];
+                    $member->trinh_do_ly_luan =  $value[6];
+                    $member->gender =  $value[2]==null ? 'female' : 'male';
+                    $member->birthday =  $value[2]==null ? (int)$value[3] : (int)$value[2];
+                    $member->ngay_vao_dang =  $value[4];
+                    if($member->save()){
+                        $group_id = (int)$value[8];
+                        $member_id = $member->member_id;
+                        if (!GroupHasMember::where([
+                            'group_id' => $group_id,
+                            'member_id' => $member_id
+                        ])->exists()
+                        ){
+                            DB::table('dhcd_group_has_member')->insert(['member_id' => $member_id, 'group_id' => $group_id]);
+                        }
+                    }
+                }        
             } else {
                 return redirect()->route('dhcd.member.member.manage')->with('error', trans('dhcd-member::language.messages.error.import'));    
             }
-            if(!empty($data_insert)){
-                if(DB::table('dhcd_member')->insert($data_insert)){
-                    return redirect()->route('dhcd.member.member.manage')->with('success', trans('dhcd-member::language.messages.success.import'));
-                }
-            } 
-            else {
-                return redirect()->route('dhcd.member.member.manage')->with('error', trans('dhcd-member::language.messages.error.import'));
-            }
+            return redirect()->route('dhcd.member.member.manage')->with('success', trans('dhcd-member::language.messages.success.import'));
         } else {
             return $validator->messages(); 
         }

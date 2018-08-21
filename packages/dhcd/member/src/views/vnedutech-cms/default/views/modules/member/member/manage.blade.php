@@ -76,6 +76,8 @@
                                 <th class="fit-content">#</th>
                                 <th>{{ trans('dhcd-member::language.table.member.name') }}</th>
                                 <th>{{ trans('dhcd-member::language.table.member.position_current') }}</th>
+                                <th>{{ trans('dhcd-member::language.table.member.trinh_do_chuyen_mon') }}</th>
+                                <th>{{ trans('dhcd-member::language.table.member.trinh_do_ly_luan') }}</th>
                                 <th class="fit-content">{{ trans('dhcd-member::language.table.action') }}</th>
                             </tr>
                             </thead>
@@ -102,6 +104,8 @@
                     { data: 'DT_Row_Index', name: 'DT_Row_Index' },
                     { data: 'name', name: 'name' },
                     { data: 'position', name: 'position' },
+                    { data: 'trinh_do_chuyen_mon', name: 'trinh_do_chuyen_mon' },
+                    { data: 'trinh_do_ly_luan', name: 'trinh_do_ly_luan' },
                     { data: 'actions', name: 'actions', orderable: false, searchable: false, className: 'fit-content'}
                 ]
             });
