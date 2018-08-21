@@ -10,8 +10,8 @@ return [
     "sLengthMenu" => "Show _MENU_ entries",
     "sLoadingRecords" => "Loading...",
     "sProcessing" => "Processing...",
-    "sSearch" => "Tìm kiếm:",
-    "sZeroRecords" => "Không có bản ghi nào",
+    "sSearch" => "Search:",
+    "sZeroRecords" => "No matching records found",
     "oPaginate" => [
         "sFirst" => "First",
         "sLast" => "Last",

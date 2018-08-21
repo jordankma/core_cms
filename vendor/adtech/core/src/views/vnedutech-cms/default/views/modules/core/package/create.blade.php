@@ -178,7 +178,7 @@
                 source: availableTags,
                 minLength: 3,
                 select: function(e, ui) {
-                    alert(ui.item.zzz);
+
                 }
             });
         });

@@ -176,7 +176,7 @@ class ApiController extends Controller
     }
 
     public function showdata($module, $link) {
-        $apis = Api::where('visible', 1)->where('link', $link)->first();
+        $apis = Api::where('link', $link)->first();
         if (null != $apis) {
             return response($apis->datademo)->setStatusCode(200)->header('Content-Type', 'application/json; charset=utf-8');
         } else {

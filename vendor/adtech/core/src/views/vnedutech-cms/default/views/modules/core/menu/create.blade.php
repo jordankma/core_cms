@@ -9,6 +9,11 @@
     <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/css/pages/blog.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('/vendor/' . $group_name . '/' . $skin . '/css/pages/icon.css') }}" rel="stylesheet" type="text/css">
+    <style type="text/css">
+        .select2 {
+            width: 100% !important;
+        }
+    </style>
 @stop
 <!--end of page css-->
 
@@ -38,10 +43,9 @@
                 <div class="row">
                     <div class="col-sm-8">
 
-                        <label>Parent</label>
+                        <label>Menu cha</label>
                         <div class="form-group {{ $errors->first('parent', 'has-error') }}">
-                            <select class="form-control select2" title="Select parent..." name="parent"
-                                    id="parent">
+                            <select class="form-control select2" title="Select parent..." name="parent">
                                 <option value="0">Root menu</option>
                                 @foreach($menus as $menu)
                                     <option value="{{ $menu->menu_id }}">{{ str_repeat('---', $menu->level) . $menu->name }}</option>
@@ -50,19 +54,47 @@
                             <span class="help-block">{{ $errors->first('parent', ':message') }}</span>
                         </div>
 
-                        <label>Route Name</label>
+                        <label>Chức năng</label>
                         <div class="form-group {{ $errors->first('route_name', 'has-error') }}">
                             <select class="form-control select2" title="Select route name..." name="route_name"
-                                    id="parent">
+                                    id="route_name" onchange="getTypeView(this);">
                                 <option value="#">No Link</option>
-                                @foreach($listRouteName as $routeName)
-                                    <option value="{{ $routeName }}">{{ $routeName }}</option>
+                                @foreach($listRouteName as $route_name => $routeName)
+                                    <option value="{{ $route_name }}">{{ $routeName }}</option>
                                 @endforeach
                             </select>
                             <span class="help-block">{{ $errors->first('route_name', ':message') }}</span>
                         </div>
 
-                        <label>Group Name</label>
+                        <div id="boxParams" style="display: none">
+                            <label id="lbl_category">Chọn danh mục</label>
+                            <div class="form-group">
+                                <select class="form-control select2" title="Select category name..." name="route_params" id="category_name"></select>
+                            </div>
+                        </div>
+
+                        <div id="boxParams_detail" style="display: none">
+                            <label>Chọn chi tiết</label>
+                            <div class="form-group input-group">
+                                {!! Form::text('route_params_detail', null, array('class' => 'form-control', 'placeholder'=> trans('adtech-core::common.menu.id_detail_here'))) !!}
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" onclick="changeGroupType()">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            {!! Form::hidden('typeData', null, ['id' => 'btn_typeData']) !!}
+                        </div>
+
+                        <div class="form-group">
+                            {!! Form::hidden('typeView', null, ['id' => 'btn_typeView']) !!}
+                        </div>
+
+                        @if ($type == 0)
+                        <label>Nhóm</label>
                         <div class="form-group input-group {{ $errors->first('group', 'has-error') }}">
                             {!! Form::text('group', null, array('class' => 'form-control', 'id' => 'group_name_txt', 'disabled' => true, 'style' => 'display:none', 'placeholder'=> trans('adtech-core::common.menu.group_name_here'))) !!}
                             <select class="form-control" title="Select group name..." name="group" id="group_name_select">
@@ -80,22 +112,28 @@
                                 </button>
                             </span>
                         </div>
+                        @endif
 
-                        <label>Menu Name</label>
+                        <label>Tên menu</label>
                         <div class="form-group {{ $errors->first('name', 'has-error') }}">
                             {!! Form::text('name', null, array('class' => 'form-control', 'autofocus'=>'autofocus','placeholder'=> trans('adtech-core::common.menu.name_here'))) !!}
                             <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                         </div>
 
-                        <label>Sort</label>
+                        <label>Sắp xếp</label>
                         <div class="form-group {{ $errors->first('sort', 'has-error') }}">
                             {!! Form::number('sort', null, array('min' => 0, 'max' => 99,'class' => 'form-control', 'placeholder'=> trans('adtech-core::common.menu.sort_here'))) !!}
                             <span class="help-block">{{ $errors->first('sort', ':message') }}</span>
                         </div>
 
                         <label>Icon</label>
-                        <div class="form-group {{ $errors->first('icon', 'has-error') }}">
-                            {!! Form::text('icon', null, array('class' => 'form-control', 'id' => 'inputIcon', 'placeholder'=>trans('adtech-core::common.menu.icon_here'))) !!}
+                        <div class="input-group {{ $errors->first('icon', 'has-error') }}">
+                            <span class="input-group-btn">
+                             <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
+                               <i class="fa fa-picture-o"></i> Choose
+                             </a>
+                           </span>
+                            {!! Form::text('icon', null, array('class' => 'form-control', 'id' => 'thumbnail', 'placeholder'=>trans('adtech-core::common.menu.icon_here'))) !!}
                             <span class="help-block">{{ $errors->first('icon', ':message') }}</span>
                         </div>
 
@@ -1359,16 +1397,17 @@
 @section('footer_scripts')
     <!-- begining of page js -->
     <script type="text/javascript" src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/select2/js/select2.js') }}"></script>
-    <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrapvalidator/js/bootstrapValidator.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/vendor/laravel-filemanager/js/lfm.js') }}" ></script>
     <!--end of page js-->
     <script>
         $(function () {
+            $('#lfm').filemanager('image');
             $(".select2").select2({
                 theme:"bootstrap"
             });
             $(".livicon").click(function () {
                 var icon_name = this.getAttribute('data-name');
-                $("#inputIcon").attr('value', icon_name);
+                $("#thumbnail").replaceWith( $("#thumbnail").val(icon_name).clone(true) );
             });
         });
 
@@ -1386,6 +1425,91 @@
                 $("#group_name_select").css('display', 'block');
             }
             checkGroup++;
+        }
+
+        var txtUrl = '', typeData = '', typeView = '', txtModal = '',
+            listRouteType = $.parseJSON('{!! $listRouteType !!}'),
+            listRouteView = $.parseJSON('{!! $listRouteView !!}');
+
+        function getTypeView(e) {
+            txtUrl = '';
+            txtModal = '';
+            var route_name = e.options[e.selectedIndex].value;
+            removeOptions(document.getElementById("category_name"));
+            $("#boxParams_detail").css('display', 'none');
+            $("#boxParams_detail").attr('value', '');
+            $("#btn_typeData").attr('value', 'thuong');
+            $("#btn_typeView").attr('value', 'thuong');
+            $("#boxParams").css('display', 'none');
+
+            if (route_name in listRouteType && route_name in listRouteView) {
+                typeData = listRouteType[route_name];
+                typeView = listRouteView[route_name];
+
+                switch(typeData + '-' + typeView) {
+                    case 'tintuc-list':
+                        txtUrl = '{{ Illuminate\Support\Facades\Route::has('dhcd.api.news.category') ? route('dhcd.api.news.category') : '' }}';
+                        break;
+                    case 'tintuc-detail':
+                        txtUrl = '';
+                        txtModal = 'tintuc-detail';
+                        break;
+                    case 'tailieu-list':
+                        txtUrl = '{{ Illuminate\Support\Facades\Route::has('dhcd.api.tailieu.category') ? route('dhcd.api.tailieu.category') : '' }}';
+                        break;
+                    case 'tailieu-detail':
+{{--                        txtUrl = '{{ Illuminate\Support\Facades\Route::has('dhcd.api.tailieu.detail') ? route('dhcd.api.tailieu.detail') : '' }}';--}}
+                        break;
+                    default:
+                        txtUrl = '';
+                }
+
+                if (txtUrl != '') {
+                    $.ajax({
+                        url: txtUrl,
+                        type: 'get',
+                        dataType: 'json',
+                        success: function (response) {
+                            console.log(response);
+                            $("#boxParams").css('display', '');
+                            $("#lbl_category").html('Chọn danh mục');
+                            if (response.length > 0) {
+                                response.forEach(function(element) {
+                                    var x = document.getElementById("category_name");
+                                    var option = document.createElement("option");
+                                    if (typeof element.news_cat_id != 'undefined') {
+                                        option.value = element.news_cat_id;
+                                    }
+                                    if (typeof element.document_cate_id != 'undefined' && typeof element.alias != 'undefined') {
+                                        option.value = element.alias;
+                                    }
+                                    option.text = element.name;
+                                    x.add(option, x[0]);
+                                });
+
+                                $("#btn_typeData").attr('value', typeData);
+                                $("#btn_typeView").attr('value', typeView);
+                            }
+                        }
+                    });
+                }
+
+                if (txtModal != '') {
+                    $("#boxParams_detail").css('display', '');
+                    $("#btn_typeData").attr('value', typeData);
+                    $("#btn_typeView").attr('value', typeView);
+                }
+
+            }
+        }
+
+        function removeOptions(selectbox)
+        {
+            var i;
+            for(i = selectbox.options.length - 1 ; i >= 0 ; i--)
+            {
+                selectbox.remove(i);
+            }
         }
     </script>
 @stop

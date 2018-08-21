@@ -4,7 +4,7 @@ namespace Adtech\Core\App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class MenuRequest extends FormRequest
+class LocaleRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,18 +28,18 @@ class MenuRequest extends FormRequest
             case 'GET':
             case 'DELETE': {
                 return [
-                    'menu_id' => 'required'
+                    'locale_id' => 'required'
                 ];
             }
             case 'POST': {
                 return [
                     'name' => 'required',
-                    'route_name' => 'required'
+                    'alias' => 'required|unique:mysql_core.adtech_core_locales,alias'
                 ];
             }
             case 'PUT':{
                 return [
-                    'menu_id' => 'required',
+                    'locale_id' => 'required',
                     'name' => 'required',
                     'alias' => 'required'
                 ];

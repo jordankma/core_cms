@@ -18,6 +18,13 @@ class DashboardController extends Controller
 //        return view('ADTECH-CORE::modules.core.dashboard.index',
 //            compact('analytics_error', 'users', 'blogs', 'pageVisits', 'blog_count', 'visitors', 'user_count', 'month_visits', 'year_visits'));
 
+//        if ($request->session()->has('tab')) {
+//            if ($request->session()->get('tab') != '') {
+//                $request->session()->put('tab', '');
+//                return redirect()->refresh();
+//            }
+//        }
+
         return view('ADTECH-CORE::modules.core.dashboard.backend');
     }
 
@@ -33,14 +40,12 @@ class DashboardController extends Controller
 
     public function fileuploadtest(UploadRequest $request)
     {
-        echo shell_exec('upload.sh');die;
-
-        if ($request->isMethod('post')) {
-            if ($request->has('file_real_path')) {
-                $filePath = $request->input("file_real_path");
-
-            }
-        }
+//        if ($request->isMethod('post')) {
+//            if ($request->has('file_real_path')) {
+//                $filePath = $request->input("file_real_path");
+//
+//            }
+//        }
         return view('ADTECH-CORE::modules.core.file.upload');
     }
 }
