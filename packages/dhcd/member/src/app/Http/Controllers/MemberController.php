@@ -436,6 +436,7 @@ class MemberController extends Controller
                 }
                 $rows[] = $cells;
             }
+            dd($rows);
             if(!empty($rows)){
                 foreach ($rows as $key => $value) {
                     $data_insert[] = [
