@@ -220,6 +220,7 @@
                 buttonWidth: '100%',
                 nonSelectedText: 'Chọn đoàn',
                 enableFiltering: true,
+                numberDisplayed:100
             });
             var check_lyluan = 0;
             $('body').on('click','#change-type-trinh-do-ly-luan',function(e){
