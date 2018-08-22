@@ -100,7 +100,7 @@ class DocumentController extends Controller
                  'file' => json_encode($files),
                  'avatar' => $avatar,
                  'is_reserve' => $is_reserve,
-                 'is_offical' => $is_offical,
+                 'is_offical' => $is_offical, 
                  'icon' => asset($request->icon)                
              ]);
              if($document->document_id){

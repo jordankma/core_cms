@@ -346,7 +346,7 @@ class MemberController extends Controller
         if (Cache::has('member')) {
             $members = Cache::get('member');
         } else{
-            $members = $this->member->all();    
+            $members = Member::where('status',1)->with('group')->get();
             Cache::put('member', $members);
         }
         return Datatables::of($members)
@@ -369,7 +369,11 @@ class MemberController extends Controller
                 $position = $members->position_current;
                 return $position;
             })
-            ->rawColumns(['actions','status'])
+            ->addColumn('group', function ($members) {
+                $group = $members->group[0]->name;
+                return $group;
+            })
+            ->rawColumns(['actions','status','group'])
             ->make();
     }
 

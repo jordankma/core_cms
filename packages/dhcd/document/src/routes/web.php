@@ -22,6 +22,13 @@ Route::group(array('prefix' => $adminPrefix), function() {
             Route::post('update}', 'DocumentCateController@update')->name('dhcd.document.cate.update');
             Route::get('delete', 'DocumentCateController@delete')->name('dhcd.document.cate.delete');
             Route::get('log', 'DocumentCateController@log')->name('dhcd.document.cate.log');
+
+            Route::get('create/member', 'DocumentCateController@createMember')->name('dhcd.document.cate.create.member');
+            Route::post('add/member', 'DocumentCateController@addMember')->name('dhcd.document.cate.add.member');
+            Route::get('data/member', 'DocumentCateController@dataMember')->name('dhcd.document.cate.data.member');
+            Route::get('delete/member', 'DocumentCateController@deleteMember')->name('dhcd.document.cate.delete.member');
+            Route::get('confirm-delete/member', 'DocumentCateController@getModalDeleteMember')->name('dhcd.document.cate.confirm-delete.member');
+            Route::get('search/member', 'DocumentCateController@searchMember')->name('dhcd.document.cate.search.member');
         });
         
          Route::group(['prefix' => 'dhcd/document/type'], function () {           

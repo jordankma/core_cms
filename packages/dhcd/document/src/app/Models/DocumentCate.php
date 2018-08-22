@@ -30,16 +30,20 @@ class DocumentCate extends Model {
         return $this->belongsToMany(Tag::class, 'dhcd_tags_item','document_cate_id', 'tag_id');
     }
     
+    public function getMember(){
+        return $this->belongsToMany('Dhcd\Member\App\Models\Member', 'dhcd_document_cate_has_member', 'document_cate_id', 'member_id');
+    }
+
     public static function showCategories($cates,$parent_current = 0,$prarent_id = 0, $char = ''){
              
         foreach($cates as $key => $item){
             if($item['parent_id'] == $prarent_id){
                 if($item['document_cate_id'] == $parent_current )
                 {
-                    echo  '<option value="'.$item['document_cate_id'].'" selected>'.$char.' '.$item['name'].'</option>';                
+                    echo  '<option value="'.$item['document_cate_id'].'" selected>'.$char.' '.htmlspecialchars($item['name']).'</option>';                
                 }
                 else{
-                    echo  '<option value="'.$item['document_cate_id'].'" >'.$char.' '.$item['name'].'</option>';  
+                    echo  '<option value="'.$item['document_cate_id'].'" >'.$char.' '.htmlspecialchars($item['name']).'</option>';  
                 }
                 unset($cates[$key]);
                 self::showCategories($cates,$parent_current,$item['document_cate_id'],$char.'|--');
@@ -54,20 +58,20 @@ class DocumentCate extends Model {
             if($item['parent_id'] == $prarent_id){
                 if(in_array($item['document_cate_id'], $document_cate_id))
                 {
-                    echo  '<option  value="'.$item['document_cate_id'].'" selected>'.$char.' '.$item['name'].'</option>';                
+                    echo  '<option  value="'.$item['document_cate_id'].'" selected>'.$char.' '.htmlspecialchars($item['name']).'</option>';                
                 }
                 else{
-                    echo  '<option value="'.$item['document_cate_id'].'" >'.$char.' '.$item['name'].'</option>';  
+                    echo  '<option value="'.$item['document_cate_id'].'" >'.$char.' '.htmlspecialchars($item['name']).'</option>';  
                 }
                  
             }
             else{
                 if(in_array($item['document_cate_id'], $document_cate_id))
                 {
-                    echo  '<option  value="'.$item['document_cate_id'].'" selected>'.$char.' '.$item['name'].'</option>';                
+                    echo  '<option  value="'.$item['document_cate_id'].'" selected>'.$char.' '.htmlspecialchars($item['name']).'</option>';                
                 }
                 else{
-                    echo  '<option value="'.$item['document_cate_id'].'" >'.$char.' '.$item['name'].'</option>';  
+                    echo  '<option value="'.$item['document_cate_id'].'" >'.$char.' '.htmlspecialchars($item['name']).'</option>';  
                 } 
             }
             unset($cates[$key]);
@@ -91,7 +95,7 @@ class DocumentCate extends Model {
                         echo "<img width='50px' src='".$item["icon"]."' >";
                     echo '</td>';               
                     echo '<td>';
-                        echo $char . ' '.$item['name'];
+                        echo $char . ' '.htmlspecialchars($item['name']);
                     echo '</td>';               
                     echo '<td>';
                         echo !empty($parents[$item['parent_id']]) ? $parents[$item['parent_id']]['name'] : 'Root';
@@ -106,6 +110,9 @@ class DocumentCate extends Model {
                         if($USER_LOGGED->canAccess('dhcd.document.cate.delete')){
                             echo "<a href='".route('dhcd.document.cate.delete',['document_cate_id' => $item['document_cate_id']])."'  onclick='return confirm(".'"'."Bạn có chắc chắn muốn xóa?".'"'.")'><i class='livicon' data-name='trash' data-size='18' data-loop='true' data-c='#f56954' data-hc='#f56954' title='delete'></i></a>";
                         }
+                        if($USER_LOGGED->canAccess('dhcd.document.cate.create.member')){
+                            echo "<a href='".route('dhcd.document.cate.create.member',['document_cate_id' => $item['document_cate_id']])."' ><i class='livicon' data-name='add member' data-size='18' data-loop='true' data-c='#428BCA' data-hc='#428BCA' title='add member'></i></a>";
+                        } //
                     echo '</td>';
                 echo '</tr>';
                 

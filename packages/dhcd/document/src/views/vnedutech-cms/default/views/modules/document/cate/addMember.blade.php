@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 {{-- Page title --}}
-@section('title'){{ $title = trans('dhcd-topic::language.titles.topic.add_member') }}@stop
+@section('title'){{ $title = trans('dhcd-document::language.titles.doucment_cate.add_member') }}@stop
 
 {{-- page styles --}}
 @section('header_styles')
@@ -27,7 +27,7 @@
             <li>
                 <a href="{{ route('backend.homepage') }}">
                     <i class="livicon" data-name="home" data-size="16" data-color="#000"></i>
-                    {{ trans('dhcd-topic::language.labels.home') }}
+                    {{ trans('dhcd-document::language.labels.home') }}
                 </a>
             </li>
             <li class="active"><a href="#">{{ $title }}</a></li>
@@ -43,7 +43,7 @@
                 <div class="panel panel-primary" id="hidepanel1">
                     <div class="panel-heading">
                         <h3 class="panel-title">
-                            Add User Topic    
+                            Add User document    
                         </h3>
                     </div>
                     <div id="btnToolbarMember" style=" padding-left: 50%; padding-top: 10px; ">
@@ -51,27 +51,26 @@
                     </div>
                     <div class="panel-body"> 
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-8">
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="table">
                                         <thead>
                                         <tr class="filters">
                                             <th class="fit-content">#</th>
-                                            <th>{{ trans('dhcd-member::language.table.group.name') }}</th>
-                                            {{-- <th>{{ trans('dhcd-member::language.table.group.position') }}</th> --}}
-                                            <th class="fit-content" style="width: 100px">{{ trans('dhcd-topic::language.table.delete') }}</th>
+                                            <th>{{ trans('dhcd-document::language.table.add_member.name') }}</th>
+                                            <th class="fit-content" style="width: 100px">{{ trans('dhcd-document::language.table.delete') }}</th>
                                         </tr>
                                         </thead>
                                     </table>
                                 </div>
                             </div>
-                            <div class="col-md-6" id="content-right">
+                            <div class="col-md-4" id="content-right">
                                 <div id="typeaheadmulti">
                                     
                                 <input type="text" id="searchProduct" name="keyword" class="typeahead form-control" placeholder="Nhập tên người cần thêm" required="">
                                 </div>
                                 <div id="resultSearch">
-                                    <form action="{{route('dhcd.member.group.add.member',['group_id'=>$group_id])}}" method="post">
+                                    <form action="{{route('dhcd.document.cate.add.member',['document_cate_id'=>$document_cate_id])}}" method="post">
                                         <input type='hidden' name="_token" value="{!! csrf_token() !!}">
                                         <ul class="list-group" id="list_members">
                                         </ul>
@@ -97,22 +96,15 @@
     <script src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/bootstrapvalidator/js/bootstrapValidator.min.js') }}" type="text/javascript"></script>
     <script type="text/javascript" src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/datatables/js/jquery.dataTables.js') }}"></script>
     <script type="text/javascript" src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/datatables/js/dataTables.bootstrap.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/typeahead/js/bloodhound.min.js') }}"></script><script type="text/javascript" src="{{ asset('/vendor/' . $group_name . '/' . $skin . '/vendors/typeahead/js/typeahead.bundle.min.js') }}"></script>
     <!--end of page js-->
-    <script>
-        $(function () {
-            $("[name='permission_locked']").bootstrapSwitch();
-        })
-    </script>
     <script type="text/javascript">
         var table = $('#table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{{ route('dhcd.member.group.data.member',['group_id' => $group_id]) }}',
+            ajax: '{{ route('dhcd.document.cate.data.member',['document_cate_id' => $document_cate_id]) }}',
             columns: [
                 { data: 'DT_Row_Index', name: 'DT_Row_Index' },
                 { data: 'name', name: 'name' },
-                // { data: 'position_id', name: 'position_id' },
                 { data: 'actions', name: 'actions', orderable: false, searchable: false, className: 'fit-content'}
             ]
         });
@@ -124,8 +116,8 @@
         // delete member
         var selected = 0;
         var selectedArr = [];
-        var routeDelete = '{{ route('dhcd.member.group.confirm-delete.member') }}';
-        var group_id = '{{$group_id}}';
+        var routeDelete = '{{ route('dhcd.document.cate.confirm-delete.member') }}';
+        var document_cate_id = '{{$document_cate_id}}';
         var htmlBtnToolbar = document.getElementById('btnToolbarMember').innerHTML;
         $('#table tbody').on('click', 'td.details-control', function () {
             var tr = $(this).closest('tr');
@@ -155,7 +147,7 @@
                 selectedArr.splice( index, 1 );
             }
             $(this).toggleClass('selected');
-            var moreHtml = '<a class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete_member_topic_confirm" href="' + routeDelete + '?member=' + selectedArr + '&group_id='+group_id+'">\n' +
+            var moreHtml = '<a class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete_member_document_confirm" href="' + routeDelete + '?member=' + selectedArr + '&document_cate_id='+document_cate_id+'">\n' +
             '                            <span class="glyphicon glyphicon-trash"></span>\n Delete member\n' +
             '                        </a>';
             document.getElementById('btnToolbarMember').innerHTML = moreHtml + htmlBtnToolbar;
@@ -178,13 +170,13 @@
         $("input.typeahead").keyup(function(){
             delay(function(){
                 var keyword = $('.typeahead').val();
-                var url = '/admin/dhcd/member/group/search/member?keyword='+keyword+'&group_id='+group_id;
+                var url = '/admin/dhcd/document/cate/search/member?keyword='+keyword+'&document_cate_id='+document_cate_id;
                 $.get(url, function(data){
                     var i,text = '';
                     var obj_data = JSON.parse(data);
                     if(obj_data.length>0){
                         for (i in obj_data) {
-                            text += '<li class="list-group-item"><input id="m-del-' + obj_data[i].member_id + '" type="checkbox" name="list_members[]" value="'+obj_data[i].member_id+'">  <label for="m-del-' + obj_data[i].member_id + '">' + '  ' + escapeHtml(obj_data[i].name) + ' - ' + obj_data[i].position_current + '</label></li>';
+                            text += '<li class="list-group-item"><input id="m-del-'+obj_data[i].member_id+'" type="checkbox" name="list_members[]" value="'+obj_data[i].member_id+'"><label for="m-del-'+obj_data[i].member_id+'">'+'  ' + escapeHtml(obj_data[i].name) + ' - ' + obj_data[i].position_current + '</label></li>';
                         }
                         $('#list_members').html('');
                         $('#list_members').append(text);
@@ -203,12 +195,11 @@
                 '"': '&quot;',
                 "'": '&#039;'
             };
-
           return text.replace(/[&<>"']/g, function(m) { return map[m]; });
         }
         //end add member
     </script>
-    <div class="modal fade" id="delete_member_topic_confirm" tabindex="-1" role="dialog" aria-labelledby="delete_member_topic_confirm"
+    <div class="modal fade" id="delete_member_document_confirm" tabindex="-1" role="dialog" aria-labelledby="delete_member_document_confirm"
          aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content"></div>

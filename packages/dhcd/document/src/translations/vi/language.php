@@ -14,6 +14,7 @@ return [
             "manage" => "Quản lý danh mục tài liệu",
             "create" => "Thêm danh mục tài liệu",
             "edit" => "Sửa danh mục tài liệu",
+            "add_member" => "Thêm thành viên"
         ],
         'document' => [
             "manage" => "Quản lý tài liệu",
@@ -34,7 +35,8 @@ return [
         "action" => "Actions",
         'name' => 'Tên nhóm tag',
         'alias' => 'Nhãn hiển thị',
-        "demo" => [
+        "delete" => "Xóa",
+        "add_member" => [
             "name" => "Name"
         ]
     ],

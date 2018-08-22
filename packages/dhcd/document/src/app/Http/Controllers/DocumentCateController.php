@@ -5,6 +5,10 @@ namespace Dhcd\Document\App\Http\Controllers;
 use Illuminate\Http\Request;
 use Adtech\Application\Cms\Controllers\Controller as Controller;
 use Dhcd\Document\App\Models\DocumentCate;
+
+use Dhcd\Document\App\Models\DocumentCateHasMember;
+use Dhcd\Member\App\Models\Member;
+
 use Dhcd\Document\App\Models\Tag;
 use Dhcd\Document\App\Models\TagItem;
 use Dhcd\Document\App\Repositories\DocumentCateRepository;
@@ -12,7 +16,7 @@ use Spatie\Activitylog\Models\Activity;
 use Yajra\Datatables\Datatables;
 use Validator,
     Cache,
-    Auth;
+    Auth,DB;
 
 class DocumentCateController extends Controller {
 
@@ -240,4 +244,149 @@ class DocumentCateController extends Controller {
        $cates = $this->documentCate->getCates();
        return $cates;
    }
+
+   // add xoa tung member 
+    public function createMember(Request $request){
+        $validator = Validator::make($request->all(), [
+            'document_cate_id' => 'required|numeric',
+        ], $this->messages);
+        if (!$validator->fails()) {
+            $document_cate_id = $request->input('document_cate_id');
+            return view('DHCD-DOCUMENT::modules.document.cate.addMember',compact('document_cate_id')); 
+        } else {
+            return $validator->messages();
+        }
+    }
+
+    public function addMember(Request $request){
+        $validator = Validator::make($request->all(), [
+            'document_cate_id' => 'required|numeric',
+        ], $this->messages);
+        if (!$validator->fails()) {
+
+            $document_cate_id = $request->input('document_cate_id');
+            $members = $request->list_members;
+            $document_cates = $this->documentCate->find($document_cate_id);
+            if (null != $document_cates && !empty($members)) {
+                $data_insert = array();
+                if(!empty($members)){
+                    foreach ($members as $key => $member) {
+                        if (!DocumentCateHasMember::where([
+                            'document_cate_id' => $document_cate_id,
+                            'member_id' => $member,
+                        ])->exists()
+                        )
+                        {
+                            $data_insert[] = [
+                                'document_cate_id' => $document_cate_id,
+                                'member_id' => $member
+                            ];
+                        }
+                    }
+                }
+                if(!empty($data_insert)){
+                    DB::table('dhcd_document_cate_has_member')->insert($data_insert);
+                }
+                activity('document_cates')
+                    ->performedOn($document_cates)
+                    ->withProperties($request->all())
+                    ->log('User: :causer.email - Add single member document - document_cate_id: :properties.document_cate_id, name: ' . $document_cates->name);
+                return redirect()->route('dhcd.document.cate.create.member',['document_cate_id' => $document_cate_id])->with('success', trans('dhcd-document::language.messages.success.status'));
+            }
+            else{
+                return redirect()->route('dhcd.document.cate.create.member',['document_cate_id' => $document_cate_id])->with('error', trans('dhcd-document::language.messages.error.status'));
+            }
+        } else {
+            return $validator->messages();
+        }
+    }
+
+    public function getModalDeleteMember(Request $request)
+    {
+        $model = 'document_cate';
+        $type = 'delete_member';
+        $confirm_route = $error = null;
+        $validator = Validator::make($request->all(), [
+            'document_cate_id' => 'required|numeric',
+            'member' => 'required',
+        ], $this->messages);
+        if (!$validator->fails()) {
+            try {
+                $confirm_route = route('dhcd.document.cate.delete.member', ['document_cate_id' => $request->input('document_cate_id'),'member' => $request->input('member')]);
+                return view('DHCD-DOCUMENT::modules.document.modal.modal_confirmation', compact('error', 'type' , 'model', 'confirm_route'));
+            } catch (GroupNotFoundException $e) {
+                return view('DHCD-DOCUMENT::modules.document.modal.modal_confirmation', compact('error', 'type' , 'model', 'confirm_route'));
+            }
+        } else {
+            return $validator->messages();
+        }
+    }
+
+    public function deleteMember(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'document_cate_id' => 'required|numeric',
+            'member' => 'required',
+        ], $this->messages);
+        if (!$validator->fails()) {
+            
+            $document_cate_id = $request->input('document_cate_id');
+            $document_cates = $this->documentCate->find($document_cate_id);
+            $members = explode(",",$request->input('member'));
+            if (!empty($members)) {
+                foreach ($members as $key => $member) {
+                    DB::table('dhcd_document_cate_has_member')->where(['document_cate_id' => $document_cate_id,'member_id' => $member])->delete();
+                }
+                activity('document_cates')
+                    ->performedOn($document_cates)
+                    ->withProperties($request->all())
+                    ->log('User: :causer.email - Delete member document_cates - document_cate_id: :properties.document_cate_id, name: ' . $document_cates->name);
+
+                return redirect()->route('dhcd.document.cate.create.member',['document_cate_id' => $document_cate_id])->with('success', trans('dhcd-document::language.messages.success.delete'));
+            } else {
+                return redirect()->route('dhcd.document.cate.create.member',['document_cate_id' => $document_cate_id])->with('error', trans('dhcd-document::language.messages.error.delete'));
+            }
+
+        } else {
+            return $validator->messages();
+        }   
+    }
+
+    public function dataMember(Request $request)
+    {
+        $document_cate_id = $request->input('document_cate_id');
+        $document_cate = DocumentCate::where('document_cate_id', $document_cate_id)->with('getMember')->first();
+        $members = $document_cate->getMember;
+        return Datatables::of($members)
+            ->addIndexColumn()
+            ->addColumn('actions', function ($members) use ($document_cate_id) {
+                $actions = '<input id="'.$members->member_id.'" type="checkbox" value="" class="select-member">';
+                return $actions;
+            })
+            ->rawColumns(['actions'])
+            ->make();
+    }
+
+    public function searchMember(Request $request) {
+        $data = [];
+        if ($request->ajax()) {
+            $keyword = $request->input('keyword');
+            $document_cate_id = $request->input('document_cate_id');
+            if(!empty($keyword)){
+                $list_member_old = DocumentCateHasMember::where('document_cate_id',$document_cate_id)->select('member_id')->get();
+                $list_members = Member::where('name', 'like', '%' . $keyword . '%')->whereNotIn('member_id', $list_member_old)->get();
+                if(!empty($list_members)){
+                    foreach($list_members as $member){
+                        $data[] = [
+                            'name' => $member->name,
+                            'member_id' => $member->member_id,
+                            'position_current' => $member->position_current
+                        ];
+                    }
+                }
+            }
+        }
+        echo json_encode($data);
+    }
+    // add xoa tung member 
 }
