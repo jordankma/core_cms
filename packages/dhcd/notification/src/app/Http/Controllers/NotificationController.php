@@ -24,6 +24,7 @@ class NotificationController extends Controller
         'required' => "Bắt buộc",
         'numeric'  => "Phải là số"
     );
+    private $api_key_firebase = "AIzaSyAq9otIY5XLE7dB-fa1u08AJgfxjuO1nxQ";
 
     public function __construct(NotificationRepository $notificationRepository,GroupRepository $groupRepository)
     {
@@ -245,21 +246,23 @@ class NotificationController extends Controller
         if (!$validator->fails()) {
             $notification_id = $request->input('notification_id');
             $notification = $this->notification->find($notification_id);
-            $time_sent = $request->input('time_sent');
-            if($time_sent != null || $time_sent != ''){
-                $date = new DateTime($request->input('time_sent'));
-                $time_sent = $date->format('Y-m-d H:i:s');
-            }
-            
+            // $time_sent = $request->input('time_sent');
+            // if($time_sent != null || $time_sent != ''){
+            //     $date = new DateTime($request->input('time_sent'));
+            //     $time_sent = $date->format('Y-m-d H:i:s');
+            // }
             $log_sent = new LogSent();
             $log_sent->notification_id = $request->input('notification_id');
-            $log_sent->group_id = $request->input('group_id');
             $log_sent->create_by = $this->user->email;
-            $log_sent->time_sent = $time_sent;
+            // $log_sent->time_sent = $time_sent;
             $log_sent->created_at = new DateTime();
             $log_sent->updated_at = new DateTime();
             if ($log_sent->save()) {
-
+                $message = [
+                    'name' => $notification->name,
+                    'content' => $notification->content
+                ];
+                $this->sendGCM( $message, $this->device_id_register );
                 activity('notification')
                     ->performedOn($notification)
                     ->withProperties($request->all())
@@ -272,6 +275,66 @@ class NotificationController extends Controller
         } else {
             return $validator->messages();
         }
+    }
+
+    // protected function sendGCM($message, $id) {
+    //     $url = 'https://fcm.googleapis.com/fcm/send';
+    //     $fields = array (
+    //         'registration_ids' => array (
+    //             $id
+    //         ),
+    //         'data' => array (
+    //             "message" => $message
+    //         )
+    //     );
+    //     $fields = json_encode ( $fields );
+
+    //     $headers = array (
+    //         'Authorization: key=' . $this->api_key_firebase,
+    //         'Content-Type: application/json'
+    //     );
+    //     $ch = curl_init ();
+    //     curl_setopt ( $ch, CURLOPT_URL, $url );
+    //     curl_setopt ( $ch, CURLOPT_POST, true );
+    //     curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+    //     curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+    //     curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+
+    //     $result = curl_exec ( $ch );
+    //     echo $result;
+    //     curl_close ( $ch );
+    // }
+    public function sendGCM($message=null) {
+        if($message==null){
+            $msg = array(
+                'body'  => 'Thông báo test',
+                'title' => 'Thông báo',
+            );
+        } else {
+            $msg = $message;  
+        }
+        $fields = array
+        (
+            'to' => "topic/all",
+            'notification' => $msg
+        ); 
+        $headers = array
+        (
+            'Authorization: key=' . $this->api_key_firebase,
+            'Content-Type: application/json'
+        );
+        #Send Reponse To FireBase Server    
+        $ch = curl_init();
+        curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
+        curl_setopt( $ch,CURLOPT_POST, true );
+        curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+        curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+        curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+        curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
+        $result = curl_exec( $ch );
+        curl_close( $ch );
+        #Echo Result Of FireBase Server
+        dd($result);
     }
 
 }

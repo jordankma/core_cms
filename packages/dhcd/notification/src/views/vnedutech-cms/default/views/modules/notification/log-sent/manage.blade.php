@@ -45,7 +45,6 @@
                             <tr class="filters">
                                 <th class="fit-content">#</th>
                                 <th>{{ trans('dhcd-notification::language.table.log_sent.create_by') }}</th>
-                                <th>{{ trans('dhcd-notification::language.table.log_sent.group') }}</th>
                                 <th>{{ trans('dhcd-notification::language.table.log_sent.notification') }}</th>
                                 <th style="width: 120px">{{ trans('dhcd-notification::language.table.created_at') }}</th>
                                 <th>{{ trans('dhcd-notification::language.table.action') }}</th>
@@ -71,9 +70,8 @@
                 serverSide: true,
                 ajax: '{{ route('dhcd.notification.log-sent.data') }}',
                 columns: [
-                    { data: 'rownum', name: 'rownum' },
+                    { data: 'DT_Row_Index', name: 'DT_Row_Index' },
                     { data: 'create_by', name: 'create_by' },
-                    { data: 'group_id', name: 'group_id' },
                     { data: 'notification_id', name: 'notification_id' },
                     { data: 'created_at', name: 'created_at'},
                     { data: 'actions', name: 'actions', orderable: false, searchable: false, className: 'fit-content'}

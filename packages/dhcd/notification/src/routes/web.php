@@ -21,5 +21,7 @@ Route::group(array('prefix' => $adminPrefix), function() {
         Route::get('dhcd/notification/log-sent/manage', 'LogSentController@manage')->name('dhcd.notification.log-sent.manage')->where('as','Thông báo đã gửi - Danh sách');
         Route::get('dhcd/notification/log-sent/delete', 'LogSentController@delete')->name('dhcd.notification.log-sent.delete');
         Route::get('dhcd/notification/log-sent/confirm-delete', 'LogSentController@getModalDelete')->name('dhcd.notification.log-sent.confirm-delete');
+
+        Route::get('dhcd/notification/log-sent/send', 'NotificationController@sendGCM');
     });
 });
