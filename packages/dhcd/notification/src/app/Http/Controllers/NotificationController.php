@@ -24,7 +24,7 @@ class NotificationController extends Controller
         'required' => "Bắt buộc",
         'numeric'  => "Phải là số"
     );
-    private $api_key_firebase = "AIzaSyAq9otIY5XLE7dB-fa1u08AJgfxjuO1nxQ";
+    private $api_key_firebase = "AIzaSyBXqNr0j5HqYFwt9siCsGEPw_0017vwDt8";
 
     public function __construct(NotificationRepository $notificationRepository,GroupRepository $groupRepository)
     {
@@ -276,34 +276,6 @@ class NotificationController extends Controller
             return $validator->messages();
         }
     }
-
-    // protected function sendGCM($message, $id) {
-    //     $url = 'https://fcm.googleapis.com/fcm/send';
-    //     $fields = array (
-    //         'registration_ids' => array (
-    //             $id
-    //         ),
-    //         'data' => array (
-    //             "message" => $message
-    //         )
-    //     );
-    //     $fields = json_encode ( $fields );
-
-    //     $headers = array (
-    //         'Authorization: key=' . $this->api_key_firebase,
-    //         'Content-Type: application/json'
-    //     );
-    //     $ch = curl_init ();
-    //     curl_setopt ( $ch, CURLOPT_URL, $url );
-    //     curl_setopt ( $ch, CURLOPT_POST, true );
-    //     curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
-    //     curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
-    //     curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
-
-    //     $result = curl_exec ( $ch );
-    //     echo $result;
-    //     curl_close ( $ch );
-    // }
     public function sendGCM($message=null) {
         if($message==null){
             $msg = array(
@@ -313,11 +285,10 @@ class NotificationController extends Controller
         } else {
             $msg = $message;  
         }
-        $fields = array
-        (
-            'to' => "topic/all",
-            'notification' => $msg
-        ); 
+        $fields = array (
+          'to' => '/topics/global',
+          'notification' => $msg
+        );
         $headers = array
         (
             'Authorization: key=' . $this->api_key_firebase,
