@@ -24,7 +24,7 @@ class NotificationController extends Controller
         'required' => "Bắt buộc",
         'numeric'  => "Phải là số"
     );
-    private $api_key_firebase = "AIzaSyAq9otIY5XLE7dB-fa1u08AJgfxjuO1nxQ";
+    private $api_key_firebase = "AIzaSyBXqNr0j5HqYFwt9siCsGEPw_0017vwDt8";
 
     public function __construct(NotificationRepository $notificationRepository,GroupRepository $groupRepository)
     {
