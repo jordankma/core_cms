@@ -22,6 +22,7 @@ Route::group(array('prefix' => $adminPrefix), function() {
         Route::get('dhcd/notification/log-sent/delete', 'LogSentController@delete')->name('dhcd.notification.log-sent.delete');
         Route::get('dhcd/notification/log-sent/confirm-delete', 'LogSentController@getModalDelete')->name('dhcd.notification.log-sent.confirm-delete');
 
-        Route::get('dhcd/notification/log-sent/send', 'NotificationController@sendGCM');
+        Route::get('api/notification/notification-list', 'NotificationController@notificationList');
+
     });
 });

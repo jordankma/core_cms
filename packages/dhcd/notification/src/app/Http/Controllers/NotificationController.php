@@ -24,7 +24,7 @@ class NotificationController extends Controller
         'required' => "Bắt buộc",
         'numeric'  => "Phải là số"
     );
-    private $api_key_firebase = "AIzaSyBXqNr0j5HqYFwt9siCsGEPw_0017vwDt8";
+    private $api_key_firebase = "AIzaSyAq9otIY5XLE7dB-fa1u08AJgfxjuO1nxQ";
 
     public function __construct(NotificationRepository $notificationRepository,GroupRepository $groupRepository)
     {
@@ -259,15 +259,15 @@ class NotificationController extends Controller
             $log_sent->updated_at = new DateTime();
             if ($log_sent->save()) {
                 $message = [
-                    'name' => $notification->name,
-                    'content' => $notification->content
+                    'title' => $notification->name,
+                    'body' => $notification->content
                 ];
-                $this->sendGCM( $message, $this->device_id_register );
+                $this->sendGCM( $message );
                 activity('notification')
                     ->performedOn($notification)
                     ->withProperties($request->all())
                     ->log('User: :causer.email - Sent notification - notification_id: :properties.notification_id, name: :properties.name');
-
+                    
                 return redirect()->route('dhcd.notification.notification.manage')->with('success', trans('dhcd-notification::language.messages.success.sent'));
             } else {
                 return redirect()->route('dhcd.notification.notification.manage')->with('error', trans('dhcd-notification::language.messages.error.sent'));
@@ -276,17 +276,20 @@ class NotificationController extends Controller
             return $validator->messages();
         }
     }
-    public function sendGCM($message=null) {
+    private function sendGCM($message=null) {
         if($message==null){
             $msg = array(
-                'body'  => 'Thông báo test',
                 'title' => 'Thông báo',
+                'body'  => 'Nội dung thông báo'
             );
         } else {
             $msg = $message;  
         }
+        $this->actionSendGCM('global',$msg);
+    }
+    private function actionSendGCM($topic_name,$msg) {
         $fields = array (
-          'to' => '/topics/global',
+          'to' => '/topics/'.$topic_name,
           'notification' => $msg
         );
         $headers = array
@@ -305,7 +308,17 @@ class NotificationController extends Controller
         $result = curl_exec( $ch );
         curl_close( $ch );
         #Echo Result Of FireBase Server
-        dd($result);
     }
 
+    public function notificationList(){
+        $notifications = Notification::all();
+        $list_notification = array();
+        foreach ($notifications as $key => $value) {
+            $list_notification[] = [
+                'name' => $value->name,
+                'content' => $value->content
+            ];    
+        } 
+        return json_encode($list_notification);   
+    }
 }
