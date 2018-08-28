@@ -11,11 +11,12 @@ use Dhcd\Api\App\Http\Controllers\Traits\Menu;
 use Dhcd\Api\App\Http\Controllers\Traits\Member;
 use Dhcd\Api\App\Http\Controllers\Traits\Setting;
 use Dhcd\Api\App\Http\Controllers\Traits\Document;
+use Dhcd\Api\App\Http\Controllers\Traits\LogSent;
 use Validator;
 
 class GlobalController extends Controller
 {
-    use Events, News, Forum, Menu, Member, Setting, Document;
+    use Events, News, Forum, Menu, Member, Setting, Document, LogSent;
 
     private $messages = array(
         'name.regex' => "Sai định dạng",
@@ -25,7 +26,7 @@ class GlobalController extends Controller
 
     public function get(Request $request, $route_hash)
     {
-        $encrypted = $this->my_simple_crypt( 'dev/get/events?time='.time()*1000, 'e' );
+        $encrypted = $this->my_simple_crypt( 'dev/get/getlogsent/detail?time='.time()*1000 . '&id=1', 'e' );
         $decrypted = $this->my_simple_crypt( $route_hash, 'd' );
         $parts = parse_url($decrypted);
 
@@ -117,6 +118,12 @@ class GlobalController extends Controller
                         }
                         case 'dev/get/getuserinfo': {
                             return $this->getUserInfo($request);
+                        }
+                        case 'dev/get/getlogsent': {
+                            return $this->getLogSent();
+                        }
+                        case 'dev/get/getlogsent/detail': {
+                            return $this->getLogSentDetail($request);
                         }
                         case 'dev/get/logout': {
                             return app('Adtech\Api\App\Http\Controllers\Auth\LoginController')->logout();

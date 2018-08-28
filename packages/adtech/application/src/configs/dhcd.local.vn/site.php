@@ -58,6 +58,7 @@ return [
     */
     'url_storage' => 'http://dhcd.local.vn',
     'api_prefix' => '/resource/dev/get',
+    'url_static' => 'http://static.dhcd.vnedutech.vn',
     'admin_prefix' => '/admin',
     'homepage' => [
         'frontend' => [

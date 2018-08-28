@@ -14,7 +14,6 @@ class EventsController extends BaseController
     public function getEvents()
     {
         Cache::forget('api_events');
-        dd('1');
         if (Cache::has('api_events')) {
             $events = Cache::get('api_events');
         } else {
