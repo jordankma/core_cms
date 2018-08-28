@@ -85,6 +85,7 @@ return array(
     'Dhcd\\Document\\' => array($baseDir . '/packages/dhcd/document/src'),
     'Dhcd\\Banner\\' => array($baseDir . '/packages/dhcd/banner/src'),
     'Dhcd\\Art\\' => array($baseDir . '/packages/dhcd/art/src'),
+    'Dhcd\\Api\\' => array($baseDir . '/packages/dhcd/api/src'),
     'Dhcd\\Administration\\' => array($baseDir . '/packages/dhcd/administration/src'),
     'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),
     'Cron\\' => array($vendorDir . '/dragonmantank/cron-expression/src/Cron'),

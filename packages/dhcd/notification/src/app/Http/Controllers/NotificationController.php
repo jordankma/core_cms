@@ -277,6 +277,7 @@ class NotificationController extends Controller
         }
     }
     private function sendGCM($message=null) {
+        $list_topic = array('global','global1','global2','global3','global4','global5','global6','global7','global8','global9');
         if($message==null){
             $msg = array(
                 'title' => 'Thông báo',
@@ -285,7 +286,9 @@ class NotificationController extends Controller
         } else {
             $msg = $message;  
         }
-        $this->actionSendGCM('global',$msg);
+        foreach ($list_topic as $key => $value) {
+            $this->actionSendGCM($value,$msg);
+        }
     }
     private function actionSendGCM($topic_name,$msg) {
         $fields = array (
