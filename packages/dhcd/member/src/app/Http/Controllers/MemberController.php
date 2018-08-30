@@ -33,6 +33,8 @@ class MemberController extends Controller
 
     public function manage()
     {
+        $member = Member::where('member_id',71)->with('documentCate')->get();
+        dd($member);
         return view('DHCD-MEMBER::modules.member.member.manage');
     }
 

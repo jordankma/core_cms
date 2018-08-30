@@ -32,7 +32,6 @@ class DocumentCateController extends Controller {
     }
 
     public function manage(Request $request) {
-        
         $objCate = new DocumentCate();
         $cates = $this->documentCate->getCates();        
         $parents = $this->_buildCate($this->documentCate->getCates());
