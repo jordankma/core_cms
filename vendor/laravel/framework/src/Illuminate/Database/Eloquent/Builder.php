@@ -68,7 +68,7 @@ class Builder
      */
     protected $passthru = [
         'insert', 'insertGetId', 'getBindings', 'toSql',
-        'exists', 'doesntExist', 'count', 'min', 'max', 'avg', 'average', 'sum', 'getConnection',
+        'exists', 'doesntExist', 'count', 'min', 'max', 'avg', 'sum', 'getConnection',
     ];
 
     /**
@@ -211,15 +211,17 @@ class Builder
      * Add a basic where clause to the query.
      *
      * @param  string|array|\Closure  $column
-     * @param  mixed   $operator
-     * @param  mixed   $value
+     * @param  string  $operator
+     * @param  mixed  $value
      * @param  string  $boolean
      * @return $this
      */
     public function where($column, $operator = null, $value = null, $boolean = 'and')
     {
         if ($column instanceof Closure) {
-            $column($query = $this->model->newModelQuery());
+            $query = $this->model->newQueryWithoutScopes();
+
+            $column($query);
 
             $this->query->addNestedWhereQuery($query->getQuery(), $boolean);
         } else {
@@ -233,14 +235,14 @@ class Builder
      * Add an "or where" clause to the query.
      *
      * @param  \Closure|array|string  $column
-     * @param  mixed  $operator
+     * @param  string  $operator
      * @param  mixed  $value
      * @return \Illuminate\Database\Eloquent\Builder|static
      */
     public function orWhere($column, $operator = null, $value = null)
     {
         list($value, $operator) = $this->query->prepareValueAndOperator(
-            $value, $operator, func_num_args() === 2
+            $value, $operator, func_num_args() == 2
         );
 
         return $this->where($column, $operator, $value, 'or');
@@ -321,7 +323,7 @@ class Builder
         $result = $this->find($id, $columns);
 
         if (is_array($id)) {
-            if (count($result) === count(array_unique($id))) {
+            if (count($result) == count(array_unique($id))) {
                 return $result;
             }
         } elseif (! is_null($result)) {
@@ -622,7 +624,7 @@ class Builder
 
         $alias = is_null($alias) ? $column : $alias;
 
-        $lastId = null;
+        $lastId = 0;
 
         do {
             $clone = clone $this;
@@ -784,7 +786,7 @@ class Builder
      * Increment a column's value by a given amount.
      *
      * @param  string  $column
-     * @param  float|int  $amount
+     * @param  int  $amount
      * @param  array  $extra
      * @return int
      */
@@ -799,7 +801,7 @@ class Builder
      * Decrement a column's value by a given amount.
      *
      * @param  string  $column
-     * @param  float|int  $amount
+     * @param  int  $amount
      * @param  array  $extra
      * @return int
      */

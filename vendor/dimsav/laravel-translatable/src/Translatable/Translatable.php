@@ -2,15 +2,17 @@
 
 namespace Dimsav\Translatable;
 
-use App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Dimsav\Translatable\Exception\LocalesNotDefinedException;
 
 trait Translatable
 {
+    protected static $autoloadTranslations = null;
+
     protected $defaultLocale;
 
     /**
@@ -33,7 +35,7 @@ trait Translatable
      *
      * @return \Illuminate\Database\Eloquent\Model|null
      */
-    public function translateOrDefault($locale)
+    public function translateOrDefault($locale = null)
     {
         return $this->getTranslation($locale, true);
     }
@@ -45,7 +47,7 @@ trait Translatable
      *
      * @return \Illuminate\Database\Eloquent\Model|null
      */
-    public function translateOrNew($locale)
+    public function translateOrNew($locale = null)
     {
         return $this->getTranslationOrNew($locale);
     }
@@ -70,7 +72,7 @@ trait Translatable
             if ($translation = $this->getTranslationByLocaleKey($fallbackLocale)) {
                 return $translation;
             }
-            if ($translation = $this->getTranslationByLocaleKey($configFallbackLocale)) {
+            if ($fallbackLocale !== $configFallbackLocale && $translation = $this->getTranslationByLocaleKey($configFallbackLocale)) {
                 return $translation;
             }
         }
@@ -109,7 +111,21 @@ trait Translatable
      */
     public function getTranslationModelNameDefault()
     {
-        return get_class($this).config('translatable.translation_suffix', 'Translation');
+        $modelName = get_class($this);
+
+        if ($namespace = $this->getTranslationModelNamespace()) {
+            $modelName = $namespace.'\\'.class_basename(get_class($this));
+        }
+
+        return $modelName.config('translatable.translation_suffix', 'Translation');
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTranslationModelNamespace()
+    {
+        return config('translatable.translation_model_namespace');
     }
 
     /**
@@ -149,7 +165,7 @@ trait Translatable
      */
     private function usePropertyFallback()
     {
-        return config('translatable.use_property_fallback', false);
+        return $this->useFallback() && config('translatable.use_property_fallback', false);
     }
 
     /**
@@ -162,18 +178,23 @@ trait Translatable
      */
     private function getAttributeOrFallback($locale, $attribute)
     {
-        $value = $this->getTranslation($locale)->$attribute;
+        $translation = $this->getTranslation($locale);
 
-        $usePropertyFallback = $this->useFallback() && $this->usePropertyFallback();
         if (
-            empty($value) &&
-            $usePropertyFallback &&
-            ($fallback = $this->getTranslation($this->getFallbackLocale(), true))
+            (
+                ! $translation instanceof Model ||
+                empty($translation->$attribute)
+            ) &&
+            $this->usePropertyFallback()
         ) {
-            return $fallback->$attribute;
+            $translation = $this->getTranslation($this->getFallbackLocale(), false);
         }
 
-        return $value;
+        if ($translation instanceof Model) {
+            return $translation->$attribute;
+        }
+
+        return null;
     }
 
     /**
@@ -232,7 +253,7 @@ trait Translatable
     public function save(array $options = [])
     {
         if ($this->exists) {
-            if (count($this->getDirty()) > 0) {
+            if ($this->isDirty()) {
                 // If $this->exists and dirty, parent::save() has to return true. If not,
                 // an error has occurred. Therefore we shouldn't save the translations.
                 if (parent::save($options)) {
@@ -243,6 +264,10 @@ trait Translatable
             } else {
                 // If $this->exists and not dirty, parent::save() skips saving and returns
                 // false. So we have to save the translations
+                if ($this->fireModelEvent('saving') === false) {
+                    return false;
+                }
+
                 if ($saved = $this->saveTranslations()) {
                     $this->fireModelEvent('saved', false);
                     $this->fireModelEvent('updated', false);
@@ -261,10 +286,12 @@ trait Translatable
     /**
      * @param string $locale
      *
-     * @return \Illuminate\Database\Eloquent\Model|null
+     * @return \Illuminate\Database\Eloquent\Model
      */
-    protected function getTranslationOrNew($locale)
+    protected function getTranslationOrNew($locale = null)
     {
+        $locale = $locale ?: $this->locale();
+
         if (($translation = $this->getTranslation($locale, false)) === null) {
             $translation = $this->getNewTranslation($locale);
         }
@@ -676,13 +703,43 @@ trait Translatable
     }
 
     /**
+     * This scope sorts results by the given translation field.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string                                $key
+     * @param string                                $sortmethod
+     *
+     * @return \Illuminate\Database\Eloquent\Builder|static
+     */
+    public function scopeOrderByTranslation(Builder $query, $key, $sortmethod = 'asc')
+    {
+        $translationTable = $this->getTranslationsTable();
+        $localeKey = $this->getLocaleKey();
+        $table = $this->getTable();
+        $keyName = $this->getKeyName();
+
+        return $query
+            ->join($translationTable, function (JoinClause $join) use ($translationTable, $localeKey, $table, $keyName) {
+                $join
+                    ->on($translationTable.'.'.$this->getRelationKey(), '=', $table.'.'.$keyName)
+                    ->where($translationTable.'.'.$localeKey, $this->locale());
+            })
+            ->orderBy($translationTable.'.'.$key, $sortmethod)
+            ->select($table.'.*')
+            ->with('translations');
+    }
+
+    /**
      * @return array
      */
     public function attributesToArray()
     {
         $attributes = parent::attributesToArray();
 
-        if (! $this->relationLoaded('translations') && ! $this->toArrayAlwaysLoadsTranslations()) {
+        if (
+            (! $this->relationLoaded('translations') && ! $this->toArrayAlwaysLoadsTranslations() && is_null(self::$autoloadTranslations))
+            || self::$autoloadTranslations === false
+        ) {
             return $attributes;
         }
 
@@ -693,9 +750,7 @@ trait Translatable
                 continue;
             }
 
-            if ($translations = $this->getTranslation()) {
-                $attributes[$field] = $translations->$field;
-            }
+            $attributes[$field] = $this->getAttributeOrFallback(null, $field);
         }
 
         return $attributes;
@@ -805,5 +860,20 @@ trait Translatable
     private function toArrayAlwaysLoadsTranslations()
     {
         return config('translatable.to_array_always_loads_translations', true);
+    }
+
+    public static function enableAutoloadTranslations()
+    {
+        self::$autoloadTranslations = true;
+    }
+
+    public static function defaultAutoloadTranslations()
+    {
+        self::$autoloadTranslations = null;
+    }
+
+    public static function disableAutoloadTranslations()
+    {
+        self::$autoloadTranslations = false;
     }
 }

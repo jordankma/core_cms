@@ -185,6 +185,7 @@ return [
 
         // Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
         // Tymon\JWTAuth\Providers\LaravelServiceProvider::class
+        Elasticquent\ElasticquentServiceProvider::class,
     ],
 
     /*
@@ -238,6 +239,7 @@ return [
         
         // 'JWTAuth'   => Tymon\JWTAuth\Facades\JWTAuth::class,
         // 'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class
+        'Es' => Elasticquent\ElasticquentElasticsearchFacade::class,
     ],
 
 ];
