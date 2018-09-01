@@ -37,11 +37,12 @@ class MemberController extends Controller
     public function manage()
     {
         $params = [
-            'group.name' => 'an',
-            // 'name' => 'lêx'
+            'name' => 'lê',
+            'limit' => 10,
+            'offset' => 2
         ];
         $member_elastic = new MemberElastic();
-        $pagination = $member_elastic->customSearch($params)->paginate(11);
+        $pagination = $member_elastic->customSearch($params)->paginate(8);
         dd($pagination);
         return view('DHCD-MEMBER::modules.member.member.manage');
     }
@@ -236,6 +237,8 @@ class MemberController extends Controller
                     DB::table('dhcd_group_has_member')->insert($data_insert);
                 }
                 Cache::forget('member');
+                $member_elastic = new MemberElactic();
+                $member_elastic->saveDocument($members->member_id);
                 activity('member')
                     ->performedOn($member)
                     ->withProperties($request->all())

@@ -12,13 +12,13 @@ use Dhcd\Api\App\Http\Controllers\Traits\Member;
 use Dhcd\Api\App\Http\Controllers\Traits\Setting;
 use Dhcd\Api\App\Http\Controllers\Traits\Document;
 use Dhcd\Api\App\Http\Controllers\Traits\Logsent;
-use Dhcd\Api\App\Http\Controllers\Traits\Search;
-use Dhcd\Api\App\Http\Controllers\Traits\Domain;
+// use Dhcd\Api\App\Http\Controllers\Traits\Search;
+// use Dhcd\Api\App\Http\Controllers\Traits\Domain;
 use Validator;
 
 class GlobalController extends Controller
 {
-    use Events, News, Forum, Menu, Member, Setting, Document, Logsent, Search, Domain;
+    use Events, News, Forum, Menu, Member, Setting, Document, Logsent;
 
     private $messages = array(
         'name.regex' => "Sai định dạng",
@@ -130,15 +130,15 @@ class GlobalController extends Controller
                         case 'dev/get/getlogsent/detail': {
                             return $this->getLogSentDetail($request);
                         }
-                        case 'dev/get/search': {
-                            return $this->getSearch($request);
-                        }
-                        case 'dev/get/domain': {
-                            return $this->getDomain();
-                        }
-                        case 'dev/get/display': {
-                            return $this->getDisPlay();
-                        }
+                        // case 'dev/get/search': {
+                        //     return $this->getSearch($request);
+                        // }
+                        // case 'dev/get/domain': {
+                        //     return $this->getDomain();
+                        // }
+                        // case 'dev/get/display': {
+                        //     return $this->getDisPlay();
+                        // }
                         case 'dev/get/logout': {
                             return app('Adtech\Api\App\Http\Controllers\Auth\LoginController')->logout();
                         }

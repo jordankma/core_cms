@@ -27,8 +27,8 @@ trait Domain
     }
 
     public function getDisplay(){
-        $image = "dhcd.vnedutech.vn";
-        $slogan = "image.img";
+        $image = "http://dhcd.vnedutech.vn/files/photos/icons/36.png";
+        $slogan = "Đổi mới - Dân chủ - Đoàn kết - Trách nhiệm";
         $data = '{
                     "data": {
                         "image": '. json_encode($image) .',

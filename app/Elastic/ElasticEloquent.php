@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Duy
- * Date: 13/09/2017
- * Time: 9:56 SA
- */
 
 namespace App\Elastic;
 use Elasticquent\ElasticquentTrait;
