@@ -45,12 +45,12 @@ trait Menu
         if (count($menus) > 0) {
             foreach ($menus as $menu) {
                 $item = new \stdClass();
-                $item->id = base64_encode($menu->menu_id);
-                $item->title = base64_encode($menu->name);
-                $item->alias = base64_encode($menu->alias);
-                $item->icon = base64_encode(config('site.url_storage') . $menu->icon);
-                $item->type = in_array($menu->typeData, $arrTypeData) ? base64_encode($menu->typeData) : '';
-                $item->typeView = in_array($menu->typeView, $arrTypeView) ? base64_encode($menu->typeView) : '';
+                $item->id = $menu->menu_id;
+                $item->title = $menu->name;
+                $item->alias = $menu->alias;
+                $item->icon = config('site.url_storage') . $menu->icon;
+                $item->type = in_array($menu->typeData, $arrTypeData) ? $menu->typeData : '';
+                $item->typeView = in_array($menu->typeView, $arrTypeView) ? $menu->typeView : '';
                 $list_menus[] = $item;
             }
         }
@@ -88,12 +88,12 @@ trait Menu
         if (count($menus) > 0) {
             foreach ($menus as $menu) {
                 $item = new \stdClass();
-                $item->id = base64_encode($menu->menu_id);
-                $item->title = base64_encode($menu->name);
-                $item->alias = in_array($menu->typeView, $arrTypeView) ? base64_encode($menu->route_params) : base64_encode($menu->alias);
-                $item->icon = base64_encode(config('site.url_storage') . $menu->icon);
-                $item->type = in_array($menu->typeData, $arrTypeData) ? base64_encode($menu->typeData) : '';
-                $item->typeView = in_array($menu->typeView, $arrTypeView) ? base64_encode($menu->typeView) : '';
+                $item->id = $menu->menu_id;
+                $item->title = $menu->name;
+                $item->alias = $menu->alias;
+                $item->icon = config('site.url_storage') . $menu->icon;
+                $item->type = in_array($menu->typeData, $arrTypeData) ? $menu->typeData : '';
+                $item->typeView = in_array($menu->typeView, $arrTypeView) ? $menu->typeView : '';
                 $list_menus[] = $item;
             }
         }
@@ -131,12 +131,12 @@ trait Menu
         if (count($menus) > 0) {
             foreach ($menus as $menu) {
                 $item = new \stdClass();
-                $item->id = base64_encode($menu->menu_id);
-                $item->title = base64_encode($menu->name);
-                $item->alias = base64_encode($menu->alias);
-                $item->icon = base64_encode(config('site.url_storage') . $menu->icon);
-                $item->type = in_array($menu->typeData, $arrTypeData) ? base64_encode($menu->typeData) : '';
-                $item->typeView = in_array($menu->typeView, $arrTypeView) ? base64_encode($menu->typeView) : '';
+                $item->id = $menu->menu_id;
+                $item->title = $menu->name;
+                $item->alias = $menu->alias;
+                $item->icon = config('site.url_storage') . $menu->icon;
+                $item->type = in_array($menu->typeData, $arrTypeData) ? $menu->typeData : '';
+                $item->typeView = in_array($menu->typeView, $arrTypeView) ? $menu->typeView : '';
                 $list_menus[] = $item;
             }
         }

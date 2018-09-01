@@ -22,26 +22,12 @@ trait Events
         $list_events = [];
         if (count($events) > 0) {
             foreach ($events as $event) {
-
-                $arrDetail = json_decode($event->event_detail);
-                if (count($arrDetail) > 0) {
-                    foreach ($arrDetail as $k => $detail) {
-
-                        $item = new \stdClass();
-                        $item->start_time = base64_encode($detail['start_time']);
-                        $item->end_time = base64_encode($detail['end_time']);
-                        $item->content = base64_encode($detail['content']);
-
-                        $arrDetail[$k] = $item;
-                    }
-                }
-
                 $item = new \stdClass();
-                $item->id = base64_encode($event->event_id);
-                $item->title_day = base64_encode($event->name);
-                $item->date = base64_encode(date("d-m-Y", strtotime($event->date)));
-                $item->content = base64_encode($event->content);
-                $item->events = $arrDetail;
+                $item->id = $event->event_id;
+                $item->title_day = $event->name;
+                $item->date = date("d-m-Y", strtotime($event->date));
+                $item->content = $event->content;
+                $item->events = json_decode($event->event_detail);
 
                 $list_events[] = $item;
             }

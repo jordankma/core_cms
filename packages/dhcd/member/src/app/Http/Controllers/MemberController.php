@@ -15,6 +15,9 @@ use Dhcd\Member\App\Models\Position;
 use Spatie\Activitylog\Models\Activity;
 use Yajra\Datatables\Datatables;
 use Validator,Auth,DateTime,DB,Cache;
+
+use App\Elastic\MemberElastic;
+
 class MemberController extends Controller
 {
     private $messages = array(
@@ -33,8 +36,13 @@ class MemberController extends Controller
 
     public function manage()
     {
-        $member = Member::where('member_id',71)->with('documentCate')->get();
-        dd($member);
+        $params = [
+            'group.name' => 'an',
+            // 'name' => 'lêx'
+        ];
+        $member_elastic = new MemberElastic();
+        $pagination = $member_elastic->customSearch($params)->paginate(11);
+        dd($pagination);
         return view('DHCD-MEMBER::modules.member.member.manage');
     }
 
@@ -117,6 +125,8 @@ class MemberController extends Controller
                     DB::table('dhcd_group_has_member')->insert($data_insert);
                 }
                 Cache::forget('member');
+                $member_elastic = new MemberElactic();
+                $member_elastic->saveDocument($members->member_id);
                 activity('member')
                     ->performedOn($members)
                     ->withProperties($request->all())
@@ -471,6 +481,23 @@ class MemberController extends Controller
             return redirect()->route('dhcd.member.member.manage')->with('success', trans('dhcd-member::language.messages.success.import'));
         } else {
             return $validator->messages(); 
+        }
+    }
+
+    public function sync(Request $request, $type){
+        if ($type == 0) {
+            MemberElastic::syncDocuments(95);
+            $redirectUrl = $request->fullUrl();
+            echo "<script>window.location.href = '{$redirectUrl}';</script>";
+        } else {
+            if (MemberElastic::getMapping()) {
+                MemberElastic::deleteMapping();
+            }
+            MemberElastic::putMapping();
+            Member::where(['sync_es' => 'done'])->update(['sync_es' => 'pending']);
+            
+            $url = route('sync',0);
+            echo "<script>window.location.href = '{$url}';</script>";
         }
     }
 }

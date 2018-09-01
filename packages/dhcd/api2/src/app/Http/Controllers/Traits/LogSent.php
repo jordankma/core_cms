@@ -3,10 +3,11 @@
 namespace Dhcd\Api\App\Http\Controllers\Traits;
 
 use Dhcd\Notification\App\Models\LogSent as LogSentModel;
+use Illuminate\Support\Facades\DB;
 use Validator;
 use Cache;
 
-trait Logsent
+trait LogSent
 {
     private $messages = array(
         'name.regex' => "Sai định dạng",
@@ -25,12 +26,12 @@ trait Logsent
             $page = $log_sents_arr['current_page'];
             foreach ($log_sents as $key => $value) {
                 $list_log_sent[] = [
-                    'log_sent_id' => base64_encode($value->log_sent_id),
+                    'log_sent_id' => $value->log_sent_id,
                     'name' => base64_encode($value->notification->name),
                     'content' => base64_encode($value->notification->content),
-                    'created_at' => base64_encode($value->created_at)
-                ];
-            }
+                    'created_at' => $value->created_at
+                ];     
+            }    
         }
         $data = '{
                     "data": {
@@ -53,11 +54,11 @@ trait Logsent
             $id = $request->input('id');
             $log_sent = LogSentModel::where('log_sent_id',$id)->with('notification')->first();
             $log_sent_data = [
-                'log_sent_id' => base64_encode($log_sent->log_sent_id),
-                'name' => base64_encode($log_sent->notification->name),
-                'content' => base64_encode($log_sent->notification->content),
-                'created_at' => base64_encode($log_sent->created_at)
-            ];
+                    'log_sent_id' => $log_sent->log_sent_id,
+                    'name' => base64_encode($log_sent->notification->name),
+                    'content' => base64_encode($log_sent->notification->content),
+                    'created_at' => $log_sent->created_at
+                ];
             $data = '{
                     "data": '. json_encode($log_sent_data) .',
                     "success" : true,
