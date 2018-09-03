@@ -31,6 +31,8 @@ Route::group(array('prefix' => $adminPrefix), function() {
 
         Route::post('dhcd/member/member/check-email-exist', 'MemberController@checkEmailExist')->name('dhcd.member.member.check-email-exist');
         Route::post('dhcd/member/member/check-phone-exist', 'MemberController@checkPhoneExist')->name('dhcd.member.member.check-phone-exist');
+
+        Route::get('dhcd/member/member/sync/{type}', ['as' => 'synces', 'uses' => 'MemberController@sync']);
         //import export member excel
         Route::get('dhcd/member/member/excel/get/import', 'MemberController@getImport')->name('dhcd.member.member.excel.get.import')->where('as','Upload excel');
         Route::post('dhcd/member/member/excel/post/import', 'MemberController@postImport')->name('dhcd.member.member.excel.post.import');
