@@ -36,14 +36,14 @@ class MemberController extends Controller
 
     public function manage()
     {
-        $params = [
-            'name' => 'lê',
-            'limit' => 10,
-            'offset' => 2
-        ];
-        $member_elastic = new MemberElastic();
-        $pagination = $member_elastic->customSearch($params)->paginate(8);
-        dd($pagination);
+        // $params = [
+        //     'name' => 'diễm',
+        //     // 'limit' => 10,
+        //     // 'offset' => 2
+        // ];
+        // $member_elastic = new MemberElastic();
+        // $pagination = $member_elastic->customSearch($params)->paginate(8);
+        // dd($pagination);
         return view('DHCD-MEMBER::modules.member.member.manage');
     }
 

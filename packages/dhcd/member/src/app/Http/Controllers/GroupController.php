@@ -14,6 +14,7 @@ use Dhcd\Member\App\Models\Member;
 use Spatie\Activitylog\Models\Activity;
 use Yajra\Datatables\Datatables;
 
+use App\Elastic\GroupElastic;
 use Validator,DateTime,DB,Cache;
 class GroupController extends Controller
 {
@@ -57,6 +58,8 @@ class GroupController extends Controller
 
             if ($groups->save()) {
                 Cache::forget('member_group');
+                $group_elastic = new GroupElastic();
+                $group_elastic->saveDocument($groups->group_id);
                 activity('group')
                     ->performedOn($groups)
                     ->withProperties($request->all())
@@ -108,6 +111,8 @@ class GroupController extends Controller
             $group->alias = strtolower(preg_replace('([^a-zA-Z0-9])', '', self::stripUnicode($name)));
             $group->updated_at = new DateTime();
             if ($group->save()) {
+                $group_elastic = new GroupElastic();
+                $group_elastic->saveDocument($group->group_id);
                 Cache::forget('member_group');
                 activity('group')
                     ->performedOn($group)
@@ -150,6 +155,8 @@ class GroupController extends Controller
 
         if (null != $group) {
             $this->group->delete($group_id);
+            $group_elastic = new GroupElastic();
+            $group_elastic->saveDocument($group_id);
             Cache::forget('member_group');
             activity('group')
                 ->performedOn($group)
