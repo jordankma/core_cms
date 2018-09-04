@@ -12,13 +12,13 @@ use Dhcd\Api\App\Http\Controllers\Traits\Member;
 use Dhcd\Api\App\Http\Controllers\Traits\Setting;
 use Dhcd\Api\App\Http\Controllers\Traits\Document;
 use Dhcd\Api\App\Http\Controllers\Traits\Logsent;
-// use Dhcd\Api\App\Http\Controllers\Traits\Search;
+use Dhcd\Api\App\Http\Controllers\Traits\Search;
 // use Dhcd\Api\App\Http\Controllers\Traits\Domain;
 use Validator;
 
 class GlobalController extends Controller
 {
-    use Events, News, Forum, Menu, Member, Setting, Document, Logsent;
+    use Events, News, Forum, Menu, Member, Setting, Document, Logsent,Search;
 
     private $messages = array(
         'name.regex' => "Sai định dạng",
@@ -28,7 +28,7 @@ class GlobalController extends Controller
 
     public function get(Request $request, $route_hash)
     {
-        $encrypted = $this->my_simple_crypt( 'dev/get/display?time='.time()*1000 , 'e' );
+        $encrypted = $this->my_simple_crypt( 'dev/get/search?time='.time()*1000 , 'e' );
         $decrypted = $this->my_simple_crypt( $route_hash, 'd' );
         $parts = parse_url($decrypted);
 
@@ -130,9 +130,9 @@ class GlobalController extends Controller
                         case 'dev/get/getlogsent/detail': {
                             return $this->getLogSentDetail($request);
                         }
-                        // case 'dev/get/search': {
-                        //     return $this->getSearch($request);
-                        // }
+                        case 'dev/get/search': {
+                            return $this->getSearch($request);
+                        }
                         // case 'dev/get/domain': {
                         //     return $this->getDomain();
                         // }
