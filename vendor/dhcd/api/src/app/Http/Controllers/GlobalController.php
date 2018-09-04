@@ -11,12 +11,14 @@ use Dhcd\Api\App\Http\Controllers\Traits\Menu;
 use Dhcd\Api\App\Http\Controllers\Traits\Member;
 use Dhcd\Api\App\Http\Controllers\Traits\Setting;
 use Dhcd\Api\App\Http\Controllers\Traits\Document;
-// use Dhcd\Api\App\Http\Controllers\Traits\LogSent;
+use Dhcd\Api\App\Http\Controllers\Traits\Logsent;
+// use Dhcd\Api\App\Http\Controllers\Traits\Search;
+// use Dhcd\Api\App\Http\Controllers\Traits\Domain;
 use Validator;
 
 class GlobalController extends Controller
 {
-    use Events, News, Forum, Menu, Member, Setting, Document;
+    use Events, News, Forum, Menu, Member, Setting, Document, Logsent;
 
     private $messages = array(
         'name.regex' => "Sai định dạng",
@@ -26,12 +28,12 @@ class GlobalController extends Controller
 
     public function get(Request $request, $route_hash)
     {
-        $encrypted = $this->my_simple_crypt( 'dev/get/test?time='.time()*1000 , 'e' );
+        $encrypted = $this->my_simple_crypt( 'dev/get/display?time='.time()*1000 , 'e' );
         $decrypted = $this->my_simple_crypt( $route_hash, 'd' );
         $parts = parse_url($decrypted);
 
-       // echo $encrypted.'<br>';
-       // echo $decrypted.'<br>';die;
+        // echo $encrypted.'<br>';
+        // echo $decrypted.'<br>';die;
 
         $query = [];
         if (count($parts) > 0) {
@@ -77,24 +79,27 @@ class GlobalController extends Controller
                         case 'dev/get/events': {
                             return $this->getEvents();
                         }
-                        case 'dev/get/news': {
-                            return $this->getNews($request);
-                        }
-                        case 'dev/get/news-home': {
-                            return $this->getNewshome($request);
-                        }
-                        case 'dev/get/detail-news': {
-                            return $this->getNewsdetail($request);
-                        }
-                        case 'dev/get/forum': {
-                            return $this->getForum($request);
-                        }
+//                        case 'dev/get/news': {
+//                            return $this->getNews($request);
+//                        }
+//                        case 'dev/get/news-home': {
+//                            return $this->getNewshome($request);
+//                        }
+//                        case 'dev/get/detail-news': {
+//                            return $this->getNewsdetail($request);
+//                        }
+//                        case 'dev/get/forum': {
+//                            return $this->getForum($request);
+//                        }
                         case 'dev/get/member-group': {
                             return $this->getMemberGroup($request);
                         }
                         case 'dev/get/member-by-group': {
                             return $this->getMemberByGroup($request);
                         }
+//                        case 'dev/get/member-by-category': {
+//                            return $this->getMemberByCategory($request);
+//                        }
                         case 'dev/get/menu': {
                             return $this->getMenu();
                         }
@@ -119,11 +124,20 @@ class GlobalController extends Controller
                         case 'dev/get/getuserinfo': {
                             return $this->getUserInfo($request);
                         }
-                        // case 'dev/get/getlogsent': {
-                        //     return $this->getLogSent();
+                        case 'dev/get/getlogsent': {
+                            return $this->getLogSent();
+                        }
+                        case 'dev/get/getlogsent/detail': {
+                            return $this->getLogSentDetail($request);
+                        }
+                        // case 'dev/get/search': {
+                        //     return $this->getSearch($request);
                         // }
-                        // case 'dev/get/getlogsent/detail': {
-                        //     return $this->getLogSentDetail($request);
+                        // case 'dev/get/domain': {
+                        //     return $this->getDomain();
+                        // }
+                        // case 'dev/get/display': {
+                        //     return $this->getDisPlay();
                         // }
                         case 'dev/get/logout': {
                             return app('Adtech\Api\App\Http\Controllers\Auth\LoginController')->logout();
