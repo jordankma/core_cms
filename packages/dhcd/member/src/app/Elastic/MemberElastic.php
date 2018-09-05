@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace App\Elastic;
+namespace Dhcd\Member\App\Elastic;
 
 use Elasticquent\ElasticquentTrait;
 use Dhcd\Member\App\Models\Member;

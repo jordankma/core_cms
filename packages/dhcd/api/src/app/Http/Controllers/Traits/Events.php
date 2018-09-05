@@ -10,20 +10,21 @@ trait Events
 {
     public function getEvents()
     {
-        Cache::forget('api_events');
-        if (Cache::has('api_events')) {
-            $events = Cache::get('api_events');
+        $cache_name = 'api_events';
+        Cache::forget($cache_name);
+        if (Cache::has($cache_name)) {
+            $events = Cache::get($cache_name);
         } else {
             $events = EventsModel::where('date', '>=', date('Y-m-d'))->orderBy('date')->get();
             $expiresAt = now()->addMinutes(3600);
-            Cache::put('api_events', $events, $expiresAt);
+            Cache::put($cache_name, $events, $expiresAt);
         }
 
         $list_events = [];
         if (count($events) > 0) {
             foreach ($events as $event) {
 
-                $arrDetail = json_decode($event->event_detail);
+                $arrDetail = json_decode($event->event_detail, true);
                 if (count($arrDetail) > 0) {
                     foreach ($arrDetail as $k => $detail) {
 
@@ -37,7 +38,7 @@ trait Events
                 }
 
                 $item = new \stdClass();
-                $item->id = base64_encode($event->event_id);
+                $item->id = $event->event_id;
                 $item->title_day = base64_encode($event->name);
                 $item->date = base64_encode(date("d-m-Y", strtotime($event->date)));
                 $item->content = base64_encode($event->content);

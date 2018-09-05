@@ -27,6 +27,6 @@ return array(
     | Elasticquent models.
     */
 
-    'default_index' => 'dhcd_test',
+    'default_index' => 'dhcd_vnedutech',
 
 );

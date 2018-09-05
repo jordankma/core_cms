@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace App\Elastic;
+namespace Dhcd\Member\App\Elastic;
 
 use Elasticquent\ElasticquentTrait;
 use Dhcd\Member\App\Models\Member;
@@ -123,7 +123,7 @@ class GroupElastic extends ElasticEloquent
                 $data = self::_builDocument($item);
                 $group_elastic->addDocument($item['group_id'], $data);
                 
-                Member::where('group_id', $item['group_id'])->update(['sync_es' => 'done']);
+                Group::where('group_id', $item['group_id'])->update(['sync_es' => 'done']);
             }
         } else {
             die('DONE');
@@ -173,6 +173,7 @@ class GroupElastic extends ElasticEloquent
                 'must_not' => !empty($mustNotFilters[0]) ? $mustNotFilters : []
             ]
         ];
+
         $query = [
             'function_score' => [
                 'query' => [
@@ -182,7 +183,6 @@ class GroupElastic extends ElasticEloquent
                     ]
                 ]
             ],
-        
         ];
         
         if (!empty($params['is_random'])) {
@@ -195,7 +195,6 @@ class GroupElastic extends ElasticEloquent
         $offset = !empty($params['offset']) ? $params['offset'] : 0;
         $sort = !empty($params['sort']) ? $params['sort'] : ['member_id' => 'desc'];
         $data = GroupElastic::searchByQuery($query, null, null, $limit, $offset, $sort);
-
         return $data;
     }
 	public function remove(CourseElactic $course) {

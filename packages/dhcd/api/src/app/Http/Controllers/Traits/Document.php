@@ -12,19 +12,23 @@ trait Document
 
     public function getTest()
     {
-        $pdf_base64 = "files/test/1.pdf";
+        $client = new \GuzzleHttp\Client();
+        $res = $client->request('GET', 'http://localhost:8080/split?path=/src/public/files/test/chap01.pdf');
+
+        $pdf_base64 = "files/test/test.pdf";
         $content = $this->my_simple_crypt( $pdf_base64, 'f' );
     }
 
     public function getMenuDocument()
     {
-        Cache::forget('api_document_cate');
-        if (Cache::has('api_document_cate')) {
-            $menus = Cache::get('api_document_cate');
+        $cache_name = 'api_document_cate';
+        Cache::forget($cache_name);
+        if (Cache::has($cache_name)) {
+            $menus = Cache::get($cache_name);
         } else {
             $menus = app('Dhcd\Document\App\Http\Controllers\DocumentCateController')->getListCategory();
             $expiresAt = now()->addMinutes(3600);
-            Cache::put('api_document_cate', $menus, $expiresAt);
+            Cache::put($cache_name, $menus, $expiresAt);
         }
 
         $list_menus = [];
@@ -32,12 +36,12 @@ trait Document
             foreach ($menus as $menu) {
                 $menu = (object) $menu;
                 $item = new \stdClass();
-                $item->id = base64_encode($menu->document_cate_id);
+                $item->id = $menu->document_cate_id;
                 $item->title = base64_encode($menu->name);
                 $item->alias = base64_encode($menu->alias);
                 $item->type = base64_encode(1);
                 $item->type_api = base64_encode(1);
-                $item->icon = base64_encode(config('site.url_storage') . $menu->icon);
+                $item->icon = config('site.url_storage') . $menu->icon;
                 $list_menus[] = $item;
             }
         }
@@ -55,13 +59,14 @@ trait Document
 
     public function getAllDocument()
     {
-        Cache::forget('api_all_document_cate');
-        if (Cache::has('api_all_document_cate')) {
-            $documentCates = Cache::get('api_all_document_cate');
+        $cache_name = 'api_all_document_cate';
+        Cache::forget($cache_name);
+        if (Cache::has($cache_name)) {
+            $documentCates = Cache::get($cache_name);
         } else {
             $documentCates = app('Dhcd\Document\App\Http\Controllers\DocumentCateController')->getAllCategory();
             $expiresAt = now()->addMinutes(3600);
-            Cache::put('api_all_document_cate', $documentCates, $expiresAt);
+            Cache::put($cache_name, $documentCates, $expiresAt);
         }
 
         $list_menus = [];
@@ -71,9 +76,11 @@ trait Document
                 $cate = (object) $cate;
                 $list_docs = [];
                 $alias = $cate->alias;
-                Cache::forget('api_doc_document_page_' . $alias . '_all');
-                if (Cache::has('api_doc_document_page_' . $alias . '_all')) {
-                    $filesDoc = Cache::get('api_doc_document_page_' . $alias . '_all');
+
+                $cache_name = 'api_doc_document_page_' . $alias . '_all';
+                Cache::forget($cache_name);
+                if (Cache::has($cache_name)) {
+                    $filesDoc = Cache::get($cache_name);
                 } else {
                     $filesDoc = DocModel::with('getDocumentCate')
                         ->whereHas('getDocumentCate', function ($query) use ($cate) {
@@ -81,7 +88,7 @@ trait Document
                         })->get();
 
                     $expiresAt = now()->addMinutes(3600);
-                    Cache::put('api_doc_document_page_' . $alias . '_all', $filesDoc, $expiresAt);
+                    Cache::put($cache_name, $filesDoc, $expiresAt);
                 }
 
                 if (count($filesDoc) > 0) {
@@ -92,21 +99,23 @@ trait Document
                             $listFile = [];
                             foreach ($listFiles as $files) {
                                 $files['name'] = (self::is_url($files['name'])) ? $files['name'] : config('app.url') . '' . $files['name'];
-                                $listFile[] = base64_encode($files);
+                                $files['name'] = base64_encode($files['name']);
+                                $listFile[] = $files;
                             }
 
-                            $item->id = base64_encode($file->document_id);
+                            $item->id = $file->document_id;
                             $item->title = base64_encode($file->name);
                             $item->alias = base64_encode($file->alias);
                             $item->sub_title = base64_encode($file->descript);
-                            $item->icon = (self::is_url($file->icon)) ? base64_encode($file->icon) : base64_encode(config('app.url') . '' . $file->icon);
+                            $item->icon = (self::is_url($file->icon)) ? $file->icon : config('app.url') . '' . $file->icon;
                             $item->files = $listFile;
                             $item->is_offical = base64_encode($file->is_offical);
                             $item->is_reserve = base64_encode($file->is_reserve);
+                            $item->updated_file_at = strtotime($file->updated_file_at) * 1000;
                             $item->type_file = '';
                             $item->type_view = base64_encode('detail');
-                            $item->date_created = base64_encode(strtotime($file->created_at) * 1000);
-                            $item->date_modified = base64_encode(strtotime($file->updated_at) * 1000);
+                            $item->date_created = strtotime($file->created_at) * 1000;
+                            $item->date_modified = strtotime($file->updated_at) * 1000;
 
                             $list_docs[] = $item;
                         }
@@ -114,15 +123,14 @@ trait Document
                     }
                 }
 
-                $item = (object) $cate;
                 $item = new \stdClass();
-                $item->id = base64_encode($cate->document_cate_id);
+                $item->id = $cate->document_cate_id;
                 $item->title = base64_encode($cate->name);
                 $item->alias = base64_encode($cate->alias);
                 $item->list_document = $list_docs;
                 $item->type = base64_encode(1);
                 $item->type_api = base64_encode(1);
-                $item->icon = base64_encode(config('site.url_storage') . $cate->icon);
+                $item->icon = config('site.url_storage') . $cate->icon;
                 $list_menus[] = $item;
             }
         }
@@ -141,7 +149,7 @@ trait Document
     public function getFilesDocument($request) {
         $page = $request->input('page', 1);
         $alias = $request->input('alias', '');
-        $list_news = $filesDoc = $list_document = [];
+        $list_document = [];
         $total_page = 0;
 
         $documentCate = DocumentCate::where('alias', $alias)->first();
@@ -150,9 +158,10 @@ trait Document
             $cateChildren = DocumentCate::where('parent_id', $documentCate->document_cate_id)->get();
 
             //doc child
-            Cache::forget('api_doc_document_page_' . $alias . '_all');
-            if (Cache::has('api_doc_document_page_' . $alias . '_all')) {
-                $filesDoc = Cache::get('api_doc_document_page_' . $alias . '_all');
+            $cache_name = 'api_doc_document_page_' . $alias . '_all';
+            Cache::forget($cache_name);
+            if (Cache::has($cache_name)) {
+                $filesDoc = Cache::get($cache_name);
             } else {
                 $filesDoc = DocModel::with('getDocumentCate')
                     ->whereHas('getDocumentCate', function ($query) use ($documentCate) {
@@ -160,7 +169,7 @@ trait Document
                     })->get();
 
                 $expiresAt = now()->addMinutes(3600);
-                Cache::put('api_doc_document_page_' . $alias . '_all', $filesDoc, $expiresAt);
+                Cache::put($cache_name, $filesDoc, $expiresAt);
             }
 
             if (count($cateChildren) > 0 && count($filesDoc) > 0) {
@@ -168,14 +177,14 @@ trait Document
                 if (count($cateChildren) > 0) {
                     foreach ($cateChildren as $child) {
                         $item = new \stdClass();
-                        $item->id = base64_encode($child->document_cate_id);
+                        $item->id = $child->document_cate_id;
                         $item->title = base64_encode($child->name);
                         $item->alias = base64_encode($child->alias);
                         $item->descript = base64_encode($child->descript);
                         $item->type = base64_encode(1);
                         $item->type_api = base64_encode(1);
                         $item->type_view = base64_encode('category');
-                        $item->icon = base64_encode(config('site.url_storage') . $child->icon);
+                        $item->icon = config('site.url_storage') . $child->icon;
                         $list_document[] = $item;
                     }
                 }
@@ -188,21 +197,23 @@ trait Document
                             $listFile = [];
                             foreach ($listFiles as $files) {
                                 $files['name'] = (self::is_url($files['name'])) ? $files['name'] : config('app.url') . '' . $files['name'];
-                                $listFile[] = base64_encode($files);
+                                $files['name'] = base64_encode($files['name']);
+                                $listFile[] = $files;
                             }
 
-                            $item->id = base64_encode($file->document_id);
+                            $item->id = $file->document_id;
                             $item->title = base64_encode($file->name);
                             $item->alias = base64_encode($file->alias);
                             $item->sub_title = base64_encode($file->descript);
-                            $item->icon = (self::is_url($file->icon)) ? base64_encode($file->icon) : base64_encode(config('app.url') . '' . $file->icon);
+                            $item->icon = (self::is_url($file->icon)) ? $file->icon : config('app.url') . '' . $file->icon;
                             $item->files = $listFile;
                             $item->is_offical = base64_encode($file->is_offical);
                             $item->is_reserve = base64_encode($file->is_reserve);
+                            $item->updated_file_at = strtotime($file->updated_file_at) * 1000;
                             $item->type_file = '';
                             $item->type_view = base64_encode('detail');
-                            $item->date_created = base64_encode(strtotime($file->created_at) * 1000);
-                            $item->date_modified = base64_encode(strtotime($file->updated_at) * 1000);
+                            $item->date_created = strtotime($file->created_at) * 1000;
+                            $item->date_modified = strtotime($file->updated_at) * 1000;
 
                             $list_document[] = $item;
                         }
@@ -212,7 +223,9 @@ trait Document
 
                 $data = '{
                     "data": {
-                        "list_document": '. json_encode($list_document) .'
+                        "list_document": '. json_encode($list_document) .',
+                        "total_page": 1,
+                        "current_page": 1
                     },
                     "success" : true,
                     "message" : "ok!"
@@ -223,7 +236,7 @@ trait Document
                 if (count($cateChildren) > 0) {
                     foreach ($cateChildren as $child) {
                         $item = new \stdClass();
-                        $item->id = base64_encode($child->document_cate_id);
+                        $item->id = $child->document_cate_id;
                         $item->title = base64_encode($child->name);
                         $item->alias = base64_encode($child->alias);
                         $item->descript = base64_encode($child->descript);
@@ -267,10 +280,11 @@ trait Document
                             $listFile = [];
                             foreach ($listFiles as $files) {
                                 $files['name'] = (self::is_url($files['name'])) ? $files['name'] : config('app.url') . '' . $files['name'];
-                                $listFile[] = base64_encode($files);
+                                $files['name'] = base64_encode($files['name']);
+                                $listFile[] = $files;
                             }
 
-                            $item->id = base64_encode($file->document_id);
+                            $item->id = $file->document_id;
                             $item->title = base64_encode($file->name);
                             $item->alias = base64_encode($file->alias);
                             $item->sub_title = base64_encode($file->descript);
@@ -278,6 +292,7 @@ trait Document
                             $item->files = $listFile;
                             $item->is_offical = base64_encode($file->is_offical);
                             $item->is_reserve = base64_encode($file->is_reserve);
+                            $item->updated_file_at = base64_encode($file->updated_file_at);
                             $item->type_file = '';
                             $item->type_view = base64_encode('detail');
                             $item->date_created = base64_encode(strtotime($file->created_at) * 1000);
@@ -308,13 +323,15 @@ trait Document
 
     public function getFilesDetail($request) {
         $alias = $request->input('alias', '');
-        Cache::forget('api_doc_document_detail_' . $alias);
-        if (Cache::has('api_doc_document_detail_' . $alias)) {
-            $filesDoc = Cache::get('api_doc_document_detail_' . $alias);
+
+        $cache_name = 'api_doc_document_detail_' . $alias;
+        Cache::forget($cache_name);
+        if (Cache::has($cache_name)) {
+            $filesDoc = Cache::get($cache_name);
         } else {
             $filesDoc = DocModel::where('alias', $alias)->first();
             $expiresAt = now()->addMinutes(3600);
-            Cache::put('api_doc_document_detail_' . $alias, $filesDoc, $expiresAt);
+            Cache::put($cache_name, $filesDoc, $expiresAt);
         }
 
         $item = new \stdClass();
@@ -325,18 +342,19 @@ trait Document
                     $listFile = [];
                     foreach ($listFiles as $files) {
                         $files['name'] = (self::is_url($files['name'])) ? $files['name'] : config('app.url') . '' . $files['name'];
-                        $listFile[] = base64_encode($files);
+                        $files['name'] = base64_encode($files['name']);
+                        $listFile[] = $files;
                     }
 
-                    $item->id = base64_encode($filesDoc->document_id);
+                    $item->id = $filesDoc->document_id;
                     $item->title = base64_encode($filesDoc->name);
                     $item->alias = base64_encode($filesDoc->alias);
                     $item->sub_title = base64_encode($filesDoc->descript);
-                    $item->icon = (self::is_url($filesDoc->avatar)) ? base64_encode($filesDoc->avatar) : base64_encode(config('app.url') . '' . $filesDoc->avatar);
+                    $item->icon = (self::is_url($filesDoc->avatar)) ? $filesDoc->avatar : config('app.url') . '' . $filesDoc->avatar;
                     $item->files = $listFile;
                     $item->type_file = '';
-                    $item->date_created = base64_encode(strtotime($filesDoc->created_at) * 1000);
-                    $item->date_modified = base64_encode(strtotime($filesDoc->updated_at) * 1000);
+                    $item->date_created = strtotime($filesDoc->created_at) * 1000;
+                    $item->date_modified = strtotime($filesDoc->updated_at) * 1000;
                 }
                 //
         }

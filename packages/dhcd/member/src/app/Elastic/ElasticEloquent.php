@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Elastic;
+namespace Dhcd\Member\App\Elastic;
 use Elasticquent\ElasticquentTrait;
 use Exception;
 use Illuminate\Database\Eloquent\Model as Eloquent;
