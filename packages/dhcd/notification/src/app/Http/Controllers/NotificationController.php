@@ -104,6 +104,7 @@ class NotificationController extends Controller
             $notification_id = $request->input('notification_id');
             $notification = $this->notification->find($notification_id);
             $notification->name = $request->input('name');
+            $notifications->alias = self::stripUnicode($request->input('name'));
             $notification->content = $request->input('content');
 
             if ($notification->save()) {

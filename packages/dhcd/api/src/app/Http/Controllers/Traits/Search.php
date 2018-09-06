@@ -17,6 +17,9 @@ trait Search
 
     public function getSearch($request){
         $keyword = $this->to_slug($request->keyword);
+        if($keyword != ''){
+            $keyword = explode(" ",$keyword)[0];
+        }
         $params = [
             'name' => $keyword
         ];
@@ -27,18 +30,22 @@ trait Search
         $groups = $members = array();
         if(count($data_groups)>0){
             foreach ($data_groups as $key => $group) {
-                $groups[] = [
-                    'group_id' => $group->group_id,
-                    'name' => base64_encode($group->name)
-                ];   
+                if($group->deleted_at == ''){
+                    $groups[] = [
+                        'group_id' => $group->group_id,
+                        'name' => base64_encode($group->name)
+                    ];  
+                } 
             }
         }
         if(count($data_members)>0){
             foreach ($data_members as $key => $member) {
-                $members[] = [
-                    'member_id' => $member->member_id,
-                    'name' => base64_encode($member->name)
-                ];   
+                if($member->deleted_at == ''){
+                    $members[] = [
+                        'member_id' => $member->member_id,
+                        'name' => base64_encode($member->name)
+                    ];   
+                }
             }
         }
         $data = '{
