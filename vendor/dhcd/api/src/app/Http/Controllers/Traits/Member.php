@@ -16,11 +16,12 @@ trait Member
 {
     public function getCar($request)
     {
-        $cars = [];
         $doan_id = $request->input('doan_id');
-        Cache::forget('car_' . $doan_id);
-        if (Cache::has('car_' . $doan_id)) {
-            $cars = Cache::get('car_' . $doan_id);
+
+        $cache_name = 'car_' . $doan_id;
+        Cache::forget($cache_name);
+        if (Cache::has($cache_name)) {
+            $cars = Cache::get($cache_name);
         } else {
             $cars = car::orWhere('doan_id', 'like', $doan_id . ',%')
                 ->orWhere('doan_id', 'like', '%,' . $doan_id . ',%')
@@ -28,14 +29,14 @@ trait Member
                 ->orWhere('doan_id', $doan_id)
                 ->get();
             $expiresAt = now()->addMinutes(3600);
-            Cache::put('car_' . $doan_id, $cars, $expiresAt);
+            Cache::put($cache_name, $cars, $expiresAt);
         }
 
         $list_car = [];
         if (count($cars) > 0) {
             foreach ($cars as $car) {
 
-                $arrStaff = json_decode($car->car_staff);
+                $arrStaff = json_decode($car->car_staff, true);
                 if (count($arrStaff) > 0) {
                     foreach ($arrStaff as $k => $staff) {
 
@@ -49,7 +50,7 @@ trait Member
                 }
 
                 $item = new \stdClass();
-                $item->img = base64_encode(config('site.url_storage') . $car->img);
+                $item->img = config('site.url_storage') . $car->img;
                 $item->note = base64_encode($car->note);
                 $item->car_bs = base64_encode($car->car_bs);
                 $item->car_num = base64_encode($car->car_num);
@@ -72,11 +73,12 @@ trait Member
     
     public function getHotel($request)
     {
-        $hotels = [];
         $doan_id = $request->input('doan_id');
-        Cache::forget('hotel_' . $doan_id);
-        if (Cache::has('hotel_' . $doan_id)) {
-            $hotels = Cache::get('hotel_' . $doan_id);
+
+        $cache_name = 'hotel_' . $doan_id;
+        Cache::forget($cache_name);
+        if (Cache::has($cache_name)) {
+            $hotels = Cache::get($cache_name);
         } else {
             $hotels = Hotel::orWhere('doan_id', 'like', $doan_id . ',%')
                 ->orWhere('doan_id', 'like', '%,' . $doan_id . ',%')
@@ -84,14 +86,14 @@ trait Member
                 ->orWhere('doan_id', $doan_id)
                 ->get();
             $expiresAt = now()->addMinutes(3600);
-            Cache::put('hotel_' . $doan_id, $hotels, $expiresAt);
+            Cache::put($cache_name, $hotels, $expiresAt);
         }
 
         $list_hotel = [];
         if (count($hotels) > 0) {
             foreach ($hotels as $hotel) {
 
-                $arrStaff = json_decode($hotel->hotel_staff);
+                $arrStaff = json_decode($hotel->hotel_staff, true);
                 if (count($arrStaff) > 0) {
                     foreach ($arrStaff as $k => $staff) {
 
@@ -106,7 +108,7 @@ trait Member
 
                 $item = new \stdClass();
                 $item->hotel = base64_encode($hotel->hotel);
-                $item->img = base64_encode(config('site.url_storage') . $hotel->img);
+                $item->img = config('site.url_storage') . $hotel->img;
                 $item->note = base64_encode($hotel->note);
                 $item->address = base64_encode($hotel->address);
                 $item->staff = $arrStaff;
@@ -128,21 +130,21 @@ trait Member
 
     public function getHotels()
     {
-        $hotels = [];
-        Cache::forget('hotels');
-        if (Cache::has('hotels')) {
-            $hotels = Cache::get('hotels');
+        $cache_name = 'hotels';
+        Cache::forget($cache_name);
+        if (Cache::has($cache_name)) {
+            $hotels = Cache::get($cache_name);
         } else {
             $hotels = Hotel::all();
             $expiresAt = now()->addMinutes(3600);
-            Cache::put('hotels', $hotels, $expiresAt);
+            Cache::put($cache_name, $hotels, $expiresAt);
         }
 
         $list_hotel = [];
         if (count($hotels) > 0) {
             foreach ($hotels as $hotel) {
 
-                $arrStaff = json_decode($hotel->hotel_staff);
+                $arrStaff = json_decode($hotel->hotel_staff, true);
                 if (count($arrStaff) > 0) {
                     foreach ($arrStaff as $k => $staff) {
 
@@ -157,7 +159,7 @@ trait Member
 
                 $item = new \stdClass();
                 $item->hotel = base64_encode($hotel->hotel);
-                $item->img = base64_encode(config('site.url_storage') . $hotel->img);
+                $item->img = config('site.url_storage') . $hotel->img;
                 $item->note = base64_encode($hotel->note);
                 $item->address = base64_encode($hotel->address);
                 $item->staff = $arrStaff;
@@ -179,23 +181,24 @@ trait Member
 
     public function getSeat($request)
     {
-        $seats = [];
         $doan_id = $request->input('doan_id');
         $sessionseat_id = $request->input('sessionseat_id');
-        Cache::forget('seat_' . $doan_id . '_' . $sessionseat_id);
-        if (Cache::has('seat_' . $doan_id . '_' . $sessionseat_id)) {
-            $seats = Cache::get('seat_' . $doan_id . '_' . $sessionseat_id);
+
+        $cache_name = 'seat_' . $doan_id . '_' . $sessionseat_id;
+        Cache::forget($cache_name);
+        if (Cache::has($cache_name)) {
+            $seats = Cache::get($cache_name);
         } else {
             $seats = Seat::where('doan_id', $doan_id)->where('sessionseat_id' , $sessionseat_id)->get();
             $expiresAt = now()->addMinutes(3600);
-            Cache::put('seat_' . $doan_id . '_' . $sessionseat_id, $seats, $expiresAt);
+            Cache::put($cache_name, $seats, $expiresAt);
         }
 
         $list_seat = [];
         if (count($seats) > 0) {
             foreach ($seats as $seat) {
 
-                $arrStaff = json_decode($seat->seat_staff);
+                $arrStaff = json_decode($seat->seat_staff, true);
                 if (count($arrStaff) > 0) {
                     foreach ($arrStaff as $k => $staff) {
 
@@ -230,33 +233,33 @@ trait Member
 
     public function getSessionSeat()
     {
-        $sessionSeat = [];
-        Cache::forget('session_seat');
-        if (Cache::has('session_seat')) {
-            $sessionSeat = Cache::get('session_seat');
+        $cache_name = 'session_seat';
+        Cache::forget($cache_name);
+        if (Cache::has($cache_name)) {
+            $sessionSeat = Cache::get($cache_name);
         } else {
             $sessionSeat = Sessionseat::all();
             $expiresAt = now()->addMinutes(3600);
-            Cache::put('session_seat', $sessionSeat, $expiresAt);
+            Cache::put($cache_name, $sessionSeat, $expiresAt);
         }
 
         $list_session_seat = [];
         if (count($sessionSeat) > 0) {
             foreach ($sessionSeat as $session) {
 
-                $arrImg = json_decode($session->sessionseat_img);
+                $arrImg = json_decode($session->sessionseat_img, true);
                 if (count($arrImg) > 0) {
                     foreach ($arrImg as $k => $img) {
 
                         $item = new \stdClass();
-                        $item->url = base64_encode(config('site.url_storage') . $img);
+                        $item->url = config('site.url_storage') . $img;
 
                         $arrImg[$k] = $item;
                     }
                 }
 
                 $item = new \stdClass();
-                $item->id = base64_encode($session->sessionseat_id);
+                $item->id = $session->sessionseat_id;
                 $item->name = base64_encode($session->sessionseat_name);
                 $item->image = $arrImg;
 
@@ -277,14 +280,14 @@ trait Member
 
     public function getMemberGroup($request)
     {
-        $memberGroup = [];
-        Cache::forget('member_group');
-        if (Cache::has('member_group')) {
-            $memberGroup = Cache::get('member_group');
+        $cache_name = 'member_group';
+        Cache::forget($cache_name);
+        if (Cache::has($cache_name)) {
+            $memberGroup = Cache::get($cache_name);
         } else {
             $memberGroup = Group::all();
             $expiresAt = now()->addMinutes(3600);
-            Cache::put('member_group', $memberGroup, $expiresAt);
+            Cache::put($cache_name, $memberGroup, $expiresAt);
         }
 
         $list_member_groups = [];
@@ -298,11 +301,11 @@ trait Member
                 }
 
                 $item = new \stdClass();
-                $item->id = base64_encode($group->group_id);
+                $item->id = $group->group_id;
                 $item->name = base64_encode($group->name);
                 $item->desc = base64_encode($group->desc);
                 $item->alias = base64_encode($group->alias);
-                $item->image = base64_encode(config('site.url_storage') . $group->image);
+                $item->image = config('site.url_storage') . $group->image;
 
                 $list_member_groups[] = $item;
             }
@@ -324,19 +327,20 @@ trait Member
         if ($request->has('is_category')) {
             $members = [];
             $alias = $request->input('alias');
-            Cache::forget('member_by_category_' . $alias);
-            if (Cache::has('member_by_category_' . $alias)) {
-                $members = Cache::get('member_by_category_' . $alias);
+
+            $cache_name = 'member_by_category_' . $alias;
+            Cache::forget($cache_name);
+            if (Cache::has($cache_name)) {
+                $members = Cache::get($cache_name);
             } else {
                 $category = DocumentCate::where('alias', $alias)->first();
                 if (null != $category) {
                     $members = MemberModel::whereHas('documentCate', function ($query) use ($category) {
                         $query->where('dhcd_document_cate_has_member.document_cate_id', $category->document_cate_id);
                         $query->where('dhcd_document_cate_has_member.deleted_at', null);
-                    })
-                        ->get();
+                    })->get();
                     $expiresAt = now()->addMinutes(3600);
-                    Cache::put('member_by_category_' . $alias, $members, $expiresAt);
+                    Cache::put($cache_name, $members, $expiresAt);
                 }
             }
 
@@ -344,7 +348,7 @@ trait Member
             if (count($members) > 0) {
                 foreach ($members as $member) {
                     $item = new \stdClass();
-                    $item->id = base64_encode($member->member_id);
+                    $item->id = $member->member_id;
                     $item->name = base64_encode($member->name);
                     $item->anh_ca_nhan = base64_encode($member->avatar);
                     $item->ten_hien_thi = base64_encode($member->name);
@@ -375,19 +379,20 @@ trait Member
         } else {
             $members = [];
             $alias = $request->input('alias');
-            Cache::forget('member_by_group_' . $alias);
-            if (Cache::has('member_by_group_' . $alias)) {
-                $members = Cache::get('member_by_group_' . $alias);
+
+            $cache_name = 'member_by_group_' . $alias;
+            Cache::forget($cache_name);
+            if (Cache::has($cache_name)) {
+                $members = Cache::get($cache_name);
             } else {
                 $group = Group::where('alias', $alias)->first();
                 if (null != $group) {
                     $members = MemberModel::whereHas('group', function ($query) use ($group) {
                         $query->where('dhcd_group_has_member.group_id', $group->group_id);
                         $query->where('dhcd_group_has_member.deleted_at', null);
-                    })
-                        ->get();
+                    })->get();
                     $expiresAt = now()->addMinutes(3600);
-                    Cache::put('member_by_group_' . $alias, $members, $expiresAt);
+                    Cache::put($cache_name, $members, $expiresAt);
                 }
             }
 
@@ -395,7 +400,7 @@ trait Member
             if (count($members) > 0) {
                 foreach ($members as $member) {
                     $item = new \stdClass();
-                    $item->id = base64_encode($member->member_id);
+                    $item->id = $member->member_id;
                     $item->name = base64_encode($member->name);
 
                     $list_members[] = $item;
@@ -509,7 +514,7 @@ trait Member
 
         if(null != $member){
             $member_info = [
-                "id" => base64_encode($member->member_id),
+                "id" => $member->member_id,
                 "anh_ca_nhan" => base64_encode($member->avatar),
                 "ten_hien_thi" => base64_encode($member->name),
                 "email" => base64_encode($member->email),

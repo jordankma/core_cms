@@ -16,7 +16,7 @@ use Spatie\Activitylog\Models\Activity;
 use Yajra\Datatables\Datatables;
 use Validator,Auth,DateTime,DB,Cache;
 
-use App\Elastic\MemberElastic;
+use Dhcd\Member\App\Elastic\MemberElastic;
 
 class MemberController extends Controller
 {
@@ -36,14 +36,6 @@ class MemberController extends Controller
 
     public function manage()
     {
-        // $params = [
-        //     'name' => 'diễm',
-        //     // 'limit' => 10,
-        //     // 'offset' => 2
-        // ];
-        // $member_elastic = new MemberElastic();
-        // $pagination = $member_elastic->customSearch($params)->paginate(8);
-        // dd($pagination);
         return view('DHCD-MEMBER::modules.member.member.manage');
     }
 
@@ -126,7 +118,7 @@ class MemberController extends Controller
                     DB::table('dhcd_group_has_member')->insert($data_insert);
                 }
                 Cache::forget('member');
-                $member_elastic = new MemberElactic();
+                $member_elastic = new MemberElastic();
                 $member_elastic->saveDocument($members->member_id);
                 activity('member')
                     ->performedOn($members)
@@ -237,8 +229,8 @@ class MemberController extends Controller
                     DB::table('dhcd_group_has_member')->insert($data_insert);
                 }
                 Cache::forget('member');
-                $member_elastic = new MemberElactic();
-                $member_elastic->saveDocument($members->member_id);
+                $member_elastic = new MemberElastic();
+                $member_elastic->saveDocument($member->member_id);
                 activity('member')
                     ->performedOn($member)
                     ->withProperties($request->all())
@@ -259,6 +251,8 @@ class MemberController extends Controller
         $member = $this->member->find($member_id);
         if (null != $member) {
             $this->member->delete($member_id);
+            $member_elastic = new MemberElastic();
+            $member_elastic->saveDocument($member_id);
             DB::table('dhcd_group_has_member')->where(['member_id' => $member_id])->delete();
             Cache::forget('member');
             activity('member')
@@ -476,6 +470,8 @@ class MemberController extends Controller
                         ){
                             DB::table('dhcd_group_has_member')->insert(['member_id' => $member_id, 'group_id' => $group_id]);
                         }
+                        $member_elastic = new MemberElastic();
+                        $member_elastic->saveDocument($member_id);
                     }
                 }        
             } else {

@@ -12,13 +12,12 @@ use Dhcd\Api\App\Http\Controllers\Traits\Member;
 use Dhcd\Api\App\Http\Controllers\Traits\Setting;
 use Dhcd\Api\App\Http\Controllers\Traits\Document;
 use Dhcd\Api\App\Http\Controllers\Traits\Logsent;
-// use Dhcd\Api\App\Http\Controllers\Traits\Search;
-// use Dhcd\Api\App\Http\Controllers\Traits\Domain;
+use Dhcd\Api\App\Http\Controllers\Traits\Search;
 use Validator;
 
 class GlobalController extends Controller
 {
-    use Events, News, Forum, Menu, Member, Setting, Document, Logsent;
+    use Events, News, Forum, Menu, Member, Setting, Document, Logsent, Search;
 
     private $messages = array(
         'name.regex' => "Sai định dạng",
@@ -28,12 +27,12 @@ class GlobalController extends Controller
 
     public function get(Request $request, $route_hash)
     {
-        $encrypted = $this->my_simple_crypt( 'dev/get/display?time='.time()*1000 , 'e' );
+        $encrypted = $this->my_simple_crypt( 'dev/get/files/detail='.time()*1000 .'&alias="quychelamviecdaihoicongdoanvietnamlanthuxii" ', 'e' );
         $decrypted = $this->my_simple_crypt( $route_hash, 'd' );
         $parts = parse_url($decrypted);
 
-        // echo $encrypted.'<br>';
-        // echo $decrypted.'<br>';die;
+       echo $encrypted.'<br>';
+       echo $decrypted.'<br>';die;
 
         $query = [];
         if (count($parts) > 0) {
@@ -56,7 +55,7 @@ class GlobalController extends Controller
 //                $getUser = app('Adtech\Api\App\Http\Controllers\Auth\LoginController')->me();
 //                $userInfo = json_decode($getUser->content());
 
-                if ((time() * 1000 - $request->input('time')) < 600000) { //5000
+                if ((time() * 1000 - $request->input('time')) < 6000000) { //5000
                     switch ($parts['path']) {
                         case 'dev/get/test': {
                             return $this->getTest();
@@ -64,8 +63,17 @@ class GlobalController extends Controller
                         case 'dev/get/session-seat': {
                             return $this->getSessionSeat();
                         }
+                        case 'dev/get/domain-api': {
+                            return $this->getDomainApi();
+                        }
+                        case 'dev/get/config-text': {
+                            return $this->getConfigText();
+                        }
                         case 'dev/get/seat': {
                             return $this->getSeat($request);
+                        }
+                        case 'dev/get/search': {
+                            return $this->getSearch($request);
                         }
                         case 'dev/get/hotel': {
                             return $this->getHotel($request);
@@ -125,20 +133,11 @@ class GlobalController extends Controller
                             return $this->getUserInfo($request);
                         }
                         case 'dev/get/getlogsent': {
-                            return $this->getLogSent();
+                            return $this->getLogSent($request);
                         }
                         case 'dev/get/getlogsent/detail': {
                             return $this->getLogSentDetail($request);
                         }
-                        // case 'dev/get/search': {
-                        //     return $this->getSearch($request);
-                        // }
-                        // case 'dev/get/domain': {
-                        //     return $this->getDomain();
-                        // }
-                        // case 'dev/get/display': {
-                        //     return $this->getDisPlay();
-                        // }
                         case 'dev/get/logout': {
                             return app('Adtech\Api\App\Http\Controllers\Auth\LoginController')->logout();
                         }

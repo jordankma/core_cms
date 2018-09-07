@@ -32,11 +32,14 @@ Route::group(array('prefix' => $adminPrefix), function() {
         Route::post('dhcd/member/member/check-email-exist', 'MemberController@checkEmailExist')->name('dhcd.member.member.check-email-exist');
         Route::post('dhcd/member/member/check-phone-exist', 'MemberController@checkPhoneExist')->name('dhcd.member.member.check-phone-exist');
 
-        Route::get('dhcd/member/member/sync/{type}', ['as' => 'synces', 'uses' => 'MemberController@sync']);
+        Route::get('dhcd/member/member/sync/{type}','MemberController@sync');
         //import export member excel
         Route::get('dhcd/member/member/excel/get/import', 'MemberController@getImport')->name('dhcd.member.member.excel.get.import')->where('as','Upload excel');
         Route::post('dhcd/member/member/excel/post/import', 'MemberController@postImport')->name('dhcd.member.member.excel.post.import');
         //group member 
+        
+        Route::get('dhcd/member/group/sync/{type}','GroupController@sync');
+        
         Route::get('dhcd/member/group/log', 'GroupController@log')->name('dhcd.member.group.log');
         Route::get('dhcd/member/group/data', 'GroupController@data')->name('dhcd.member.group.data');
         Route::get('dhcd/member/group/manage', 'GroupController@manage')->name('dhcd.member.group.manage')->where('as','Nhóm người dùng - Danh sách');
@@ -69,6 +72,7 @@ Route::group(array('prefix' => $adminPrefix), function() {
         Route::get('dhcd/member/position/confirm-delete', 'PositionMemberController@getModalDelete')->name('dhcd.member.position.confirm-delete');
     });
     Route::get('api/member/group-list', 'GroupController@apiList');
+
 });
 
 Route::group(array('prefix' => 'resource/dev'), function() {
