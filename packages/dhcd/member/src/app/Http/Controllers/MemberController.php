@@ -380,7 +380,9 @@ class MemberController extends Controller
             })
             ->addColumn('group', function ($members) {
                 $group = '';
-                $group = htmlspecialchars($members->group[0]->name);
+                if(isset($members->group[0])){
+                    $group = htmlspecialchars($members->group[0]->name);
+                }
                 return $group;
             })
             ->rawColumns(['actions','status','group'])

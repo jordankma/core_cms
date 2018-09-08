@@ -57,8 +57,7 @@
     <!--end of page js-->
     <script type="text/javascript">
         $(document).ready(function() {
-            var domain = "/admin/laravel-filemanager/";
-            $('#lfm').filemanager('file', {prefix: domain});
+            $('#lfm').filemanager('file');
         });
     </script>
 @stop
