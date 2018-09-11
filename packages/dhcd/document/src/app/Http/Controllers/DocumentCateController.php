@@ -62,12 +62,12 @@ class DocumentCateController extends Controller {
                 $alias = $this->to_slug($request->name).$count_alias;    
             }
             $cate = DocumentCate::create([
-                        'name' => $request->name,
-                        'alias' => $alias,
-                        'icon' => $request->icon,
-                        'sort' => $request->sort,
-                        'descript' => $request->descript,
-                        'parent_id' => $request->parent_id
+                'name' => $request->name,
+                'alias' => $alias,
+                'icon' => $request->icon,
+                'sort' => $request->sort,
+                'descript' => $request->descript,
+                'parent_id' => $request->parent_id
             ]);
             //save tag
             if ($cate->document_cate_id) {
@@ -125,7 +125,7 @@ class DocumentCateController extends Controller {
                 $alias = $this->to_slug($request->name);
             } else {
 
-                $alias = $this->to_slug($request->name).($count_alias-1);    
+                $alias = $this->to_slug($request->name).($count_alias);    
             }
             $cate = $this->documentCate->find($request->document_cate_id);
             $cate->name = $request->name;

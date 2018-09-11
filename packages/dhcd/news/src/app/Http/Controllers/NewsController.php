@@ -378,6 +378,7 @@ class NewsController extends Controller
     		$list_news = News::where('type_page','news')->get();	
     	}
         return Datatables::of($list_news)
+            ->addIndexColumn()
             ->addColumn('actions', function ($list_news) {
                 $actions = '';
                 if ($this->user->canAccess('dhcd.news.news.log')) {

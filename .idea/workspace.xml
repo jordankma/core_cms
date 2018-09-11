@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/packages/dhcd/news/src/app/Http/Controllers/NewsController.php" line="295" />
-  </component>
   <component name="ChangeListManager">
     <list default="true" id="cc86e173-5c3d-43df-9cb1-f3ebc1acdd76" name="Default Changelist" comment="test">
       <change beforePath="$PROJECT_DIR$/.idea/core_cms.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/core_cms.iml" afterDir="false" />
@@ -27,13 +24,13 @@
     <session id="-626705350">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="6" />
+          <entry key="project.closed" value="7" />
           <entry key="project.open.time.0" value="2" />
           <entry key="project.open.time.17" value="1" />
           <entry key="project.open.time.4" value="1" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="6" />
+          <entry key="project.opened" value="7" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -73,7 +70,7 @@
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf />
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -330,7 +327,7 @@
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19083156" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19296375" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -596,20 +593,8 @@
     <entry file="file://$PROJECT_DIR$/../core_cpvm/packages/cpvm/class/modules.json">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/../core_cpvm/packages/cpvm/class/src/database/migrations/2018_08_06_092212_create_cpvm_class_table.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="16" column="37" selection-start-line="16" selection-start-column="37" selection-end-line="16" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../core_cpvm/packages/cpvm/class/src/database/migrations/2018_08_06_092309_create_cpvm_class_has_subject_table.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="16" column="37" selection-start-line="16" selection-start-column="37" selection-end-line="16" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/../core_cpvm/packages/cpvm/class/src/database/migrations/2018_08_06_092212_create_cpvm_class_table.php" />
+    <entry file="file://$PROJECT_DIR$/../core_cpvm/packages/cpvm/class/src/database/migrations/2018_08_06_092309_create_cpvm_class_has_subject_table.php" />
     <entry file="file://$PROJECT_DIR$/../core_cpvm/packages/cpvm/class/src/ClassServiceProvider.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="138">
