@@ -14,7 +14,7 @@ use Dhcd\Member\App\Models\Position;
 
 use Spatie\Activitylog\Models\Activity;
 use Yajra\Datatables\Datatables;
-use Validator,Auth,DateTime,DB,Cache;
+use Validator,Auth,DateTime,DB,Cache,Config;
 
 use Dhcd\Member\App\Elastic\MemberElastic;
 
@@ -380,7 +380,9 @@ class MemberController extends Controller
             })
             ->addColumn('group', function ($members) {
                 $group = '';
-                $group = htmlspecialchars($members->group[0]->name);
+                if(isset($members->group[0])){
+                    $group = htmlspecialchars($members->group[0]->name);
+                }
                 return $group;
             })
             ->rawColumns(['actions','status','group'])
@@ -437,8 +439,10 @@ class MemberController extends Controller
         ], $this->messages);
         if (!$validator->fails()) {
             $term = $request->input('path');
-            $url = substr($term, 1, strlen($term));
-            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($url);
+            $url_storage = Config::get('site.url_storage');
+            $url = $url_storage.$term;
+            file_put_contents('excel.xls', file_get_contents($url));
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load('excel.xls');
             $worksheet = $spreadsheet->getActiveSheet();
             $rows = [];
             foreach ($worksheet->getRowIterator() AS $row) {
@@ -468,7 +472,11 @@ class MemberController extends Controller
                             'member_id' => $member_id
                         ])->exists()
                         ){
-                            DB::table('dhcd_group_has_member')->insert(['member_id' => $member_id, 'group_id' => $group_id]);
+                            $dhcd_group_has_member = new GroupHasMember();
+                            $dhcd_group_has_member->member_id = $member_id;
+                            $dhcd_group_has_member->group_id = $group_id;
+                            $dhcd_group_has_member->save();
+                            // DB::table('dhcd_group_has_member')->insert(['member_id' => $member_id, 'group_id' => $group_id]);
                         }
                         $member_elastic = new MemberElastic();
                         $member_elastic->saveDocument($member_id);

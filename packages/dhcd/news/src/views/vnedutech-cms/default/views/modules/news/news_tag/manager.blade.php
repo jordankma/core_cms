@@ -96,7 +96,7 @@
                 serverSide: true,
                 ajax: '{{ route('dhcd.news.tag.data') }}',
                 columns: [
-                    { data: 'rownum', name: 'rownum' },
+                    { data: 'DT_Row_Index', name: 'news_tag_id' },
                     { data: 'name', name: 'name' },
                     // { data: 'created_at', name: 'created_at'},
                     // { data: 'updated_at', name: 'updated_at'},

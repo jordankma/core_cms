@@ -27,12 +27,12 @@ class GlobalController extends Controller
 
     public function get(Request $request, $route_hash)
     {
-        $encrypted = $this->my_simple_crypt( 'dev/get/files/detail='.time()*1000 .'&alias="quychelamviecdaihoicongdoanvietnamlanthuxii" ', 'e' );
+        $encrypted = $this->my_simple_crypt( 'dev/get/getlogsent?time='.time()*1000 , 'e' );
         $decrypted = $this->my_simple_crypt( $route_hash, 'd' );
         $parts = parse_url($decrypted);
 
-       echo $encrypted.'<br>';
-       echo $decrypted.'<br>';die;
+        echo $encrypted.'<br>';
+        echo $decrypted.'<br>';die;
 
         $query = [];
         if (count($parts) > 0) {

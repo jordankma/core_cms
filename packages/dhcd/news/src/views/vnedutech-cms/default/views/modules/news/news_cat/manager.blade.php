@@ -98,7 +98,7 @@
                 serverSide: true,
                 ajax: '{{ route('dhcd.news.cat.data') }}',
                 columns: [
-                    { data: 'news_cat_id', name: 'news_cat_id' },
+                    { data: 'DT_Row_Index', name: 'news_cat_id' },
                     { data: 'name', name: 'name' },
                     // { data: 'created_at', name: 'created_at'},
                     // { data: 'updated_at', name: 'updated_at'},
