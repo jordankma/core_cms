@@ -1,0 +1,6 @@
+projectKey=tuanlv
+serverUrl=http://localhost:9000
+serverVersion=7.3.0.15553
+dashboardUrl=http://localhost:9000/dashboard?id=tuanlv
+ceTaskId=AWW2eL23RRzchGGl0pTr
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AWW2eL23RRzchGGl0pTr
