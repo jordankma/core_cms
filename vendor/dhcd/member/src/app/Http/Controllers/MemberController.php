@@ -14,9 +14,9 @@ use Dhcd\Member\App\Models\Position;
 
 use Spatie\Activitylog\Models\Activity;
 use Yajra\Datatables\Datatables;
-use Validator,Auth,DateTime,DB,Cache;
+use Validator,Auth,DateTime,DB,Cache,Config;
 
-use App\Elastic\MemberElastic;
+use Dhcd\Member\App\Elastic\MemberElastic;
 
 class MemberController extends Controller
 {
@@ -36,14 +36,6 @@ class MemberController extends Controller
 
     public function manage()
     {
-        // $params = [
-        //     'name' => 'diễm',
-        //     // 'limit' => 10,
-        //     // 'offset' => 2
-        // ];
-        // $member_elastic = new MemberElastic();
-        // $pagination = $member_elastic->customSearch($params)->paginate(8);
-        // dd($pagination);
         return view('DHCD-MEMBER::modules.member.member.manage');
     }
 
@@ -126,7 +118,7 @@ class MemberController extends Controller
                     DB::table('dhcd_group_has_member')->insert($data_insert);
                 }
                 Cache::forget('member');
-                $member_elastic = new MemberElactic();
+                $member_elastic = new MemberElastic();
                 $member_elastic->saveDocument($members->member_id);
                 activity('member')
                     ->performedOn($members)
@@ -237,8 +229,8 @@ class MemberController extends Controller
                     DB::table('dhcd_group_has_member')->insert($data_insert);
                 }
                 Cache::forget('member');
-                $member_elastic = new MemberElactic();
-                $member_elastic->saveDocument($members->member_id);
+                $member_elastic = new MemberElastic();
+                $member_elastic->saveDocument($member->member_id);
                 activity('member')
                     ->performedOn($member)
                     ->withProperties($request->all())
@@ -259,6 +251,8 @@ class MemberController extends Controller
         $member = $this->member->find($member_id);
         if (null != $member) {
             $this->member->delete($member_id);
+            $member_elastic = new MemberElastic();
+            $member_elastic->saveDocument($member_id);
             DB::table('dhcd_group_has_member')->where(['member_id' => $member_id])->delete();
             Cache::forget('member');
             activity('member')
@@ -386,7 +380,9 @@ class MemberController extends Controller
             })
             ->addColumn('group', function ($members) {
                 $group = '';
-                $group = htmlspecialchars($members->group[0]->name);
+                if(isset($members->group[0])){
+                    $group = htmlspecialchars($members->group[0]->name);
+                }
                 return $group;
             })
             ->rawColumns(['actions','status','group'])
@@ -443,8 +439,10 @@ class MemberController extends Controller
         ], $this->messages);
         if (!$validator->fails()) {
             $term = $request->input('path');
-            $url = substr($term, 1, strlen($term));
-            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($url);
+            $url_storage = Config::get('site.url_storage');
+            $url = $url_storage.$term;
+            file_put_contents('excel.xls', file_get_contents($url));
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load('excel.xls');
             $worksheet = $spreadsheet->getActiveSheet();
             $rows = [];
             foreach ($worksheet->getRowIterator() AS $row) {
@@ -474,8 +472,14 @@ class MemberController extends Controller
                             'member_id' => $member_id
                         ])->exists()
                         ){
-                            DB::table('dhcd_group_has_member')->insert(['member_id' => $member_id, 'group_id' => $group_id]);
+                            $dhcd_group_has_member = new GroupHasMember();
+                            $dhcd_group_has_member->member_id = $member_id;
+                            $dhcd_group_has_member->group_id = $group_id;
+                            $dhcd_group_has_member->save();
+                            // DB::table('dhcd_group_has_member')->insert(['member_id' => $member_id, 'group_id' => $group_id]);
                         }
+                        $member_elastic = new MemberElastic();
+                        $member_elastic->saveDocument($member_id);
                     }
                 }        
             } else {

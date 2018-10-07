@@ -152,7 +152,7 @@
                 serverSide: true,
                 ajax: '{!! route('dhcd.news.news.data', ['name' => $params['name'],'news_time'=>$params['news_time'],'news_cat'=>$params['news_cat'],'is_hot'=>$params['is_hot']]) !!}',
                 columns: [
-                    { data: 'rownum', name: 'rownum' },
+                    { data: 'DT_Row_Index', name: 'news_id' },
                     { data: 'title', name: 'title' },
                     { data: 'image', name: 'image' },
                     { data: 'create_by', name: 'create_by' },

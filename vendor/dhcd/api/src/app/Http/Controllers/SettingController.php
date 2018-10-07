@@ -20,4 +20,19 @@ class SettingController extends BaseController
                 }';
         return response($data)->setStatusCode(200)->header('Content-Type', 'application/json; charset=utf-8');
     }
+
+    public function appDebug()
+    {
+        $filePath = base_path('apk/app-debug.apk');
+
+        header("Cache-Control: public");
+        header("Content-Description: File Transfer");
+        header("Content-Disposition: attachment; filename=$filePath");
+        header("Content-Type: application/octet-stream");
+        header('Content-Length: ' . filesize($filePath));
+        header("Content-Transfer-Encoding: binary");
+
+        // read the file from disk
+        readfile($filePath);
+    }
 }

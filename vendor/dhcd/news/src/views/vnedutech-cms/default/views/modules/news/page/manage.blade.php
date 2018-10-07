@@ -74,7 +74,7 @@
                 serverSide: true,
                 ajax: '{{ route('dhcd.news.page.data') }}',
                 columns: [
-                    { data: 'DT_Row_Index', name: 'DT_Row_Index' },
+                    { data: 'DT_Row_Index', name: 'news_id' },
                     { data: 'title', name: 'title' },
                     { data: 'created_at', name: 'created_at'},
                     { data: 'actions', name: 'actions', orderable: false, searchable: false, className: 'fit-content'}

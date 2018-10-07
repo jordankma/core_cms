@@ -65,7 +65,7 @@
                                 <label>{{trans('dhcd-news::language.form.text.desc')}}</label><br>
                                 <textarea rows="5" cols="101" name="desc"  class="form-control" placeholder="{{trans('dhcd-news::language.form.desc_placeholder')}}">{{$news->desc}}</textarea>
                             </div>
-                            <div class="form-group" style="display: none;visibility: hidden;">
+                            {{-- <div class="form-group" style="display: none;visibility: hidden;">
                                 <label for="news-text">
                                     <input type="radio" id="news-text" name="type" value="1" @if($news->type==1) checked="checked" @endif class="type_news">
                                     {{trans('dhcd-news::language.form.text.news_text')}}
@@ -74,8 +74,8 @@
                                     <input type="radio" id="news-image" name="type" value="2" @if($news->type==2) checked="checked" @endif class="type_news">
                                     {{trans('dhcd-news::language.form.text.news_image')}}
                                 </label>
-                            </div>
-                            <div class="area-new-text" @if($news->type==1) style="display: block;" @else style="display: none;" @endif>
+                            </div> --}}
+                            <div class="area-new-text" {{-- @if($news->type==1) style="display: block;" @else style="display: none;" @endif --}}>
                                 <div class="form-group" >
                                     <label>{{trans('dhcd-news::language.form.text.content')}} </label><br>
                                     <div class='box-body pad form-group'>
@@ -83,7 +83,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="area-new-image" @if($news->type==2) style="display: block;" @else style="display: none;" @endif>
+                            {{-- <div class="area-new-image" @if($news->type==2) style="display: block;" @else style="display: none;" @endif>
                                 <div class="form-group" id="list-item" >
                                     <a id="lfm1" data-input="thumbnail1" data-preview="holder1" class="btn btn-primary">
                                         <i class="fa fa-picture-o"></i> {{trans('dhcd-news::language.label.choise_image')}}
@@ -116,7 +116,7 @@
                                         </table>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                         <!-- /.col-sm-8 -->
                         <!-- /.col-sm-4 -->
@@ -266,17 +266,18 @@
                     }
                 }
             });  
-            $('body').on('click','.type_news',function(e){
-                var type = $(this).val();
-                if(type==1) {
-                    $(".area-new-image").css("display", "none");
-                    $(".area-new-text").css("display", "block");
-                }
-                else if(type==2) {
-                    $(".area-new-image").css("display", "block");
-                    $(".area-new-text").css("display", "none");
-                }
-            });
+            
+            // $('body').on('click','.type_news',function(e){
+            //     var type = $(this).val();
+            //     if(type==1) {
+            //         $(".area-new-image").css("display", "none");
+            //         $(".area-new-text").css("display", "block");
+            //     }
+            //     else if(type==2) {
+            //         $(".area-new-image").css("display", "block");
+            //         $(".area-new-text").css("display", "none");
+            //     }
+            // });
 
             $('body').on('click','#add-tag',function(e){
                 e.preventDefault();

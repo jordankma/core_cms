@@ -51,6 +51,12 @@ class DhcdMemberTable extends Migration
 
             // $table->foreign('position_id')->references('position_id')->on('dhcd_position')->onDelete('cascade');
         });
+        // DB::connection('mysql_dhcd')->table('dhcd_document_types')->insert([
+        //     'document_type_id' => 1,
+        //     'name' => 'Hình ảnh',
+        //     'type' => 'image',
+        //     'extentions' => json_encode(['image/jpeg','image/jpg','image/png','image/gif','JPEG Image'])
+        // ]);
     }
 
     /**

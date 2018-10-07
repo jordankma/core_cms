@@ -201,6 +201,7 @@ class NewsCatController extends Controller
         self::getCate();
         $list_news_cat = Collection::make($this->_newsCatList);
         return Datatables::of($list_news_cat)
+            ->addIndexColumn()
             ->editColumn('name', function ($list_news_cat) {
                 $name = str_repeat('---', $list_news_cat->level) . $list_news_cat->name;
                 return $name;

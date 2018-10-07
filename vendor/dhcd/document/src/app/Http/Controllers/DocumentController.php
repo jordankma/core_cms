@@ -16,6 +16,8 @@ use Dhcd\Document\App\Models\TagItem;
 use Spatie\Activitylog\Models\Activity;
 use Yajra\Datatables\Datatables;
 use Validator,Cache,Auth,DateTime;
+use Illuminate\Http\File;
+use Illuminate\Support\Facades\Storage;
 
 class DocumentController extends Controller
 {
@@ -64,32 +66,34 @@ class DocumentController extends Controller
     }
     
     public function create(Request $request){
-        if(empty($request->file_types) || empty($request->file_names) || empty($request->path)){
-            return redirect()->back()->withInput()->withErrors(['Bạn chưa chọn file đính kèm']);
-        }      
+//        if(empty($request->file_types) || empty($request->file_names) || empty($request->path)){
+//            return redirect()->back()->withInput()->withErrors(['Bạn chưa chọn file đính kèm']);
+//        }
         $validator = Validator::make($request->all(), [
             'name' => 'required',                                   
             'document_type_id' => 'required',            
         ]);
-        if (!$validator->fails()) {            
+        if (!$validator->fails()) {
              $files = [];
              $file_names = $request->file_names;
              $file_types = $request->file_types;
              $paths = $request->path;
-             foreach($file_names as $i => $name){
-                 $path_term = str_replace(' ', '%20', $paths[$i]);
-                 $files[] = [
-                     'type' => $file_types[$i],
-                     'name' => $name,
-                     'path' => $path_term 
-                 ];
+             if(!empty($file_names)){
+                 foreach($file_names as $i => $name){
+                     $path_term = str_replace(' ', '%20', $paths[$i]);
+                     $files[] = [
+                         'type' => $file_types[$i],
+                         'name' => $name,
+                         'path' => $path_term 
+                     ];
+                 }
              }
              $is_reserve = !empty($request->is_reserve) ? $request->is_reserve : 0;
              $is_offical = !empty($request->is_offical) ? $request->is_offical : 0;
              $type_control = !empty($request->type_control) ? $request->type_control : 'file';
              $avatar = '';
              if($type_control != 'file'){
-                $avatar = !empty($request->setAvatar) ? $request->setAvatar : $files[0]['path'];                
+                $avatar = !empty($request->setAvatar) ? $request->setAvatar : $files[0]['path'];
              }
              
              $document = Document::create([
@@ -118,7 +122,7 @@ class DocumentController extends Controller
                 }
 
 
-                if (!empty($request->document_cate_id)) {    
+                if (!empty($request->document_cate_id)) {
                     $document_cate_id = $request->document_cate_id;
                     $dochascate = [];
                     foreach ($document_cate_id as $cate_id) {
@@ -126,6 +130,12 @@ class DocumentController extends Controller
                             'document_id' => $document->document_id,
                             'document_cate_id' => $cate_id
                         ];
+
+                        $cateParent = $this->documentCateRepository->find($cate_id);
+                        if (null != $cateParent) {
+                            Cache::forget('api_doc_document_page_' . $cateParent->alias . '_all');
+                            Cache::forget('api_doc_document_children_' . $cateParent->alias . '_all');
+                        }
                     }
 
                     if (!empty($dochascate)) {
@@ -142,7 +152,6 @@ class DocumentController extends Controller
             
              return redirect()->back()->withInput()->withErrors(['Vui lòng kiểm tra lại dữ liệu nhập vào']);
         }
-        
     }
     
     public function edit(Request $request){
@@ -162,10 +171,10 @@ class DocumentController extends Controller
     }
     
     public function update(Request $request){    
-        if(empty($request->file_types) || empty($request->file_names) || empty($request->path)){
-            return redirect()->back()->withInput()->withErrors(['Bạn chưa chọn file đính kèm']);
-        }        
-        
+//        if(empty($request->file_types) || empty($request->file_names) || empty($request->path)){
+//            return redirect()->back()->withInput()->withErrors(['Bạn chưa chọn file đính kèm']);
+//        }
+
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'document_type_id' => 'required',
@@ -178,14 +187,16 @@ class DocumentController extends Controller
              $file_names = $request->file_names;
              $file_types = $request->file_types;
              $paths = $request->path;
-             foreach($file_names as $i => $name){
-                 $path_term = str_replace(' ', '%20', $paths[$i]);
-                 $files[] = [
-                     'type' => $file_types[$i],
-                     'name' => $name,
-                     'path' => $path_term 
-                 ];
-             }          
+             if(!empty($file_names)){
+                 foreach($file_names as $i => $name){
+                     $path_term = str_replace(' ', '%20', $paths[$i]);
+                     $files[] = [
+                         'type' => $file_types[$i],
+                         'name' => $name,
+                         'path' => $path_term 
+                     ];
+                 }  
+             }        
              $is_reserve = !empty($request->is_reserve) ? $request->is_reserve : 0;
              $is_offical = !empty($request->is_offical) ? $request->is_offical : 0;
              
@@ -224,6 +235,27 @@ class DocumentController extends Controller
                   ]);
                   $document->save();
 
+                 Cache::forget('api_doc_document_detail_' . $this->to_slug($request->name));
+
+                 $document_id = $document->document_id;
+                 $alias = $this->to_slug($request->name);
+                 Cache::forget('api_doc_document_detail_' . $alias);
+                 $arrParent = Document::with(['getDocumentCate' => function ($query) use ($document_id) {
+                     $query->where('dhcd_document_has_cate.document_id', $document_id);
+                 }])->get();
+
+                 if (count($arrParent) > 0) {
+                     foreach ($arrParent as $item) {
+
+                         if (count($item->getDocumentCate) > 0) {
+                             foreach ($item->getDocumentCate as $cate) {
+                                 Cache::forget('api_doc_document_page_' . $cate->alias . '_all');
+                             }
+                         }
+
+                     }
+                 }
+
                      // save tag
                      if(!empty($request->tag)){
                         TagItem::where('document_id',$document->document_id)->delete();
@@ -250,6 +282,12 @@ class DocumentController extends Controller
                             'document_id' => $document->document_id,
                             'document_cate_id' => $cate_id
                         ];
+
+                        $cateParent = $this->documentCateRepository->find($cate_id);
+                        if (null != $cateParent) {
+                            Cache::forget('api_doc_document_page_' . $cateParent->alias . '_all');
+                            Cache::forget('api_doc_document_children_' . $cateParent->alias . '_all');
+                        }
                     }
 
                     if (!empty($dochascate)) {
@@ -271,7 +309,6 @@ class DocumentController extends Controller
     }
     
     public function delete(Request $request){
-        
         if(empty($request->only('document_id'))){
             return redirect()->route('dhcd.document.doc.manage')->withErrors(['Không tìm thấy tài liệu cần xóa']);
         }
@@ -279,6 +316,24 @@ class DocumentController extends Controller
         $document->status = 0;
         $document->deleted_at = date('Y-m-d H:s:i');        
         $document->save();
+
+        $document_id = $request->document_id;
+        Cache::forget('api_doc_document_detail_' . $document->alias);
+        $arrParent = Document::with(['getDocumentCate' => function ($query) use ($document_id) {
+            $query->where('dhcd_document_has_cate.document_id', $document_id);
+        }])->get();
+
+        if (count($arrParent) > 0) {
+            foreach ($arrParent as $item) {
+
+                if (count($item->getDocumentCate) > 0) {
+                    foreach ($item->getDocumentCate as $cate) {
+                        Cache::forget('api_doc_document_page_' . $cate->alias . '_all');
+                    }
+                }
+
+            }
+        }
         
         activity('documents')->performedOn($document)->withProperties($request->all())->log('User: :'.Auth::user()->email.' - Delete document - document: '.$document->document_id.', name: '.$document->name);
         

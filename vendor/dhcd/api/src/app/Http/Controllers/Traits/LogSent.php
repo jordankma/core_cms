@@ -14,24 +14,22 @@ trait Logsent
         'numeric'  => "Phải là số"
     );
 
-    public function getLogSent(){
+    public function getLogSent($request){
+        $page = $request->input('page', 1);
+
         $log_sents = LogSentModel::orderBy('log_sent_id', 'desc')->with('notification')->paginate(20);
         $list_log_sent = array();
-        $total_page = '';
-        $page = '';
         if (count($log_sents) > 0) {
-            $log_sents_arr = $log_sents->toArray();
-            $total_page = $log_sents_arr['total'];
-            $page = $log_sents_arr['current_page'];
             foreach ($log_sents as $key => $value) {
                 $list_log_sent[] = [
-                    'log_sent_id' => base64_encode($value->log_sent_id),
+                    'id' => $value->log_sent_id,
                     'name' => base64_encode($value->notification->name),
                     'content' => base64_encode($value->notification->content),
-                    'created_at' => base64_encode($value->created_at)
+                    'created_at' => strtotime($value->created_at) * 1000
                 ];
             }
         }
+        $total_page = $log_sents->lastPage();
         $data = '{
                     "data": {
                         "list_log_sent": '. json_encode($list_log_sent) .',
@@ -51,12 +49,12 @@ trait Logsent
         ], $this->messages);
         if (!$validator->fails()) {
             $id = $request->input('id');
-            $log_sent = LogSentModel::where('log_sent_id',$id)->with('notification')->first();
+            $log_sent = LogSentModel::where('log_sent_id', $id)->with('notification')->first();
             $log_sent_data = [
-                'log_sent_id' => base64_encode($log_sent->log_sent_id),
+                'id' => $log_sent->log_sent_id,
                 'name' => base64_encode($log_sent->notification->name),
                 'content' => base64_encode($log_sent->notification->content),
-                'created_at' => base64_encode($log_sent->created_at)
+                'created_at' => strtotime($log_sent->created_at) * 1000
             ];
             $data = '{
                     "data": '. json_encode($log_sent_data) .',

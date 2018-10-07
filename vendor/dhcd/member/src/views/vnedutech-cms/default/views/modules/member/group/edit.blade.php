@@ -93,8 +93,7 @@
     <!--end of page js-->
     <script>
         $(document).ready(function() {
-            var domain = "/admin/laravel-filemanager/";
-            $("#lfm").filemanager('image', {prefix: domain});
+            $("#lfm").filemanager('image');
             $('#form-edit-group').bootstrapValidator({
                 feedbackIcons: {
                     // validating: 'glyphicon glyphicon-refresh'
