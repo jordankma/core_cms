@@ -454,6 +454,7 @@ class MemberController extends Controller
                 }
                 $rows[] = $cells;
             }
+            // dd($rows);
             if(!empty($rows)){
                 foreach ($rows as $key => $value) {
                     $member = new Member();
@@ -478,8 +479,8 @@ class MemberController extends Controller
                             $dhcd_group_has_member->save();
                             // DB::table('dhcd_group_has_member')->insert(['member_id' => $member_id, 'group_id' => $group_id]);
                         }
-                        $member_elastic = new MemberElastic();
-                        $member_elastic->saveDocument($member_id);
+                        // $member_elastic = new MemberElastic();
+                        // $member_elastic->saveDocument($member_id);
                     }
                 }        
             } else {
